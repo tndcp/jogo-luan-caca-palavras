@@ -26,7 +26,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luan Coins 💰 — Caça-Palavras</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html){font-family:"Optimistic", system-ui, sans-serif}
+:where(code, pre, kbd, samp){font-family:"Optimistic Mono", ui-monospace, monospace}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:inherit}
 body{background:#1a1a2e;color:#fff;min-height:100vh;padding:15px}
 .container{max-width:480px;margin:0 auto}
 h1{text-align:center;color:#ffd700;margin:15px 0;font-size:24px}
@@ -36,7 +53,7 @@ h2{color:#ffd700;margin:15px 0;text-align:center;font-size:20px}
 @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 @keyframes brilho{0%{box-shadow:0 0 5px #ffd700}50%{box-shadow:0 0 25px #ffd700,0 0 40px #ff8c00}100%{box-shadow:0 0 5px #ffd700}}
 @keyframes subirNivel{0%{transform:scale(1)}25%{transform:scale(1.1) rotate(2deg)}50%{transform:scale(1.2)}75%{transform:scale(1.1) rotate(-2deg)}100%{transform:scale(1)}}
-input{width:100%;padding:15px;font-size:17px;border:none;border-radius:12px;background:#2a2a4e;color:#fff;margin-bottom:12px;border:2px solid #444;transition:0.3s}
+input{width:100%;padding:15px;font-size:17px;border-radius:12px;background:#2a2a4e;color:#fff;margin-bottom:12px;border:2px solid #444;transition:0.3s}
 input:focus{border-color:#ffd700;box-shadow:0 0 10px #ffd70055;outline:none}
 button{width:100%;padding:15px;font-size:17px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin:6px 0;transition:0.3s}
 button:active{transform:scale(0.95)}
@@ -88,8 +105,8 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 
 <div id="telaLogin" class="tela ativa">
   <h1>🎸 Luan Coins 💰</h1>
-  <input type="text" id="campoUsuario" placeholder="Nome de Jogador">
-  <input type="password" id="campoSenha" placeholder="Senha">
+  <input type="text" id="campoUsuario" placeholder="Nome de Jogador" autocomplete="username">
+  <input type="password" id="campoSenha" placeholder="Senha" autocomplete="current-password">
   <div id="msgErro" class="erro"></div>
   <button class="primario" id="botaoEntrar">🎵 Entrar</button>
   <button class="secundario" id="botaoCriarLink">📝 Criar Nova Conta</button>
@@ -145,7 +162,7 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 
 <div id="telaEntrarSala" class="tela">
   <div class="cabecalho"><h2>🚪 Entrar em Sala</h2></div>
-  <input type="text" id="campoCodigoSala" placeholder="CÓDIGO (ex: AB12)" style="text-transform:uppercase;text-align:center;font-size:22px;letter-spacing:4px">
+  <input type="text" id="campoCodigoSala" placeholder="CÓDIGO (ex: AB12)" style="text-transform:uppercase;text-align:center;font-size:22px;letter-spacing:4px" maxlength="6">
   <div id="msgErroSala" class="erro"></div>
   <button class="amigo" id="btnConfirmarEntrar">Entrar</button>
   <button class="secundario" id="btnVoltarEntrar">← Voltar</button>
@@ -200,60 +217,336 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-database-compat.js"></script>
 <script>
+/* ================= CONFIG ================= */
 const MOEDAS_POR_NIVEL=20, MOEDAS_MESTRE=40, PRECO_DICA=15;
 const USUARIO_MESTRE='Thiago Shelby', SENHA_MESTRE='9090iop';
-const PATENTES=[{nome:'👑 DONO DO JOGO',minNivel:1,cor:'#ffd700',especial:true},{nome:'🌟 Lenda Santana',minNivel:50,cor:'#f44336'},{nome:'🎖️ Rei da Seresta',minNivel:35,cor:'#ff9800'},{nome:'🎸 Estrela Nacional',minNivel:25,cor:'#9c27b0'},{nome:'🎤 Cantor Sertanejo',minNivel:15,cor:'#673ab7'},{nome:'🎶 Seresteiro',minNivel:8,cor:'#2196f3'},{nome:'🎵 Fã Dedicado',minNivel:3,cor:'#4caf50'},{nome:'🎧 Ouvinte Iniciante',minNivel:1,cor:'#9e9e9e'}];
+const PATENTES=[
+  {nome:'👑 DONO DO JOGO',minNivel:1,cor:'#ffd700',especial:true},
+  {nome:'🌟 Lenda Santana',minNivel:50,cor:'#f44336'},
+  {nome:'🎖️ Rei da Seresta',minNivel:35,cor:'#ff9800'},
+  {nome:'🎸 Estrela Nacional',minNivel:25,cor:'#9c27b0'},
+  {nome:'🎤 Cantor Sertanejo',minNivel:15,cor:'#673ab7'},
+  {nome:'🎶 Seresteiro',minNivel:8,cor:'#2196f3'},
+  {nome:'🎵 Fã Dedicado',minNivel:3,cor:'#4caf50'},
+  {nome:'🎧 Ouvinte Iniciante',minNivel:1,cor:'#9e9e9e'}
+];
 const PALAVRAS_LUAN=['LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA','BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','PAIXAO','SAUDADE','SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL','ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS','PROMESSA','DESTINO','CAMINHO','VIDA','ESPERANCA','FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO','VERSOS','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO','CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO','CORAGEM','TESOURO','JOIA','ALMA','CHUVA','ADEUS','CARINHO','ABRACO','SORRISO','OLHOS'];
 const LETRAS='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const PERGUNTAS_QUIZ=[{pergunta:'Em qual cidade nasceu Luan Santana?',alternativas:['São Paulo - SP','Campo Grande - MS','Cuiabá - MT','Goiânia - GO'],correta:1},{pergunta:'Qual é o nome verdadeiro?',alternativas:['Luan Rafael Domingos Santana','Luan Carlos Santana','Luan Silva Santana','Rafael Luan Santana'],correta:0},{pergunta:'Qual ano lançou primeiro álbum?',alternativas:['2007','2009','2010','2005'],correta:1},{pergunta:'Qual música consagrou?',alternativas:['Amor de Mãe','Você Não Vale Nada','Sábado','Hoje Eu Vou Beber'],correta:1},{pergunta:'Signo de Luan?',alternativas:['Leão','Câncer','Áries','Touro'],correta:1},{pergunta:'Idade que começou a cantar?',alternativas:['5 anos','10 anos','13 anos','16 anos'],correta:0},{pergunta:'Parceria famosa?',alternativas:['Com Jorge & Mateus','Com Anitta','Com Ludmilla','Com Marília Mendonça'],correta:0},{pergunta:'Conhecido como:',alternativas:['Rei do Forró','Príncipe da Seresta','Sertanejo Raiz','Cantor do Povo'],correta:1},{pergunta:'Música dele?',alternativas:['Cuida Bem Dela','Flor e o Beija-Flor','Fica Tudo Bem','Todas'],correta:3},{pergunta:'Estado natal?',alternativas:['São Paulo','Minas Gerais','Mato Grosso do Sul','Goiás'],correta:2}];
+const PERGUNTAS_QUIZ=[
+  {pergunta:'Em qual cidade nasceu Luan Santana?',alternativas:['São Paulo - SP','Campo Grande - MS','Cuiabá - MT','Goiânia - GO'],correta:1},
+  {pergunta:'Qual é o nome verdadeiro?',alternativas:['Luan Rafael Domingos Santana','Luan Carlos Santana','Luan Silva Santana','Rafael Luan Santana'],correta:0},
+  {pergunta:'Qual ano lançou primeiro álbum?',alternativas:['2007','2009','2010','2005'],correta:1},
+  {pergunta:'Qual música consagrou?',alternativas:['Amor de Mãe','Você Não Vale Nada','Sábado','Hoje Eu Vou Beber'],correta:1},
+  {pergunta:'Signo de Luan?',alternativas:['Leão','Câncer','Áries','Touro'],correta:1},
+  {pergunta:'Idade que começou a cantar?',alternativas:['5 anos','10 anos','13 anos','16 anos'],correta:0},
+  {pergunta:'Parceria famosa?',alternativas:['Com Jorge & Mateus','Com Anitta','Com Ludmilla','Com Marília Mendonça'],correta:0},
+  {pergunta:'Conhecido como:',alternativas:['Rei do Forró','Príncipe da Seresta','Sertanejo Raiz','Cantor do Povo'],correta:1},
+  {pergunta:'Música dele?',alternativas:['Cuida Bem Dela','Flor e o Beija-Flor','Fica Tudo Bem','Todas'],correta:3},
+  {pergunta:'Estado natal?',alternativas:['São Paulo','Minas Gerais','Mato Grosso do Sul','Goiás'],correta:2}
+];
 
-const firebaseConfig={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316"};
+const firebaseConfig={
+  apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",
+  authDomain:"luan-coins.firebaseapp.com",
+  databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",
+  projectId:"luan-coins",
+  storageBucket:"luan-coins.firebasestorage.app",
+  messagingSenderId:"379641584803",
+  appId:"1:379641584803:web:c1bfc0c0715e3347fef316"
+};
+
 let db,refContas,refRanking,refSalas,firebaseOK=false;
-try{firebase.initializeApp(firebaseConfig);db=firebase.database();refContas=db.ref('contas');refRanking=db.ref('ranking');refSalas=db.ref('salas');firebaseOK=true;}catch(e){}
+try{
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  db=firebase.database();
+  refContas=db.ref('contas');
+  refRanking=db.ref('ranking');
+  refSalas=db.ref('salas');
+  firebaseOK=true;
+}catch(e){console.warn('Firebase offline, modo local:',e);}
 
 let usuarioAtual=null,dadosUsuario=null,modoJogo='solo',dificuldadeAtual='medio',nivel=1,pontos=0;
 let grade=[],selecionadas=[],encontradas=[],palavrasRodada=[],palavrasComPosicao=[];
 let perguntaAtual=0,acertosQuiz=0,SOM_ATIVO=true,EH_MESTRE=false;
 let modoPendente='solo',salaAtual=null,codigoSalaAtual=null,listenerSala=null,souHost=false;
 
-// === CORREÇÃO PRINCIPAL: chave segura para Firebase ===
+/* ====== CORREÇÃO CRÍTICA: CHAVE SEGURA ====== */
 function chaveSegura(nome){
-  // Firebase não aceita . # $ / [ ]  — troca por _
-  return nome.replace(/[.#$\\[\\]\\/]/g,'_');
+  if(!nome) return '_vazio_';
+  // Firebase RTDB proíbe . # $ [ ] /
+  return String(nome).replace(/[.#$\[\]\/]/g,'_').trim();
 }
 function meuId(){ return chaveSegura(usuarioAtual); }
 
-function tocarSom(t){if(!SOM_ATIVO) return; try{const a=new(window.AudioContext||window.webkitAudioContext)();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);g.gain.value=0.12;if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);}else if(t==='acerto'){o.frequency.value=880;o.start();setTimeout(()=>o.frequency.value=1100,80);o.stop(a.currentTime+0.3);}else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);}else if(t==='nivel'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>{const o2=a.createOscillator();const g2=a.createGain();o2.connect(g2);g2.connect(a.destination);g2.gain.value=0.09;o2.frequency.value=f;o2.start();o2.stop(a.currentTime+0.25);},i*120));}}catch(e){}}
-function alternarSom(){SOM_ATIVO=!SOM_ATIVO;document.querySelectorAll('[id^="botaoSom"]').forEach(b=>b.textContent=SOM_ATIVO?'🔊 Som: ON':'🔇 Som: OFF');tocarSom('clique');}
-function mostrarTela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));document.getElementById(id).classList.add('ativa');if(id==='telaInicio')atualizarTelaInicio();if(id==='telaRanking')carregarRankingGeral();if(id==='telaLoja')atualizarSaldoLoja();}
-function voltarMenu(){ if(listenerSala){listenerSala.off(); listenerSala=null;} if(salaAtual && modoJogo==='amigo' && souHost){ try{ refSalas.child(codigoSalaAtual).remove(); }catch(e){} } salaAtual=null; codigoSalaAtual=null; tocarSom('clique'); mostrarTela('telaInicio'); }
-function getPatente(n){if(EH_MESTRE) return PATENTES[0]; const norm=PATENTES.filter(p=>!p.especial); for(let p of norm) if(n>=p.minNivel) return p; return norm[norm.length-1];}
-function atualizarTelaInicio(){if(!dadosUsuario) return; document.getElementById('nomeJogador').textContent=usuarioAtual; document.getElementById('saldoMoedas').textContent=`💰 ${dadosUsuario.moedas||0} Luan Coins`; EH_MESTRE=(usuarioAtual===USUARIO_MESTRE); document.getElementById('avisoMestre').classList.toggle('oculta',!EH_MESTRE); const nb=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1); const pat=getPatente(nb); const el=document.getElementById('patenteJogador'); el.innerHTML=`<strong>${pat.nome}</strong><br><small>Nível: ${nb} • ${modoJogo}</small>`; el.style.background=pat.cor+'33'; el.style.color=pat.cor; el.classList.toggle('mestre',EH_MESTRE);}
-function atualizarSaldoLoja(){document.getElementById('saldoLojaPrincipal').textContent=`💰 ${dadosUsuario.moedas||0}`;}
-async function salvarDados(){if(!usuarioAtual||!dadosUsuario) return; localStorage.setItem('luan_'+usuarioAtual,JSON.stringify(dadosUsuario)); if(firebaseOK){try{await refContas.child(chaveSegura(usuarioAtual)).update(dadosUsuario); const nr=Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1); const pr=Math.max(dadosUsuario.pontosTotal||0,dadosUsuario.pontosRanqueada||0); await refRanking.child(chaveSegura(usuarioAtual)).update({nome:usuarioAtual,pontos:pr,nivel:nr,patente:getPatente(nr).nome,eMestre:EH_MESTRE});}catch(e){console.warn(e);}}}
-async function carregarDados(nome){const k=chaveSegura(nome); if(firebaseOK){try{const s=await refContas.child(k).once('value'); if(s.exists()) return s.val();}catch(e){}} const l=localStorage.getItem('luan_'+nome); return l?JSON.parse(l):null;}
-async function entrar(){const nome=document.getElementById('campoUsuario').value.trim();const senha=document.getElementById('campoSenha').value;const erro=document.getElementById('msgErro');if(!nome||!senha){erro.textContent='Preencha usuário e senha!';return;} if(nome===USUARIO_MESTRE&&senha!==SENHA_MESTRE){erro.textContent='Senha incorreta do Admin!';return;} const dados=await carregarDados(nome); if(!dados){erro.textContent='Usuário não existe! Crie conta.';return;} if(dados.senha!==senha){erro.textContent='Senha incorreta!';return;} usuarioAtual=nome;dadosUsuario=dados;EH_MESTRE=(nome===USUARIO_MESTRE); tocarSom('acerto'); erro.textContent=''; mostrarTela('telaInicio');}
-async function criarConta(){const nome=document.getElementById('campoNovoUsuario').value.trim();const senha=document.getElementById('campoNovaSenha').value;const erro=document.getElementById('msgErroCad');if(nome.length<3){erro.textContent='Mínimo 3 letras!';return;} if(senha.length<4){erro.textContent='Mínimo 4 caracteres!';return;} if(nome===USUARIO_MESTRE){erro.textContent='Nome reservado!';return;} if(await carregarDados(nome)){erro.textContent='Já existe!';return;} const novo={nivelMax:1,nivelRanqueada:1,pontosTotal:0,pontosRanqueada:0,moedas:50,senha:senha,eMestre:false, nomeOriginal:nome}; localStorage.setItem('luan_'+nome,JSON.stringify(novo)); if(firebaseOK){try{await refContas.child(chaveSegura(nome)).set(novo); await refRanking.child(chaveSegura(nome)).set({nome:nome,pontos:0,nivel:1,patente:'🎧 Ouvinte Iniciante',eMestre:false});}catch(e){}} alert('✅ Conta criada! 50 💰'); mostrarTela('telaLogin'); document.getElementById('campoUsuario').value=nome;}
-function sair(){if(!confirm('Sair?')) return; usuarioAtual=null; dadosUsuario=null; mostrarTela('telaLogin');}
-function cfgPorDificuldade(d){switch(d){case 'facil':return{tam:10,qtd:5};case 'medio':return{tam:14,qtd:8};case 'dificil':return{tam:18,qtd:12};default:return{tam:14,qtd:8};}}
-function abrirEscolhaModo(m){modoPendente=m; tocarSom('clique'); document.getElementById('tituloEscolha').textContent=m==='ranqueada'?'🏆 Ranqueada - Escolha':m==='amigo'?'👥 Amigo - Escolha':'🎮 Solo - Escolha'; mostrarTela('telaEscolhaModo');}
-function iniciarJogoEscolhido(dif){ if(modoPendente==='amigo'){ criarSalaMultiplayer(dif); return;} modoJogo=modoPendente; dificuldadeAtual=dif; nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1); pontos=0; encontradas=[]; palavrasComPosicao=[]; prepararTelaJogo(); iniciarRodadaSolo(); atualizarSaldoJogo(); }
-function prepararTelaJogo(){ mostrarTela('telaJogo'); document.getElementById('botaoMestre').classList.toggle('oculta',!EH_MESTRE); document.getElementById('botaoDica').textContent=EH_MESTRE?'💡 DICA GRÁTIS':`💡 Dica — ${PRECO_DICA} 💰`; const ehRanq=modoJogo==='ranqueada'; const ehAmigo=modoJogo==='amigo'; document.getElementById('tituloModo').textContent=(dificuldadeAtual==='facil'?'🟢 Fácil':dificuldadeAtual==='medio'?'🟡 Médio':'🔴 Difícil')+(ehRanq?' 🏆 RANQUEADA':ehAmigo?' 👥 1V1':' 🎮 SOLO'); document.getElementById('avisoModo').innerHTML=EH_MESTRE?'<span style="background:linear-gradient(90deg,#ffd700,#ff8c00);padding:8px 14px;border-radius:20px;color:#000">👑 MESTRE</span>':ehRanq?'<span style="background:linear-gradient(90deg,#9c27b0,#673ab7);padding:8px 14px;border-radius:20px">🏆 RANQUEADA — Vale patente!</span>':ehAmigo?'<span style="background:linear-gradient(90deg,#ff5722,#ff9800);padding:8px 14px;border-radius:20px">👥 VS AMIGO</span>':'<span style="background:#4caf50;padding:8px 14px;border-radius:20px">🎮 Modo Solo</span>'; document.getElementById('placarVs').classList.toggle('oculta', !ehAmigo); document.getElementById('btnProximo').classList.toggle('oculta', ehAmigo); }
+/* ====== SOM ====== */
+function tocarSom(t){
+  if(!SOM_ATIVO) return;
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const a=new AudioCtx();
+    const o=a.createOscillator(); const g=a.createGain();
+    o.connect(g); g.connect(a.destination); g.gain.value=0.12;
+    if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);}
+    else if(t==='acerto'){o.frequency.value=880;o.start();setTimeout(()=>{try{o.frequency.value=1100}catch{}},80);o.stop(a.currentTime+0.3);}
+    else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);}
+    else if(t==='nivel'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>{try{const o2=a.createOscillator();const g2=a.createGain();o2.connect(g2);g2.connect(a.destination);g2.gain.value=0.09;o2.frequency.value=f;o2.start();o2.stop(a.currentTime+0.25);}catch{}},i*120));}
+  }catch(e){}
+}
+function alternarSom(){
+  SOM_ATIVO=!SOM_ATIVO;
+  document.querySelectorAll('.som').forEach(b=>{
+    b.textContent = SOM_ATIVO ? '🔊 Som: ON' : '🔇 Som: OFF';
+  });
+  tocarSom('clique');
+}
+function mostrarTela(id){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  const alvo=document.getElementById(id);
+  if(alvo) alvo.classList.add('ativa');
+  if(id==='telaInicio') atualizarTelaInicio();
+  if(id==='telaRanking') carregarRankingGeral();
+  if(id==='telaLoja') atualizarSaldoLoja();
+}
+function voltarMenu(){
+  if(listenerSala){try{listenerSala.off();}catch{} listenerSala=null;}
+  if(salaAtual && modoJogo==='amigo' && souHost && codigoSalaAtual){
+    try{ refSalas.child(codigoSalaAtual).remove(); }catch(e){}
+  }
+  salaAtual=null; codigoSalaAtual=null; souHost=false;
+  tocarSom('clique');
+  mostrarTela('telaInicio');
+}
+function getPatente(n){
+  if(EH_MESTRE) return PATENTES[0];
+  const norm=PATENTES.filter(p=>!p.especial);
+  for(let p of norm) if(n>=p.minNivel) return p;
+  return norm[norm.length-1];
+}
+function atualizarTelaInicio(){
+  if(!dadosUsuario) return;
+  document.getElementById('nomeJogador').textContent=usuarioAtual;
+  document.getElementById('saldoMoedas').textContent=`💰 ${dadosUsuario.moedas||0} Luan Coins`;
+  EH_MESTRE=(usuarioAtual===USUARIO_MESTRE);
+  const aviso=document.getElementById('avisoMestre');
+  if(aviso) aviso.classList.toggle('oculta',!EH_MESTRE);
+  const nb=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1);
+  const pat=getPatente(nb);
+  const el=document.getElementById('patenteJogador');
+  if(el){
+    el.innerHTML=`<strong>${pat.nome}</strong><br><small>Nível: ${nb} • ${modoJogo}</small>`;
+    el.style.background=pat.cor+'33'; el.style.color=pat.cor;
+    el.classList.toggle('mestre',EH_MESTRE);
+  }
+}
+function atualizarSaldoLoja(){
+  const el=document.getElementById('saldoLojaPrincipal');
+  if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;
+}
+async function salvarDados(){
+  if(!usuarioAtual||!dadosUsuario) return;
+  try{ localStorage.setItem('luan_'+usuarioAtual,JSON.stringify(dadosUsuario)); }catch{}
+  if(firebaseOK){
+    try{
+      await refContas.child(chaveSegura(usuarioAtual)).update(dadosUsuario);
+      const nr=Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1);
+      const pr=Math.max(dadosUsuario.pontosTotal||0,dadosUsuario.pontosRanqueada||0);
+      await refRanking.child(chaveSegura(usuarioAtual)).update({nome:usuarioAtual,pontos:pr,nivel:nr,patente:getPatente(nr).nome,eMestre:EH_MESTRE});
+    }catch(e){console.warn('Erro salvar Firebase',e);}
+  }
+}
+async function carregarDados(nome){
+  const k=chaveSegura(nome);
+  if(firebaseOK){
+    try{
+      const s=await refContas.child(k).once('value');
+      if(s.exists()) return s.val();
+    }catch(e){}
+  }
+  try{
+    const l=localStorage.getItem('luan_'+nome);
+    return l?JSON.parse(l):null;
+  }catch{ return null; }
+}
+async function entrar(){
+  const nome=document.getElementById('campoUsuario').value.trim();
+  const senha=document.getElementById('campoSenha').value;
+  const erro=document.getElementById('msgErro');
+  if(!nome||!senha){erro.textContent='Preencha usuário e senha!';return;}
+  if(nome===USUARIO_MESTRE && senha!==SENHA_MESTRE){erro.textContent='Senha incorreta do Admin!';return;}
+  const dados=await carregarDados(nome);
+  if(!dados){erro.textContent='Usuário não existe! Crie conta.';return;}
+  if(dados.senha!==senha){erro.textContent='Senha incorreta!';return;}
+  usuarioAtual=nome; dadosUsuario=dados; EH_MESTRE=(nome===USUARIO_MESTRE);
+  try{localStorage.setItem('luan_ultimo',nome);}catch{}
+  tocarSom('acerto'); erro.textContent=''; mostrarTela('telaInicio');
+}
+async function criarConta(){
+  const nome=document.getElementById('campoNovoUsuario').value.trim();
+  const senha=document.getElementById('campoNovaSenha').value;
+  const erro=document.getElementById('msgErroCad');
+  if(nome.length<3){erro.textContent='Mínimo 3 letras!';return;}
+  if(senha.length<4){erro.textContent='Mínimo 4 caracteres!';return;}
+  if(nome===USUARIO_MESTRE){erro.textContent='Nome reservado!';return;}
+  const existe=await carregarDados(nome);
+  if(existe){erro.textContent='Já existe!';return;}
+  const novo={nivelMax:1,nivelRanqueada:1,pontosTotal:0,pontosRanqueada:0,moedas:50,senha:senha,eMestre:false,nomeOriginal:nome};
+  try{ localStorage.setItem('luan_'+nome,JSON.stringify(novo)); }catch{}
+  if(firebaseOK){
+    try{
+      await refContas.child(chaveSegura(nome)).set(novo);
+      await refRanking.child(chaveSegura(nome)).set({nome:nome,pontos:0,nivel:1,patente:'🎧 Ouvinte Iniciante',eMestre:false});
+    }catch(e){console.warn(e);}
+  }
+  alert('✅ Conta criada! 50 💰');
+  mostrarTela('telaLogin');
+  document.getElementById('campoUsuario').value=nome;
+}
+function sair(){ if(!confirm('Sair?')) return; usuarioAtual=null; dadosUsuario=null; mostrarTela('telaLogin'); }
+function cfgPorDificuldade(d){ switch(d){case 'facil':return{tam:10,qtd:5};case 'medio':return{tam:14,qtd:8};case 'dificil':return{tam:18,qtd:12};default:return{tam:14,qtd:8};} }
+function abrirEscolhaModo(m){ modoPendente=m; tocarSom('clique'); const tit=document.getElementById('tituloEscolha'); if(tit) tit.textContent=m==='ranqueada'?'🏆 Ranqueada - Escolha':m==='amigo'?'👥 Amigo - Escolha':'🎮 Solo - Escolha'; mostrarTela('telaEscolhaModo'); }
+function iniciarJogoEscolhido(dif){
+  if(modoPendente==='amigo'){ criarSalaMultiplayer(dif); return; }
+  modoJogo=modoPendente; dificuldadeAtual=dif;
+  nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1);
+  pontos=0; encontradas=[]; palavrasComPosicao=[];
+  prepararTelaJogo(); iniciarRodadaSolo(); atualizarSaldoJogo();
+}
+function prepararTelaJogo(){
+  mostrarTela('telaJogo');
+  const bm=document.getElementById('botaoMestre');
+  if(bm) bm.classList.toggle('oculta',!EH_MESTRE);
+  const bd=document.getElementById('botaoDica');
+  if(bd) bd.textContent=EH_MESTRE?'💡 DICA GRÁTIS':`💡 Dica — ${PRECO_DICA} 💰`;
+  const ehRanq=modoJogo==='ranqueada'; const ehAmigo=modoJogo==='amigo';
+  const titulo=document.getElementById('tituloModo');
+  if(titulo) titulo.textContent=(dificuldadeAtual==='facil'?'🟢 Fácil':dificuldadeAtual==='medio'?'🟡 Médio':'🔴 Difícil')+(ehRanq?' 🏆 RANQUEADA':ehAmigo?' 👥 1V1':' 🎮 SOLO');
+  const aviso=document.getElementById('avisoModo');
+  if(aviso) aviso.innerHTML=EH_MESTRE?'<span style="background:linear-gradient(90deg,#ffd700,#ff8c00);padding:8px 14px;border-radius:20px;color:#000">👑 MESTRE</span>':ehRanq?'<span style="background:linear-gradient(90deg,#9c27b0,#673ab7);padding:8px 14px;border-radius:20px">🏆 RANQUEADA — Vale patente!</span>':ehAmigo?'<span style="background:linear-gradient(90deg,#ff5722,#ff9800);padding:8px 14px;border-radius:20px">👥 VS AMIGO</span>':'<span style="background:#4caf50;padding:8px 14px;border-radius:20px">🎮 Modo Solo</span>';
+  const vs=document.getElementById('placarVs');
+  if(vs) vs.classList.toggle('oculta', !ehAmigo);
+  const bp=document.getElementById('btnProximo');
+  if(bp) bp.classList.toggle('oculta', ehAmigo);
+}
 
-// SOLO
-function iniciarRodadaSolo(){const cfg=cfgPorDificuldade(dificuldadeAtual); selecionadas=[]; encontradas=[]; palavrasComPosicao=[]; palavrasRodada=[...PALAVRAS_LUAN].sort(()=>Math.random()-0.5).slice(0,cfg.qtd); grade=Array(cfg.tam).fill(0).map(()=>Array(cfg.tam).fill('')); palavrasRodada.forEach(palavra=>{let ok=false,t=0; while(!ok&&t<1000){const horiz=Math.random()>0.5; const l=Math.floor(Math.random()*(cfg.tam-(horiz?0:palavra.length))); const c=Math.floor(Math.random()*(cfg.tam-(horiz?palavra.length:0))); let cabe=true; for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(grade[nl][nc]&&grade[nl][nc]!==palavra[i]){cabe=false;break;}} if(cabe){for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; grade[nl][nc]=palavra[i];} palavrasComPosicao.push({texto:palavra,l,c,dir:horiz}); ok=true;} t++;}}); for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!grade[l][c]) grade[l][c]=LETRAS[Math.floor(Math.random()*26)]; document.getElementById('nivel').textContent=nivel; atualizarPlacar(); renderizarSolo();}
-function atualizarPlacar(){document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${encontradas.length}/${palavrasRodada.length}`;}
-function renderizarSolo(){const cfg=cfgPorDificuldade(dificuldadeAtual); const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML=''; for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c]; d.onclick=()=>clicarSolo(l,c); if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada'); if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) d.classList.add(EH_MESTRE?'mestre':'encontrada'); g.appendChild(d);} const lista=document.getElementById('listaPalavras'); lista.innerHTML=''; palavrasRodada.forEach(p=>{const d=document.createElement('div'); d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':''); d.textContent=p; lista.appendChild(d);});}
-function clicarSolo(l,c){ if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return; tocarSom('clique'); const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c); if(idx>=0){selecionadas.splice(idx,1); renderizarSolo(); return;} selecionadas.push({l,c}); if(selecionadas.length>=2){const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l); const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c); let txt=''; if(mesmaLinha){selecionadas.sort((a,b)=>a.c-b.c); txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));}else if(mesmaColuna){selecionadas.sort((a,b)=>a.l-b.l); txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));}} renderizarSolo();}
-function tentarVerificarSolo(palavra){if(!PALAVRAS_LUAN.includes(palavra)) return false; if(encontradas.some(e=>e.texto===palavra)) return true; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set}); pontos+=palavra.length*10; selecionadas=[]; tocarSom('acerto'); atualizarPlacar(); renderizarSolo(); if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,300); return true;}
-async function concluirNivelSolo(){tocarSom('nivel'); document.getElementById('nivel').classList.add('subir-nivel'); setTimeout(()=>document.getElementById('nivel').classList.remove('subir-nivel'),800); const ganho=EH_MESTRE?MOEDAS_MESTRE:MOEDAS_POR_NIVEL; if(modoJogo==='ranqueada'){dadosUsuario.nivelRanqueada=Math.max(dadosUsuario.nivelRanqueada||1,nivel+1); dadosUsuario.pontosRanqueada=(dadosUsuario.pontosRanqueada||0)+pontos; dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;}else{dadosUsuario.nivelMax=Math.max(dadosUsuario.nivelMax||1,nivel+1); dadosUsuario.pontosTotal=(dadosUsuario.pontosTotal||0)+pontos; dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;} await salvarDados(); atualizarSaldoJogo(); atualizarTelaInicio(); const pat=getPatente(modoJogo==='ranqueada'?dadosUsuario.nivelRanqueada:dadosUsuario.nivelMax).nome; alert(`${modoJogo==='ranqueada'?'🏆 RANQUEADA':'🎉'} Nível ${nivel} concluído!\n+${ganho} 💰\nPatente: ${pat}`);}
+/* SOLO */
+function iniciarRodadaSolo(){
+  const cfg=cfgPorDificuldade(dificuldadeAtual);
+  selecionadas=[]; encontradas=[]; palavrasComPosicao=[];
+  palavrasRodada=[...PALAVRAS_LUAN].sort(()=>Math.random()-0.5).slice(0,cfg.qtd);
+  grade=Array(cfg.tam).fill(0).map(()=>Array(cfg.tam).fill(''));
+  palavrasRodada.forEach(palavra=>{
+    let ok=false,t=0;
+    while(!ok&&t<1000){
+      const horiz=Math.random()>0.5;
+      const l=Math.floor(Math.random()*(cfg.tam-(horiz?0:palavra.length)));
+      const c=Math.floor(Math.random()*(cfg.tam-(horiz?palavra.length:0)));
+      let cabe=true;
+      for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(grade[nl][nc]&&grade[nl][nc]!==palavra[i]){cabe=false;break;}}
+      if(cabe){
+        for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; grade[nl][nc]=palavra[i];}
+        palavrasComPosicao.push({texto:palavra,l,c,dir:horiz}); ok=true;
+      } t++;
+    }
+  });
+  for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!grade[l][c]) grade[l][c]=LETRAS[Math.floor(Math.random()*26)];
+  const elN=document.getElementById('nivel'); if(elN) elN.textContent=nivel;
+  atualizarPlacar(); renderizarSolo();
+}
+function atualizarPlacar(){
+  const elP=document.getElementById('pontos'); if(elP) elP.textContent=pontos;
+  const elC=document.getElementById('contagem'); if(elC) elC.textContent=`${encontradas.length}/${palavrasRodada.length}`;
+}
+function renderizarSolo(){
+  const cfg=cfgPorDificuldade(dificuldadeAtual);
+  const g=document.getElementById('grade'); if(!g) return;
+  g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
+  for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){
+    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c];
+    d.onclick=()=>clicarSolo(l,c);
+    if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada');
+    if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) d.classList.add(EH_MESTRE?'mestre':'encontrada');
+    g.appendChild(d);
+  }
+  const lista=document.getElementById('listaPalavras'); if(!lista) return; lista.innerHTML='';
+  palavrasRodada.forEach(p=>{
+    const d=document.createElement('div'); d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':''); d.textContent=p; lista.appendChild(d);
+  });
+}
+function clicarSolo(l,c){
+  if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
+  tocarSom('clique');
+  const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c);
+  if(idx>=0){selecionadas.splice(idx,1); renderizarSolo(); return;}
+  selecionadas.push({l,c});
+  if(selecionadas.length>=2){
+    const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l);
+    const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c);
+    if(mesmaLinha){
+      selecionadas.sort((a,b)=>a.c-b.c);
+      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));
+    }else if(mesmaColuna){
+      selecionadas.sort((a,b)=>a.l-b.l);
+      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));
+    }
+  }
+  renderizarSolo();
+}
+function tentarVerificarSolo(palavra){
+  if(!PALAVRAS_LUAN.includes(palavra)) return false;
+  if(encontradas.some(e=>e.texto===palavra)) return true;
+  const pos=palavrasComPosicao.find(p=>p.texto===palavra);
+  if(!pos) return false;
+  const set=new Set();
+  for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
+  encontradas.push({texto:palavra,linhas:set});
+  pontos+=palavra.length*10; selecionadas=[];
+  tocarSom('acerto'); atualizarPlacar(); renderizarSolo();
+  if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,300);
+  return true;
+}
+async function concluirNivelSolo(){
+  tocarSom('nivel');
+  const el=document.getElementById('nivel'); if(el){el.classList.add('subir-nivel'); setTimeout(()=>el.classList.remove('subir-nivel'),800);}
+  const ganho=EH_MESTRE?MOEDAS_MESTRE:MOEDAS_POR_NIVEL;
+  if(modoJogo==='ranqueada'){
+    dadosUsuario.nivelRanqueada=Math.max(dadosUsuario.nivelRanqueada||1,nivel+1);
+    dadosUsuario.pontosRanqueada=(dadosUsuario.pontosRanqueada||0)+pontos;
+    dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
+  }else{
+    dadosUsuario.nivelMax=Math.max(dadosUsuario.nivelMax||1,nivel+1);
+    dadosUsuario.pontosTotal=(dadosUsuario.pontosTotal||0)+pontos;
+    dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
+  }
+  await salvarDados(); atualizarSaldoJogo(); atualizarTelaInicio();
+  const pat=getPatente(modoJogo==='ranqueada'?dadosUsuario.nivelRanqueada:dadosUsuario.nivelMax).nome;
+  alert(`${modoJogo==='ranqueada'?'🏆 RANQUEADA':'🎉'} Nível ${nivel} concluído!\n+${ganho} 💰\nPatente: ${pat}`);
+}
 
-// MULTIPLAYER CORRIGIDO
+/* MULTIPLAYER */
 function gerarCodigo(){ return Math.random().toString(36).substring(2,6).toUpperCase(); }
-function gerarGradeMulti(dif){ const cfg=cfgPorDificuldade(dif); const g=Array(cfg.tam).fill(0).map(()=>Array(cfg.tam).fill('')); const pos=[]; const palavras=[...PALAVRAS_LUAN].sort(()=>Math.random()-0.5).slice(0,cfg.qtd); palavras.forEach(pal=>{let ok=false,t=0; while(!ok&&t<1000){const horiz=Math.random()>0.5; const l=Math.floor(Math.random()*(cfg.tam-(horiz?0:pal.length))); const c=Math.floor(Math.random()*(cfg.tam-(horiz?pal.length:0))); let cabe=true; for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(g[nl][nc]&&g[nl][nc]!==pal[i]){cabe=false;break;}} if(cabe){for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; g[nl][nc]=pal[i];} pos.push({texto:pal,l,c,dir:horiz}); ok=true;} t++;}}); for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!g[l][c]) g[l][c]=LETRAS[Math.floor(Math.random()*26)]; return {grade:g,palavras,pos,cfg}; }
-
+function gerarGradeMulti(dif){
+  const cfg=cfgPorDificuldade(dif);
+  const g=Array(cfg.tam).fill(0).map(()=>Array(cfg.tam).fill(''));
+  const pos=[]; const palavras=[...PALAVRAS_LUAN].sort(()=>Math.random()-0.5).slice(0,cfg.qtd);
+  palavras.forEach(pal=>{
+    let ok=false,t=0;
+    while(!ok&&t<1000){
+      const horiz=Math.random()>0.5;
+      const l=Math.floor(Math.random()*(cfg.tam-(horiz?0:pal.length)));
+      const c=Math.floor(Math.random()*(cfg.tam-(horiz?pal.length:0)));
+      let cabe=true;
+      for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(g[nl][nc]&&g[nl][nc]!==pal[i]){cabe=false;break;}}
+      if(cabe){for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; g[nl][nc]=pal[i];} pos.push({texto:pal,l,c,dir:horiz}); ok=true;} t++;
+    }
+  });
+  for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!g[l][c]) g[l][c]=LETRAS[Math.floor(Math.random()*26)];
+  return {grade:g,palavras,pos,cfg};
+}
 async function criarSalaMultiplayer(dif){
-  if(!firebaseOK){ alert('Firebase offline: precisa de internet.'); return; }
+  if(!firebaseOK){ alert('Multiplayer precisa de internet. Jogue Solo por enquanto.'); return; }
   dificuldadeAtual=dif; const codigo=gerarCodigo(); const dg=gerarGradeMulti(dif);
   const sala={
     codigo, host:usuarioAtual, hostId: meuId(), guest:null, guestId:null,
@@ -264,18 +557,27 @@ async function criarSalaMultiplayer(dif){
   sala.pontos[meuId()]=0;
   try{ await refSalas.child(codigo).set(sala); }catch(e){ alert('Erro criar sala: '+e.message); return; }
   codigoSalaAtual=codigo; salaAtual=sala; souHost=true; modoJogo='amigo';
-  document.getElementById('codigoSalaTexto').textContent=codigo; document.getElementById('infoDif').textContent=dif.toUpperCase(); document.getElementById('statusSala').textContent='Aguardando amigo...'; document.getElementById('btnIniciarSala').disabled=true; document.getElementById('btnIniciarSala').textContent='⏳ Aguardando oponente...'; mostrarTela('telaSala'); escutarSala(codigo);
+  document.getElementById('codigoSalaTexto').textContent=codigo;
+  document.getElementById('infoDif').textContent=dif.toUpperCase();
+  document.getElementById('statusSala').textContent='Aguardando amigo...';
+  document.getElementById('btnIniciarSala').disabled=true;
+  document.getElementById('btnIniciarSala').textContent='⏳ Aguardando oponente...';
+  mostrarTela('telaSala'); escutarSala(codigo);
 }
 function escutarSala(codigo){
-  if(listenerSala) listenerSala.off();
+  if(listenerSala) try{listenerSala.off();}catch{}
   listenerSala=refSalas.child(codigo);
   listenerSala.on('value', snap=>{
     if(!snap.exists()){ if(modoJogo==='amigo'){ alert('Sala encerrada.'); voltarMenu(); } return; }
     const s=snap.val(); salaAtual=s;
     if(s.status==='waiting'){
-      const guestNome = s.guest ? s.jogadores[s.guestId] || s.guest : null;
-      document.getElementById('statusSala').textContent = guestNome ? `🎉 ${guestNome} entrou!` : 'Aguardando amigo entrar...';
-      if(s.guest){ document.getElementById('btnIniciarSala').disabled=false; document.getElementById('btnIniciarSala').textContent=`🚀 Iniciar 1v1 vs ${guestNome}`; }
+      const guestNome = s.guest ? (s.jogadores[s.guestId] || s.guest) : null;
+      const statusEl=document.getElementById('statusSala');
+      if(statusEl) statusEl.textContent = guestNome ? `🎉 ${guestNome} entrou!` : 'Aguardando amigo entrar...';
+      if(s.guest){
+        const btn=document.getElementById('btnIniciarSala');
+        if(btn){btn.disabled=false; btn.textContent=`🚀 Iniciar 1v1 vs ${guestNome}`;}
+      }
     }
     if(s.status==='playing'){
       if(!document.getElementById('telaJogo').classList.contains('ativa')) iniciarJogoMultiplayerComDados(s);
@@ -284,10 +586,15 @@ function escutarSala(codigo){
     if(s.status==='finished'){ mostrarResultadoMulti(s); }
   });
 }
-async function iniciarSalaHost(){ if(!salaAtual||!salaAtual.guest){ alert('Aguardando amigo!'); return; } await refSalas.child(codigoSalaAtual).update({status:'playing', iniciado:Date.now()}); }
+async function iniciarSalaHost(){
+  if(!salaAtual||!salaAtual.guest){ alert('Aguardando amigo!'); return; }
+  await refSalas.child(codigoSalaAtual).update({status:'playing', iniciado:Date.now()});
+}
 async function entrarSalaCodigo(){
-  const codigo=document.getElementById('campoCodigoSala').value.trim().toUpperCase(); const erro=document.getElementById('msgErroSala');
-  if(!codigo||codigo.length<4){erro.textContent='Código inválido!'; return;} if(!firebaseOK){erro.textContent='Firebase offline'; return;}
+  const codigo=document.getElementById('campoCodigoSala').value.trim().toUpperCase();
+  const erro=document.getElementById('msgErroSala');
+  if(!codigo||codigo.length<4){erro.textContent='Código inválido!'; return;}
+  if(!firebaseOK){erro.textContent='Firebase offline'; return;}
   try{
     const snap=await refSalas.child(codigo).once('value');
     if(!snap.exists()){erro.textContent='Sala não encontrada!'; return;}
@@ -295,7 +602,6 @@ async function entrarSalaCodigo(){
     if(s.hostId===meuId()){erro.textContent='Você é o host!'; return;}
     if(s.guest && s.guestId!==meuId()){erro.textContent='Sala lotada!'; return;}
     if(s.status!=='waiting'){erro.textContent='Jogo já começou!'; return;}
-    // CORREÇÃO: usar / em vez de .  e chave segura
     const updates={};
     updates[`guest`]=usuarioAtual;
     updates[`guestId`]=meuId();
@@ -303,32 +609,218 @@ async function entrarSalaCodigo(){
     updates[`pontos/${meuId()}`]=0;
     await refSalas.child(codigo).update(updates);
     codigoSalaAtual=codigo; salaAtual=s; souHost=false; modoJogo='amigo';
-    erro.textContent=''; mostrarTela('telaSala');
+    erro.textContent='';
+    mostrarTela('telaSala');
     document.getElementById('codigoSalaTexto').textContent=codigo;
     document.getElementById('infoDif').textContent=s.dificuldade.toUpperCase();
     document.getElementById('statusSala').textContent=`✅ Você entrou! Aguardando host...`;
-    document.getElementById('btnIniciarSala').textContent='⏳ Aguardando host iniciar...';
-    document.getElementById('btnIniciarSala').disabled=true;
+    const btn=document.getElementById('btnIniciarSala');
+    if(btn){btn.textContent='⏳ Aguardando host iniciar...'; btn.disabled=true;}
     escutarSala(codigo);
   }catch(e){ erro.textContent='Erro: '+e.message; console.error(e); }
 }
-function iniciarJogoMultiplayerComDados(s){ grade=s.grade; palavrasRodada=s.palavras; palavrasComPosicao=s.posicoes; nivel=1; pontos=s.pontos[meuId()]||0; encontradas=[]; selecionadas=[]; modoJogo='amigo'; dificuldadeAtual=s.dificuldade; for(let palavra in s.encontradas){ const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome}); } prepararTelaJogo(); document.getElementById('nivel').textContent='VS'; atualizarPlacar(); renderizarMulti(); atualizarSaldoJogo(); atualizarPlacarVs(s); }
-function sincronizarMulti(s){ let mudou=false; for(let palavra in s.encontradas){ if(!encontradas.some(e=>e.texto===palavra)){ const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome}); if(quemId!==meuId()) tocarSom('clique'); mudou=true; } } pontos=s.pontos[meuId()]||0; if(mudou){ atualizarPlacar(); renderizarMulti(); } atualizarPlacarVs(s); if(Object.keys(s.encontradas).length===s.palavras.length){ verificarFimMulti(s); } }
-function atualizarPlacarVs(s){ if(!s) s=salaAtual; if(!s) return; const meu=meuId(); const oponenteId = s.hostId===meu ? s.guestId : s.hostId; const oponenteNome = oponenteId ? (s.jogadores[oponenteId]||'Oponente') : 'Aguardando...'; const meuPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0; document.getElementById('nomeEu').textContent=`${usuarioAtual}: ${meuPts}`; document.getElementById('nomeOponente').textContent=`${oponenteNome}: ${delePts}`; document.getElementById('pontos').textContent=meuPts; document.getElementById('contagem').textContent=`${Object.keys(s.encontradas||{}).length}/${palavrasRodada.length}`; }
-function renderizarMulti(){ const cfg=salaAtual.cfg; const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML=''; for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c]; d.onclick=()=>clicarMulti(l,c); if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada'); const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`)); if(enc){ d.classList.add('encontrada'); if(enc.donoId!==meuId()) d.classList.add('inimigo'); } g.appendChild(d);} const lista=document.getElementById('listaPalavras'); lista.innerHTML=''; palavrasRodada.forEach(p=>{const enc=encontradas.find(e=>e.texto===p); const d=document.createElement('div'); d.className='palavra'+(enc?' encontrada':''); if(enc){ d.textContent= enc.donoId===meuId()? `${p} (você)`: `${p} (${enc.dono})`; d.classList.add(enc.donoId===meuId()?'eu':'inimigo'); } else d.textContent=p; lista.appendChild(d);});}
-function clicarMulti(l,c){ const ja=encontradas.some(e=>e.linhas.has(`${l},${c}`)); if(ja) return; tocarSom('clique'); const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c); if(idx>=0){selecionadas.splice(idx,1); renderizarMulti(); return;} selecionadas.push({l,c}); if(selecionadas.length>=2){const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l); const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c); let txt=''; if(mesmaLinha){selecionadas.sort((a,b)=>a.c-b.c); txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));} else if(mesmaColuna){selecionadas.sort((a,b)=>a.l-b.l); txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));}} renderizarMulti();}
-async function tentarVerificarMulti(palavra){ if(!PALAVRAS_LUAN.includes(palavra)) return false; if(encontradas.some(e=>e.texto===palavra)) return true; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false; try{ const ref=refSalas.child(codigoSalaAtual); const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{}; if(atuais[palavra]) return true; await ref.child(`encontradas/${palavra}`).set(meuId()); const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0; await ref.child(`pontos/${meuId()}`).set(atualPts+palavra.length*10); tocarSom('acerto'); selecionadas=[]; return true; }catch(e){ console.error(e); alert('Erro: '+e.message); return false; } }
-async function verificarFimMulti(s){ const total=Object.keys(s.encontradas).length; if(total< s.palavras.length) return; if(souHost && s.status!=='finished'){ let vencedor=null, max=-1; for(let k in s.pontos){ if(s.pontos[k]>max){max=s.pontos[k]; vencedor=k;} } const empate=Object.values(s.pontos).filter(v=>v===max).length>1; await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor: empate?'empate':vencedor, finalizado:Date.now()}); } }
-function mostrarResultadoMulti(s){ if(s._alertou) return; const meu=meuId(); const oponenteId=s.hostId===meu ? s.guestId : s.hostId; const oponenteNome=s.jogadores[oponenteId]||'Oponente'; const euPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0; let msg=''; if(s.vencedor==='empate'){msg=`🤝 Empate!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+15 💰` ; dadosUsuario.moedas=(dadosUsuario.moedas||0)+15; } else if(s.vencedor===meu){msg=`🏆 Você venceu!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+30 💰!`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+30; } else{msg=`😢 Você perdeu!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+10 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+10; } s._alertou=true; salvarDados(); alert(msg); setTimeout(()=>voltarMenu(),1500); }
+function iniciarJogoMultiplayerComDados(s){
+  grade=s.grade; palavrasRodada=s.palavras; palavrasComPosicao=s.posicoes; nivel=1;
+  pontos=s.pontos[meuId()]||0; encontradas=[]; selecionadas=[];
+  modoJogo='amigo'; dificuldadeAtual=s.dificuldade;
+  for(let palavra in (s.encontradas||{})){
+    const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId;
+    const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue;
+    const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
+    encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome});
+  }
+  prepararTelaJogo(); const elN=document.getElementById('nivel'); if(elN) elN.textContent='VS';
+  atualizarPlacar(); renderizarMulti(); atualizarSaldoJogo(); atualizarPlacarVs(s);
+}
+function sincronizarMulti(s){
+  let mudou=false;
+  for(let palavra in (s.encontradas||{})){
+    if(!encontradas.some(e=>e.texto===palavra)){
+      const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId;
+      const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue;
+      const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
+      encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome});
+      if(quemId!==meuId()) tocarSom('clique'); mudou=true;
+    }
+  }
+  pontos=s.pontos[meuId()]||0;
+  if(mudou){ atualizarPlacar(); renderizarMulti(); }
+  atualizarPlacarVs(s);
+  if(Object.keys(s.encontradas||{}).length===s.palavras.length){ verificarFimMulti(s); }
+}
+function atualizarPlacarVs(s){
+  if(!s) s=salaAtual; if(!s) return;
+  const meu=meuId(); const oponenteId = s.hostId===meu ? s.guestId : s.hostId;
+  const oponenteNome = oponenteId ? (s.jogadores[oponenteId]||'Oponente') : 'Aguardando...';
+  const meuPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0;
+  const euEl=document.getElementById('nomeEu'); if(euEl) euEl.textContent=`${usuarioAtual}: ${meuPts}`;
+  const opEl=document.getElementById('nomeOponente'); if(opEl) opEl.textContent=`${oponenteNome}: ${delePts}`;
+  const pEl=document.getElementById('pontos'); if(pEl) pEl.textContent=meuPts;
+  const cEl=document.getElementById('contagem'); if(cEl) cEl.textContent=`${Object.keys(s.encontradas||{}).length}/${palavrasRodada.length}`;
+}
+function renderizarMulti(){
+  if(!salaAtual) return;
+  const cfg=salaAtual.cfg; const g=document.getElementById('grade'); if(!g) return;
+  g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
+  for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){
+    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c];
+    d.onclick=()=>clicarMulti(l,c);
+    if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada');
+    const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`));
+    if(enc){ d.classList.add('encontrada'); if(enc.donoId!==meuId()) d.classList.add('inimigo'); }
+    g.appendChild(d);
+  }
+  const lista=document.getElementById('listaPalavras'); if(!lista) return; lista.innerHTML='';
+  palavrasRodada.forEach(p=>{
+    const enc=encontradas.find(e=>e.texto===p);
+    const d=document.createElement('div'); d.className='palavra'+(enc?' encontrada':'');
+    if(enc){ d.textContent= enc.donoId===meuId()? `${p} (você)`: `${p} (${enc.dono})`; }
+    else d.textContent=p; lista.appendChild(d);
+  });
+}
+function clicarMulti(l,c){
+  if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
+  tocarSom('clique');
+  const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c);
+  if(idx>=0){selecionadas.splice(idx,1); renderizarMulti(); return;}
+  selecionadas.push({l,c});
+  if(selecionadas.length>=2){
+    const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l);
+    const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c);
+    if(mesmaLinha){
+      selecionadas.sort((a,b)=>a.c-b.c);
+      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));
+    } else if(mesmaColuna){
+      selecionadas.sort((a,b)=>a.l-b.l);
+      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));
+    }
+  }
+  renderizarMulti();
+}
+async function tentarVerificarMulti(palavra){
+  if(!PALAVRAS_LUAN.includes(palavra)) return false;
+  if(encontradas.some(e=>e.texto===palavra)) return true;
+  const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false;
+  try{
+    const ref=refSalas.child(codigoSalaAtual);
+    const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{};
+    if(atuais[palavra]) return true;
+    await ref.child(`encontradas/${palavra}`).set(meuId());
+    const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0;
+    await ref.child(`pontos/${meuId()}`).set(atualPts+palavra.length*10);
+    tocarSom('acerto'); selecionadas=[]; return true;
+  }catch(e){ console.error(e); alert('Erro: '+e.message); return false; }
+}
+async function verificarFimMulti(s){
+  const total=Object.keys(s.encontradas||{}).length;
+  if(total< s.palavras.length) return;
+  if(souHost && s.status!=='finished'){
+    let vencedor=null, max=-1;
+    for(let k in s.pontos){ if(s.pontos[k]>max){max=s.pontos[k]; vencedor=k;} }
+    const empate=Object.values(s.pontos).filter(v=>v===max).length>1;
+    await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor: empate?'empate':vencedor, finalizado:Date.now()});
+  }
+}
+function mostrarResultadoMulti(s){
+  if(s._alertou) return; s._alertou=true;
+  const meu=meuId(); const oponenteId=s.hostId===meu ? s.guestId : s.hostId;
+  const oponenteNome=s.jogadores[oponenteId]||'Oponente';
+  const euPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0;
+  let msg='';
+  if(s.vencedor==='empate'){msg=`🤝 Empate!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+15 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+15;}
+  else if(s.vencedor===meu){msg=`🏆 Você venceu!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+30 💰!`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+30;}
+  else{msg=`😢 Você perdeu!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+10 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+10;}
+  salvarDados(); alert(msg); setTimeout(()=>voltarMenu(),1500);
+}
 
-function atualizarSaldoJogo(){ document.getElementById('saldoJogo').textContent=`💰 ${dadosUsuario.moedas||0}`; document.getElementById('botaoDica').disabled=!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA; }
-async function usarDica(){ if(modoJogo==='amigo'){ alert('Sem dicas no VS! 👥'); return;} if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;} const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto)); if(!alvo){alert('Todas encontradas!'); return;} if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();} tocarSom('clique'); alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`); atualizarSaldoJogo();}
-function acharTodasPalavras(){if(!EH_MESTRE) return; if(modoJogo==='amigo'){alert('Mestre desativado no VS'); return;} tocarSom('nivel'); palavrasComPosicao.forEach(p=>{if(encontradas.some(e=>e.texto===p.texto)) return; const set=new Set(); for(let i=0;i<p.texto.length;i++){const nl=p.dir?p.l:p.l+i,nc=p.dir?p.c+i:p.c; set.add(`${nl},${nc}`);} encontradas.push({texto:p.texto,linhas:set}); pontos+=p.texto.length*10;}); selecionadas=[]; atualizarPlacar(); renderizarSolo(); if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);}
-function proximoNivel(){ if(modoJogo==='amigo'){ alert('No 1v1 é partida única!'); return; } if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras! Continuar?')) return; tocarSom('clique'); nivel++; pontos=0; iniciarRodadaSolo(); }
-function iniciarQuiz(){perguntaAtual=0; acertosQuiz=0; document.getElementById('acertosQuiz').textContent='0'; mostrarTela('telaQuiz'); carregarPergunta();}
-function carregarPergunta(){ if(perguntaAtual>=PERGUNTAS_QUIZ.length){ const msg=acertosQuiz>=8?`🏆 Excelente! ${acertosQuiz}/10!`:acertosQuiz>=5?`👍 Bom! ${acertosQuiz}/10!`:`📚 ${acertosQuiz}/10!`; if(acertosQuiz>=5){const b=EH_MESTRE?40:20; dadosUsuario.moedas=(dadosUsuario.moedas||0)+b; salvarDados(); alert(msg+`\n+${b} 💰`);} else alert(msg); voltarMenu(); return;} const p=PERGUNTAS_QUIZ[perguntaAtual]; document.getElementById('textoPergunta').textContent=`${perguntaAtual+1}. ${p.pergunta}`; const lista=document.getElementById('listaAlternativas'); lista.innerHTML=''; p.alternativas.forEach((alt,i)=>{const d=document.createElement('div'); d.className='alternativa'; d.textContent=alt; d.onclick=()=>{ if(lista.dataset.resp) return; lista.dataset.resp='1'; if(i===p.correta){d.classList.add('correta'); acertosQuiz++; document.getElementById('acertosQuiz').textContent=acertosQuiz; tocarSom('acerto');} else{d.classList.add('errada'); [...lista.children][p.correta].classList.add('correta'); tocarSom('erro');} setTimeout(()=>{perguntaAtual++; delete lista.dataset.resp; carregarPergunta();},900);}; lista.appendChild(d);});}
-async function carregarRankingGeral(){const lista=document.getElementById('listaRankingGeral'); lista.innerHTML='<p style="text-align:center">Carregando...</p>'; let dados=[]; if(firebaseOK){try{const snap=await refRanking.orderByChild('pontos').limitToLast(50).once('value'); snap.forEach(ch=>dados.push(ch.val())); dados.sort((a,b)=>b.pontos-a.pontos);}catch(e){}} if(dados.length===0){for(let k in localStorage){if(k.startsWith('luan_') && !k.includes('ultimo')){try{const u=JSON.parse(localStorage.getItem(k)); dados.push({nome:k.replace('luan_',''),pontos:Math.max(u.pontosTotal||0,u.pontosRanqueada||0),nivel:Math.max(u.nivelMax||1,u.nivelRanqueada||1),patente:getPatente(Math.max(u.nivelMax||1,u.nivelRanqueada||1)).nome,eMestre:u.eMestre});}catch(e){}}}} dados.sort((a,b)=>b.pontos-a.pontos); lista.innerHTML=''; if(dados.length===0){lista.innerHTML='<p style="text-align:center;opacity:0.6">Nenhum jogador</p>'; return;} dados.slice(0,30).forEach((j,i)=>{const div=document.createElement('div'); div.className='item'+(j.nome===usuarioAtual?' voce':''); div.innerHTML=`<div style="font-size:22px;width:40px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º'}</div><div style="flex:1"><strong>${j.nome}${j.eMestre?' 👑':''}</strong><br><small>${j.patente} • Nv ${j.nivel}</small></div><div style="color:#ffd700;font-weight:bold">${j.pontos} pts</div>`; lista.appendChild(div);});}
-async function comprarDicaLoja(){ if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;} if(!EH_MESTRE) dadosUsuario.moedas-=PRECO_DICA; dadosUsuario.dicasExtras=(dadosUsuario.dicasExtras||0)+1; await salvarDados(); atualizarSaldoLoja(); atualizarTelaInicio(); alert(EH_MESTRE?'👑 Dica grátis!':'✅ Dica comprada!');}
+function atualizarSaldoJogo(){
+  const el=document.getElementById('saldoJogo'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;
+  const btn=document.getElementById('botaoDica'); if(btn) btn.disabled=!EH_MESTRE&&(dadosUsuario?.moedas||0)<PRECO_DICA;
+}
+async function usarDica(){
+  if(modoJogo==='amigo'){ alert('Sem dicas no VS! 👥'); return;}
+  if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;}
+  const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto));
+  if(!alvo){alert('Todas encontradas!'); return;}
+  if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();}
+  tocarSom('clique'); alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`); atualizarSaldoJogo();
+}
+function acharTodasPalavras(){
+  if(!EH_MESTRE) return;
+  if(modoJogo==='amigo'){alert('Mestre desativado no VS'); return;}
+  tocarSom('nivel');
+  palavrasComPosicao.forEach(p=>{
+    if(encontradas.some(e=>e.texto===p.texto)) return;
+    const set=new Set(); for(let i=0;i<p.texto.length;i++){const nl=p.dir?p.l:p.l+i,nc=p.dir?p.c+i:p.c; set.add(`${nl},${nc}`);}
+    encontradas.push({texto:p.texto,linhas:set}); pontos+=p.texto.length*10;
+  });
+  selecionadas=[]; atualizarPlacar(); renderizarSolo();
+  if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);
+}
+function proximoNivel(){
+  if(modoJogo==='amigo'){ alert('No 1v1 é partida única!'); return; }
+  if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras! Continuar?')) return;
+  tocarSom('clique'); nivel++; pontos=0; iniciarRodadaSolo();
+}
+function iniciarQuiz(){perguntaAtual=0; acertosQuiz=0; const el=document.getElementById('acertosQuiz'); if(el) el.textContent='0'; mostrarTela('telaQuiz'); carregarPergunta();}
+function carregarPergunta(){
+  if(perguntaAtual>=PERGUNTAS_QUIZ.length){
+    const msg=acertosQuiz>=8?`🏆 Excelente! ${acertosQuiz}/10!`:acertosQuiz>=5?`👍 Bom! ${acertosQuiz}/10!`:`📚 ${acertosQuiz}/10!`;
+    if(acertosQuiz>=5){const b=EH_MESTRE?40:20; dadosUsuario.moedas=(dadosUsuario.moedas||0)+b; salvarDados(); alert(msg+`\n+${b} 💰`);} else alert(msg);
+    voltarMenu(); return;
+  }
+  const p=PERGUNTAS_QUIZ[perguntaAtual];
+  const txt=document.getElementById('textoPergunta'); if(txt) txt.textContent=`${perguntaAtual+1}. ${p.pergunta}`;
+  const lista=document.getElementById('listaAlternativas'); if(!lista) return; lista.innerHTML=''; lista.removeAttribute('data-resp');
+  p.alternativas.forEach((alt,i)=>{
+    const d=document.createElement('div'); d.className='alternativa'; d.textContent=alt;
+    d.onclick=()=>{
+      if(lista.dataset.resp) return; lista.dataset.resp='1';
+      if(i===p.correta){d.classList.add('correta'); acertosQuiz++; const ac=document.getElementById('acertosQuiz'); if(ac) ac.textContent=acertosQuiz; tocarSom('acerto');}
+      else{d.classList.add('errada'); [...lista.children][p.correta].classList.add('correta'); tocarSom('erro');}
+      setTimeout(()=>{perguntaAtual++; carregarPergunta();},900);
+    };
+    lista.appendChild(d);
+  });
+}
+async function carregarRankingGeral(){
+  const lista=document.getElementById('listaRankingGeral'); if(!lista) return;
+  lista.innerHTML='<p style="text-align:center">Carregando...</p>';
+  let dados=[];
+  if(firebaseOK){
+    try{
+      const snap=await refRanking.orderByChild('pontos').limitToLast(50).once('value');
+      snap.forEach(ch=>dados.push(ch.val()));
+      dados.sort((a,b)=>b.pontos-a.pontos);
+    }catch(e){}
+  }
+  if(dados.length===0){
+    for(let k in localStorage){
+      if(k.startsWith('luan_') && !k.includes('ultimo')){
+        try{
+          const u=JSON.parse(localStorage.getItem(k));
+          dados.push({nome:k.replace('luan_',''),pontos:Math.max(u.pontosTotal||0,u.pontosRanqueada||0),nivel:Math.max(u.nivelMax||1,u.nivelRanqueada||1),patente:getPatente(Math.max(u.nivelMax||1,u.nivelRanqueada||1)).nome,eMestre:u.eMestre});
+        }catch(e){}
+      }
+    }
+  }
+  dados.sort((a,b)=>b.pontos-a.pontos); lista.innerHTML='';
+  if(dados.length===0){lista.innerHTML='<p style="text-align:center;opacity:0.6">Nenhum jogador</p>'; return;}
+  dados.slice(0,30).forEach((j,i)=>{
+    const div=document.createElement('div'); div.className='item'+(j.nome===usuarioAtual?' voce':'');
+    div.innerHTML=`<div style="font-size:22px;width:40px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º'}</div><div style="flex:1"><strong>${j.nome}${j.eMestre?' 👑':''}</strong><br><small>${j.patente} • Nv ${j.nivel}</small></div><div style="color:#ffd700;font-weight:bold">${j.pontos} pts</div>`;
+    lista.appendChild(div);
+  });
+}
+async function comprarDicaLoja(){
+  if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;}
+  if(!EH_MESTRE) dadosUsuario.moedas-=PRECO_DICA;
+  dadosUsuario.dicasExtras=(dadosUsuario.dicasExtras||0)+1;
+  await salvarDados(); atualizarSaldoLoja(); atualizarTelaInicio();
+  alert(EH_MESTRE?'👑 Dica grátis!':'✅ Dica comprada!');
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('botaoEntrar').onclick=entrar;
@@ -356,13 +848,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnComprarMenu').onclick=comprarDicaLoja;
   document.getElementById('btnConfirmarEntrar').onclick=entrarSalaCodigo;
   document.getElementById('btnIniciarSala').onclick=iniciarSalaHost;
-  document.getElementById('btnCopiarCodigo').onclick=()=>{ const c=document.getElementById('codigoSalaTexto').textContent; navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c)); };
-  document.querySelectorAll('[id^="botaoSom"]').forEach(b=>b.onclick=alternarSom);
+  document.getElementById('btnCopiarCodigo').onclick=()=>{
+    const c=document.getElementById('codigoSalaTexto').textContent;
+    if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c));}
+    else{prompt('Copie o código:',c);}
+  };
+  document.querySelectorAll('.som').forEach(b=>b.onclick=alternarSom);
   document.querySelectorAll('[data-dificuldade]').forEach(b=>{b.onclick=()=>iniciarJogoEscolhido(b.dataset.dificuldade);});
-  document.getElementById('campoSenha').addEventListener('keydown', e=>{ if(e.key==='Enter') entrar(); });
-  const ultimo=localStorage.getItem('luan_ultimo'); if(ultimo) document.getElementById('campoUsuario').value=ultimo;
+  const senhaInput=document.getElementById('campoSenha');
+  if(senhaInput) senhaInput.addEventListener('keydown', e=>{ if(e.key==='Enter') entrar(); });
+  try{
+    const ultimo=localStorage.getItem('luan_ultimo');
+    if(ultimo) document.getElementById('campoUsuario').value=ultimo;
+  }catch{}
+  const usuarioInput=document.getElementById('campoUsuario');
+  if(usuarioInput) usuarioInput.addEventListener('input', e=>{try{localStorage.setItem('luan_ultimo',e.target.value.trim());}catch{}});
 });
-document.getElementById('campoUsuario')?.addEventListener('input', e=>{localStorage.setItem('luan_ultimo',e.target.value.trim());});
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
