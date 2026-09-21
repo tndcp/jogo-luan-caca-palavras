@@ -24,33 +24,38 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luan Coins V6 - Stop Profissional</title>
+<title>Luan Coins V7 - Stop Auto Secreto</title>
 <style>
-:root{--bg:#0f0f1a;--card:#1a1a2e;--card2:#252542;--border:#2e2e4e;--gold:#ffd700;--green:#00e676;--red:#ff1744;}
+:root{--bg:#0e0e1a;--card:#1b1b32;--card2:#252545;--border:#2f2f52;--gold:#ffd700;--green:#00e676;--red:#ff1744;}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
 body{background:var(--bg);color:#e8e8ff;min-height:100vh;padding:10px}
 .container{max-width:600px;margin:0 auto}
-h1{font-size:20px;color:var(--gold);text-align:center;margin:10px 0}
-h2{font-size:17px;color:var(--gold);text-align:center;margin:10px 0}
+h1{font-size:19px;color:var(--gold);text-align:center;margin:10px 0}
+h2{font-size:16px;color:var(--gold);text-align:center;margin:10px 0}
 .tela{display:none;animation:fadeIn .3s ease}
 .tela.ativa{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-input,select,textarea{width:100%;padding:11px 13px;font-size:13px;border-radius:10px;background:var(--card);color:#fff;border:1px solid var(--border);margin-bottom:7px;outline:none}
-button{width:100%;padding:12px;font-size:13px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin:4px 0;transition:.2s}
+@keyframes pulseGold{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #ffd70066}50%{transform:scale(1.03);box-shadow:0 0 0 12px #ffd70000}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+input,select{width:100%;padding:11px 13px;font-size:13px;border-radius:10px;background:var(--card);color:#fff;border:1px solid var(--border);margin-bottom:7px;outline:none}
+button{width:100%;padding:11px;font-size:13px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin:4px 0;transition:.2s}
 button:active{transform:scale(.97)}
 .primario{background:linear-gradient(135deg,#ffd700,#ffb300);color:#000}
 .secundario{background:var(--card2);color:#fff;border:1px solid var(--border)}
 .ranqueada{background:linear-gradient(135deg,#9c27b0,#673ab7);color:#fff}
 .amigo{background:linear-gradient(135deg,#ff5722,#ff9800);color:#fff}
 .stop{background:linear-gradient(135deg,#00e676,#00bfa5);color:#000;font-weight:900}
-.loja{background:linear-gradient(135deg,#00bcd4,#0097a7);color:#fff}
-.som{background:var(--card2);color:#aaa;width:auto;padding:6px 10px;font-size:11px;border:1px solid var(--border)}
-.mestre{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;width:auto;padding:7px 11px;font-size:11px;border-radius:20px;border:1px solid #fff;position:fixed;bottom:12px;right:12px;z-index:100}
-.erro{color:#ff5252;text-align:center;margin:6px 0;min-height:16px;font-size:11px}
+.som{background:var(--card2);color:#aaa;width:auto;padding:5px 9px;font-size:11px;border:1px solid var(--border)}
+.mestre{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;width:auto;padding:6px 10px;font-size:10px;border-radius:20px;border:1px solid #fff;position:fixed;bottom:10px;right:10px;z-index:100}
+.btn-auto-cheat{position:fixed;top:10px;right:10px;z-index:200;width:auto;padding:6px 10px;font-size:10px;border-radius:20px;background:#111;border:1px solid #ffd700;color:#ffd700;display:none;animation:pulseGold 2s infinite}
+.btn-auto-cheat.ativo{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;border-color:#fff}
+.btn-auto-cheat.visivel{display:block}
+.erro{color:#ff5252;text-align:center;margin:5px 0;min-height:14px;font-size:11px}
 .top-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
 .stat-value{font-size:18px;font-weight:800;color:var(--gold)}
-.stat-label{font-size:10px;opacity:.6;text-transform:uppercase}
+.stat-label{font-size:9px;opacity:.6;text-transform:uppercase}
 .patente-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin:10px 0}
 .progress-bar{height:7px;background:#0f0f1a;border-radius:20px;overflow:hidden;border:1px solid var(--border);margin-top:8px}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ff8c00);transition:width .6s}
@@ -58,73 +63,57 @@ button:active{transform:scale(.97)}
 .oculta{display:none !important}
 .placar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:10px 0}
 .caixa{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center}
-.caixa div:first-child{font-size:9px;opacity:.5;text-transform:uppercase}
-.caixa div:last-child{font-size:16px;font-weight:800}
 .grade{display:grid;gap:3px;margin:12px 0;background:var(--card);padding:5px;border-radius:12px;border:1px solid var(--border)}
 .casa{aspect-ratio:1;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;user-select:none;font-size:13px;border:1px solid transparent;transition:.12s}
-.casa.selecionada{background:var(--gold) !important;color:#000 !important;transform:scale(1.08);border-color:#fff;box-shadow:0 0 8px #ffd70088}
+.casa.selecionada{background:var(--gold) !important;color:#000 !important;transform:scale(1.08)}
 .casa.encontrada{background:linear-gradient(135deg,#00c853,#69f0ae) !important;color:#000 !important}
-.casa.encontrada.inimigo{background:linear-gradient(135deg,#ff1744,#ff8a65) !important;color:#fff !important}
 .palavras{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .palavra{padding:5px 9px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:600}
 .palavra.encontrada{opacity:.35;text-decoration:line-through}
 .ranking-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .ranking-card.voce{border-color:var(--gold)}
-.ranking-pos{font-size:15px;font-weight:900;width:30px;text-align:center}
-.ranking-info{flex:1;min-width:0}
-.ranking-nome{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ranking-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
-.meta-chip{font-size:9px;padding:2px 6px;border-radius:20px;background:var(--bg);border:1px solid var(--border)}
-.ranking-pontos{font-size:15px;color:var(--gold);font-weight:800}
-.pergunta{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:12px;margin:10px 0;text-align:center}
-.alternativa{padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;margin:5px 0;cursor:pointer;text-align:left;font-size:12px;position:relative}
-.alternativa.correta{background:#00c85322;border-color:#00c853}
-.alternativa.errada{background:#ff174422;border-color:#ff1744}
-.alternativa.mestre-gabarito{border-color:var(--gold) !important;box-shadow:0 0 0 2px #ffd70033}
-.vs-placar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin:8px 0;display:flex;flex-direction:column;gap:6px}
-.codigo-sala{font-size:24px;letter-spacing:5px;text-align:center;background:var(--card);padding:10px;border-radius:10px;border:1px dashed var(--gold);margin:8px 0;font-weight:900;color:var(--gold)}
 .lista{display:flex;flex-direction:column;gap:5px}
 .item{display:flex;gap:8px;padding:9px;background:var(--card);border:1px solid var(--border);border-radius:10px;align-items:center;font-size:12px}
 .item.voce{border-color:var(--gold)}
-/* STOP PRO */
-.stop-setup{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0}
-.stop-setup h3{font-size:13px;margin-bottom:8px;color:var(--gold)}
-.setup-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:180px;overflow-y:auto;padding:4px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
-.check-item{display:flex;align-items:center;gap:6px;font-size:11px;padding:4px 6px;background:var(--card2);border-radius:6px;border:1px solid transparent;cursor:pointer}
-.check-item.ativo{border-color:var(--green);background:#00e67611}
-.check-item input{width:auto;margin:0}
-.stop-letra{font-size:52px;font-weight:900;color:var(--gold);text-align:center;background:var(--card);border:2px solid var(--gold);border-radius:16px;padding:12px;margin:10px 0;line-height:1}
+.codigo-sala{font-size:22px;letter-spacing:5px;text-align:center;background:var(--card);padding:10px;border-radius:10px;border:1px dashed var(--gold);margin:8px 0;font-weight:900;color:var(--gold)}
+.vs-placar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin:8px 0;display:flex;flex-direction:column;gap:6px}
+
+/* STOP CHAMATIVO */
+.stop-hero{background:linear-gradient(135deg,#1a1a2e,#252545,#1a1a2e);background-size:200% 200%;animation:bgShift 4s ease infinite;border:1px solid var(--border);border-radius:16px;padding:12px;margin:8px 0;position:relative;overflow:hidden}
+.stop-hero::before{content:'✨';position:absolute;top:8px;left:12px;animation:float 2s ease-in-out infinite}
+.stop-hero::after{content:'🎉';position:absolute;top:8px;right:12px;animation:float 2s ease-in-out infinite .5s}
+.stop-letra{font-size:56px;font-weight:900;color:var(--gold);text-align:center;line-height:1;text-shadow:0 0 20px #ffd70088;animation:pulseGold 1.8s infinite;display:block}
+.stop-letra-sub{font-size:11px;opacity:.6;text-align:center;margin-top:4px;text-transform:uppercase;letter-spacing:2px}
+.timer-bar{height:8px;background:var(--bg);border-radius:10px;overflow:hidden;margin:8px 0;border:1px solid var(--border)}
+.timer-fill{height:100%;background:linear-gradient(90deg,#00e676,#ffd700,#ff6d00,#ff1744);transition:width 1s linear}
 .stop-categorias{display:grid;gap:8px;margin:10px 0}
-.stop-cat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;position:relative}
-.stop-cat.invalido{border-color:var(--red);background:#ff174411}
-.stop-cat.valido{border-color:var(--green);background:#00e67611}
-.stop-cat label{font-size:10px;opacity:.7;text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:4px;font-weight:700}
-.stop-cat .pontos-badge{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
-.chat-box{background:var(--card);border:1px solid var(--border);border-radius:10px;height:160px;overflow-y:auto;padding:6px;margin:6px 0;display:flex;flex-direction:column;gap:3px}
+.stop-cat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;position:relative;transition:.3s}
+.stop-cat.valido{border-color:var(--green);background:#00e6760f;box-shadow:0 0 0 2px #00e67622}
+.stop-cat.invalido{border-color:var(--red);background:#ff17440f;box-shadow:0 0 0 2px #ff174422;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.stop-cat label{font-size:10px;opacity:.7;text-transform:uppercase;display:flex;justify-content:space-between;margin-bottom:5px;font-weight:700}
+.badge{font-size:9px;padding:2px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
+.badge.ok{background:#00e67622;color:#00e676;border-color:#00e67644}
+.badge.no{background:#ff174422;color:#ff6d00;border-color:#ff174444}
+.badge.auto{background:#ffd70022;color:var(--gold);border-color:#ffd70044}
+.chat-box{background:var(--card);border:1px solid var(--border);border-radius:10px;height:140px;overflow-y:auto;padding:6px;margin:6px 0;display:flex;flex-direction:column;gap:3px}
 .chat-msg{font-size:11px;padding:5px 9px;border-radius:10px;background:var(--card2);max-width:85%;word-break:break-word}
 .chat-msg.eu{align-self:flex-end;background:#ffd70022;border:1px solid #ffd70044}
 .chat-input-row{display:flex;gap:5px}
 .emoji-bar{display:flex;gap:3px;flex-wrap:wrap;margin:5px 0}
 .emoji-btn{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 7px;font-size:14px;width:auto;min-width:32px}
-.timer-bar{height:6px;background:var(--bg);border-radius:10px;overflow:hidden;margin:6px 0;border:1px solid var(--border)}
-.timer-fill{height:100%;background:linear-gradient(90deg,#00e676,#ffd700,#ff1744);transition:width 1s linear}
-.stop-resultado{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin:8px 0}
-.result-table{width:100%;border-collapse:collapse;font-size:11px}
-.result-table th{font-size:9px;opacity:.6;text-align:left;padding:4px;border-bottom:1px solid var(--border)}
-.result-table td{padding:6px 4px;border-bottom:1px solid var(--border);vertical-align:top}
-.result-table tr.eu{background:#ffd7000f}
-.vote-btn{width:auto;padding:2px 8px;font-size:10px;margin:1px;border-radius:6px}
-.vote-btn.ok{background:#00c853;color:#fff}
-.vote-btn.no{background:#ff1744;color:#fff}
-.vote-btn.active{box-shadow:0 0 0 2px #fff}
+.stop-setup{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin:8px 0}
+.checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;max-height:150px;overflow-y:auto;padding:4px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.check-item{display:flex;align-items:center;gap:5px;font-size:11px;padding:4px 6px;background:var(--card2);border-radius:6px;border:1px solid transparent;cursor:pointer}
+.check-item.ativo{border-color:var(--green);background:#00e67611}
+.check-item input{width:auto;margin:0}
 </style>
 </head>
 <body>
 <div class="container">
 
 <div id="telaLogin" class="tela ativa">
-  <h1>🎸 LUAN COINS V6</h1>
+  <h1>🎸 LUAN COINS V7</h1>
   <input type="text" id="campoUsuario" placeholder="Nome">
   <input type="password" id="campoSenha" placeholder="Senha">
   <div id="msgErro" class="erro"></div>
@@ -143,7 +132,7 @@ button:active{transform:scale(.97)}
 
 <div id="telaInicio" class="tela">
   <div style="display:flex;justify-content:space-between;align-items:center"><h1 style="margin:0">🎸 LUAN COINS</h1><button class="som" id="botaoSom">🔊 ON</button></div>
-  <div id="avisoMestre" class="oculta" style="background:#ffd70014;border:1px solid #ffd70044;border-radius:8px;padding:6px;font-size:11px;text-align:center;margin:6px 0">👑 Dono ativo</div>
+  <div id="avisoMestre" class="oculta" style="background:#ffd70014;border:1px solid #ffd70044;border-radius:8px;padding:6px;font-size:11px;text-align:center;margin:6px 0">👑 Dono ativo - Auto Stop liberado</div>
   <div class="top-stats">
     <div class="stat-card"><div class="stat-value" id="saldoMoedas">0</div><div class="stat-label">Coins</div></div>
     <div class="stat-card"><div class="stat-value" id="statPontos">0</div><div class="stat-label">Pts Ranqueada</div></div>
@@ -154,66 +143,55 @@ button:active{transform:scale(.97)}
     <div class="progress-text"><span id="progressAtual">0 pts</span><span id="progressProx">500 pts</span></div>
     <div style="font-size:10px;opacity:.5;text-align:center;margin-top:4px" id="progressFalta"></div>
   </div>
-  <button class="secundario" id="btnSolo">🎮 Solo (só moedas)</button>
-  <button class="ranqueada" id="btnRanqueada">🏆 Ranqueada (vale patente)</button>
+  <button class="secundario" id="btnSolo">🎮 Solo</button>
+  <button class="ranqueada" id="btnRanqueada">🏆 Ranqueada</button>
   <button class="amigo" id="btnAmigo">👥 Caça 1v1 Infinito</button>
-  <button class="stop" id="btnStop">🛑 STOP Adedonha (2-6 jogadores) - PRO</button>
+  <button class="stop" id="btnStop">🛑 STOP Adedonha 2-6 Jogadores - PRO</button>
   <button class="secundario" id="btnEntrarSala">🚪 Entrar com Código</button>
-  <button class="secundario" id="btnQuiz">🎤 Quiz Solo</button>
-  <button class="secundario" id="btnQuizAmigo">🎤 Quiz 1v1</button>
-  <button class="loja" id="btnLoja">🛒 Loja</button>
+  <button class="secundario" id="btnQuiz">🎤 Quiz</button>
   <button class="secundario" id="btnRanking">📊 Ranking</button>
   <button class="secundario" id="btnSair">🚪 Sair</button>
 </div>
 
 <div id="telaEscolhaModo" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2 id="tituloEscolha">Escolha</h2><button class="som" id="botaoSom2">🔊</button></div>
+  <h2 id="tituloEscolha">Escolha</h2>
   <button class="primario" data-dificuldade="facil">🟢 Fácil - 12x12</button>
   <button class="primario" data-dificuldade="medio" style="background:linear-gradient(135deg,#ff9800,#ff5722);color:#fff">🟡 Médio - 15x15</button>
-  <button class="ranqueada" data-dificuldade="dificil">🔴 Difícil - 18x18 + diagonais</button>
+  <button class="ranqueada" data-dificuldade="dificil">🔴 Difícil - 18x18</button>
   <button class="secundario" id="btnVoltarInicio1">← Voltar</button>
 </div>
 
-<!-- SALA CACA/QUIZ -->
 <div id="telaSala" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2 id="tituloSala">Sala</h2><button class="som" id="botaoSomSala">🔊</button></div>
+  <h2 id="tituloSala">Sala</h2>
   <div class="codigo-sala" id="codigoSalaTexto">----</div>
   <div id="statusSala" style="text-align:center;font-size:12px;margin:6px 0">Aguardando...</div>
   <div id="listaJogadoresSala" class="lista"></div>
   <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;font-size:11px;margin:6px 0"><span id="infoDif"></span> • <span id="infoTipo"></span> • Rodada <span id="infoRodada">1</span></div>
   <div id="chatSalaBox" class="chat-box"></div>
-  <div class="chat-input-row"><input type="text" id="chatSalaInput" placeholder="Chat..."><button style="width:auto;padding:8px 14px" id="btnChatSala" class="primario">➤</button></div>
-  <div class="emoji-bar"><button class="emoji-btn" data-emoji="😂">😂</button><button class="emoji-btn" data-emoji="🔥">🔥</button><button class="emoji-btn" data-emoji="😍">😍</button><button class="emoji-btn" data-emoji="😎">😎</button><button class="emoji-btn" data-emoji="🤔">🤔</button><button class="emoji-btn" data-emoji="😡">😡</button><button class="emoji-btn" data-emoji="👏">👏</button><button class="emoji-btn" data-emoji="💀">💀</button><button class="emoji-btn" data-emoji="🎸">🎸</button><button class="emoji-btn" data-emoji="💰">💰</button></div>
+  <div class="chat-input-row"><input type="text" id="chatSalaInput" placeholder="Chat..."><button style="width:auto" id="btnChatSala" class="primario">➤</button></div>
   <button class="primario" id="btnIniciarSala" disabled>⏳ Aguardando...</button>
   <button class="secundario" id="btnCopiarCodigo">📋 Copiar Código</button>
   <button class="secundario" id="btnVoltarSala">← Sair</button>
 </div>
 
-<!-- SALA STOP PRO - CONFIG -->
 <div id="telaSalaStop" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2>🛑 STOP - Sala</h2><button class="som" id="botaoSomSalaStop">🔊</button></div>
+  <h2>🛑 STOP - Sala PRO</h2>
   <div class="codigo-sala" id="codigoSalaStopTexto">----</div>
-  <div id="statusSalaStop" style="text-align:center;font-size:12px;margin:6px 0">Aguardando jogadores (mín 2, máx 6)</div>
+  <div id="statusSalaStop" style="text-align:center;font-size:12px;margin:6px 0">Aguardando (mín 2, máx 6)</div>
   <div id="listaJogadoresStop" class="lista"></div>
-  
   <div id="configStopHost" class="stop-setup">
-    <h3>⚙️ Configuração (só Host)</h3>
-    <div class="setup-row">
-      <div><label style="font-size:10px;opacity:.6">RODADAS</label><select id="selectRodadas"><option value="3">3 rodadas</option><option value="5" selected>5 rodadas</option><option value="10">10 rodadas</option><option value="15">15 rodadas</option></select></div>
-      <div><label style="font-size:10px;opacity:.6">TEMPO</label><select id="selectTempo"><option value="30">30s</option><option value="60" selected>60s</option><option value="90">90s</option><option value="120">120s</option></select></div>
+    <h3 style="font-size:12px;color:var(--gold);margin-bottom:6px">⚙️ Config Host</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div><label style="font-size:9px;opacity:.6">RODADAS</label><select id="selectRodadas"><option value="3">3</option><option value="5" selected>5</option><option value="10">10</option></select></div>
+      <div><label style="font-size:9px;opacity:.6">TEMPO</label><select id="selectTempo"><option value="45">45s</option><option value="60" selected>60s</option><option value="90">90s</option><option value="120">120s</option></select></div>
     </div>
-    <div style="margin-bottom:6px"><label style="font-size:10px;opacity:.6">CATEGORIAS (escolha 5-10)</label></div>
-    <div class="checkbox-grid" id="checkboxCategorias">
-      <!-- JS -->
-    </div>
-    <div style="font-size:10px;opacity:.5;margin-top:6px" id="contadorCats">0 categorias selecionadas</div>
+    <div style="font-size:10px;opacity:.6;margin-bottom:4px">CATEGORIAS (5-10)</div>
+    <div class="checkbox-grid" id="checkboxCategorias"></div>
+    <div style="font-size:10px;opacity:.5;margin-top:4px" id="contadorCats">0 selecionadas</div>
   </div>
-
   <div id="chatStopLobbyBox" class="chat-box"></div>
-  <div class="chat-input-row"><input type="text" id="chatStopLobbyInput" placeholder="Chat da sala..."><button style="width:auto" id="btnChatStopLobby" class="primario">➤</button></div>
-  <div class="emoji-bar"><button class="emoji-btn" data-emoji-lobby="😂">😂</button><button class="emoji-btn" data-emoji-lobby="🔥">🔥</button><button class="emoji-btn" data-emoji-lobby="❤️">❤️</button><button class="emoji-btn" data-emoji-lobby="😎">😎</button><button class="emoji-btn" data-emoji-lobby="👏">👏</button><button class="emoji-btn" data-emoji-lobby="🛑">🛑</button></div>
-
-  <button class="primario" id="btnIniciarStop" disabled>⏳ Aguardando mínimo 2 jogadores</button>
+  <div class="chat-input-row"><input type="text" id="chatStopLobbyInput" placeholder="Chat..."><button style="width:auto" id="btnChatStopLobby" class="primario">➤</button></div>
+  <button class="primario" id="btnIniciarStop" disabled>⏳ Mín 2 jogadores</button>
   <button class="secundario" id="btnCopiarCodigoStop">📋 Copiar Código</button>
   <button class="secundario" id="btnVoltarSalaStop">← Sair</button>
 </div>
@@ -227,13 +205,12 @@ button:active{transform:scale(.97)}
 </div>
 
 <div id="telaJogo" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2 id="tituloModo">Jogo</h2><button class="som" id="botaoSom6">🔊</button></div>
+  <h2 id="tituloModo">Jogo</h2>
   <div class="moedas" id="saldoJogo">💰 0</div>
   <div id="avisoModo" style="text-align:center;font-size:11px;font-weight:700;margin:4px 0"></div>
   <div id="placarVs" class="vs-placar oculta">
-    <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeEu">Você: 0</span><span id="patenteEu" style="font-size:10px;opacity:.6"></span></div>
-    <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeOponente">Oponente: 0</span><span id="patenteOponente" style="font-size:10px;opacity:.6"></span></div>
-    <div style="font-size:10px;opacity:.5;text-align:center">Infinito - até alguém sair</div>
+    <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeEu">Você: 0</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeOponente">Oponente: 0</span></div>
   </div>
   <div class="placar">
     <div class="caixa"><div>Pontos</div><div id="pontos">0</div></div>
@@ -243,79 +220,74 @@ button:active{transform:scale(.97)}
   <button id="botaoDica" class="loja">💡 Dica — 15 💰</button>
   <button id="botaoMestre" class="mestre oculta">✨ ACHAR 1</button>
   <div class="grade" id="grade"></div>
-  <div style="font-size:10px;opacity:.5;margin:6px 0">Toque em sequência. Se ficar amarelo sem ficar verde, selecione mais devagar.</div>
   <div class="palavras" id="listaPalavras"></div>
   <br>
   <button id="btnProximo" class="primario">Próximo ➡️</button>
   <button class="secundario" id="btnVoltarInicioJogo">← Menu</button>
 </div>
 
-<!-- STOP JOGO PRO -->
+<!-- STOP JOGO -->
 <div id="telaStop" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2>🛑 STOP</h2><button class="som" id="botaoSomStop">🔊</button></div>
-  <div id="stopStatus" style="text-align:center;font-size:12px;margin:4px 0">Rodada 1/5</div>
-  <div class="stop-letra" id="stopLetra">?</div>
+  <button id="btnAutoCheat" class="btn-auto-cheat">🤖 Auto: OFF</button>
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2>🛑 STOP PRO</h2><button class="som" id="botaoSomStop">🔊</button></div>
+  
+  <div class="stop-hero">
+    <span class="stop-letra" id="stopLetra">?</span>
+    <div class="stop-letra-sub">Letra da rodada</div>
+  </div>
+
   <div class="timer-bar"><div class="timer-fill" id="stopTimerFill" style="width:100%"></div></div>
   <div style="display:flex;justify-content:space-between;font-size:11px"><span>⏱️ <span id="stopTimer">60</span>s</span><span>Rodada <span id="stopRodada">1</span>/<span id="stopTotalRodadas">5</span></span><span id="stopJogadoresCount">2/6</span></div>
+  <div id="stopStatus" style="text-align:center;font-size:11px;margin:6px 0;opacity:.7">Escreva rápido! Palavras inválidas serão anuladas automaticamente.</div>
   
   <div class="stop-categorias" id="stopCategorias"></div>
   
-  <button class="stop" id="btnStopStop" style="font-size:16px;padding:14px">🛑 STOP! (Finalizar)</button>
-  <div id="stopAguardando" class="oculta" style="background:var(--card);border:1px solid var(--gold);border-radius:10px;padding:10px;text-align:center;font-size:12px;margin:8px 0">✅ Você finalizou! Aguardando outros jogadores...</div>
+  <button class="stop" id="btnStopStop" style="font-size:16px;padding:14px;animation:pulseGold 1.5s infinite">🛑 STOP! Finalizar</button>
+  <div id="stopAguardando" class="oculta" style="background:var(--card);border:1px solid var(--gold);border-radius:10px;padding:10px;text-align:center;font-size:12px;margin:8px 0">✅ Finalizado! Aguardando outros...</div>
   
-  <h3 style="font-size:11px;margin:8px 0 4px;opacity:.6">💬 CHAT + EMOJI</h3>
+  <h3 style="font-size:11px;margin:8px 0 4px;opacity:.6">💬 CHAT</h3>
   <div id="chatStopBox" class="chat-box"></div>
   <div class="chat-input-row"><input type="text" id="chatStopInput" placeholder="Digite..."><button style="width:auto" id="btnChatStop" class="primario">➤</button></div>
-  <div class="emoji-bar"><button class="emoji-btn" data-emoji-stop="😂">😂</button><button class="emoji-btn" data-emoji-stop="🔥">🔥</button><button class="emoji-btn" data-emoji-stop="❤️">❤️</button><button class="emoji-btn" data-emoji-stop="😎">😎</button><button class="emoji-btn" data-emoji-stop="🤣">🤣</button><button class="emoji-btn" data-emoji-stop="😡">😡</button><button class="emoji-btn" data-emoji-stop="👏">👏</button><button class="emoji-btn" data-emoji-stop="🎸">🎸</button><button class="emoji-btn" data-emoji-stop="💀">💀</button><button class="emoji-btn" data-emoji-stop="🛑">🛑</button></div>
+  <div class="emoji-bar"><button class="emoji-btn" data-emoji-stop="😂">😂</button><button class="emoji-btn" data-emoji-stop="🔥">🔥</button><button class="emoji-btn" data-emoji-stop="❤️">❤️</button><button class="emoji-btn" data-emoji-stop="😎">😎</button><button class="emoji-btn" data-emoji-stop="🤣">🤣</button><button class="emoji-btn" data-emoji-stop="😡">😡</button><button class="emoji-btn" data-emoji-stop="👏">👏</button><button class="emoji-btn" data-emoji-stop="💀">💀</button><button class="emoji-btn" data-emoji-stop="🛑">🛑</button></div>
   
   <button class="secundario" id="btnVoltarStop">← Sair</button>
 </div>
 
-<!-- STOP VOTAÇÃO -->
-<div id="telaStopVotacao" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2>🗳️ Validação</h2><button class="som">🔊</button></div>
-  <div style="text-align:center;font-size:12px;margin:6px 0" id="votacaoStatus">Valide as respostas dos oponentes. Marque ✓ se válido, ✗ se inválido.</div>
-  <div id="votacaoLista"></div>
-  <button class="primario" id="btnConfirmarVotacao">✅ Confirmar Votos</button>
-  <div style="font-size:10px;opacity:.5;text-align:center;margin:6px 0" id="votacaoAguardando"></div>
-</div>
-
-<!-- STOP RESULTADO RODADA -->
 <div id="telaStopResultado" class="tela">
-  <h2>🏆 Resultado da Rodada</h2>
-  <div id="resultadoRodadaLetra" style="text-align:center;font-size:14px;margin:6px 0"></div>
+  <h2>🏆 Resultado Rodada</h2>
+  <div id="resultadoRodadaLetra" style="text-align:center;font-size:13px;margin:6px 0"></div>
   <div id="resultadoRodadaLista"></div>
   <div class="vs-placar" id="placarGeralStop"></div>
   <button class="primario" id="btnProximaRodadaStop">➡️ Próxima Rodada</button>
-  <button class="secundario oculta" id="btnFinalizarStop">🏁 Ver Ranking Final</button>
+  <button class="secundario oculta" id="btnFinalizarStop">🏁 Ranking Final</button>
 </div>
 
 <div id="telaStopFinal" class="tela">
-  <h2>🏆 Ranking Final - STOP</h2>
+  <h2>🏆 Ranking Final STOP</h2>
   <div id="rankingFinalStop"></div>
   <button class="primario" id="btnVoltarInicioStop">← Menu</button>
 </div>
 
 <div id="telaQuiz" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2 id="tituloQuiz">Quiz</h2><button class="som" id="botaoSomQuiz">🔊</button></div>
+  <h2 id="tituloQuiz">Quiz</h2>
   <div id="placarVsQuiz" class="vs-placar oculta">
     <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeEuQuiz">Você: 0</span></div>
     <div style="display:flex;justify-content:space-between;font-size:12px"><span id="nomeOponenteQuiz">Oponente: 0</span></div>
   </div>
-  <div class="pontuacao-quiz" style="text-align:center;font-weight:800;color:var(--gold);margin:6px 0"><span id="acertosQuiz">0</span>/10</div>
+  <div style="text-align:center;font-weight:800;color:var(--gold);margin:6px 0"><span id="acertosQuiz">0</span>/10</div>
   <div class="pergunta"><h3 id="textoPergunta" style="font-size:13px"></h3><div id="listaAlternativas"></div></div>
   <button class="secundario" id="btnVoltarQuiz">← Voltar</button>
 </div>
 
 <div id="telaRanking" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2>🏆 Ranking</h2><button class="som" id="botaoSom7">🔊</button></div>
+  <h2>🏆 Ranking</h2>
   <button id="btnResetGlobal" class="secundario oculta" style="background:#ff174422;border-color:#ff1744;color:#ff8a80;font-size:11px">🗑️ ZERAR TUDO (Dono)</button>
   <div class="lista" id="listaRankingGeral"></div>
   <button class="secundario" id="btnVoltarInicio4">← Voltar</button>
 </div>
 
 <div id="telaLoja" class="tela">
-  <div style="display:flex;justify-content:space-between"><h2>🛒 Loja</h2><button class="som" id="botaoSom8">🔊</button></div>
+  <h2>🛒 Loja</h2>
   <div class="moedas" id="saldoLojaPrincipal">💰 0</div>
   <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0">
     <h3>💡 Dica</h3><p style="color:var(--gold);font-weight:800;margin:6px 0">15 💰</p>
@@ -346,20 +318,32 @@ const PERGUNTAS_QUIZ=[
   {pergunta:'Em qual cidade nasceu Luan Santana?',alternativas:['São Paulo - SP','Campo Grande - MS','Cuiabá - MT','Goiânia - GO'],correta:1},
   {pergunta:'Qual é o nome verdadeiro?',alternativas:['Luan Rafael Domingos Santana','Luan Carlos Santana','Luan Silva Santana','Rafael Luan Santana'],correta:0},
   {pergunta:'Qual ano lançou primeiro álbum?',alternativas:['2007','2009','2010','2005'],correta:1},
-  {pergunta:'Qual música consagrou?',alternativas:['Amor de Mãe','Você Não Vale Nada','Sábado','Hoje Eu Vou Beber'],correta:1},
-  {pergunta:'Signo de Luan?',alternativas:['Leão','Câncer','Áries','Touro'],correta:1},
-  {pergunta:'Idade que começou a cantar?',alternativas:['5 anos','10 anos','13 anos','16 anos'],correta:0},
-  {pergunta:'Parceria famosa?',alternativas:['Com Jorge & Mateus','Com Anitta','Com Ludmilla','Com Marília Mendonça'],correta:0},
-  {pergunta:'Conhecido como:',alternativas:['Rei do Forró','Príncipe da Seresta','Sertanejo Raiz','Cantor do Povo'],correta:1},
-  {pergunta:'Música dele?',alternativas:['Cuida Bem Dela','Flor e o Beija-Flor','Fica Tudo Bem','Todas'],correta:3},
-  {pergunta:'Estado natal?',alternativas:['São Paulo','Minas Gerais','Mato Grosso do Sul','Goiás'],correta:2}
+  {pergunta:'Qual música consagrou?',alternativas:['Amor de Mãe','Você Não Vale Nada','Sábado','Hoje Eu Vou Beber'],correta:1}
 ];
-// Categorias STOP profissionais - normais, sem Luan
 const CATEGORIAS_STOP_PRO=[
-  'NOME','SOBRENOME','CIDADE','PAÍS','ANIMAL','COMIDA','FRUTA','COR','OBJETO','PROFISSÃO',
-  'MARCA','CARRO','FILME','CANTOR','TIME','ESPORTE','FLOR','BEBIDA','ROUPA','MATERIAL ESCOLAR',
-  'VERBO','ADJETIVO','CELEBRIDADE','DESENHO','JOGO','INSTRUMENTO','DOENÇA','REMÉDIO'
+  'NOME','CIDADE','ANIMAL','COMIDA','FRUTA','COR','OBJETO','PROFISSÃO',
+  'MARCA','TIME','FILME','CANTOR','ESPORTE','BEBIDA','CARRO','PAÍS'
 ];
+
+// DICIONÁRIO AUTO-RESPOSTA - PALAVRAS VÁLIDAS POR LETRA
+const DIC_STOP={
+  NOME:{A:'Amanda',B:'Bruno',C:'Carlos',D:'Daniel',E:'Eduardo',F:'Fernanda',G:'Gustavo',H:'Henrique',I:'Isabela',J:'João',K:'Kauã',L:'Lucas',M:'Marcos',N:'Natalia',O:'Otávio',P:'Paulo',Q:'Queila',R:'Ricardo',S:'Sofia',T:'Thiago',U:'Uriel',V:'Victor',W:'William',X:'Xavier',Y:'Yasmin',Z:'Zeca'},
+  CIDADE:{A:'Anápolis',B:'Belém',C:'Curitiba',D:'Diadema',E:'Erechim',F:'Florianópolis',G:'Goiânia',H:'Hortolândia',I:'Itajaí',J:'Joinville',K:'Kalamazoo',L:'Londrina',M:'Manaus',N:'Natal',O:'Olinda',P:'Palmas',Q:'Quixadá',R:'Recife',S:'Salvador',T:'Teresina',U:'Uberlândia',V:'Vitória',W:'Washington',X:'Xanxerê',Y:'Yokohama',Z:'Zurique'},
+  ANIMAL:{A:'Abelha',B:'Baleia',C:'Cachorro',D:'Dragão',E:'Elefante',F:'Foca',G:'Gato',H:'Hipopótamo',I:'Iguana',J:'Jacaré',K:'Kiwi',L:'Leão',M:'Macaco',N:'Naja',O:'Onça',P:'Panda',Q:'Quati',R:'Raposa',S:'Sapo',T:'Tigre',U:'Urso',V:'Vaca',W:'Wallaby',X:'Xexéu',Y:'Yak',Z:'Zebra'},
+  COMIDA:{A:'Arroz',B:'Bife',C:'Churrasco',D:'Dobradinha',E:'Escondidinho',F:'Feijoada',G:'Galinhada',H:'Hambúrguer',I:'Inhame',J:'Jiló',K:'Kibe',L:'Lasanha',M:'Macarrão',N:'Nhoque',O:'Omelete',P:'Pizza',Q:'Quindim',R:'Risoto',S:'Sushi',T:'Tapioca',U:'Udon',V:'Vatapá',W:'Waffle',X:'Xis',Y:'Yakisoba',Z:'Zucchini'},
+  FRUTA:{A:'Abacaxi',B:'Banana',C:'Caju',D:'Damasco',E:'Embaúba',F:'Figo',G:'Goiaba',H:'Hibisco',I:'Ingá',J:'Jabuticaba',K:'Kiwi',L:'Laranja',M:'Maçã',N:'Nectarina',O:'Oiti',P:'Pêssego',Q:'Quina',R:'Romã',S:'Seriguela',T:'Tangerina',U:'Uva',V:'Veludo',W:'Wampi',X:'Xixá',Y:'Yuzu',Z:'Zimbro'},
+  COR:{A:'Amarelo',B:'Branco',C:'Cinza',D:'Dourado',E:'Esmeralda',F:'Fúcsia',G:'Grafite',H:'Hematita',I:'Índigo',J:'Jade',K:'Kaki',L:'Lilás',M:'Marrom',N:'Nude',O:'Ouro',P:'Preto',Q:'Quartzo',R:'Rosa',S:'Salmão',T:'Turquesa',U:'Uva',V:'Verde',W:'Wengue',X:'Xadrez',Y:'Yellow',Z:'Zinco'},
+  OBJETO:{A:'Abajur',B:'Bola',C:'Cadeira',D:'Dado',E:'Escada',F:'Faca',G:'Garrafa',H:'Halter',I:'Imã',J:'Janela',K:'Kit',L:'Lápis',M:'Mesa',N:'Navio',O:'Óculos',P:'Prato',Q:'Quadro',R:'Relógio',S:'Sofá',T:'Tesoura',U:'Umbrella',V:'Vaso',W:'Walkman',X:'Xícara',Y:'Yoyo',Z:'Zíper'},
+  PROFISSÃO:{A:'Advogado',B:'Bombeiro',C:'Cantor',D:'Dentista',E:'Engenheiro',F:'Fotógrafo',G:'Garçom',H:'Historiador',I:'Influencer',J:'Jornalista',K:'Kitesurfista',L:'Lutador',M:'Médico',N:'Nadador',O:'Ourives',P:'Professor',Q:'Químico',R:'Repórter',S:'Soldado',T:'Taxista',U:'Uber',V:'Veterinário',W:'Web Designer',X:'Xerife',Y:'Youtuber',Z:'Zelador'},
+  MARCA:{A:'Adidas',B:'BMW',C:'Colgate',D:'Dove',E:'Epson',F:'Ferrari',G:'Gucci',H:'Honda',I:'Intel',J:'Jeep',K:'Kia',L:'Lacoste',M:'Mizuno',N:'Nike',O:'Omo',P:'Puma',Q:'Qboa',R:'RayBan',S:'Samsung',T:'Toyota',U:'Uber',V:'Vans',W:'WhatsApp',X:'Xbox',Y:'Yamaha',Z:'Zara'},
+  TIME:{A:'Athletico',B:'Botafogo',C:'Corinthians',D:'Dinamo',E:'Estudiantes',F:'Flamengo',G:'Grêmio',H:'Holanda',I:'Internacional',J:'Juventus',K:'Kashima',L:'Liverpool',M:'Milan',N:'Napoli',O:'Orlando',P:'Palmeiras',Q:'Qatar',R:'Real Madrid',S:'Santos',T:'Tottenham',U:'Udinese',V:'Vasco',W:'West Ham',X:'Xavantes',Y:'Yokohama',Z:'Zenit'},
+  FILME:{A:'Avatar',B:'Batman',C:'Coringa',D:'Duna',E:'Eternos',F:'Frozen',G:'Gladiador',H:'Hulk',I:'It',J:'Jumanji',K:'Kong',L:'Lagoa Azul',M:'Matrix',N:'Narnia',O:'Oppenheimer',P:'Pantera Negra',Q:'Queen',R:'Rambo',S:'Shrek',T:'Titanic',U:'Up',V:'Vingadores',W:'Wolverine',X:'X-Men',Y:'Your Name',Z:'Zootopia'},
+  CANTOR:{A:'Anitta',B:'Beyoncé',C:'Caetano',D:'Djavan',E:'Elvis',F:'Freddie',G:'Gusttavo Lima',H:'Henrique',I:'Ivete',J:'Justin Bieber',K:'Katy Perry',L:'Luan Santana',M:'Marília Mendonça',N:'Neymar Jr',O:'Orochi',P:'Pabllo Vittar',Q:'Queen',R:'Roberto Carlos',S:'Sandy',T:'Thiaguinho',U:'U2',V:'Vitão',W:'Wesley Safadão',X:'Xuxa',Y:'Yasmin Santos',Z:'Zé Neto'},
+  ESPORTE:{A:'Atletismo',B:'Basquete',C:'Ciclismo',D:'Dança',E:'Esgrima',F:'Futebol',G:'Golfe',H:'Handebol',I:'Iatismo',J:'Judô',K:'Karatê',L:'Luta',M:'Musculação',N:'Natação',O:'Olimpíada',P:'Patinação',Q:'Queimada',R:'Rugby',S:'Surfe',T:'Tênis',U:'UFC',V:'Vôlei',W:'Wakeboard',X:'Xadrez',Y:'Yoga',Z:'Zumba'},
+  BEBIDA:{A:'Água',B:'Breja',C:'Cerveja',D:'Dolly',E:'Energético',F:'Fanta',G:'Guaraná',H:'Heineken',I:'Itaipava',J:'Jurupinga',K:'Kuat',L:'Leite',M:'Monster',N:'Nescafé',O:'Ovomaltine',P:'Pepsi',Q:'Quentão',R:'Refrigerante',S:'Suco',T:'Toddynho',U:'Uísque',V:'Vinho',W:'Whisky',X:'Xarope',Y:'Yakult',Z:'Zorra'},
+  CARRO:{A:'Audi',B:'BMW',C:'Corolla',D:'Duster',E:'Etios',F:'Ferrari',G:'Gol',H:'Hilux',I:'Impala',J:'Jeep',K:'Ka',L:'Lancer',M:'Mobi',N:'Nivus',O:'Onix',P:'Palio',Q:'Q3',R:'Renegade',S:'Saveiro',T:'T-Cross',U:'Uno',V:'Versa',W:'Wrangler',X:'X1',Y:'Yaris',Z:'Zafira'},
+  PAÍS:{A:'Alemanha',B:'Brasil',C:'Canadá',D:'Dinamarca',E:'Espanha',F:'França',G:'Grécia',H:'Holanda',I:'Itália',J:'Japão',K:'Kuwait',L:'Líbano',M:'México',N:'Noruega',O:'Omã',P:'Portugal',Q:'Qatar',R:'Rússia',S:'Suécia',T:'Tailândia',U:'Uruguai',V:'Venezuela',W:'Wallis',X:'Xad',Y:'Yemen',Z:'Zâmbia'}
+};
 
 const firebaseConfig={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316"};
 let db,refContas,refRanking,refSalas,refChats,firebaseOK=false;
@@ -370,20 +354,15 @@ let grade=[],selecionadas=[],encontradas=[],palavrasRodada=[],palavrasComPosicao
 let perguntaAtual=0,acertosQuiz=0,SOM_ATIVO=true,EH_MESTRE=false;
 let modoPendente='solo',salaAtual=null,codigoSalaAtual=null,listenerSala=null,souHost=false,tipoSalaAtual='caca';
 let listenerChat=null, timerStop=null, tempoStop=60;
-let categoriasStopSelecionadas=['NOME','CIDADE','ANIMAL','COMIDA','COR','OBJETO','PROFISSÃO','FRUTA'];
+let categoriasStopSelecionadas=['NOME','CIDADE','ANIMAL','COMIDA','FRUTA','COR','OBJETO','PROFISSÃO'];
+let autoCheatLigado=false, autoTimers=[];
 
 function chaveSegura(n){return String(n||'').replace(/[.#$\[\]\/]/g,'_').trim()||'_vazio_';}
 function meuId(){return chaveSegura(usuarioAtual);}
-function tocarSom(t){if(!SOM_ATIVO) return; try{const C=window.AudioContext||window.webkitAudioContext; if(!C) return; const a=new C(); const o=a.createOscillator(); const g=a.createGain(); o.connect(g); g.connect(a.destination); g.gain.value=0.11; if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);} else if(t==='acerto'){o.frequency.value=880;o.start();setTimeout(()=>{try{o.frequency.value=1100}catch{}},80);o.stop(a.currentTime+0.3);} else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);} else if(t==='nivel'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>{try{const o2=a.createOscillator();const g2=a.createGain();o2.connect(g2);g2.connect(a.destination);g2.gain.value=0.09;o2.frequency.value=f;o2.start();o2.stop(a.currentTime+0.25);}catch{}},i*120));}}catch{}}
-function alternarSom(){SOM_ATIVO=!SOM_ATIVO; document.querySelectorAll('.som').forEach(b=>b.textContent=SOM_ATIVO?'🔊 ON':'🔇 OFF'); tocarSom('clique');}
-function mostrarTela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa')); const el=document.getElementById(id); if(el) el.classList.add('ativa'); if(id==='telaInicio') atualizarTelaInicio(); if(id==='telaRanking') carregarRankingGeral(); if(id==='telaLoja') atualizarSaldoLoja();}
-function voltarMenu(){
-  if(listenerSala){try{listenerSala.off();}catch{} listenerSala=null;}
-  if(listenerChat){try{listenerChat.off();}catch{} listenerChat=null;}
-  if(timerStop){clearInterval(timerStop); timerStop=null;}
-  if(salaAtual && souHost && codigoSalaAtual){try{refSalas.child(codigoSalaAtual).remove(); refChats.child(codigoSalaAtual).remove();}catch{}}
-  salaAtual=null; codigoSalaAtual=null; souHost=false; tocarSom('clique'); mostrarTela('telaInicio');
-}
+function tocarSom(t){if(!SOM_ATIVO) return; try{const C=window.AudioContext||window.webkitAudioContext; if(!C) return; const a=new C(); const o=a.createOscillator(); const g=a.createGain(); o.connect(g); g.connect(a.destination); g.gain.value=0.11; if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);} else if(t==='acerto'){o.frequency.value=880;o.start();o.stop(a.currentTime+0.3);} else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);}}catch{}}
+function alternarSom(){SOM_ATIVO=!SOM_ATIVO; document.querySelectorAll('.som').forEach(b=>b.textContent=SOM_ATIVO?'🔊 ON':'🔇 OFF');}
+function mostrarTela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa')); const el=document.getElementById(id); if(el) el.classList.add('ativa'); if(id==='telaInicio') atualizarTelaInicio(); if(id==='telaRanking') carregarRankingGeral();}
+function voltarMenu(){if(listenerSala){try{listenerSala.off();}catch{} listenerSala=null;} if(listenerChat){try{listenerChat.off();}catch{} listenerChat=null;} if(timerStop){clearInterval(timerStop); timerStop=null;} limparAutoTimers(); if(salaAtual && souHost && codigoSalaAtual){try{refSalas.child(codigoSalaAtual).remove(); refChats.child(codigoSalaAtual).remove();}catch{}} salaAtual=null; codigoSalaAtual=null; souHost=false; mostrarTela('telaInicio');}
 function getPatentePorPontos(p){if(p<0) p=0; for(let i=PATENTES_POR_PONTOS.length-1;i>=0;i--){ if(p>=PATENTES_POR_PONTOS[i].min) return PATENTES_POR_PONTOS[i]; } return PATENTES_POR_PONTOS[0];}
 function getProximaPatente(p){for(let pat of PATENTES_POR_PONTOS){ if(p<pat.min) return pat; } return null;}
 function atualizarTelaInicio(){
@@ -394,7 +373,6 @@ function atualizarTelaInicio(){
   const pr=dadosUsuario.pontosRanqueada||0;
   document.getElementById('saldoMoedas').textContent=dadosUsuario.moedas||0;
   document.getElementById('statPontos').textContent=pr;
-  document.getElementById('saldoJogo').textContent=`💰 ${dadosUsuario.moedas||0}`;
   const pat=getPatentePorPontos(pr); const prox=getProximaPatente(pr);
   document.getElementById('patenteNome').textContent=pat.nome;
   document.getElementById('patenteEmoji').textContent=pat.emoji;
@@ -405,7 +383,6 @@ function atualizarTelaInicio(){
   else{prog=100; document.getElementById('progressAtual').textContent=`${pr} pts`; document.getElementById('progressProx').textContent=`MAX`; document.getElementById('progressFalta').textContent=`🏆 Topo!`;}
   document.getElementById('progressFill').style.width=prog+'%';
 }
-function atualizarSaldoLoja(){const el=document.getElementById('saldoLojaPrincipal'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;}
 async function salvarDados(){
   if(!usuarioAtual||!dadosUsuario) return;
   try{localStorage.setItem('luan_'+usuarioAtual,JSON.stringify(dadosUsuario));}catch{}
@@ -430,7 +407,7 @@ async function entrar(){
   if(!nome||!senha){erro.textContent='Preencha!';return;}
   if(nome===USUARIO_MESTRE && senha!==SENHA_MESTRE){erro.textContent='Senha incorreta!';return;}
   const dados=await carregarDados(nome);
-  if(!dados){erro.textContent='Usuário não existe! Crie conta.';return;}
+  if(!dados){erro.textContent='Usuário não existe!';return;}
   if(dados.senha!==senha){erro.textContent='Senha incorreta!';return;}
   usuarioAtual=nome; dadosUsuario=dados; EH_MESTRE=(nome===USUARIO_MESTRE);
   try{localStorage.setItem('luan_ultimo',nome);}catch{}
@@ -451,18 +428,9 @@ async function criarConta(){
 }
 function sair(){if(!confirm('Sair?')) return; usuarioAtual=null; dadosUsuario=null; mostrarTela('telaLogin');}
 function cfgPorDificuldade(d){switch(d){case 'facil':return{tam:12,qtd:8};case 'medio':return{tam:15,qtd:12};case 'dificil':return{tam:18,qtd:16};default:return{tam:12,qtd:8};}}
-function abrirEscolhaModo(m){modoPendente=m; tocarSom('clique'); if(m==='stop'){criarSalaStop();return;} document.getElementById('tituloEscolha').textContent=m==='ranqueada'?'🏆 Ranqueada':m==='amigo'?'👥 Amigo Infinito':m==='quizAmigo'?'🎤 Quiz 1v1':'🎮 Solo'; mostrarTela('telaEscolhaModo');}
-function iniciarJogoEscolhido(dif){if(modoPendente==='amigo'){criarSalaMultiplayer(dif,'caca');return;} if(modoPendente==='quizAmigo'){criarSalaMultiplayer(dif,'quiz');return;} modoJogo=modoPendente; dificuldadeAtual=dif; nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1); pontos=0; encontradas=[]; palavrasComPosicao=[]; prepararTelaJogo(); iniciarRodadaSolo(); atualizarSaldoJogo();}
-function prepararTelaJogo(){
-  mostrarTela('telaJogo');
-  const bm=document.getElementById('botaoMestre'); if(bm){bm.classList.toggle('oculta',!EH_MESTRE); atualizarBotaoMestre();}
-  const bd=document.getElementById('botaoDica'); if(bd) bd.textContent=EH_MESTRE?'💡 GRÁTIS':`💡 Dica — ${PRECO_DICA} 💰`;
-  const ehRanq=modoJogo==='ranqueada'; const ehAmigo=modoJogo==='amigo';
-  document.getElementById('tituloModo').textContent=(dificuldadeAtual==='facil'?'🟢 Fácil':dificuldadeAtual==='medio'?'🟡 Médio':'🔴 Difícil')+(ehRanq?' 🏆 RANQUEADA':ehAmigo?' 👥 INFINITO':' 🎮 SOLO');
-  let aviso=ehRanq?'🏆 VALE patente!':ehAmigo?'👥 Infinito - até sair':'🎮 Solo - só moedas'; if(EH_MESTRE) aviso+=' | 👑 1/clique'; document.getElementById('avisoModo').textContent=aviso;
-  document.getElementById('placarVs').classList.toggle('oculta',!ehAmigo);
-  document.getElementById('btnProximo').classList.toggle('oculta',ehAmigo);
-}
+function abrirEscolhaModo(m){modoPendente=m; if(m==='stop'){criarSalaStop();return;} document.getElementById('tituloEscolha').textContent=m==='ranqueada'?'🏆 Ranqueada':m==='amigo'?'👥 Amigo Infinito':m==='quizAmigo'?'🎤 Quiz 1v1':'🎮 Solo'; mostrarTela('telaEscolhaModo');}
+function iniciarJogoEscolhido(dif){if(modoPendente==='amigo'){criarSalaMultiplayer(dif,'caca');return;} if(modoPendente==='quizAmigo'){criarSalaMultiplayer(dif,'quiz');return;} modoJogo=modoPendente; dificuldadeAtual=dif; nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1); pontos=0; encontradas=[]; palavrasComPosicao=[]; prepararTelaJogo(); iniciarRodadaSolo();}
+function prepararTelaJogo(){mostrarTela('telaJogo'); const bm=document.getElementById('botaoMestre'); if(bm){bm.classList.toggle('oculta',!EH_MESTRE);} document.getElementById('tituloModo').textContent=dificuldadeAtual.toUpperCase(); document.getElementById('placarVs').classList.toggle('oculta',modoJogo!=='amigo'); document.getElementById('btnProximo').classList.toggle('oculta',modoJogo==='amigo');}
 function gerarGradeDificil(tam,qtd){
   let grade=Array(tam).fill(0).map(()=>Array(tam).fill(''));
   let posicoes=[]; let palavras=[...PALAVRAS_LUAN].sort(()=>Math.random()-0.5).slice(0,qtd);
@@ -486,10 +454,8 @@ function iniciarRodadaSolo(){
   selecionadas=[]; encontradas=[]; palavrasComPosicao=[];
   const res=gerarGradeDificil(cfg.tam,cfg.qtd);
   grade=res.grade; palavrasRodada=res.palavras; palavrasComPosicao=res.posicoes;
-  document.getElementById('nivel').textContent=nivel; atualizarPlacar(); renderizarSolo(); atualizarBotaoMestre();
+  document.getElementById('nivel').textContent=nivel; document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${encontradas.length}/${palavrasRodada.length}`; renderizarSolo();
 }
-function atualizarPlacar(){document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${encontradas.length}/${palavrasRodada.length}`;}
-function atualizarBotaoMestre(){const bm=document.getElementById('botaoMestre'); if(!bm) return; if(!EH_MESTRE){bm.classList.add('oculta');return;} bm.classList.remove('oculta'); bm.textContent=`✨ ACHAR 1 (${encontradas.length}/${palavrasRodada.length})`;}
 function renderizarSolo(){
   const cfg=cfgPorDificuldade(dificuldadeAtual);
   const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
@@ -501,7 +467,6 @@ function renderizarSolo(){
   }
   const lista=document.getElementById('listaPalavras'); lista.innerHTML='';
   palavrasRodada.forEach(p=>{const d=document.createElement('div'); d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':''); d.textContent=p; lista.appendChild(d);});
-  atualizarBotaoMestre();
 }
 function getWordFromSelection(sel, grade){
   if(sel.length<2) return null;
@@ -527,7 +492,6 @@ function getWordFromSelection(sel, grade){
 }
 function clicarSolo(l,c){
   if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
-  tocarSom('clique');
   const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c);
   if(idx>=0){selecionadas.splice(idx,1); renderizarSolo(); return;}
   selecionadas.push({l,c}); renderizarSolo();
@@ -543,164 +507,129 @@ function tentarVerificarSolo(palavra){
   if(encontradas.some(e=>e.texto===palavra)) return true;
   const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false;
   const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.l+pos.dl*i,nc=pos.c+pos.dc*i; set.add(`${nl},${nc}`);}
-  encontradas.push({texto:palavra,linhas:set}); pontos+=palavra.length*12; selecionadas=[]; tocarSom('acerto'); atualizarPlacar(); renderizarSolo();
+  encontradas.push({texto:palavra,linhas:set}); pontos+=palavra.length*12; selecionadas=[]; document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${encontradas.length}/${palavrasRodada.length}`; renderizarSolo();
   if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);
   return true;
 }
 async function concluirNivelSolo(){
-  tocarSom('nivel');
   const ganho=EH_MESTRE?MOEDAS_MESTRE:MOEDAS_POR_NIVEL;
   if(modoJogo==='ranqueada'){
     dadosUsuario.nivelRanqueada=(dadosUsuario.nivelRanqueada||1)+1;
     dadosUsuario.pontosRanqueada=(dadosUsuario.pontosRanqueada||0)+pontos;
     dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
     await salvarDados(); atualizarTelaInicio();
-    alert(`🏆 Ranqueada! +${pontos} pts ranking +${ganho} 💰`);
+    alert(`🏆 +${pontos} pts ranking +${ganho} 💰`);
   } else {
     dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
     await salvarDados(); atualizarTelaInicio();
-    alert(`🎮 Solo: +${ganho} 💰 (só ranqueada vale patente)`);
+    alert(`🎮 +${ganho} 💰`);
   }
-  atualizarSaldoJogo();
 }
 
-// MULTI CAÇA
 function gerarCodigo(){return Math.random().toString(36).substring(2,6).toUpperCase();}
 function gerarGradeMulti(dif){const cfg=cfgPorDificuldade(dif); const res=gerarGradeDificil(cfg.tam,cfg.qtd); return {grade:res.grade,palavras:res.palavras,pos:res.posicoes,cfg};}
 async function criarSalaMultiplayer(dif,tipo){
   if(!firebaseOK){alert('Precisa internet');return;}
   dificuldadeAtual=dif; tipoSalaAtual=tipo; const codigo=gerarCodigo();
   const pr=dadosUsuario.pontosRanqueada||0; const pat=getPatentePorPontos(pr);
-  let salaBase={
-    codigo, host:usuarioAtual, hostId:meuId(), guest:null, guestId:null,
-    status:'waiting', dificuldade:dif, tipo:tipo, rodada:1,
-    pontos:{}, encontradas:{}, jogadores:{ [meuId()]: usuarioAtual },
-    jogadoresInfo:{ [meuId()]: {nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:pr, moedas:dadosUsuario.moedas||0} },
-    criado:Date.now()
-  };
+  let salaBase={codigo, host:usuarioAtual, hostId:meuId(), guest:null, guestId:null, status:'waiting', dificuldade:dif, tipo:tipo, rodada:1, pontos:{}, encontradas:{}, jogadores:{ [meuId()]: usuarioAtual }, jogadoresInfo:{ [meuId()]: {nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:pr}}, criado:Date.now()};
   salaBase.pontos[meuId()]=0;
   if(tipo==='caca'){const dg=gerarGradeMulti(dif); salaBase.grade=dg.grade; salaBase.palavras=dg.palavras; salaBase.posicoes=dg.pos; salaBase.cfg=dg.cfg;}
   else if(tipo==='quiz'){salaBase.quiz={perguntas:[...PERGUNTAS_QUIZ].sort(()=>Math.random()-0.5), perguntaAtual:0, respostas:{}}; salaBase.pontosQuiz={[meuId()]:0};}
-  try{await refSalas.child(codigo).set(salaBase);}catch(e){alert('Erro:'+e.message);return;}
+  try{await refSalas.child(codigo).set(salaBase);}catch(e){alert(e.message);return;}
   codigoSalaAtual=codigo; salaAtual=salaBase; souHost=true; modoJogo='amigo';
-  document.getElementById('codigoSalaTexto').textContent=codigo; document.getElementById('infoDif').textContent=dif.toUpperCase(); document.getElementById('infoTipo').textContent=tipo.toUpperCase(); document.getElementById('infoRodada').textContent='1'; document.getElementById('tituloSala').textContent=tipo==='quiz'?'🎤 Quiz':'👥 Caça'; document.getElementById('statusSala').textContent='Aguardando...'; document.getElementById('btnIniciarSala').disabled=true; document.getElementById('btnIniciarSala').textContent='⏳ Aguardando...'; mostrarTela('telaSala'); escutarSala(codigo); iniciarChat(codigo);
+  document.getElementById('codigoSalaTexto').textContent=codigo; document.getElementById('infoDif').textContent=dif.toUpperCase(); document.getElementById('infoTipo').textContent=tipo.toUpperCase(); document.getElementById('infoRodada').textContent='1'; mostrarTela('telaSala'); escutarSala(codigo); iniciarChat(codigo);
 }
 function renderListaJogadoresSala(s){
   const lista=document.getElementById('listaJogadoresSala'); if(!lista) return; lista.innerHTML='';
   for(let id in s.jogadoresInfo||{}){
     const info=s.jogadoresInfo[id];
     const div=document.createElement('div'); div.className='item'+(id===meuId()?' voce':'');
-    div.innerHTML=`<div style="flex:1"><strong>${info.nome}</strong><br><small style="color:${info.cor}">${info.emoji} ${info.patente}</small> • ${info.pontos} pts</div><div style="color:var(--gold);font-weight:800">${s.pontos[id]||0}</div>`;
+    div.innerHTML=`<div style="flex:1"><strong>${info.nome}</strong><br><small style="color:${info.cor}">${info.emoji} ${info.patente}</small></div><div style="color:var(--gold);font-weight:800">${s.pontos[id]||0}</div>`;
     lista.appendChild(div);
   }
-  const rod=document.getElementById('infoRodada'); if(rod) rod.textContent=s.rodada||1;
 }
 function escutarSala(codigo){
   if(listenerSala) try{listenerSala.off();}catch{}
   listenerSala=refSalas.child(codigo);
   listenerSala.on('value', snap=>{
-    if(!snap.exists()){if(modoJogo.includes('amigo')){alert('Sala encerrada.'); voltarMenu();} return;}
-    const s=snap.val(); salaAtual=s; tipoSalaAtual=s.tipo||'caca'; renderListaJogadoresSala(s);
+    if(!snap.exists()){alert('Sala encerrada'); voltarMenu(); return;}
+    const s=snap.val(); salaAtual=s; renderListaJogadoresSala(s);
     if(s.status==='waiting'){
       const guestNome=s.guest?(s.jogadores[s.guestId]||s.guest):null;
       document.getElementById('statusSala').textContent=guestNome?`🎉 ${guestNome} entrou!`:'Aguardando...';
-      if(s.guest){const btn=document.getElementById('btnIniciarSala'); if(btn){btn.disabled=false; btn.textContent=s.tipo==='quiz'?`🚀 Quiz vs ${guestNome}`:`🚀 Iniciar vs ${guestNome}`;}}
+      if(s.guest){const btn=document.getElementById('btnIniciarSala'); if(btn){btn.disabled=false; btn.textContent=`🚀 Iniciar vs ${guestNome}`;}}
     }
     if(s.status==='playing'){
-      if(s.tipo==='quiz'){if(!document.getElementById('telaQuiz').classList.contains('ativa')) iniciarQuizMultiComDados(s); else sincronizarQuizMulti(s);}
+      if(s.tipo==='quiz'){if(!document.getElementById('telaQuiz').classList.contains('ativa')) iniciarQuizMultiComDados(s);}
       else{if(!document.getElementById('telaJogo').classList.contains('ativa')) iniciarJogoMultiplayerComDados(s); else sincronizarMulti(s);}
     }
   });
 }
-async function iniciarSalaHost(){if(!salaAtual||!salaAtual.guest){alert('Aguardando amigo!');return;} await refSalas.child(codigoSalaAtual).update({status:'playing', iniciado:Date.now()});}
+async function iniciarSalaHost(){if(!salaAtual||!salaAtual.guest){alert('Aguardando!');return;} await refSalas.child(codigoSalaAtual).update({status:'playing'});}
 async function entrarSalaCodigo(){
   const codigo=document.getElementById('campoCodigoSala').value.trim().toUpperCase();
   const erro=document.getElementById('msgErroSala');
   if(!codigo||codigo.length<4){erro.textContent='Código inválido!';return;}
-  if(!firebaseOK){erro.textContent='Offline';return;}
   try{
     const snap=await refSalas.child(codigo).once('value'); if(!snap.exists()){erro.textContent='Não encontrada!';return;}
     const s=snap.val();
-    // verifica tipo
-    if(s.tipo==='stop'){ // redireciona para sala stop
-      await entrarSalaStopCodigo(codigo);
-      return;
-    }
-    if(s.hostId===meuId()){erro.textContent='Você é host!';return;}
-    const numJogadores=Object.keys(s.jogadores||{}).length;
-    if(numJogadores>=6){erro.textContent='Sala lotada (máx 6)!';return;}
+    if(s.tipo==='stop'){await entrarSalaStopCodigo(codigo); return;}
+    const numJog=Object.keys(s.jogadores||{}).length;
+    if(numJog>=6){erro.textContent='Lotada! Máx 6';return;}
     if(s.status!=='waiting'){erro.textContent='Já começou!';return;}
     const pat=getPatentePorPontos(dadosUsuario.pontosRanqueada||0);
     const updates={};
     updates[`guest`]=usuarioAtual; updates[`guestId`]=meuId();
     updates[`jogadores/${meuId()}`]=usuarioAtual;
-    updates[`jogadoresInfo/${meuId()}`]={nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:dadosUsuario.pontosRanqueada||0, moedas:dadosUsuario.moedas||0};
+    updates[`jogadoresInfo/${meuId()}`]={nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:dadosUsuario.pontosRanqueada||0};
     updates[`pontos/${meuId()}`]=0;
-    if(s.tipo==='quiz') updates[`pontosQuiz/${meuId()}`]=0;
     await refSalas.child(codigo).update(updates);
-    codigoSalaAtual=codigo; salaAtual=s; souHost=false; modoJogo='amigo'; tipoSalaAtual=s.tipo||'caca'; erro.textContent='';
-    mostrarTela('telaSala'); document.getElementById('codigoSalaTexto').textContent=codigo; document.getElementById('infoDif').textContent=s.dificuldade.toUpperCase(); document.getElementById('infoTipo').textContent=s.tipo.toUpperCase(); document.getElementById('statusSala').textContent=`✅ Entrou!`; document.getElementById('btnIniciarSala').textContent='⏳ Aguardando host...'; document.getElementById('btnIniciarSala').disabled=true; escutarSala(codigo); iniciarChat(codigo);
+    codigoSalaAtual=codigo; salaAtual=s; souHost=false; modoJogo='amigo'; erro.textContent='';
+    mostrarTela('telaSala'); document.getElementById('codigoSalaTexto').textContent=codigo; escutarSala(codigo); iniciarChat(codigo);
   }catch(e){erro.textContent='Erro: '+e.message;}
 }
 function iniciarJogoMultiplayerComDados(s){
   grade=s.grade; palavrasRodada=s.palavras; palavrasComPosicao=s.posicoes; nivel=s.rodada||1; pontos=s.pontos[meuId()]||0; encontradas=[]; selecionadas=[]; modoJogo='amigo'; dificuldadeAtual=s.dificuldade;
   for(let palavra in s.encontradas||{}){const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.l+pos.dl*i,nc=pos.c+pos.dc*i; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome});}
-  prepararTelaJogo(); document.getElementById('nivel').textContent='Rodada '+(s.rodada||1); atualizarPlacar(); renderizarMulti(); atualizarSaldoJogo(); atualizarPlacarVs(s);
+  prepararTelaJogo(); document.getElementById('nivel').textContent='Rodada '+(s.rodada||1); document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${Object.keys(s.encontradas||{}).length}/${s.palavras.length}`; renderizarMulti();
 }
 function sincronizarMulti(s){
   let mudou=false;
-  for(let palavra in s.encontradas||{}){if(!encontradas.some(e=>e.texto===palavra)){const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.l+pos.dl*i,nc=pos.c+pos.dc*i; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome}); if(quemId!==meuId()) tocarSom('clique'); mudou=true;}}
-  pontos=s.pontos[meuId()]||0; if(mudou){atualizarPlacar(); renderizarMulti();} atualizarPlacarVs(s);
-  if(Object.keys(s.encontradas||{}).length===s.palavras.length){
-    if(souHost){
-      setTimeout(async()=>{
-        const novaRodada=(s.rodada||1)+1;
-        const dg=gerarGradeMulti(s.dificuldade);
-        await refSalas.child(codigoSalaAtual).update({grade:dg.grade, palavras:dg.palavras, posicoes:dg.pos, cfg:dg.cfg, encontradas:{}, rodada:novaRodada});
-      },3000);
-    } else {
-      document.getElementById('avisoModo').textContent=`✅ Rodada ${s.rodada} acabou! Próxima em 3s...`;
-    }
-  }
-}
-function atualizarPlacarVs(s){
-  if(!s) s=salaAtual; if(!s) return;
-  const meu=meuId(); const opId=s.hostId===meu?s.guestId:s.hostId;
-  const infoEu=s.jogadoresInfo?.[meu]||{nome:usuarioAtual, patente:'...', cor:'#fff'};
-  const infoOp=s.jogadoresInfo?.[opId]||{nome:'Oponente', patente:'...', cor:'#fff'};
-  document.getElementById('nomeEu').textContent=`${infoEu.nome}: ${s.pontos[meu]||0}`;
-  document.getElementById('nomeOponente').textContent=`${infoOp.nome}: ${opId?(s.pontos[opId]||0):0}`;
-  document.getElementById('patenteEu').textContent=`${infoEu.emoji} ${infoEu.patente}`;
-  document.getElementById('patenteOponente').textContent=`${infoOp.emoji} ${infoOp.patente}`;
-  document.getElementById('pontos').textContent=s.pontos[meu]||0;
+  for(let palavra in s.encontradas||{}){if(!encontradas.some(e=>e.texto===palavra)){const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue; const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.l+pos.dl*i,nc=pos.c+pos.dc*i; set.add(`${nl},${nc}`);} encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome}); mudou=true;}}
+  pontos=s.pontos[meuId()]||0; if(mudou){renderizarMulti();} 
+  document.getElementById('pontos').textContent=s.pontos[meuId()]||0;
   document.getElementById('contagem').textContent=`${Object.keys(s.encontradas||{}).length}/${s.palavras.length}`;
-  document.getElementById('nivel').textContent='Rodada '+(s.rodada||1);
+  if(Object.keys(s.encontradas||{}).length===s.palavras.length && souHost){
+    setTimeout(async()=>{
+      const novaRodada=(s.rodada||1)+1;
+      const dg=gerarGradeMulti(s.dificuldade);
+      await refSalas.child(codigoSalaAtual).update({grade:dg.grade, palavras:dg.palavras, posicoes:dg.pos, cfg:dg.cfg, encontradas:{}, rodada:novaRodada});
+    },3000);
+  }
 }
 function renderizarMulti(){
   if(!salaAtual) return; const cfg=salaAtual.cfg; const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
   for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){
     const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c]; d.onclick=()=>clicarMulti(l,c);
     if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada');
-    const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`)); if(enc){d.classList.add('encontrada'); if(enc.donoId!==meuId()) d.classList.add('inimigo');}
+    const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`)); if(enc){d.classList.add('encontrada');}
     g.appendChild(d);
   }
   const lista=document.getElementById('listaPalavras'); lista.innerHTML='';
-  palavrasRodada.forEach(p=>{const enc=encontradas.find(e=>e.texto===p); const d=document.createElement('div'); d.className='palavra'+(enc?' encontrada':''); d.textContent=enc?(enc.donoId===meuId()?`${p} (você)`: `${p} (${enc.dono})`):p; lista.appendChild(d);});
-  atualizarBotaoMestre();
+  palavrasRodada.forEach(p=>{const enc=encontradas.find(e=>e.texto===p); const d=document.createElement('div'); d.className='palavra'+(enc?' encontrada':''); d.textContent=p; lista.appendChild(d);});
 }
 function clicarMulti(l,c){
   if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
-  tocarSom('clique');
   const idx=selecionadas.findIndex(p=>p.l===l&&p.c===c);
   if(idx>=0){selecionadas.splice(idx,1); renderizarMulti(); return;}
   selecionadas.push({l,c}); renderizarMulti();
   if(selecionadas.length>=2){
     const res=getWordFromSelection(selecionadas, grade);
-    if(res){if(!tentarVerificarMulti(res.word)) tentarVerificarMulti(res.word.split('').reverse().join(''));}
+    if(res){tentarVerificarMulti(res.word);}
   }
 }
-async function tentarVerificarMulti(palavra){if(!PALAVRAS_LUAN.includes(palavra)) return false; if(encontradas.some(e=>e.texto===palavra)) return true; const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false; try{const ref=refSalas.child(codigoSalaAtual); const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{}; if(atuais[palavra]) return true; await ref.child(`encontradas/${palavra}`).set(meuId()); const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0; await ref.child(`pontos/${meuId()}`).set(atualPts+palavra.length*12); tocarSom('acerto'); selecionadas=[]; return true;}catch(e){return false;}}
-
+async function tentarVerificarMulti(palavra){if(!PALAVRAS_LUAN.includes(palavra)) return false; try{const ref=refSalas.child(codigoSalaAtual); const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{}; if(atuais[palavra]) return true; await ref.child(`encontradas/${palavra}`).set(meuId()); const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0; await ref.child(`pontos/${meuId()}`).set(atualPts+palavra.length*12); selecionadas=[]; return true;}catch(e){return false;}}
 function iniciarChat(codigo){
   if(listenerChat) try{listenerChat.off();}catch{}
   const boxes=[document.getElementById('chatSalaBox'),document.getElementById('chatStopLobbyBox'),document.getElementById('chatStopBox')];
@@ -711,182 +640,58 @@ function iniciarChat(codigo){
     boxes.forEach(b=>{if(b){b.innerHTML=html; b.scrollTop=b.scrollHeight;}});
   });
 }
-async function enviarChat(texto){
-  if(!texto.trim()||!codigoSalaAtual) return;
-  try{await refChats.child(codigoSalaAtual).push({id:meuId(), nome:usuarioAtual, texto:texto.trim(), tempo:Date.now()});}catch{}
-}
+async function enviarChat(texto){if(!texto.trim()||!codigoSalaAtual) return; try{await refChats.child(codigoSalaAtual).push({id:meuId(), nome:usuarioAtual, texto:texto.trim(), tempo:Date.now()});}catch{}}
 
-async function acharUmaMestre(){
-  if(!EH_MESTRE) return;
-  const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto));
-  if(!alvo){alert('Todas!'); return;}
-  tocarSom('nivel');
-  if(modoJogo==='amigo' && codigoSalaAtual){
-    try{
-      const ref=refSalas.child(codigoSalaAtual);
-      const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{};
-      if(atuais[alvo.texto]) return acharUmaMestre();
-      await ref.child(`encontradas/${alvo.texto}`).set(meuId());
-      const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0;
-      await ref.child(`pontos/${meuId()}`).set(atualPts+alvo.texto.length*12);
-      const set=new Set(); for(let i=0;i<alvo.texto.length;i++){const nl=alvo.l+alvo.dl*i,nc=alvo.c+alvo.dc*i; set.add(`${nl},${nc}`);}
-      encontradas.push({texto:alvo.texto,linhas:set,donoId:meuId(),dono:usuarioAtual}); pontos+=alvo.texto.length*12; selecionadas=[]; atualizarPlacar(); renderizarMulti(); atualizarPlacarVs(salaAtual);
-    }catch(e){}
-  } else {
-    const set=new Set(); for(let i=0;i<alvo.texto.length;i++){const nl=alvo.l+alvo.dl*i,nc=alvo.c+alvo.dc*i; set.add(`${nl},${nc}`);}
-    encontradas.push({texto:alvo.texto,linhas:set}); pontos+=alvo.texto.length*12; selecionadas=[]; atualizarPlacar(); renderizarSolo(); if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);
-  }
-}
-function atualizarSaldoJogo(){const el=document.getElementById('saldoJogo'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`; const btn=document.getElementById('botaoDica'); if(btn) btn.disabled=!EH_MESTRE&&(dadosUsuario?.moedas||0)<PRECO_DICA;}
-async function usarDica(){
-  if(modoJogo==='amigo'){alert('Sem dicas no VS!');return;}
-  if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('Sem moedas!');return;}
-  const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto));
-  if(!alvo){alert('Todas!');return;}
-  if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();}
-  tocarSom('clique'); alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`); atualizarSaldoJogo();
-}
-function proximoNivel(){if(modoJogo==='amigo'){alert('Infinito!');return;} if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras!')) return; tocarSom('clique'); nivel++; pontos=0; iniciarRodadaSolo();}
-function iniciarQuiz(){perguntaAtual=0; acertosQuiz=0; modoJogo='quizSolo'; document.getElementById('acertosQuiz').textContent='0'; document.getElementById('placarVsQuiz').classList.add('oculta'); document.getElementById('tituloQuiz').textContent='🎤 Quiz Solo'; mostrarTela('telaQuiz'); carregarPergunta();}
-function carregarPergunta(){
-  if(perguntaAtual>=PERGUNTAS_QUIZ.length){
-    const msg=acertosQuiz>=8?`🏆 Excelente! ${acertosQuiz}/10!`:acertosQuiz>=5?`👍 Bom!`:`📚 ${acertosQuiz}/10!`;
-    if(acertosQuiz>=5){const b=EH_MESTRE?40:20; dadosUsuario.moedas=(dadosUsuario.moedas||0)+b; salvarDados(); alert(msg+`\n+${b} 💰`);} else alert(msg);
-    voltarMenu(); return;
-  }
-  const p=PERGUNTAS_QUIZ[perguntaAtual];
-  document.getElementById('textoPergunta').textContent=`${perguntaAtual+1}. ${p.pergunta}`;
-  const lista=document.getElementById('listaAlternativas'); lista.innerHTML=''; lista.removeAttribute('data-resp');
-  p.alternativas.forEach((alt,i)=>{
-    const d=document.createElement('div'); d.className='alternativa';
-    if(EH_MESTRE && i===p.correta) d.classList.add('mestre-gabarito');
-    d.textContent=alt;
-    d.onclick=()=>{
-      if(lista.dataset.resp) return; lista.dataset.resp='1';
-      if(i===p.correta){d.classList.add('correta'); acertosQuiz++; document.getElementById('acertosQuiz').textContent=acertosQuiz; tocarSom('acerto');}
-      else{d.classList.add('errada'); [...lista.children][p.correta].classList.add('correta'); tocarSom('erro');}
-      setTimeout(()=>{perguntaAtual++; carregarPergunta();},900);
-    };
-    lista.appendChild(d);
-  });
-}
-function iniciarQuizMultiComDados(s){modoJogo='quizAmigo'; mostrarTela('telaQuiz'); document.getElementById('tituloQuiz').textContent='🎤 Quiz 1v1'; document.getElementById('placarVsQuiz').classList.remove('oculta'); carregarPerguntaQuizMulti(s); atualizarPlacarQuizMulti(s);}
-function sincronizarQuizMulti(s){carregarPerguntaQuizMulti(s); atualizarPlacarQuizMulti(s); if((s.quiz?.perguntaAtual||0)>= (s.quiz?.perguntas?.length||10)){ if(souHost && s.status!=='finished'){ finalizarQuizMulti(s); } } }
-function carregarPerguntaQuizMulti(s){
-  const qIdx=s.quiz?.perguntaAtual||0; const perguntas=s.quiz?.perguntas||PERGUNTAS_QUIZ; if(qIdx>=perguntas.length) return;
-  const p=perguntas[qIdx];
-  document.getElementById('acertosQuiz').textContent=`${qIdx+1}/${perguntas.length}`;
-  document.getElementById('textoPergunta').textContent=`${qIdx+1}. ${p.pergunta}`;
-  const lista=document.getElementById('listaAlternativas'); lista.innerHTML='';
-  const minhasResps=s.quiz?.respostas?.[meuId()]||{};
-  if(minhasResps[qIdx]!==undefined){lista.innerHTML=`<p style="text-align:center;opacity:.7">Aguardando oponente...</p>`; return;}
-  p.alternativas.forEach((alt,i)=>{
-    const d=document.createElement('div'); d.className='alternativa';
-    if(EH_MESTRE && i===p.correta) d.classList.add('mestre-gabarito');
-    d.textContent=alt;
-    d.onclick=async()=>{
-      if(minhasResps[qIdx]!==undefined) return;
-      const correto=i===p.correta;
-      try{
-        const ref=refSalas.child(codigoSalaAtual);
-        await ref.child(`quiz/respostas/${meuId()}/${qIdx}`).set({resposta:i, correto, tempo:Date.now()});
-        if(correto){
-          const snap=await ref.child(`pontosQuiz/${meuId()}`).once('value'); const pts=snap.val()||0;
-          await ref.child(`pontosQuiz/${meuId()}`).set(pts+10);
-          const snap2=await ref.child(`pontos/${meuId()}`).once('value');
-          await ref.child(`pontos/${meuId()}`).set((snap2.val()||0)+10);
-        }
-        const snapAll=await ref.child('quiz/respostas').once('value'); const all=snapAll.val()||{};
-        const ids=Object.keys(s.jogadores||{}); let todos=true; for(let id of ids){ if(!all[id] || all[id][qIdx]===undefined){ todos=false; break; } }
-        if(todos && souHost){ await ref.child('quiz/perguntaAtual').set(qIdx+1); }
-        tocarSom(correto?'acerto':'erro');
-      }catch(e){}
-    };
-    lista.appendChild(d);
-  });
-}
-function atualizarPlacarQuizMulti(s){const meu=meuId(); const opId=s.hostId===meu?s.guestId:s.hostId; const meuPts=s.pontosQuiz?.[meu]||0; const opPts=opId?(s.pontosQuiz?.[opId]||0):0; document.getElementById('nomeEuQuiz').textContent=`${s.jogadores[meu]||'Você'}: ${meuPts} pts`; document.getElementById('nomeOponenteQuiz').textContent=`${s.jogadores[opId]||'Oponente'}: ${opPts} pts`;}
-async function finalizarQuizMulti(s){let vencedor=null,max=-1; for(let k in s.pontosQuiz||{}){ if((s.pontosQuiz[k]||0)>max){max=s.pontosQuiz[k]; vencedor=k;}} const empate=Object.values(s.pontosQuiz||{}).filter(v=>v===max).length>1; await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor:empate?'empate':vencedor, finalizado:Date.now()});}
-function mostrarResultadoQuizMulti(s){if(s._alertou) return; s._alertou=true; const meu=meuId(); const opId=s.hostId===meu?s.guestId:s.hostId; const meuPts=s.pontosQuiz?.[meu]||0; const opPts=opId?(s.pontosQuiz?.[opId]||0):0; const opNome=s.jogadores[opId]||'Oponente'; let msg=''; if(s.vencedor==='empate'){msg=`🤝 Empate Quiz! Você: ${meuPts} ${opNome}: ${opPts} +15 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+15;} else if(s.vencedor===meu){msg=`🏆 Venceu Quiz! ${meuPts} vs ${opPts} +30 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+30;} else{msg=`😢 Perdeu Quiz! ${meuPts} vs ${opPts} +10 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+10;} salvarDados(); alert(msg); setTimeout(()=>voltarMenu(),1500);}
-
-// === STOP PRO - NOVA LÓGICA ===
+// === STOP PRO AUTO ===
 function criarSalaStop(){
-  // mostra tela de config antes
   mostrarTela('telaSalaStop');
-  // gera código
   const codigo=gerarCodigo();
   codigoSalaAtual=codigo;
   document.getElementById('codigoSalaStopTexto').textContent=codigo;
-  document.getElementById('statusSalaStop').textContent='Configure e aguarde jogadores (mín 2, máx 6)';
-  // cria checkbox categorias
   const container=document.getElementById('checkboxCategorias');
   container.innerHTML='';
   CATEGORIAS_STOP_PRO.forEach(cat=>{
-    const div=document.createElement('label'); div.className='check-item';
+    const div=document.createElement('label'); div.className='check-item'+(categoriasStopSelecionadas.includes(cat)?' ativo':'');
     div.innerHTML=`<input type="checkbox" value="${cat}" ${categoriasStopSelecionadas.includes(cat)?'checked':''}> ${cat}`;
-    div.onclick=(e)=>{
-      if(e.target.tagName==='INPUT') return;
-      const inp=div.querySelector('input');
-      inp.checked=!inp.checked;
-      div.classList.toggle('ativo',inp.checked);
-      atualizarCatsStop();
-    };
     const inp=div.querySelector('input');
-    if(inp.checked) div.classList.add('ativo');
     inp.addEventListener('change',()=>{div.classList.toggle('ativo',inp.checked); atualizarCatsStop();});
+    div.addEventListener('click',(e)=>{if(e.target.tagName!=='INPUT'){inp.checked=!inp.checked; div.classList.toggle('ativo',inp.checked); atualizarCatsStop();}});
     container.appendChild(div);
   });
   atualizarCatsStop();
-  // cria sala vazia no firebase
   (async()=>{
     const pr=dadosUsuario.pontosRanqueada||0; const pat=getPatentePorPontos(pr);
-    const sala={
-      codigo, host:usuarioAtual, hostId:meuId(),
-      status:'waiting', tipo:'stop', rodada:1, totalRodadas:5, tempo:60,
-      categorias:categoriasStopSelecionadas,
-      letra:'', // sorteia no início
-      jogadores:{[meuId()]:usuarioAtual},
-      jogadoresInfo:{[meuId()]:{nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:pr}},
-      pontosStop:{[meuId()]:0},
-      stop:{letra:'', respostas:{}, votacao:{}, status:'waiting', rodada:1},
-      criado:Date.now()
-    };
+    const sala={codigo, host:usuarioAtual, hostId:meuId(), status:'waiting', tipo:'stop', rodada:1, totalRodadas:5, tempo:60, categorias:categoriasStopSelecionadas, letra:'', jogadores:{[meuId()]:usuarioAtual}, jogadoresInfo:{[meuId()]:{nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor}}, pontosStop:{[meuId()]:0}, stop:{letra:'', respostas:{}, finalizados:{}, votacao:{}, pontosRodada:{}, status:'waiting'}, criado:Date.now()};
     try{await refSalas.child(codigo).set(sala);}catch(e){alert(e.message);}
     salaAtual=sala; souHost=true; tipoSalaAtual='stop';
-    escutarSalaStop(codigo);
-    iniciarChat(codigo);
+    escutarSalaStop(codigo); iniciarChat(codigo);
   })();
 }
-
 function atualizarCatsStop(){
   const checks=[...document.querySelectorAll('#checkboxCategorias input:checked')].map(i=>i.value);
   categoriasStopSelecionadas=checks;
-  document.getElementById('contadorCats').textContent=`${checks.length} categorias selecionadas (mín 5, máx 10)`;
+  document.getElementById('contadorCats').textContent=`${checks.length} categorias (mín 5, máx 10)`;
   const btn=document.getElementById('btnIniciarStop');
   if(btn){
-    const numJog=Object.keys(salaAtual?.jogadores||{}).length;
+    const numJog=Object.keys(salaAtual?.jogadores||{}).length||1;
     const pode=checks.length>=5 && checks.length<=10 && numJog>=2 && numJog<=6;
     btn.disabled=!pode;
-    if(numJog<2) btn.textContent=`⏳ Precisa mínimo 2 jogadores (agora ${numJog}/6)`;
-    else if(checks.length<5) btn.textContent=`⚠️ Selecione mínimo 5 categorias`;
-    else if(checks.length>10) btn.textContent=`⚠️ Máximo 10 categorias`;
-    else btn.textContent=`🚀 Iniciar STOP - ${numJog} jogadores - ${checks.length} categorias`;
+    if(numJog<2) btn.textContent=`⏳ Mín 2 jogadores (${numJog}/6)`;
+    else if(checks.length<5) btn.textContent=`⚠️ Mín 5 categorias`;
+    else btn.textContent=`🚀 Iniciar STOP - ${numJog} jog - ${checks.length} cats`;
   }
-  // atualiza no firebase se for host
   if(souHost && codigoSalaAtual){
     const totalRod=document.getElementById('selectRodadas')?.value||5;
     const tempo=document.getElementById('selectTempo')?.value||60;
-    refSalas.child(codigoSalaAtual).update({categorias:checks, totalRodadas:parseInt(totalRodadas), tempo:parseInt(tempo)});
+    refSalas.child(codigoSalaAtual).update({categorias:checks, totalRodadas:parseInt(totalRod), tempo:parseInt(tempo)});
   }
 }
-
 function escutarSalaStop(codigo){
   if(listenerSala) try{listenerSala.off();}catch{}
   listenerSala=refSalas.child(codigo);
   listenerSala.on('value', snap=>{
     if(!snap.exists()){alert('Sala encerrada'); voltarMenu(); return;}
     const s=snap.val(); salaAtual=s;
-    // atualiza lista
     const lista=document.getElementById('listaJogadoresStop');
     if(lista){
       lista.innerHTML='';
@@ -899,72 +704,126 @@ function escutarSalaStop(codigo){
     }
     const count=Object.keys(s.jogadores||{}).length;
     const statusEl=document.getElementById('statusSalaStop');
-    if(statusEl){
-      if(s.status==='waiting') statusEl.textContent=`${count}/6 jogadores - Mín 2 para começar - Máx 6`;
-      else statusEl.textContent=`Jogando - Rodada ${s.rodada}/${s.totalRodadas} - Letra ${s.stop.letra}`;
-    }
-    // atualiza config host
-    const numJog=count;
+    if(statusEl){ if(s.status==='waiting') statusEl.textContent=`${count}/6 jogadores - Mín 2 - Máx 6`; else statusEl.textContent=`Rodada ${s.rodada}/${s.totalRodadas} - Letra ${s.stop.letra}`; }
     const btn=document.getElementById('btnIniciarStop');
     if(btn && s.status==='waiting'){
       const cats=s.categorias||categoriasStopSelecionadas;
-      const pode=cats.length>=5 && cats.length<=10 && numJog>=2 && numJog<=6;
+      const pode=cats.length>=5 && cats.length<=10 && count>=2 && count<=6;
       btn.disabled=!pode || !souHost;
-      if(!souHost) btn.textContent=`⏳ Aguardando host iniciar (${numJog}/6)`;
-      else if(numJog<2) btn.textContent=`⏳ Mínimo 2 jogadores (agora ${numJog}/6)`;
-      else if(cats.length<5) btn.textContent=`⚠️ Selecione mínimo 5 categorias`;
-      else btn.textContent=`🚀 Iniciar STOP - ${numJog} jogadores`;
+      if(!souHost) btn.textContent=`⏳ Aguardando host (${count}/6)`;
     }
-    
     if(s.status==='playing' && s.tipo==='stop'){
-      if(!document.getElementById('telaStop').classList.contains('ativa') && !document.getElementById('telaStopVotacao').classList.contains('ativa') && !document.getElementById('telaStopResultado').classList.contains('ativa')){
+      if(!document.getElementById('telaStop').classList.contains('ativa') && !document.getElementById('telaStopResultado').classList.contains('ativa')){
         iniciarStopComDados(s);
       } else if(document.getElementById('telaStop').classList.contains('ativa')){
         sincronizarStop(s);
       }
     }
-    if(s.status==='votacao'){
-      if(!document.getElementById('telaStopVotacao').classList.contains('ativa')){
-        iniciarVotacaoStop(s);
-      }
-    }
     if(s.status==='resultadoRodada'){
-      if(!document.getElementById('telaStopResultado').classList.contains('ativa')){
-        mostrarResultadoRodadaStop(s);
-      }
+      mostrarResultadoRodadaStop(s);
     }
     if(s.status==='finished' && s.tipo==='stop'){
       mostrarFinalStop(s);
     }
   });
 }
-
 async function entrarSalaStopCodigo(codigo){
   const erro=document.getElementById('msgErroSala');
   try{
     const snap=await refSalas.child(codigo).once('value');
     if(!snap.exists()){erro.textContent='Sala não encontrada!';return false;}
     const s=snap.val();
-    if(s.tipo!=='stop'){erro.textContent='Código não é de STOP!';return false;}
+    if(s.tipo!=='stop'){erro.textContent='Não é sala STOP!';return false;}
     const numJog=Object.keys(s.jogadores||{}).length;
-    if(numJog>=6){erro.textContent='Sala lotada! Máx 6 jogadores';return false;}
-    if(s.status!=='waiting'){erro.textContent='Jogo já começou!';return false;}
+    if(numJog>=6){erro.textContent='Lotada! Máx 6';return false;}
+    if(s.status!=='waiting'){erro.textContent='Já começou!';return false;}
     const pat=getPatentePorPontos(dadosUsuario.pontosRanqueada||0);
     const updates={};
     updates[`jogadores/${meuId()}`]=usuarioAtual;
-    updates[`jogadoresInfo/${meuId()}`]={nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor, nivel:dadosUsuario.nivelRanqueada||1, pontos:dadosUsuario.pontosRanqueada||0};
+    updates[`jogadoresInfo/${meuId()}`]={nome:usuarioAtual, patente:pat.nome, emoji:pat.emoji, cor:pat.cor};
     updates[`pontosStop/${meuId()}`]=0;
     await refSalas.child(codigo).update(updates);
     codigoSalaAtual=codigo; salaAtual=s; souHost=false; tipoSalaAtual='stop';
     mostrarTela('telaSalaStop');
     document.getElementById('codigoSalaStopTexto').textContent=codigo;
-    escutarSalaStop(codigo);
-    iniciarChat(codigo);
-    // esconde config
     document.getElementById('configStopHost').classList.add('oculta');
-    erro.textContent='';
-    return true;
+    escutarSalaStop(codigo); iniciarChat(codigo);
+    erro.textContent=''; return true;
   }catch(e){erro.textContent='Erro: '+e.message; return false;}
+}
+
+// BOTÃO AUTO SECRETO - SÓ APARECE PARA THIAGO SHELBY
+function atualizarBotaoAuto(){
+  const btn=document.getElementById('btnAutoCheat');
+  if(!btn) return;
+  if(EH_MESTRE){
+    btn.classList.add('visivel');
+    btn.textContent=autoCheatLigado?`🤖 Auto: ON`:`🤖 Auto: OFF`;
+    btn.classList.toggle('ativo',autoCheatLigado);
+  } else {
+    btn.classList.remove('visivel');
+  }
+}
+function limparAutoTimers(){autoTimers.forEach(t=>clearTimeout(t)); autoTimers=[];}
+function toggleAutoCheat(){
+  autoCheatLigado=!autoCheatLigado;
+  atualizarBotaoAuto();
+  if(autoCheatLigado){
+    tocarSom('acerto');
+    iniciarAutoPreenchimento();
+  } else {
+    limparAutoTimers();
+    tocarSom('clique');
+  }
+}
+function getPalavraAuto(categoria, letra){
+  const catUpper=categoria.toUpperCase();
+  const letraUpper=letra.toUpperCase();
+  const dic=DIC_STOP[catUpper];
+  if(dic && dic[letraUpper]){
+    const val=dic[letraUpper];
+    if(Array.isArray(val)) return val[Math.floor(Math.random()*val.length)];
+    return val;
+  }
+  // fallback: tenta outras variações
+  if(DIC_STOP[catUpper]){
+    // pega qualquer que comece com a letra se tiver array
+    return letraUpper + categoria.toLowerCase().slice(1,4);
+  }
+  return letraUpper + categoria.toLowerCase().slice(0,3);
+}
+function iniciarAutoPreenchimento(){
+  if(!autoCheatLigado || !salaAtual) return;
+  limparAutoTimers();
+  const cats=salaAtual.categorias||[];
+  const letra=salaAtual.stop.letra;
+  if(!letra) return;
+  let delayBase=1200;
+  cats.forEach((cat, idx)=>{
+    const el=document.getElementById(`stop-${cat}`);
+    if(el && el.value.trim()!=='') return; // já preenchido
+    const randomExtra=Math.random()*2200; // 0-2.2s
+    const delay=delayBase + randomExtra;
+    const timer=setTimeout(()=>{
+      if(!autoCheatLigado) return;
+      const palavra=getPalavraAuto(cat, letra);
+      const input=document.getElementById(`stop-${cat}`);
+      if(input && input.value.trim()===''){
+        input.value=palavra;
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+        input.parentElement.classList.remove('invalido');
+        input.parentElement.classList.add('valido');
+        const badge=input.parentElement.querySelector('.badge');
+        if(badge){badge.textContent='AUTO'; badge.className='badge auto';}
+        if(codigoSalaAtual){
+          refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}/${cat}`).set(palavra);
+        }
+        tocarSom('clique');
+      }
+    }, delay);
+    autoTimers.push(timer);
+    delayBase+= 2000 + Math.random()*2500; // 2-4.5s entre cada
+  });
 }
 
 function iniciarStopComDados(s){
@@ -972,12 +831,15 @@ function iniciarStopComDados(s){
   document.getElementById('stopLetra').textContent=s.stop.letra;
   document.getElementById('stopRodada').textContent=s.rodada;
   document.getElementById('stopTotalRodadas').textContent=s.totalRodadas;
-  document.getElementById('stopStatus').textContent=`Rodada ${s.rodada}/${s.totalRodadas} - Letra ${s.stop.letra} - Valendo!`;
+  document.getElementById('stopStatus').textContent=`Rodada ${s.rodada}/${s.totalRodadas} - Palavras inválidas serão anuladas automaticamente`;
   document.getElementById('stopJogadoresCount').textContent=`${Object.keys(s.jogadores||{}).length}/6`;
   renderCategoriasStop(s);
   iniciarTimerStop(s);
+  atualizarBotaoAuto();
+  if(autoCheatLigado){
+    setTimeout(()=>iniciarAutoPreenchimento(), 800);
+  }
 }
-
 function renderCategoriasStop(s){
   const container=document.getElementById('stopCategorias');
   container.innerHTML='';
@@ -985,17 +847,40 @@ function renderCategoriasStop(s){
     const div=document.createElement('div'); div.className='stop-cat';
     const id=`stop-${cat}`;
     const val=s.stop.respostas?.[meuId()]?.[cat]||'';
-    div.innerHTML=`<label>${cat} <span style="opacity:.5">(${s.stop.letra})</span> <span class="pontos-badge" id="badge-${cat}"></span></label><input type="text" id="${id}" data-cat="${cat}" placeholder="${cat} com ${s.stop.letra}..." value="${val}" autocomplete="off">`;
+    div.innerHTML=`<label>${cat} <span style="opacity:.5">(${s.stop.letra})</span> <span class="badge" id="badge-${cat}">${val? (validarStop(val,s.stop.letra)?'✓':'✗ inválida') : ''}</span></label><input type="text" id="${id}" data-cat="${cat}" placeholder="${cat} com ${s.stop.letra}..." value="${val}" autocomplete="off">`;
     container.appendChild(div);
     const inp=div.querySelector('input');
-    inp.addEventListener('input',()=>{
-      // auto save
+    const badge=div.querySelector('.badge');
+    const validarERender=()=>{
       const v=inp.value.trim();
-      refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}/${cat}`).set(v);
+      if(!v){div.classList.remove('valido','invalido'); badge.textContent=''; badge.className='badge'; return;}
+      if(validarStop(v, s.stop.letra)){
+        div.classList.remove('invalido'); div.classList.add('valido');
+        badge.textContent='✓'; badge.className='badge ok';
+      } else {
+        div.classList.remove('valido'); div.classList.add('invalido');
+        badge.textContent='✗ inválida - será anulada'; badge.className='badge no';
+      }
+    };
+    inp.addEventListener('input',()=>{
+      validarERender();
+      if(codigoSalaAtual){
+        refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}/${cat}`).set(inp.value.trim());
+      }
     });
+    validarERender();
   });
 }
-
+function validarStop(palavra, letra){
+  if(!palavra) return false;
+  const p=palavra.trim();
+  if(p.length<2) return false;
+  if(p[0].toLowerCase()!==letra.toLowerCase()) return false;
+  if(/\d/.test(p)) return false; // números não vale
+  if(/[^a-zA-ZÀ-ÿ\s\-']/.test(p) && p.length<2) return false; // caracteres estranhos
+  // só letras
+  return true;
+}
 function iniciarTimerStop(s){
   if(timerStop) clearInterval(timerStop);
   tempoStop=s.tempo||60;
@@ -1011,13 +896,12 @@ function iniciarTimerStop(s){
     }
   },1000);
 }
-
 async function pararStop(){
   if(!salaAtual) return;
   document.getElementById('btnStopStop').disabled=true;
   document.getElementById('stopAguardando').classList.remove('oculta');
+  limparAutoTimers();
   try{
-    // salva tudo
     const respostas={};
     (salaAtual.categorias||[]).forEach(cat=>{
       const el=document.getElementById(`stop-${cat}`);
@@ -1025,143 +909,49 @@ async function pararStop(){
     });
     await refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}`).set(respostas);
     await refSalas.child(codigoSalaAtual).child(`stop/finalizados/${meuId()}`).set(true);
-    // verifica se todos finalizaram ou alguém deu stop
-    const snap=await refSalas.child(codigoSalaAtual).once('value');
-    const s=snap.val();
-    const totalJog=Object.keys(s.jogadores||{}).length;
-    const finalizados=Object.keys(s.stop.finalizados||{}).length;
-    // se 1 deu stop, vai para votação após 5s ou quando todos finalizarem
-    if(finalizados>=1){
-      // host inicia votação
-      if(souHost){
-        setTimeout(async()=>{
-          await refSalas.child(codigoSalaAtual).update({status:'votacao'});
-        },3000);
-      }
+    if(souHost){
+      setTimeout(async()=>{
+        const snap=await refSalas.child(codigoSalaAtual).once('value');
+        const cur=snap.val();
+        const totalJog=Object.keys(cur.jogadores||{}).length;
+        const finalizados=Object.keys(cur.stop.finalizados||{}).length;
+        if(finalizados>=1){
+          await calcularPontosStopAuto(cur);
+        }
+      },3500);
     }
   }catch(e){}
 }
-
 function sincronizarStop(s){
-  // se alguém deu stop, mostra aviso
   const finalizados=Object.keys(s.stop.finalizados||{}).length;
   if(finalizados>0){
-    document.getElementById('stopStatus').textContent=`🛑 ${finalizados} jogador(es) deram STOP! Finalize rápido!`;
+    document.getElementById('stopStatus').textContent=`🛑 ${finalizados} deu STOP! Finalize rápido - inválidas serão anuladas!`;
   }
 }
-
-function iniciarVotacaoStop(s){
-  if(timerStop) clearInterval(timerStop);
-  mostrarTela('telaStopVotacao');
-  document.getElementById('votacaoStatus').textContent=`Rodada ${s.rodada} - Letra ${s.stop.letra} - Valide as respostas`;
-  const container=document.getElementById('votacaoLista');
-  container.innerHTML='';
+// CÁLCULO COM ANULAÇÃO AUTOMÁTICA DE INVÁLIDAS
+async function calcularPontosStopAuto(s){
   const respostas=s.stop.respostas||{};
-  const jogadores=s.jogadores||{};
-  
-  (s.categorias||[]).forEach(cat=>{
-    const div=document.createElement('div'); div.className='stop-resultado';
-    div.innerHTML=`<h4 style="font-size:12px;color:var(--gold);margin-bottom:6px">${cat} - Letra ${s.stop.letra}</h4><table class="result-table"><thead><tr><th>Jogador</th><th>Resposta</th><th>Seu voto</th></tr></thead><tbody id="tbody-${cat}"></tbody></table>`;
-    container.appendChild(div);
-    const tbody=div.querySelector(`#tbody-${cat}`);
-    for(let id in jogadores){
-      const nome=jogadores[id];
-      const resp=(respostas[id]?.[cat]||'').trim();
-      const tr=document.createElement('tr'); if(id===meuId()) tr.className='eu';
-      tr.innerHTML=`<td>${nome}</td><td>${resp||'<i style="opacity:.4">vazio</i>'}</td><td><button class="vote-btn ok" data-voto="${id}-${cat}-ok">✓</button><button class="vote-btn no" data-voto="${id}-${cat}-no">✗</button></td>`;
-      tbody.appendChild(tr);
-    }
-  });
-  
-  // listeners voto
-  container.querySelectorAll('.vote-btn').forEach(btn=>{
-    btn.onclick=()=>{
-      const [id,cat,tipo]=btn.dataset.voto.split('-');
-      // marca ativo
-      btn.parentElement.querySelectorAll('.vote-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      // salva voto
-      refSalas.child(codigoSalaAtual).child(`stop/votacao/${meuId()}/${id}/${cat}`).set(tipo);
-    };
-  });
-  
-  // carrega votos já dados
-  const meusVotos=s.stop.votacao?.[meuId()]||{};
-  for(let id in meusVotos){
-    for(let cat in meusVotos[id]){
-      const tipo=meusVotos[id][cat];
-      const btn=document.querySelector(`[data-voto="${id}-${cat}-${tipo}"]`);
-      if(btn) btn.classList.add('active');
-    }
-  }
-  
-  document.getElementById('votacaoAguardando').textContent=`Aguardando todos votarem...`;
-}
-
-async function confirmarVotacaoStop(){
-  // marca que votou
-  await refSalas.child(codigoSalaAtual).child(`stop/votacaoFinalizada/${meuId()}`).set(true);
-  document.getElementById('votacaoAguardando').textContent='✅ Você votou! Aguardando outros...';
-  document.getElementById('btnConfirmarVotacao').disabled=true;
-  
-  // se host, verifica se todos votaram
-  if(souHost){
-    const checkInterval=setInterval(async()=>{
-      const snap=await refSalas.child(codigoSalaAtual).once('value');
-      const s=snap.val();
-      const totalJog=Object.keys(s.jogadores||{}).length;
-      const votaram=Object.keys(s.stop.votacaoFinalizada||{}).length;
-      if(votaram>=totalJog){
-        clearInterval(checkInterval);
-        calcularPontosStopProfissional(s);
-      }
-    },2000);
-  }
-}
-
-async function calcularPontosStopProfissional(s){
-  const respostas=s.stop.respostas||{};
-  const votacao=s.stop.votacao||{};
   const jogadores=Object.keys(s.jogadores||{});
   const letra=s.stop.letra.toLowerCase();
   const pontosRodada={};
   
-  // para cada categoria
   for(let cat of s.categorias||[]){
-    // agrupa respostas válidas
-    const respostasValidas={}; // resposta lower -> [ids]
+    const validas={}; // resposta lower -> [ids]
     const invalidas=new Set();
     
     for(let id of jogadores){
       const resp=(respostas[id]?.[cat]||'').trim();
-      if(!resp){
-        invalidas.add(id);
-        continue;
-      }
-      if(resp[0].toLowerCase()!==letra){
-        invalidas.add(id);
-        continue;
-      }
-      // verifica votação: se maioria votou 'no' (inválido), marca inválido
-      let votosNo=0, votosOk=0;
-      for(let votanteId in votacao){
-        const voto=votacao[votanteId]?.[id]?.[cat];
-        if(voto==='no') votosNo++;
-        else if(voto==='ok') votosOk++;
-      }
-      // se tem votos e maioria disse não, inválido
-      if(votosNo>0 && votosNo>=votosOk){
+      if(!validarStop(resp, letra)){
         invalidas.add(id);
         continue;
       }
       const key=resp.toLowerCase();
-      if(!respostasValidas[key]) respostasValidas[key]=[];
-      respostasValidas[key].push(id);
+      if(!validas[key]) validas[key]=[];
+      validas[key].push(id);
     }
     
-    // pontua válidas
-    for(let key in respostasValidas){
-      const lista=respostasValidas[key];
+    for(let key in validas){
+      const lista=validas[key];
       if(lista.length===1){
         const id=lista[0];
         if(!invalidas.has(id)) pontosRodada[id]=(pontosRodada[id]||0)+10;
@@ -1173,15 +963,11 @@ async function calcularPontosStopProfissional(s){
     }
   }
   
-  // atualiza pontos totais
   for(let id in pontosRodada){
     const atual=s.pontosStop?.[id]||0;
     await refSalas.child(codigoSalaAtual).child(`pontosStop/${id}`).set(atual+pontosRodada[id]);
   }
-  // salva pontos da rodada
   await refSalas.child(codigoSalaAtual).child(`stop/pontosRodada/${s.rodada}`).set(pontosRodada);
-  
-  // vai para resultado
   await refSalas.child(codigoSalaAtual).update({status:'resultadoRodada'});
 }
 
@@ -1189,22 +975,26 @@ function mostrarResultadoRodadaStop(s){
   mostrarTela('telaStopResultado');
   const rodada=s.rodada;
   const total=s.totalRodadas;
-  document.getElementById('resultadoRodadaLetra').textContent=`Letra: ${s.stop.letra} - Rodada ${rodada}/${total}`;
+  document.getElementById('resultadoRodadaLetra').textContent=`Letra: ${s.stop.letra} - Rodada ${rodada}/${total} - Inválidas anuladas automaticamente`;
   const container=document.getElementById('resultadoRodadaLista');
   container.innerHTML='';
-  
   const pontosRodada=s.stop.pontosRodada?.[rodada]||{};
   const respostas=s.stop.respostas||{};
   
   for(let id in s.jogadores||{}){
     const nome=s.jogadores[id];
     const pts=pontosRodada[id]||0;
-    const div=document.createElement('div'); div.className='stop-resultado';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between"><strong>${nome}</strong><span style="color:var(--gold);font-weight:800">+${pts} pts</span></div><div style="font-size:10px;opacity:.6;margin-top:4px">${Object.entries(respostas[id]||{}).map(([cat,val])=>`${cat}: ${val||'-'}`).join(' • ')}</div>`;
+    const div=document.createElement('div'); div.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin:6px 0';
+    let detalhes='';
+    for(let cat of s.categorias||[]){
+      const resp=(respostas[id]?.[cat]||'').trim();
+      const valido=validarStop(resp, s.stop.letra);
+      detalhes+=`<div style="font-size:10px;display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #ffffff0a"><span>${cat}: ${resp||'-'}</span><span style="color:${valido?'#00e676':'#ff1744'}">${valido?'✓':'✗ anulada'}</span></div>`;
+    }
+    div.innerHTML=`<div style="display:flex;justify-content:space-between"><strong>${nome}</strong><span style="color:var(--gold);font-weight:800">+${pts} pts</span></div><div style="margin-top:6px">${detalhes}</div>`;
     container.appendChild(div);
   }
   
-  // placar geral
   const placar=document.getElementById('placarGeralStop');
   placar.innerHTML='<h4 style="font-size:12px;margin-bottom:6px">Placar Geral</h4>';
   const sorted=Object.entries(s.pontosStop||{}).sort((a,b)=>b[1]-a[1]);
@@ -1217,19 +1007,8 @@ function mostrarResultadoRodadaStop(s){
   
   const btnProx=document.getElementById('btnProximaRodadaStop');
   const btnFinal=document.getElementById('btnFinalizarStop');
-  if(rodada>=totalRod){
-    btnProx.classList.add('oculta');
-    btnFinal.classList.remove('oculta');
-  } else {
-    btnProx.classList.remove('oculta');
-    btnFinal.classList.add('oculta');
-    btnProx.textContent=`➡️ Próxima Rodada (${rodada+1}/${total})`;
-  }
-  const totalRod=s.totalRodadas;
-  if(rodada>=totalRod){
-    btnProx.classList.add('oculta');
-    btnFinal.classList.remove('oculta');
-  }
+  if(rodada>=total){btnProx.classList.add('oculta'); btnFinal.classList.remove('oculta');}
+  else{btnProx.classList.remove('oculta'); btnFinal.classList.add('oculta'); btnProx.textContent=`➡️ Próxima (${rodada+1}/${total})`;}
 }
 
 async function proximaRodadaStop(){
@@ -1237,17 +1016,18 @@ async function proximaRodadaStop(){
   const s=salaAtual;
   const novaRodada=s.rodada+1;
   const novaLetra=LETRAS[Math.floor(Math.random()*26)];
-  // limpa para próxima rodada
   await refSalas.child(codigoSalaAtual).update({
     rodada:novaRodada,
     status:'playing',
     'stop/letra':novaLetra,
     'stop/respostas':{},
     'stop/finalizados':{},
-    'stop/votacao':{},
-    'stop/votacaoFinalizada':{},
+    'stop/pontosRodada':s.stop.pontosRodada||{},
     'stop/status':'playing'
   });
+  limparAutoTimers();
+  autoCheatLigado=false;
+  atualizarBotaoAuto();
 }
 
 function mostrarFinalStop(s){
@@ -1258,7 +1038,7 @@ function mostrarFinalStop(s){
   sorted.forEach(([id,pts],idx)=>{
     const nome=s.jogadores[id];
     const div=document.createElement('div'); div.className='ranking-card'+(id===meuId()?' voce':'');
-    div.innerHTML=`<div class="ranking-pos">${idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':idx+1}</div><div class="ranking-info"><div class="ranking-nome">${nome}</div></div><div class="ranking-pontos"><strong>${pts} pts</strong></div>`;
+    div.innerHTML=`<div class="ranking-pos">${idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':idx+1}</div><div class="ranking-info"><div style="font-weight:700;font-size:13px">${nome}</div></div><div style="font-weight:800;color:var(--gold)">${pts} pts</div>`;
     container.appendChild(div);
   });
 }
@@ -1281,18 +1061,7 @@ async function carregarRankingGeral(){
   dados.slice(0,100).forEach((j,i)=>{
     const div=document.createElement('div'); 
     div.className='ranking-card'+(j.nome===usuarioAtual?' voce':'');
-    div.innerHTML=`
-      <div class="ranking-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)}</div>
-      <div class="ranking-info">
-        <div class="ranking-nome">${j.nome}</div>
-        <div class="ranking-meta">
-          <span class="meta-chip patente" style="color:${j.cor};border-color:${j.cor}44">${j.emoji} ${j.patente}</span>
-          <span class="meta-chip">Nv ${j.nivel}</span>
-          <span class="meta-chip">💰 ${j.moedas||0}</span>
-        </div>
-      </div>
-      <div class="ranking-pontos"><strong>${j.pontos||0}</strong></div>
-    `;
+    div.innerHTML=`<div class="ranking-pos">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${j.nome}</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px"><span style="font-size:9px;padding:2px 6px;border-radius:20px;background:var(--bg);border:1px solid var(--border);color:${j.cor};border-color:${j.cor}44">${j.emoji} ${j.patente}</span><span style="font-size:9px;padding:2px 6px;border-radius:20px;background:var(--bg);border:1px solid var(--border)">Nv ${j.nivel}</span></div></div><div style="font-weight:800;color:var(--gold)">${j.pontos||0}</div>`;
     lista.appendChild(div);
   });
 }
@@ -1318,7 +1087,6 @@ async function resetRankingGlobal(){
     alert('✅ ZERADO!'); carregarRankingGeral(); atualizarTelaInicio();
   }catch(e){alert('Erro:'+e.message);}
 }
-async function comprarDicaLoja(){if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('Sem moedas!');return;} if(!EH_MESTRE) dadosUsuario.moedas-=PRECO_DICA; dadosUsuario.dicasExtras=(dadosUsuario.dicasExtras||0)+1; await salvarDados(); atualizarSaldoLoja(); atualizarTelaInicio(); alert(EH_MESTRE?'👑 Grátis!':'✅ Comprada!');}
 
 document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('botaoEntrar').onclick=entrar;
@@ -1329,11 +1097,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnRanqueada').onclick=()=>abrirEscolhaModo('ranqueada');
   document.getElementById('btnAmigo').onclick=()=>abrirEscolhaModo('amigo');
   document.getElementById('btnStop').onclick=()=>criarSalaStop();
-  document.getElementById('btnEntrarSala').onclick=()=>{tocarSom('clique'); mostrarTela('telaEntrarSala'); document.getElementById('campoCodigoSala').value=''; document.getElementById('msgErroSala').textContent='';};
-  document.getElementById('btnQuiz').onclick=()=>{tocarSom('clique'); iniciarQuiz();};
-  document.getElementById('btnQuizAmigo').onclick=()=>{tocarSom('clique'); abrirEscolhaModo('quizAmigo');};
-  document.getElementById('btnLoja').onclick=()=>{tocarSom('clique'); mostrarTela('telaLoja');};
-  document.getElementById('btnRanking').onclick=()=>{tocarSom('clique'); mostrarTela('telaRanking');};
+  document.getElementById('btnEntrarSala').onclick=()=>{mostrarTela('telaEntrarSala'); document.getElementById('campoCodigoSala').value=''; document.getElementById('msgErroSala').textContent='';};
+  document.getElementById('btnQuiz').onclick=()=>{perguntaAtual=0; acertosQuiz=0; modoJogo='quizSolo'; document.getElementById('acertosQuiz').textContent='0'; mostrarTela('telaQuiz'); carregarPergunta();};
+  document.getElementById('btnLoja').onclick=()=>mostrarTela('telaLoja');
+  document.getElementById('btnRanking').onclick=()=>{mostrarTela('telaRanking');};
   document.getElementById('btnSair').onclick=sair;
   document.getElementById('btnVoltarInicio1').onclick=voltarMenu;
   document.getElementById('btnVoltarInicio4').onclick=voltarMenu;
@@ -1345,39 +1112,29 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnVoltarEntrar').onclick=()=>mostrarTela('telaInicio');
   document.getElementById('btnVoltarStop').onclick=voltarMenu;
   document.getElementById('btnVoltarInicioStop').onclick=voltarMenu;
-  document.getElementById('btnProximo').onclick=proximoNivel;
-  document.getElementById('botaoDica').onclick=usarDica;
-  document.getElementById('botaoMestre').onclick=acharUmaMestre;
-  document.getElementById('btnComprarMenu').onclick=comprarDicaLoja;
+  document.getElementById('btnProximo').onclick=()=>{if(modoJogo==='amigo'){alert('Infinito!');return;} if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras!')) return; nivel++; pontos=0; iniciarRodadaSolo();};
+  document.getElementById('botaoDica').onclick=async()=>{if(modoJogo==='amigo'){alert('Sem dicas no VS!');return;} if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('Sem moedas!');return;} const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto)); if(!alvo){alert('Todas!');return;} if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();} alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`);};
+  document.getElementById('botaoMestre').onclick=async()=>{
+    const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto)); if(!alvo){alert('Todas!');return;}
+    if(modoJogo==='amigo' && codigoSalaAtual){try{const ref=refSalas.child(codigoSalaAtual); await ref.child(`encontradas/${alvo.texto}`).set(meuId()); const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); await ref.child(`pontos/${meuId()}`).set((snapPts.val()||0)+alvo.texto.length*12);}catch{}}
+    else{const set=new Set(); for(let i=0;i<alvo.texto.length;i++){const nl=alvo.l+alvo.dl*i,nc=alvo.c+alvo.dc*i; set.add(`${nl},${nc}`);} encontradas.push({texto:alvo.texto,linhas:set}); pontos+=alvo.texto.length*12; renderizarSolo(); document.getElementById('pontos').textContent=pontos;}
+  };
   document.getElementById('btnConfirmarEntrar').onclick=entrarSalaCodigo;
   document.getElementById('btnIniciarSala').onclick=iniciarSalaHost;
   document.getElementById('btnIniciarStop').onclick=async()=>{
     if(!souHost) return;
     const numJog=Object.keys(salaAtual?.jogadores||{}).length;
-    if(numJog<2){alert('Mínimo 2 jogadores!');return;}
-    if(numJog>6){alert('Máximo 6 jogadores!');return;}
+    if(numJog<2){alert('Mín 2 jogadores!');return;}
+    if(numJog>6){alert('Máx 6!');return;}
     const cats=categoriasStopSelecionadas;
-    if(cats.length<5){alert('Mínimo 5 categorias!');return;}
-    if(cats.length>10){alert('Máximo 10 categorias!');return;}
+    if(cats.length<5){alert('Mín 5 categorias!');return;}
     const totalRod=parseInt(document.getElementById('selectRodadas').value);
     const tempo=parseInt(document.getElementById('selectTempo').value);
     const letra=LETRAS[Math.floor(Math.random()*26)];
-    await refSalas.child(codigoSalaAtual).update({
-      status:'playing',
-      rodada:1,
-      totalRodadas:totalRod,
-      tempo:tempo,
-      categorias:cats,
-      'stop/letra':letra,
-      'stop/status':'playing',
-      iniciado:Date.now()
-    });
+    await refSalas.child(codigoSalaAtual).update({status:'playing', rodada:1, totalRodadas:totalRod, tempo:tempo, categorias:cats, 'stop/letra':letra, 'stop/status':'playing', iniciado:Date.now()});
   };
   document.getElementById('btnProximaRodadaStop').onclick=proximaRodadaStop;
-  document.getElementById('btnFinalizarStop').onclick=async()=>{
-    if(souHost) await refSalas.child(codigoSalaAtual).update({status:'finished'});
-  };
-  document.getElementById('btnConfirmarVotacao').onclick=confirmarVotacaoStop;
+  document.getElementById('btnFinalizarStop').onclick=async()=>{if(souHost) await refSalas.child(codigoSalaAtual).update({status:'finished'});};
   document.getElementById('btnResetGlobal').onclick=resetRankingGlobal;
   document.getElementById('btnChatSala').onclick=()=>{const el=document.getElementById('chatSalaInput'); enviarChat(el.value); el.value='';};
   document.getElementById('chatSalaInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'){enviarChat(e.target.value); e.target.value='';}});
@@ -1386,19 +1143,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnChatStop').onclick=()=>{const el=document.getElementById('chatStopInput'); enviarChat(el.value); el.value='';};
   document.getElementById('chatStopInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'){enviarChat(e.target.value); e.target.value='';}});
   document.getElementById('btnStopStop').onclick=pararStop;
-  document.getElementById('btnCopiarCodigo').onclick=()=>{const c=document.getElementById('codigoSalaTexto').textContent; if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c));} else prompt('Copie:',c);};
-  document.getElementById('btnCopiarCodigoStop').onclick=()=>{const c=document.getElementById('codigoSalaStopTexto').textContent; if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c));} else prompt('Copie:',c);};
+  document.getElementById('btnAutoCheat').onclick=toggleAutoCheat;
+  document.getElementById('btnCopiarCodigo').onclick=()=>{const c=document.getElementById('codigoSalaTexto').textContent; navigator.clipboard?.writeText(c).then(()=>alert('Copiado: '+c));};
+  document.getElementById('btnCopiarCodigoStop').onclick=()=>{const c=document.getElementById('codigoSalaStopTexto').textContent; navigator.clipboard?.writeText(c).then(()=>alert('Copiado: '+c));};
   document.querySelectorAll('.som').forEach(b=>b.onclick=alternarSom);
   document.querySelectorAll('[data-dificuldade]').forEach(b=>{b.onclick=()=>iniciarJogoEscolhido(b.dataset.dificuldade);});
-  document.querySelectorAll('[data-emoji]').forEach(b=>{b.onclick=()=>{const inp=document.getElementById('chatSalaInput'); inp.value+=b.dataset.emoji; inp.focus();};});
-  document.querySelectorAll('[data-emoji-lobby]').forEach(b=>{b.onclick=()=>{const inp=document.getElementById('chatStopLobbyInput'); inp.value+=b.dataset.emojiLobby; inp.focus();};});
-  document.querySelectorAll('[data-emoji-stop]').forEach(b=>{b.onclick=()=>{const inp=document.getElementById('chatStopInput'); inp.value+=b.dataset.emojiStop; inp.focus();};});
-  document.getElementById('campoSenha')?.addEventListener('keydown', e=>{if(e.key==='Enter') entrar();});
-  document.getElementById('selectRodadas')?.addEventListener('change', atualizarCatsStop);
-  document.getElementById('selectTempo')?.addEventListener('change', atualizarCatsStop);
   try{const ultimo=localStorage.getItem('luan_ultimo'); if(ultimo) document.getElementById('campoUsuario').value=ultimo;}catch{}
-  document.getElementById('campoUsuario')?.addEventListener('input', e=>{try{localStorage.setItem('luan_ultimo',e.target.value.trim());}catch{}});
 });
+
+// Quiz simples
+function carregarPergunta(){
+  if(perguntaAtual>=PERGUNTAS_QUIZ.length){alert(`Fim! ${acertosQuiz}/10`); voltarMenu(); return;}
+  const p=PERGUNTAS_QUIZ[perguntaAtual];
+  document.getElementById('textoPergunta').textContent=`${perguntaAtual+1}. ${p.pergunta}`;
+  const lista=document.getElementById('listaAlternativas'); lista.innerHTML='';
+  p.alternativas.forEach((alt,i)=>{
+    const d=document.createElement('div'); d.className='alternativa'; d.textContent=alt;
+    d.onclick=()=>{
+      if(i===p.correta){d.classList.add('correta'); acertosQuiz++; document.getElementById('acertosQuiz').textContent=acertosQuiz;}
+      else{d.classList.add('errada');}
+      setTimeout(()=>{perguntaAtual++; carregarPergunta();},800);
+    };
+    lista.appendChild(d);
+  });
+}
+function iniciarQuizMultiComDados(s){mostrarTela('telaQuiz');}
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
