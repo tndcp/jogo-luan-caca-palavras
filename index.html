@@ -26,24 +26,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luan Coins 💰 — Caça-Palavras</title>
 <style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html){font-family:"Optimistic", system-ui, sans-serif}
-:where(code, pre, kbd, samp){font-family:"Optimistic Mono", ui-monospace, monospace}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:inherit}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
 body{background:#1a1a2e;color:#fff;min-height:100vh;padding:15px}
 .container{max-width:480px;margin:0 auto}
 h1{text-align:center;color:#ffd700;margin:15px 0;font-size:24px}
@@ -97,7 +80,9 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 .pontuacao-quiz{font-size:20px;color:#ffd700;font-weight:bold;text-align:center;margin:10px 0}
 .aviso-mestre{background:linear-gradient(90deg,#ffd70022,#ff8c0022);border:1px solid #ffd700;border-radius:10px;padding:10px;margin:10px 0;font-size:13px;text-align:center}
 .codigo-sala{font-size:32px;letter-spacing:6px;text-align:center;background:#2a2a4e;padding:15px;border-radius:12px;border:2px dashed #ffd700;margin:15px 0;font-weight:bold;color:#ffd700}
-.vs-placar{display:flex;justify-content:space-between;background:#2a2a4e;padding:12px;border-radius:12px;margin:10px 0;font-weight:bold}
+.vs-placar{display:flex;justify-content:space-between;background:#2a2a4e;padding:12px;border-radius:12px;margin:10px 0;font-weight:bold;flex-direction:column;gap:8px}
+.vs-linha{display:flex;justify-content:space-between;align-items:center}
+.vs-patente{font-size:11px;opacity:0.8;font-weight:normal}
 </style>
 </head>
 <body>
@@ -105,8 +90,8 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 
 <div id="telaLogin" class="tela ativa">
   <h1>🎸 Luan Coins 💰</h1>
-  <input type="text" id="campoUsuario" placeholder="Nome de Jogador" autocomplete="username">
-  <input type="password" id="campoSenha" placeholder="Senha" autocomplete="current-password">
+  <input type="text" id="campoUsuario" placeholder="Nome de Jogador">
+  <input type="password" id="campoSenha" placeholder="Senha">
   <div id="msgErro" class="erro"></div>
   <button class="primario" id="botaoEntrar">🎵 Entrar</button>
   <button class="secundario" id="botaoCriarLink">📝 Criar Nova Conta</button>
@@ -123,19 +108,20 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 
 <div id="telaInicio" class="tela">
   <div class="cabecalho"><h1>🎸 Luan Coins</h1><button class="som" id="botaoSom">🔊 Som: ON</button></div>
-  <div id="avisoMestre" class="aviso-mestre oculta">👑 Bem-vindo, DONO! Dicas grátis + moedas em dobro!</div>
+  <div id="avisoMestre" class="aviso-mestre oculta">👑 Bem-vindo, DONO! Botão MESTRE: 1 palavra por clique, funciona até no online!</div>
   <h2>Bem-vindo, <span id="nomeJogador"></span>!</h2>
   <div class="moedas" id="saldoMoedas">💰 0</div>
   <div id="patenteJogador" class="patente"></div>
-  <div class="destaque-normal"><strong>🎮 Modo Solo</strong><br>Ganha moedas e evolui</div>
+  <div class="destaque-normal"><strong>🎮 Modo Solo</strong></div>
   <button class="primario" id="btnSolo">Jogar Sozinho</button>
-  <div class="destaque-ranqueada"><strong>🏆 Ranqueada ATIVA</strong><br>Suba de patente! + Ranking</div>
+  <div class="destaque-ranqueada"><strong>🏆 Ranqueada</strong></div>
   <button class="ranqueada" id="btnRanqueada">Jogar Ranqueada</button>
-  <div class="destaque-amigo"><strong>👥 Convidar Amigo(a) ATIVO</strong><br>Crie sala e jogue 1v1</div>
-  <button class="amigo" id="btnAmigo">🔗 Criar Sala Multiplayer</button>
+  <div class="destaque-amigo"><strong>👥 Caça-Palavras 1v1</strong></div>
+  <button class="amigo" id="btnAmigo">🔗 Criar Sala Caça-Palavras</button>
   <button class="amigo" style="background:linear-gradient(135deg,#ff9800,#ff5722)" id="btnEntrarSala">🚪 Entrar em Sala</button>
   <div class="destaque-quiz"><strong>🎤 Quiz Luan Santana</strong></div>
-  <button style="background:linear-gradient(135deg,#e91e63,#9c27b0);color:#fff" id="btnQuiz">Responder Quiz</button>
+  <button style="background:linear-gradient(135deg,#e91e63,#9c27b0);color:#fff" id="btnQuiz">Quiz Solo</button>
+  <button style="background:linear-gradient(135deg,#ff5722,#e91e63);color:#fff" id="btnQuizAmigo">🎤 Quiz 1v1 com Amigo</button>
   <button class="loja" id="btnLoja">🛒 Loja de Dicas</button>
   <button class="secundario" id="btnRanking">📊 Ranking Geral</button>
   <button class="secundario" id="btnSair">🚪 Sair</button>
@@ -150,11 +136,12 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 </div>
 
 <div id="telaSala" class="tela">
-  <div class="cabecalho"><h2>👥 Sala Multiplayer</h2><button class="som" id="botaoSomSala">🔊</button></div>
+  <div class="cabecalho"><h2 id="tituloSala">👥 Sala Multiplayer</h2><button class="som" id="botaoSomSala">🔊</button></div>
   <p style="text-align:center">Compartilhe este código:</p>
   <div class="codigo-sala" id="codigoSalaTexto">----</div>
   <div id="statusSala" style="text-align:center;margin:10px 0">Aguardando...</div>
-  <div class="destaque-normal" id="infoSala">Dificuldade: <span id="infoDif"></span></div>
+  <div id="listaJogadoresSala" class="lista"></div>
+  <div class="destaque-normal" id="infoSala">Dificuldade: <span id="infoDif"></span> | Tipo: <span id="infoTipo"></span></div>
   <button class="primario" id="btnIniciarSala" disabled>⏳ Aguardando oponente...</button>
   <button class="amigo" id="btnCopiarCodigo">📋 Copiar Código</button>
   <button class="secundario" id="btnVoltarSala">← Cancelar Sala</button>
@@ -172,14 +159,17 @@ button:disabled{opacity:0.4;cursor:not-allowed}
   <div class="cabecalho"><h2 id="tituloModo">🎮 Jogo</h2><button class="som" id="botaoSom6">🔊</button></div>
   <div class="moedas" id="saldoJogo"></div>
   <div id="avisoModo" style="text-align:center;margin:8px 0;font-weight:bold"></div>
-  <div id="placarVs" class="vs-placar oculta"><span id="nomeEu">Você: 0</span><span id="nomeOponente">Oponente: 0</span></div>
+  <div id="placarVs" class="vs-placar oculta">
+    <div class="vs-linha"><span id="nomeEu">Você: 0</span><span id="patenteEu" class="vs-patente"></span></div>
+    <div class="vs-linha"><span id="nomeOponente">Oponente: 0</span><span id="patenteOponente" class="vs-patente"></span></div>
+  </div>
   <div class="placar">
     <div class="caixa"><div>Pontos</div><div id="pontos">0</div></div>
     <div class="caixa"><div>Nível</div><div id="nivel">1</div></div>
     <div class="caixa"><div>Palavras</div><div id="contagem">0/0</div></div>
   </div>
   <button id="botaoDica" class="loja">💡 Dica — 15 💰</button>
-  <button id="botaoMestre" class="mestre oculta">✨ ACHAR TUDO</button>
+  <button id="botaoMestre" class="mestre oculta">✨ ACHAR 1 PALAVRA (0/12)</button>
   <div class="grade" id="grade"></div>
   <h3>Palavras:</h3>
   <div class="palavras" id="listaPalavras"></div>
@@ -189,7 +179,11 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 </div>
 
 <div id="telaQuiz" class="tela">
-  <div class="cabecalho"><h2>🎤 Quiz</h2><button class="som" id="botaoSomQuiz">🔊</button></div>
+  <div class="cabecalho"><h2 id="tituloQuiz">🎤 Quiz</h2><button class="som" id="botaoSomQuiz">🔊</button></div>
+  <div id="placarVsQuiz" class="vs-placar oculta">
+    <div class="vs-linha"><span id="nomeEuQuiz">Você: 0</span></div>
+    <div class="vs-linha"><span id="nomeOponenteQuiz">Oponente: 0</span></div>
+  </div>
   <div class="pontuacao-quiz">Acertos: <span id="acertosQuiz">0</span>/10</div>
   <div class="pergunta"><h3 id="textoPergunta"></h3><div id="listaAlternativas"></div></div>
   <button class="secundario" id="btnVoltarQuiz">← Voltar</button>
@@ -208,7 +202,6 @@ button:disabled{opacity:0.4;cursor:not-allowed}
     <h3>💡 Dica</h3><p style="color:#ffd700;font-weight:bold;margin:10px 0">15 💰</p>
     <button class="loja" id="btnComprarMenu">Comprar Dica</button>
   </div>
-  <p style="text-align:center;opacity:0.7" id="textoGanho">✅ +20 moedas por nível</p>
   <button class="secundario" id="btnVoltarInicio5">← Voltar</button>
 </div>
 
@@ -217,7 +210,6 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-database-compat.js"></script>
 <script>
-/* ================= CONFIG ================= */
 const MOEDAS_POR_NIVEL=20, MOEDAS_MESTRE=40, PRECO_DICA=15;
 const USUARIO_MESTRE='Thiago Shelby', SENHA_MESTRE='9090iop';
 const PATENTES=[
@@ -245,128 +237,61 @@ const PERGUNTAS_QUIZ=[
   {pergunta:'Estado natal?',alternativas:['São Paulo','Minas Gerais','Mato Grosso do Sul','Goiás'],correta:2}
 ];
 
-const firebaseConfig={
-  apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",
-  authDomain:"luan-coins.firebaseapp.com",
-  databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",
-  projectId:"luan-coins",
-  storageBucket:"luan-coins.firebasestorage.app",
-  messagingSenderId:"379641584803",
-  appId:"1:379641584803:web:c1bfc0c0715e3347fef316"
-};
-
+const firebaseConfig={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316"};
 let db,refContas,refRanking,refSalas,firebaseOK=false;
-try{
-  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  db=firebase.database();
-  refContas=db.ref('contas');
-  refRanking=db.ref('ranking');
-  refSalas=db.ref('salas');
-  firebaseOK=true;
-}catch(e){console.warn('Firebase offline, modo local:',e);}
+try{if(!firebase.apps.length) firebase.initializeApp(firebaseConfig); db=firebase.database(); refContas=db.ref('contas'); refRanking=db.ref('ranking'); refSalas=db.ref('salas'); firebaseOK=true;}catch(e){console.warn(e);}
 
 let usuarioAtual=null,dadosUsuario=null,modoJogo='solo',dificuldadeAtual='medio',nivel=1,pontos=0;
 let grade=[],selecionadas=[],encontradas=[],palavrasRodada=[],palavrasComPosicao=[];
 let perguntaAtual=0,acertosQuiz=0,SOM_ATIVO=true,EH_MESTRE=false;
 let modoPendente='solo',salaAtual=null,codigoSalaAtual=null,listenerSala=null,souHost=false;
+let tipoSalaAtual='caca'; // caca ou quiz
 
-/* ====== CORREÇÃO CRÍTICA: CHAVE SEGURA ====== */
-function chaveSegura(nome){
-  if(!nome) return '_vazio_';
-  // Firebase RTDB proíbe . # $ [ ] /
-  return String(nome).replace(/[.#$\[\]\/]/g,'_').trim();
-}
+function chaveSegura(nome){ return String(nome||'').replace(/[.#$\[\]\/]/g,'_').trim() || '_vazio_'; }
 function meuId(){ return chaveSegura(usuarioAtual); }
 
-/* ====== SOM ====== */
-function tocarSom(t){
-  if(!SOM_ATIVO) return;
-  try{
-    const AudioCtx=window.AudioContext||window.webkitAudioContext;
-    if(!AudioCtx) return;
-    const a=new AudioCtx();
-    const o=a.createOscillator(); const g=a.createGain();
-    o.connect(g); g.connect(a.destination); g.gain.value=0.12;
-    if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);}
-    else if(t==='acerto'){o.frequency.value=880;o.start();setTimeout(()=>{try{o.frequency.value=1100}catch{}},80);o.stop(a.currentTime+0.3);}
-    else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);}
-    else if(t==='nivel'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>{try{const o2=a.createOscillator();const g2=a.createGain();o2.connect(g2);g2.connect(a.destination);g2.gain.value=0.09;o2.frequency.value=f;o2.start();o2.stop(a.currentTime+0.25);}catch{}},i*120));}
-  }catch(e){}
-}
-function alternarSom(){
-  SOM_ATIVO=!SOM_ATIVO;
-  document.querySelectorAll('.som').forEach(b=>{
-    b.textContent = SOM_ATIVO ? '🔊 Som: ON' : '🔇 Som: OFF';
-  });
-  tocarSom('clique');
-}
-function mostrarTela(id){
-  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-  const alvo=document.getElementById(id);
-  if(alvo) alvo.classList.add('ativa');
-  if(id==='telaInicio') atualizarTelaInicio();
-  if(id==='telaRanking') carregarRankingGeral();
-  if(id==='telaLoja') atualizarSaldoLoja();
-}
+function tocarSom(t){if(!SOM_ATIVO) return; try{const C=window.AudioContext||window.webkitAudioContext; if(!C) return; const a=new C(); const o=a.createOscillator(); const g=a.createGain(); o.connect(g); g.connect(a.destination); g.gain.value=0.12; if(t==='clique'){o.frequency.value=600;o.start();o.stop(a.currentTime+0.06);} else if(t==='acerto'){o.frequency.value=880;o.start();setTimeout(()=>{try{o.frequency.value=1100}catch{}},80);o.stop(a.currentTime+0.3);} else if(t==='erro'){o.frequency.value=180;o.start();o.stop(a.currentTime+0.25);} else if(t==='nivel'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>{try{const o2=a.createOscillator();const g2=a.createGain();o2.connect(g2);g2.connect(a.destination);g2.gain.value=0.09;o2.frequency.value=f;o2.start();o2.stop(a.currentTime+0.25);}catch{}},i*120));}}catch{}}
+function alternarSom(){SOM_ATIVO=!SOM_ATIVO; document.querySelectorAll('.som').forEach(b=>b.textContent=SOM_ATIVO?'🔊 Som: ON':'🔇 Som: OFF'); tocarSom('clique');}
+function mostrarTela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa')); const el=document.getElementById(id); if(el) el.classList.add('ativa'); if(id==='telaInicio') atualizarTelaInicio(); if(id==='telaRanking') carregarRankingGeral(); if(id==='telaLoja') atualizarSaldoLoja();}
 function voltarMenu(){
   if(listenerSala){try{listenerSala.off();}catch{} listenerSala=null;}
-  if(salaAtual && modoJogo==='amigo' && souHost && codigoSalaAtual){
-    try{ refSalas.child(codigoSalaAtual).remove(); }catch(e){}
-  }
-  salaAtual=null; codigoSalaAtual=null; souHost=false;
-  tocarSom('clique');
-  mostrarTela('telaInicio');
+  if(salaAtual && souHost && codigoSalaAtual){try{refSalas.child(codigoSalaAtual).remove();}catch{}}
+  salaAtual=null; codigoSalaAtual=null; souHost=false; tipoSalaAtual='caca';
+  tocarSom('clique'); mostrarTela('telaInicio');
 }
-function getPatente(n){
-  if(EH_MESTRE) return PATENTES[0];
-  const norm=PATENTES.filter(p=>!p.especial);
-  for(let p of norm) if(n>=p.minNivel) return p;
-  return norm[norm.length-1];
+function getPatente(n){if(EH_MESTRE) return PATENTES[0]; const norm=PATENTES.filter(p=>!p.especial); for(let p of norm) if(n>=p.minNivel) return p; return norm[norm.length-1];}
+function getPatenteInfoUser(userData){
+  const nb=Math.max(userData?.nivelMax||1,userData?.nivelRanqueada||1);
+  return getPatente(nb);
 }
 function atualizarTelaInicio(){
   if(!dadosUsuario) return;
   document.getElementById('nomeJogador').textContent=usuarioAtual;
   document.getElementById('saldoMoedas').textContent=`💰 ${dadosUsuario.moedas||0} Luan Coins`;
   EH_MESTRE=(usuarioAtual===USUARIO_MESTRE);
-  const aviso=document.getElementById('avisoMestre');
-  if(aviso) aviso.classList.toggle('oculta',!EH_MESTRE);
+  document.getElementById('avisoMestre').classList.toggle('oculta',!EH_MESTRE);
   const nb=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1);
   const pat=getPatente(nb);
   const el=document.getElementById('patenteJogador');
-  if(el){
-    el.innerHTML=`<strong>${pat.nome}</strong><br><small>Nível: ${nb} • ${modoJogo}</small>`;
-    el.style.background=pat.cor+'33'; el.style.color=pat.cor;
-    el.classList.toggle('mestre',EH_MESTRE);
-  }
+  if(el){el.innerHTML=`<strong>${pat.nome}</strong><br><small>Nível: ${nb} • ${dadosUsuario.pontosTotal||0} pts • ${modoJogo}</small>`; el.style.background=pat.cor+'33'; el.style.color=pat.cor; el.classList.toggle('mestre',EH_MESTRE);}
 }
-function atualizarSaldoLoja(){
-  const el=document.getElementById('saldoLojaPrincipal');
-  if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;
-}
+function atualizarSaldoLoja(){const el=document.getElementById('saldoLojaPrincipal'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;}
 async function salvarDados(){
   if(!usuarioAtual||!dadosUsuario) return;
-  try{ localStorage.setItem('luan_'+usuarioAtual,JSON.stringify(dadosUsuario)); }catch{}
+  try{localStorage.setItem('luan_'+usuarioAtual,JSON.stringify(dadosUsuario));}catch{}
   if(firebaseOK){
     try{
-      await refContas.child(chaveSegura(usuarioAtual)).update(dadosUsuario);
+      await refContas.child(chaveSegura(usuarioAtual)).set(dadosUsuario);
       const nr=Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1);
       const pr=Math.max(dadosUsuario.pontosTotal||0,dadosUsuario.pontosRanqueada||0);
-      await refRanking.child(chaveSegura(usuarioAtual)).update({nome:usuarioAtual,pontos:pr,nivel:nr,patente:getPatente(nr).nome,eMestre:EH_MESTRE});
-    }catch(e){console.warn('Erro salvar Firebase',e);}
+      await refRanking.child(chaveSegura(usuarioAtual)).set({nome:usuarioAtual,pontos:pr,nivel:nr,patente:getPatente(nr).nome,eMestre:EH_MESTRE, moedas:dadosUsuario.moedas||0, atualizado:Date.now()});
+    }catch(e){console.warn(e);}
   }
 }
 async function carregarDados(nome){
   const k=chaveSegura(nome);
-  if(firebaseOK){
-    try{
-      const s=await refContas.child(k).once('value');
-      if(s.exists()) return s.val();
-    }catch(e){}
-  }
-  try{
-    const l=localStorage.getItem('luan_'+nome);
-    return l?JSON.parse(l):null;
-  }catch{ return null; }
+  if(firebaseOK){try{const s=await refContas.child(k).once('value'); if(s.exists()) return s.val();}catch{}}
+  try{const l=localStorage.getItem('luan_'+nome); return l?JSON.parse(l):null;}catch{return null;}
 }
 async function entrar(){
   const nome=document.getElementById('campoUsuario').value.trim();
@@ -388,48 +313,35 @@ async function criarConta(){
   if(nome.length<3){erro.textContent='Mínimo 3 letras!';return;}
   if(senha.length<4){erro.textContent='Mínimo 4 caracteres!';return;}
   if(nome===USUARIO_MESTRE){erro.textContent='Nome reservado!';return;}
-  const existe=await carregarDados(nome);
-  if(existe){erro.textContent='Já existe!';return;}
+  if(await carregarDados(nome)){erro.textContent='Já existe!';return;}
   const novo={nivelMax:1,nivelRanqueada:1,pontosTotal:0,pontosRanqueada:0,moedas:50,senha:senha,eMestre:false,nomeOriginal:nome};
-  try{ localStorage.setItem('luan_'+nome,JSON.stringify(novo)); }catch{}
-  if(firebaseOK){
-    try{
-      await refContas.child(chaveSegura(nome)).set(novo);
-      await refRanking.child(chaveSegura(nome)).set({nome:nome,pontos:0,nivel:1,patente:'🎧 Ouvinte Iniciante',eMestre:false});
-    }catch(e){console.warn(e);}
-  }
-  alert('✅ Conta criada! 50 💰');
-  mostrarTela('telaLogin');
-  document.getElementById('campoUsuario').value=nome;
+  try{localStorage.setItem('luan_'+nome,JSON.stringify(novo));}catch{}
+  if(firebaseOK){try{await refContas.child(chaveSegura(nome)).set(novo); await refRanking.child(chaveSegura(nome)).set({nome:nome,pontos:0,nivel:1,patente:'🎧 Ouvinte Iniciante',eMestre:false,moedas:50});}catch{}}
+  alert('✅ Conta criada! 50 💰'); mostrarTela('telaLogin'); document.getElementById('campoUsuario').value=nome;
 }
-function sair(){ if(!confirm('Sair?')) return; usuarioAtual=null; dadosUsuario=null; mostrarTela('telaLogin'); }
-function cfgPorDificuldade(d){ switch(d){case 'facil':return{tam:10,qtd:5};case 'medio':return{tam:14,qtd:8};case 'dificil':return{tam:18,qtd:12};default:return{tam:14,qtd:8};} }
-function abrirEscolhaModo(m){ modoPendente=m; tocarSom('clique'); const tit=document.getElementById('tituloEscolha'); if(tit) tit.textContent=m==='ranqueada'?'🏆 Ranqueada - Escolha':m==='amigo'?'👥 Amigo - Escolha':'🎮 Solo - Escolha'; mostrarTela('telaEscolhaModo'); }
+function sair(){if(!confirm('Sair?')) return; usuarioAtual=null; dadosUsuario=null; mostrarTela('telaLogin');}
+function cfgPorDificuldade(d){switch(d){case 'facil':return{tam:10,qtd:5};case 'medio':return{tam:14,qtd:8};case 'dificil':return{tam:18,qtd:12};default:return{tam:14,qtd:8};}}
+function abrirEscolhaModo(m){modoPendente=m; tocarSom('clique'); const t=document.getElementById('tituloEscolha'); if(t) t.textContent=m==='ranqueada'?'🏆 Ranqueada':m==='amigo'?'👥 Amigo - Escolha':m==='quizAmigo'?'🎤 Quiz Amigo - Escolha':'🎮 Solo - Escolha'; mostrarTela('telaEscolhaModo');}
 function iniciarJogoEscolhido(dif){
-  if(modoPendente==='amigo'){ criarSalaMultiplayer(dif); return; }
-  modoJogo=modoPendente; dificuldadeAtual=dif;
-  nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1);
-  pontos=0; encontradas=[]; palavrasComPosicao=[];
-  prepararTelaJogo(); iniciarRodadaSolo(); atualizarSaldoJogo();
+  if(modoPendente==='amigo'){ criarSalaMultiplayer(dif,'caca'); return; }
+  if(modoPendente==='quizAmigo'){ criarSalaMultiplayer(dif,'quiz'); return; }
+  modoJogo=modoPendente; dificuldadeAtual=dif; nivel=modoJogo==='ranqueada'?(dadosUsuario.nivelRanqueada||1):(dadosUsuario.nivelMax||1); pontos=0; encontradas=[]; palavrasComPosicao=[]; prepararTelaJogo(); iniciarRodadaSolo(); atualizarSaldoJogo();
 }
 function prepararTelaJogo(){
   mostrarTela('telaJogo');
   const bm=document.getElementById('botaoMestre');
-  if(bm) bm.classList.toggle('oculta',!EH_MESTRE);
-  const bd=document.getElementById('botaoDica');
-  if(bd) bd.textContent=EH_MESTRE?'💡 DICA GRÁTIS':`💡 Dica — ${PRECO_DICA} 💰`;
+  if(bm){
+    bm.classList.toggle('oculta',!EH_MESTRE);
+    atualizarBotaoMestre();
+  }
+  const bd=document.getElementById('botaoDica'); if(bd) bd.textContent=EH_MESTRE?'💡 DICA GRÁTIS':`💡 Dica — ${PRECO_DICA} 💰`;
   const ehRanq=modoJogo==='ranqueada'; const ehAmigo=modoJogo==='amigo';
-  const titulo=document.getElementById('tituloModo');
-  if(titulo) titulo.textContent=(dificuldadeAtual==='facil'?'🟢 Fácil':dificuldadeAtual==='medio'?'🟡 Médio':'🔴 Difícil')+(ehRanq?' 🏆 RANQUEADA':ehAmigo?' 👥 1V1':' 🎮 SOLO');
-  const aviso=document.getElementById('avisoModo');
-  if(aviso) aviso.innerHTML=EH_MESTRE?'<span style="background:linear-gradient(90deg,#ffd700,#ff8c00);padding:8px 14px;border-radius:20px;color:#000">👑 MESTRE</span>':ehRanq?'<span style="background:linear-gradient(90deg,#9c27b0,#673ab7);padding:8px 14px;border-radius:20px">🏆 RANQUEADA — Vale patente!</span>':ehAmigo?'<span style="background:linear-gradient(90deg,#ff5722,#ff9800);padding:8px 14px;border-radius:20px">👥 VS AMIGO</span>':'<span style="background:#4caf50;padding:8px 14px;border-radius:20px">🎮 Modo Solo</span>';
-  const vs=document.getElementById('placarVs');
-  if(vs) vs.classList.toggle('oculta', !ehAmigo);
-  const bp=document.getElementById('btnProximo');
-  if(bp) bp.classList.toggle('oculta', ehAmigo);
+  document.getElementById('tituloModo').textContent=(dificuldadeAtual==='facil'?'🟢 Fácil':dificuldadeAtual==='medio'?'🟡 Médio':'🔴 Difícil')+(ehRanq?' 🏆 RANQUEADA':ehAmigo?' 👥 1V1':' 🎮 SOLO');
+  document.getElementById('avisoModo').innerHTML=EH_MESTRE?'<span style="background:linear-gradient(90deg,#ffd700,#ff8c00);padding:8px 14px;border-radius:20px;color:#000">👑 MESTRE: 1 palavra por clique (funciona no online)</span>':ehRanq?'<span style="background:linear-gradient(90deg,#9c27b0,#673ab7);padding:8px 14px;border-radius:20px">🏆 RANQUEADA — Vale patente!</span>':ehAmigo?'<span style="background:linear-gradient(90deg,#ff5722,#ff9800);padding:8px 14px;border-radius:20px">👥 VS AMIGO - Patentes visíveis</span>':'<span style="background:#4caf50;padding:8px 14px;border-radius:20px">🎮 Modo Solo</span>';
+  document.getElementById('placarVs').classList.toggle('oculta', !ehAmigo);
+  document.getElementById('btnProximo').classList.toggle('oculta', ehAmigo);
 }
 
-/* SOLO */
 function iniciarRodadaSolo(){
   const cfg=cfgPorDificuldade(dificuldadeAtual);
   selecionadas=[]; encontradas=[]; palavrasComPosicao=[];
@@ -443,35 +355,35 @@ function iniciarRodadaSolo(){
       const c=Math.floor(Math.random()*(cfg.tam-(horiz?palavra.length:0)));
       let cabe=true;
       for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(grade[nl][nc]&&grade[nl][nc]!==palavra[i]){cabe=false;break;}}
-      if(cabe){
-        for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; grade[nl][nc]=palavra[i];}
-        palavrasComPosicao.push({texto:palavra,l,c,dir:horiz}); ok=true;
-      } t++;
+      if(cabe){for(let i=0;i<palavra.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; grade[nl][nc]=palavra[i];} palavrasComPosicao.push({texto:palavra,l,c,dir:horiz}); ok=true;} t++;
     }
   });
   for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!grade[l][c]) grade[l][c]=LETRAS[Math.floor(Math.random()*26)];
-  const elN=document.getElementById('nivel'); if(elN) elN.textContent=nivel;
-  atualizarPlacar(); renderizarSolo();
+  document.getElementById('nivel').textContent=nivel; atualizarPlacar(); renderizarSolo(); atualizarBotaoMestre();
 }
-function atualizarPlacar(){
-  const elP=document.getElementById('pontos'); if(elP) elP.textContent=pontos;
-  const elC=document.getElementById('contagem'); if(elC) elC.textContent=`${encontradas.length}/${palavrasRodada.length}`;
+function atualizarPlacar(){document.getElementById('pontos').textContent=pontos; document.getElementById('contagem').textContent=`${encontradas.length}/${palavrasRodada.length}`;}
+function atualizarBotaoMestre(){
+  const bm=document.getElementById('botaoMestre');
+  if(!bm) return;
+  if(!EH_MESTRE){bm.classList.add('oculta'); return;}
+  bm.classList.remove('oculta');
+  const total=palavrasRodada.length;
+  const achadas=encontradas.length;
+  bm.textContent=`✨ ACHAR 1 (${achadas}/${total})`;
+  if(achadas>=total) bm.textContent='✅ Tudo achado';
 }
 function renderizarSolo(){
   const cfg=cfgPorDificuldade(dificuldadeAtual);
-  const g=document.getElementById('grade'); if(!g) return;
-  g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
+  const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
   for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){
-    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c];
-    d.onclick=()=>clicarSolo(l,c);
+    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c]; d.onclick=()=>clicarSolo(l,c);
     if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada');
     if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) d.classList.add(EH_MESTRE?'mestre':'encontrada');
     g.appendChild(d);
   }
-  const lista=document.getElementById('listaPalavras'); if(!lista) return; lista.innerHTML='';
-  palavrasRodada.forEach(p=>{
-    const d=document.createElement('div'); d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':''); d.textContent=p; lista.appendChild(d);
-  });
+  const lista=document.getElementById('listaPalavras'); lista.innerHTML='';
+  palavrasRodada.forEach(p=>{const d=document.createElement('div'); d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':''); d.textContent=p; lista.appendChild(d);});
+  atualizarBotaoMestre();
 }
 function clicarSolo(l,c){
   if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
@@ -482,51 +394,31 @@ function clicarSolo(l,c){
   if(selecionadas.length>=2){
     const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l);
     const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c);
-    if(mesmaLinha){
-      selecionadas.sort((a,b)=>a.c-b.c);
-      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
-      if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));
-    }else if(mesmaColuna){
-      selecionadas.sort((a,b)=>a.l-b.l);
-      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
-      if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));
-    }
+    if(mesmaLinha){selecionadas.sort((a,b)=>a.c-b.c); const txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));}
+    else if(mesmaColuna){selecionadas.sort((a,b)=>a.l-b.l); const txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarSolo(txt)) tentarVerificarSolo(txt.split('').reverse().join(''));}
   }
   renderizarSolo();
 }
 function tentarVerificarSolo(palavra){
   if(!PALAVRAS_LUAN.includes(palavra)) return false;
   if(encontradas.some(e=>e.texto===palavra)) return true;
-  const pos=palavrasComPosicao.find(p=>p.texto===palavra);
-  if(!pos) return false;
-  const set=new Set();
-  for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
-  encontradas.push({texto:palavra,linhas:set});
-  pontos+=palavra.length*10; selecionadas=[];
-  tocarSom('acerto'); atualizarPlacar(); renderizarSolo();
+  const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) return false;
+  const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
+  encontradas.push({texto:palavra,linhas:set}); pontos+=palavra.length*10; selecionadas=[]; tocarSom('acerto'); atualizarPlacar(); renderizarSolo();
   if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,300);
   return true;
 }
 async function concluirNivelSolo(){
-  tocarSom('nivel');
-  const el=document.getElementById('nivel'); if(el){el.classList.add('subir-nivel'); setTimeout(()=>el.classList.remove('subir-nivel'),800);}
+  tocarSom('nivel'); const el=document.getElementById('nivel'); el.classList.add('subir-nivel'); setTimeout(()=>el.classList.remove('subir-nivel'),800);
   const ganho=EH_MESTRE?MOEDAS_MESTRE:MOEDAS_POR_NIVEL;
-  if(modoJogo==='ranqueada'){
-    dadosUsuario.nivelRanqueada=Math.max(dadosUsuario.nivelRanqueada||1,nivel+1);
-    dadosUsuario.pontosRanqueada=(dadosUsuario.pontosRanqueada||0)+pontos;
-    dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
-  }else{
-    dadosUsuario.nivelMax=Math.max(dadosUsuario.nivelMax||1,nivel+1);
-    dadosUsuario.pontosTotal=(dadosUsuario.pontosTotal||0)+pontos;
-    dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;
-  }
+  if(modoJogo==='ranqueada'){dadosUsuario.nivelRanqueada=Math.max(dadosUsuario.nivelRanqueada||1,nivel+1); dadosUsuario.pontosRanqueada=(dadosUsuario.pontosRanqueada||0)+pontos; dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;}
+  else{dadosUsuario.nivelMax=Math.max(dadosUsuario.nivelMax||1,nivel+1); dadosUsuario.pontosTotal=(dadosUsuario.pontosTotal||0)+pontos; dadosUsuario.moedas=(dadosUsuario.moedas||0)+ganho;}
   await salvarDados(); atualizarSaldoJogo(); atualizarTelaInicio();
-  const pat=getPatente(modoJogo==='ranqueada'?dadosUsuario.nivelRanqueada:dadosUsuario.nivelMax).nome;
-  alert(`${modoJogo==='ranqueada'?'🏆 RANQUEADA':'🎉'} Nível ${nivel} concluído!\n+${ganho} 💰\nPatente: ${pat}`);
+  alert(`${modoJogo==='ranqueada'?'🏆 RANQUEADA':'🎉'} Nível ${nivel} concluído!\n+${ganho} 💰\nPatente: ${getPatente(modoJogo==='ranqueada'?dadosUsuario.nivelRanqueada:dadosUsuario.nivelMax).nome}`);
 }
 
-/* MULTIPLAYER */
-function gerarCodigo(){ return Math.random().toString(36).substring(2,6).toUpperCase(); }
+/* ========= MULTIPLAYER ========= */
+function gerarCodigo(){return Math.random().toString(36).substring(2,6).toUpperCase();}
 function gerarGradeMulti(dif){
   const cfg=cfgPorDificuldade(dif);
   const g=Array(cfg.tam).fill(0).map(()=>Array(cfg.tam).fill(''));
@@ -537,104 +429,138 @@ function gerarGradeMulti(dif){
       const horiz=Math.random()>0.5;
       const l=Math.floor(Math.random()*(cfg.tam-(horiz?0:pal.length)));
       const c=Math.floor(Math.random()*(cfg.tam-(horiz?pal.length:0)));
-      let cabe=true;
-      for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(g[nl][nc]&&g[nl][nc]!==pal[i]){cabe=false;break;}}
+      let cabe=true; for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; if(g[nl][nc]&&g[nl][nc]!==pal[i]){cabe=false;break;}}
       if(cabe){for(let i=0;i<pal.length;i++){const nl=horiz?l:l+i,nc=horiz?c+i:c; g[nl][nc]=pal[i];} pos.push({texto:pal,l,c,dir:horiz}); ok=true;} t++;
     }
   });
   for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++) if(!g[l][c]) g[l][c]=LETRAS[Math.floor(Math.random()*26)];
   return {grade:g,palavras,pos,cfg};
 }
-async function criarSalaMultiplayer(dif){
-  if(!firebaseOK){ alert('Multiplayer precisa de internet. Jogue Solo por enquanto.'); return; }
-  dificuldadeAtual=dif; const codigo=gerarCodigo(); const dg=gerarGradeMulti(dif);
-  const sala={
-    codigo, host:usuarioAtual, hostId: meuId(), guest:null, guestId:null,
-    status:'waiting', dificuldade:dif, grade:dg.grade, palavras:dg.palavras, posicoes:dg.pos, cfg:dg.cfg,
+
+async function criarSalaMultiplayer(dif,tipo){
+  if(!firebaseOK){alert('Precisa internet pro multiplayer');return;}
+  dificuldadeAtual=dif; tipoSalaAtual=tipo; const codigo=gerarCodigo();
+  const patHost=getPatente(Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1));
+  let salaBase={
+    codigo, host:usuarioAtual, hostId:meuId(), guest:null, guestId:null,
+    status:'waiting', dificuldade:dif, tipo:tipo,
     pontos:{}, encontradas:{}, jogadores:{ [meuId()]: usuarioAtual },
+    jogadoresInfo:{ [meuId()]: {nome:usuarioAtual, patente:patHost.nome, nivel:Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1), pontos:dadosUsuario.pontosTotal||0, eMestre:EH_MESTRE} },
     criado:Date.now()
   };
-  sala.pontos[meuId()]=0;
-  try{ await refSalas.child(codigo).set(sala); }catch(e){ alert('Erro criar sala: '+e.message); return; }
-  codigoSalaAtual=codigo; salaAtual=sala; souHost=true; modoJogo='amigo';
+  salaBase.pontos[meuId()]=0;
+
+  if(tipo==='caca'){
+    const dg=gerarGradeMulti(dif);
+    salaBase.grade=dg.grade; salaBase.palavras=dg.palavras; salaBase.posicoes=dg.pos; salaBase.cfg=dg.cfg;
+  } else { // quiz
+    salaBase.quiz={perguntas:[...PERGUNTAS_QUIZ].sort(()=>Math.random()-0.5), perguntaAtual:0, respostas:{}};
+    salaBase.pontosQuiz={ [meuId()]:0 };
+  }
+
+  try{await refSalas.child(codigo).set(salaBase);}catch(e){alert('Erro criar sala:'+e.message);return;}
+  codigoSalaAtual=codigo; salaAtual=salaBase; souHost=true; modoJogo='amigo';
   document.getElementById('codigoSalaTexto').textContent=codigo;
   document.getElementById('infoDif').textContent=dif.toUpperCase();
+  document.getElementById('infoTipo').textContent=tipo==='quiz'?'QUIZ':'CAÇA-PALAVRAS';
+  document.getElementById('tituloSala').textContent=tipo==='quiz'?'🎤 Sala Quiz 1v1':'👥 Sala Caça-Palavras';
   document.getElementById('statusSala').textContent='Aguardando amigo...';
   document.getElementById('btnIniciarSala').disabled=true;
   document.getElementById('btnIniciarSala').textContent='⏳ Aguardando oponente...';
   mostrarTela('telaSala'); escutarSala(codigo);
 }
+
+function renderListaJogadoresSala(s){
+  const lista=document.getElementById('listaJogadoresSala'); if(!lista) return; lista.innerHTML='';
+  for(let id in s.jogadoresInfo||{}){
+    const info=s.jogadoresInfo[id];
+    const div=document.createElement('div'); div.className='item'+(id===meuId()?' voce':'');
+    div.innerHTML=`<div style="flex:1"><strong>${info.nome}${info.eMestre?' 👑':''}</strong><br><small>${info.patente} • Nv ${info.nivel} • ${info.pontos} pts</small></div><div style="color:#ffd700">${s.pontos[id]||0} pts</div>`;
+    lista.appendChild(div);
+  }
+}
+
 function escutarSala(codigo){
   if(listenerSala) try{listenerSala.off();}catch{}
   listenerSala=refSalas.child(codigo);
   listenerSala.on('value', snap=>{
-    if(!snap.exists()){ if(modoJogo==='amigo'){ alert('Sala encerrada.'); voltarMenu(); } return; }
-    const s=snap.val(); salaAtual=s;
+    if(!snap.exists()){if(modoJogo==='amigo'){alert('Sala encerrada.'); voltarMenu();} return;}
+    const s=snap.val(); salaAtual=s; tipoSalaAtual=s.tipo||'caca';
+    renderListaJogadoresSala(s);
     if(s.status==='waiting'){
-      const guestNome = s.guest ? (s.jogadores[s.guestId] || s.guest) : null;
-      const statusEl=document.getElementById('statusSala');
-      if(statusEl) statusEl.textContent = guestNome ? `🎉 ${guestNome} entrou!` : 'Aguardando amigo entrar...';
+      const guestNome=s.guest ? (s.jogadores[s.guestId]||s.guest) : null;
+      document.getElementById('statusSala').textContent=guestNome?`🎉 ${guestNome} entrou!`:'Aguardando amigo entrar...';
       if(s.guest){
         const btn=document.getElementById('btnIniciarSala');
-        if(btn){btn.disabled=false; btn.textContent=`🚀 Iniciar 1v1 vs ${guestNome}`;}
+        if(btn){btn.disabled=false; btn.textContent=s.tipo==='quiz'?`🚀 Iniciar Quiz vs ${guestNome}`:`🚀 Iniciar 1v1 vs ${guestNome}`;}
       }
     }
     if(s.status==='playing'){
-      if(!document.getElementById('telaJogo').classList.contains('ativa')) iniciarJogoMultiplayerComDados(s);
-      else sincronizarMulti(s);
+      if(s.tipo==='quiz'){
+        if(!document.getElementById('telaQuiz').classList.contains('ativa')) iniciarQuizMultiComDados(s);
+        else sincronizarQuizMulti(s);
+      } else {
+        if(!document.getElementById('telaJogo').classList.contains('ativa')) iniciarJogoMultiplayerComDados(s);
+        else sincronizarMulti(s);
+      }
     }
-    if(s.status==='finished'){ mostrarResultadoMulti(s); }
+    if(s.status==='finished'){
+      if(s.tipo==='quiz') mostrarResultadoQuizMulti(s);
+      else mostrarResultadoMulti(s);
+    }
   });
 }
+
 async function iniciarSalaHost(){
-  if(!salaAtual||!salaAtual.guest){ alert('Aguardando amigo!'); return; }
+  if(!salaAtual||!salaAtual.guest){alert('Aguardando amigo!');return;}
   await refSalas.child(codigoSalaAtual).update({status:'playing', iniciado:Date.now()});
 }
+
 async function entrarSalaCodigo(){
   const codigo=document.getElementById('campoCodigoSala').value.trim().toUpperCase();
   const erro=document.getElementById('msgErroSala');
-  if(!codigo||codigo.length<4){erro.textContent='Código inválido!'; return;}
-  if(!firebaseOK){erro.textContent='Firebase offline'; return;}
+  if(!codigo||codigo.length<4){erro.textContent='Código inválido!';return;}
+  if(!firebaseOK){erro.textContent='Firebase offline';return;}
   try{
     const snap=await refSalas.child(codigo).once('value');
-    if(!snap.exists()){erro.textContent='Sala não encontrada!'; return;}
+    if(!snap.exists()){erro.textContent='Sala não encontrada!';return;}
     const s=snap.val();
-    if(s.hostId===meuId()){erro.textContent='Você é o host!'; return;}
-    if(s.guest && s.guestId!==meuId()){erro.textContent='Sala lotada!'; return;}
-    if(s.status!=='waiting'){erro.textContent='Jogo já começou!'; return;}
+    if(s.hostId===meuId()){erro.textContent='Você é o host!';return;}
+    if(s.guest && s.guestId!==meuId()){erro.textContent='Sala lotada!';return;}
+    if(s.status!=='waiting'){erro.textContent='Jogo já começou!';return;}
+    const pat=getPatente(Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1));
     const updates={};
-    updates[`guest`]=usuarioAtual;
-    updates[`guestId`]=meuId();
+    updates[`guest`]=usuarioAtual; updates[`guestId`]=meuId();
     updates[`jogadores/${meuId()}`]=usuarioAtual;
+    updates[`jogadoresInfo/${meuId()}`]={nome:usuarioAtual, patente:pat.nome, nivel:Math.max(dadosUsuario.nivelMax||1,dadosUsuario.nivelRanqueada||1), pontos:Math.max(dadosUsuario.pontosTotal||0,dadosUsuario.pontosRanqueada||0), eMestre:EH_MESTRE};
     updates[`pontos/${meuId()}`]=0;
+    if(s.tipo==='quiz') updates[`pontosQuiz/${meuId()}`]=0;
     await refSalas.child(codigo).update(updates);
-    codigoSalaAtual=codigo; salaAtual=s; souHost=false; modoJogo='amigo';
-    erro.textContent='';
-    mostrarTela('telaSala');
+    codigoSalaAtual=codigo; salaAtual=s; souHost=false; modoJogo='amigo'; tipoSalaAtual=s.tipo||'caca';
+    erro.textContent=''; mostrarTela('telaSala');
     document.getElementById('codigoSalaTexto').textContent=codigo;
     document.getElementById('infoDif').textContent=s.dificuldade.toUpperCase();
+    document.getElementById('infoTipo').textContent=s.tipo==='quiz'?'QUIZ':'CAÇA-PALAVRAS';
     document.getElementById('statusSala').textContent=`✅ Você entrou! Aguardando host...`;
-    const btn=document.getElementById('btnIniciarSala');
-    if(btn){btn.textContent='⏳ Aguardando host iniciar...'; btn.disabled=true;}
+    document.getElementById('btnIniciarSala').textContent='⏳ Aguardando host iniciar...';
+    document.getElementById('btnIniciarSala').disabled=true;
     escutarSala(codigo);
-  }catch(e){ erro.textContent='Erro: '+e.message; console.error(e); }
+  }catch(e){erro.textContent='Erro: '+e.message;}
 }
+
 function iniciarJogoMultiplayerComDados(s){
-  grade=s.grade; palavrasRodada=s.palavras; palavrasComPosicao=s.posicoes; nivel=1;
-  pontos=s.pontos[meuId()]||0; encontradas=[]; selecionadas=[];
-  modoJogo='amigo'; dificuldadeAtual=s.dificuldade;
-  for(let palavra in (s.encontradas||{})){
+  grade=s.grade; palavrasRodada=s.palavras; palavrasComPosicao=s.posicoes; nivel=1; pontos=s.pontos[meuId()]||0; encontradas=[]; selecionadas=[]; modoJogo='amigo'; dificuldadeAtual=s.dificuldade;
+  for(let palavra in s.encontradas||{}){
     const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId;
     const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue;
     const set=new Set(); for(let i=0;i<palavra.length;i++){const nl=pos.dir?pos.l:pos.l+i,nc=pos.dir?pos.c+i:pos.c; set.add(`${nl},${nc}`);}
     encontradas.push({texto:palavra,linhas:set,donoId:quemId,dono:quemNome});
   }
-  prepararTelaJogo(); const elN=document.getElementById('nivel'); if(elN) elN.textContent='VS';
-  atualizarPlacar(); renderizarMulti(); atualizarSaldoJogo(); atualizarPlacarVs(s);
+  prepararTelaJogo(); document.getElementById('nivel').textContent='VS'; atualizarPlacar(); renderizarMulti(); atualizarSaldoJogo(); atualizarPlacarVs(s);
 }
 function sincronizarMulti(s){
   let mudou=false;
-  for(let palavra in (s.encontradas||{})){
+  for(let palavra in s.encontradas||{}){
     if(!encontradas.some(e=>e.texto===palavra)){
       const quemId=s.encontradas[palavra]; const quemNome=s.jogadores[quemId]||quemId;
       const pos=palavrasComPosicao.find(p=>p.texto===palavra); if(!pos) continue;
@@ -644,39 +570,40 @@ function sincronizarMulti(s){
     }
   }
   pontos=s.pontos[meuId()]||0;
-  if(mudou){ atualizarPlacar(); renderizarMulti(); }
+  if(mudou){atualizarPlacar(); renderizarMulti();}
   atualizarPlacarVs(s);
-  if(Object.keys(s.encontradas||{}).length===s.palavras.length){ verificarFimMulti(s); }
+  if(Object.keys(s.encontradas||{}).length===s.palavras.length){verificarFimMulti(s);}
 }
 function atualizarPlacarVs(s){
   if(!s) s=salaAtual; if(!s) return;
-  const meu=meuId(); const oponenteId = s.hostId===meu ? s.guestId : s.hostId;
-  const oponenteNome = oponenteId ? (s.jogadores[oponenteId]||'Oponente') : 'Aguardando...';
-  const meuPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0;
-  const euEl=document.getElementById('nomeEu'); if(euEl) euEl.textContent=`${usuarioAtual}: ${meuPts}`;
-  const opEl=document.getElementById('nomeOponente'); if(opEl) opEl.textContent=`${oponenteNome}: ${delePts}`;
+  const meu=meuId(); const oponenteId=s.hostId===meu?s.guestId:s.hostId;
+  const infoEu=s.jogadoresInfo?.[meu] || {nome:usuarioAtual, patente:'...', nivel:'?'};
+  const infoOp=s.jogadoresInfo?.[oponenteId] || {nome:'Oponente', patente:'...', nivel:'?'};
+  const meuPts=s.pontos[meu]||0; const delePts=oponenteId?(s.pontos[oponenteId]||0):0;
+  const euEl=document.getElementById('nomeEu'); if(euEl) euEl.textContent=`${infoEu.nome}: ${meuPts}`;
+  const opEl=document.getElementById('nomeOponente'); if(opEl) opEl.textContent=`${infoOp.nome}: ${delePts}`;
+  const patEu=document.getElementById('patenteEu'); if(patEu) patEu.textContent=`${infoEu.patente} • Nv ${infoEu.nivel} • ${infoEu.pontos} pts`;
+  const patOp=document.getElementById('patenteOponente'); if(patOp) patOp.textContent=`${infoOp.patente} • Nv ${infoOp.nivel} • ${infoOp.pontos} pts`;
   const pEl=document.getElementById('pontos'); if(pEl) pEl.textContent=meuPts;
   const cEl=document.getElementById('contagem'); if(cEl) cEl.textContent=`${Object.keys(s.encontradas||{}).length}/${palavrasRodada.length}`;
 }
 function renderizarMulti(){
   if(!salaAtual) return;
-  const cfg=salaAtual.cfg; const g=document.getElementById('grade'); if(!g) return;
-  g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
+  const cfg=salaAtual.cfg; const g=document.getElementById('grade'); g.style.gridTemplateColumns=`repeat(${cfg.tam},1fr)`; g.innerHTML='';
   for(let l=0;l<cfg.tam;l++) for(let c=0;c<cfg.tam;c++){
-    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c];
-    d.onclick=()=>clicarMulti(l,c);
+    const d=document.createElement('div'); d.className='casa'; d.textContent=grade[l][c]; d.onclick=()=>clicarMulti(l,c);
     if(selecionadas.some(p=>p.l===l&&p.c===c)) d.classList.add('selecionada');
-    const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`));
-    if(enc){ d.classList.add('encontrada'); if(enc.donoId!==meuId()) d.classList.add('inimigo'); }
+    const enc=encontradas.find(e=>e.linhas.has(`${l},${c}`)); if(enc){d.classList.add('encontrada'); if(enc.donoId!==meuId()) d.classList.add('inimigo');}
     g.appendChild(d);
   }
-  const lista=document.getElementById('listaPalavras'); if(!lista) return; lista.innerHTML='';
+  const lista=document.getElementById('listaPalavras'); lista.innerHTML='';
   palavrasRodada.forEach(p=>{
     const enc=encontradas.find(e=>e.texto===p);
     const d=document.createElement('div'); d.className='palavra'+(enc?' encontrada':'');
-    if(enc){ d.textContent= enc.donoId===meuId()? `${p} (você)`: `${p} (${enc.dono})`; }
-    else d.textContent=p; lista.appendChild(d);
+    d.textContent=enc?(enc.donoId===meuId()?`${p} (você)`: `${p} (${enc.dono})`):p;
+    lista.appendChild(d);
   });
+  atualizarBotaoMestre();
 }
 function clicarMulti(l,c){
   if(encontradas.some(e=>e.linhas.has(`${l},${c}`))) return;
@@ -687,15 +614,8 @@ function clicarMulti(l,c){
   if(selecionadas.length>=2){
     const mesmaLinha=selecionadas.every(p=>p.l===selecionadas[0].l);
     const mesmaColuna=selecionadas.every(p=>p.c===selecionadas[0].c);
-    if(mesmaLinha){
-      selecionadas.sort((a,b)=>a.c-b.c);
-      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
-      if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));
-    } else if(mesmaColuna){
-      selecionadas.sort((a,b)=>a.l-b.l);
-      const txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
-      if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));
-    }
+    if(mesmaLinha){selecionadas.sort((a,b)=>a.c-b.c); const txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));}
+    else if(mesmaColuna){selecionadas.sort((a,b)=>a.l-b.l); const txt=selecionadas.map(p=>grade[p.l][p.c]).join(''); if(!tentarVerificarMulti(txt)) tentarVerificarMulti(txt.split('').reverse().join(''));}
   }
   renderizarMulti();
 }
@@ -711,23 +631,21 @@ async function tentarVerificarMulti(palavra){
     const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0;
     await ref.child(`pontos/${meuId()}`).set(atualPts+palavra.length*10);
     tocarSom('acerto'); selecionadas=[]; return true;
-  }catch(e){ console.error(e); alert('Erro: '+e.message); return false; }
+  }catch(e){console.error(e); return false;}
 }
 async function verificarFimMulti(s){
-  const total=Object.keys(s.encontradas||{}).length;
-  if(total< s.palavras.length) return;
+  if(Object.keys(s.encontradas||{}).length < s.palavras.length) return;
   if(souHost && s.status!=='finished'){
-    let vencedor=null, max=-1;
-    for(let k in s.pontos){ if(s.pontos[k]>max){max=s.pontos[k]; vencedor=k;} }
+    let vencedor=null,max=-1; for(let k in s.pontos){ if(s.pontos[k]>max){max=s.pontos[k]; vencedor=k;}}
     const empate=Object.values(s.pontos).filter(v=>v===max).length>1;
-    await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor: empate?'empate':vencedor, finalizado:Date.now()});
+    await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor:empate?'empate':vencedor, finalizado:Date.now()});
   }
 }
 function mostrarResultadoMulti(s){
   if(s._alertou) return; s._alertou=true;
-  const meu=meuId(); const oponenteId=s.hostId===meu ? s.guestId : s.hostId;
+  const meu=meuId(); const oponenteId=s.hostId===meu?s.guestId:s.hostId;
   const oponenteNome=s.jogadores[oponenteId]||'Oponente';
-  const euPts=s.pontos[meu]||0; const delePts= oponenteId ? (s.pontos[oponenteId]||0) : 0;
+  const euPts=s.pontos[meu]||0; const delePts=oponenteId?(s.pontos[oponenteId]||0):0;
   let msg='';
   if(s.vencedor==='empate'){msg=`🤝 Empate!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+15 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+15;}
   else if(s.vencedor===meu){msg=`🏆 Você venceu!\nVocê: ${euPts} pts\n${oponenteNome}: ${delePts} pts\n+30 💰!`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+30;}
@@ -735,36 +653,47 @@ function mostrarResultadoMulti(s){
   salvarDados(); alert(msg); setTimeout(()=>voltarMenu(),1500);
 }
 
-function atualizarSaldoJogo(){
-  const el=document.getElementById('saldoJogo'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`;
-  const btn=document.getElementById('botaoDica'); if(btn) btn.disabled=!EH_MESTRE&&(dadosUsuario?.moedas||0)<PRECO_DICA;
-}
-async function usarDica(){
-  if(modoJogo==='amigo'){ alert('Sem dicas no VS! 👥'); return;}
-  if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;}
-  const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto));
-  if(!alvo){alert('Todas encontradas!'); return;}
-  if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();}
-  tocarSom('clique'); alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`); atualizarSaldoJogo();
-}
-function acharTodasPalavras(){
+/* ========= MESTRE 1 POR VEZ ========= */
+async function acharUmaMestre(){
   if(!EH_MESTRE) return;
-  if(modoJogo==='amigo'){alert('Mestre desativado no VS'); return;}
+  // verifica se já acabou
+  const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto));
+  if(!alvo){alert('Todas já foram achadas!'); return;}
   tocarSom('nivel');
-  palavrasComPosicao.forEach(p=>{
-    if(encontradas.some(e=>e.texto===p.texto)) return;
-    const set=new Set(); for(let i=0;i<p.texto.length;i++){const nl=p.dir?p.l:p.l+i,nc=p.dir?p.c+i:p.c; set.add(`${nl},${nc}`);}
-    encontradas.push({texto:p.texto,linhas:set}); pontos+=p.texto.length*10;
-  });
-  selecionadas=[]; atualizarPlacar(); renderizarSolo();
-  if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);
+
+  if(modoJogo==='amigo' && codigoSalaAtual){
+    // ONLINE: adiciona via Firebase como se fosse o jogador
+    try{
+      const ref=refSalas.child(codigoSalaAtual);
+      const snap=await ref.child('encontradas').once('value'); const atuais=snap.val()||{};
+      if(atuais[alvo.texto]){ // já foi achada enquanto clicava
+        // tenta próxima
+        return acharUmaMestre();
+      }
+      await ref.child(`encontradas/${alvo.texto}`).set(meuId());
+      const snapPts=await ref.child(`pontos/${meuId()}`).once('value'); const atualPts=snapPts.val()||0;
+      await ref.child(`pontos/${meuId()}`).set(atualPts+alvo.texto.length*10);
+      // local será atualizado pelo listener, mas atualiza visual já
+      const set=new Set(); for(let i=0;i<alvo.texto.length;i++){const nl=alvo.dir?alvo.l:alvo.l+i,nc=alvo.dir?alvo.c+i:alvo.c; set.add(`${nl},${nc}`);}
+      encontradas.push({texto:alvo.texto,linhas:set,donoId:meuId(),dono:usuarioAtual});
+      pontos+=alvo.texto.length*10; selecionadas=[];
+      atualizarPlacar(); renderizarMulti(); atualizarPlacarVs(salaAtual);
+    }catch(e){console.error(e);}
+  } else {
+    // SOLO
+    const set=new Set(); for(let i=0;i<alvo.texto.length;i++){const nl=alvo.dir?alvo.l:alvo.l+i,nc=alvo.dir?alvo.c+i:alvo.c; set.add(`${nl},${nc}`);}
+    encontradas.push({texto:alvo.texto,linhas:set});
+    pontos+=alvo.texto.length*10; selecionadas=[];
+    atualizarPlacar(); renderizarSolo();
+    if(encontradas.length===palavrasRodada.length) setTimeout(concluirNivelSolo,400);
+  }
 }
-function proximoNivel(){
-  if(modoJogo==='amigo'){ alert('No 1v1 é partida única!'); return; }
-  if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras! Continuar?')) return;
-  tocarSom('clique'); nivel++; pontos=0; iniciarRodadaSolo();
-}
-function iniciarQuiz(){perguntaAtual=0; acertosQuiz=0; const el=document.getElementById('acertosQuiz'); if(el) el.textContent='0'; mostrarTela('telaQuiz'); carregarPergunta();}
+
+/* ========= QUIZ ========= */
+function atualizarSaldoJogo(){const el=document.getElementById('saldoJogo'); if(el) el.textContent=`💰 ${dadosUsuario?.moedas||0}`; const btn=document.getElementById('botaoDica'); if(btn) btn.disabled=!EH_MESTRE&&(dadosUsuario?.moedas||0)<PRECO_DICA;}
+async function usarDica(){if(modoJogo==='amigo'){alert('Sem dicas no VS! 👥');return;} if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!');return;} const alvo=palavrasComPosicao.find(p=>!encontradas.some(e=>e.texto===p.texto)); if(!alvo){alert('Todas encontradas!');return;} if(!EH_MESTRE){dadosUsuario.moedas-=PRECO_DICA; await salvarDados();} tocarSom('clique'); alert(`💡 Começa com "${alvo.texto[0]}" e tem ${alvo.texto.length} letras!`); atualizarSaldoJogo();}
+function proximoNivel(){if(modoJogo==='amigo'){alert('No 1v1 é partida única!');return;} if(encontradas.length<palavrasRodada.length && !confirm('Ainda tem palavras! Continuar?')) return; tocarSom('clique'); nivel++; pontos=0; iniciarRodadaSolo();}
+function iniciarQuiz(){perguntaAtual=0; acertosQuiz=0; modoJogo='quizSolo'; document.getElementById('acertosQuiz').textContent='0'; document.getElementById('placarVsQuiz').classList.add('oculta'); document.getElementById('tituloQuiz').textContent='🎤 Quiz Solo'; mostrarTela('telaQuiz'); carregarPergunta();}
 function carregarPergunta(){
   if(perguntaAtual>=PERGUNTAS_QUIZ.length){
     const msg=acertosQuiz>=8?`🏆 Excelente! ${acertosQuiz}/10!`:acertosQuiz>=5?`👍 Bom! ${acertosQuiz}/10!`:`📚 ${acertosQuiz}/10!`;
@@ -772,55 +701,114 @@ function carregarPergunta(){
     voltarMenu(); return;
   }
   const p=PERGUNTAS_QUIZ[perguntaAtual];
-  const txt=document.getElementById('textoPergunta'); if(txt) txt.textContent=`${perguntaAtual+1}. ${p.pergunta}`;
-  const lista=document.getElementById('listaAlternativas'); if(!lista) return; lista.innerHTML=''; lista.removeAttribute('data-resp');
+  document.getElementById('textoPergunta').textContent=`${perguntaAtual+1}. ${p.pergunta}`;
+  const lista=document.getElementById('listaAlternativas'); lista.innerHTML=''; lista.removeAttribute('data-resp');
   p.alternativas.forEach((alt,i)=>{
     const d=document.createElement('div'); d.className='alternativa'; d.textContent=alt;
     d.onclick=()=>{
       if(lista.dataset.resp) return; lista.dataset.resp='1';
-      if(i===p.correta){d.classList.add('correta'); acertosQuiz++; const ac=document.getElementById('acertosQuiz'); if(ac) ac.textContent=acertosQuiz; tocarSom('acerto');}
+      if(i===p.correta){d.classList.add('correta'); acertosQuiz++; document.getElementById('acertosQuiz').textContent=acertosQuiz; tocarSom('acerto');}
       else{d.classList.add('errada'); [...lista.children][p.correta].classList.add('correta'); tocarSom('erro');}
       setTimeout(()=>{perguntaAtual++; carregarPergunta();},900);
     };
     lista.appendChild(d);
   });
 }
+
+/* QUIZ MULTIPLAYER */
+function iniciarQuizMultiComDados(s){
+  modoJogo='quizAmigo'; mostrarTela('telaQuiz');
+  document.getElementById('tituloQuiz').textContent='🎤 Quiz 1v1';
+  document.getElementById('placarVsQuiz').classList.remove('oculta');
+  carregarPerguntaQuizMulti(s);
+  atualizarPlacarQuizMulti(s);
+}
+function sincronizarQuizMulti(s){ carregarPerguntaQuizMulti(s); atualizarPlacarQuizMulti(s); if((s.quiz?.perguntaAtual||0)>= (s.quiz?.perguntas?.length||10)){ if(souHost && s.status!=='finished'){ finalizarQuizMulti(s); } } }
+function carregarPerguntaQuizMulti(s){
+  const qIdx=s.quiz?.perguntaAtual||0;
+  const perguntas=s.quiz?.perguntas||PERGUNTAS_QUIZ;
+  if(qIdx>=perguntas.length) return;
+  const p=perguntas[qIdx];
+  document.getElementById('acertosQuiz').textContent=`${qIdx+1}/${perguntas.length}`;
+  document.getElementById('textoPergunta').textContent=`${qIdx+1}. ${p.pergunta}`;
+  const lista=document.getElementById('listaAlternativas'); lista.innerHTML='';
+  // verifica se já respondeu
+  const minhasResps=s.quiz?.respostas?.[meuId()]||{};
+  if(minhasResps[qIdx]!==undefined){
+    lista.innerHTML=`<p style="text-align:center;opacity:0.7">Aguardando oponente...</p>`;
+    return;
+  }
+  p.alternativas.forEach((alt,i)=>{
+    const d=document.createElement('div'); d.className='alternativa'; d.textContent=alt;
+    d.onclick=async()=>{
+      if(minhasResps[qIdx]!==undefined) return;
+      const correto = i===p.correta;
+      try{
+        const ref=refSalas.child(codigoSalaAtual);
+        await ref.child(`quiz/respostas/${meuId()}/${qIdx}`).set({resposta:i, correto, tempo:Date.now()});
+        if(correto){
+          const snap=await ref.child(`pontosQuiz/${meuId()}`).once('value');
+          const pts=snap.val()||0;
+          await ref.child(`pontosQuiz/${meuId()}`).set(pts+10);
+          // também pontos gerais
+          const snap2=await ref.child(`pontos/${meuId()}`).once('value');
+          await ref.child(`pontos/${meuId()}`).set((snap2.val()||0)+10);
+        }
+        // se ambos responderam, avança
+        const snapAll=await ref.child('quiz/respostas').once('value');
+        const all=snapAll.val()||{};
+        const ids=Object.keys(s.jogadores||{});
+        let todosResponderam=true;
+        for(let id of ids){ if(!all[id] || all[id][qIdx]===undefined){ todosResponderam=false; break; } }
+        if(todosResponderam && souHost){
+          await ref.child('quiz/perguntaAtual').set(qIdx+1);
+        }
+        tocarSom(correto?'acerto':'erro');
+      }catch(e){console.error(e);}
+    };
+    lista.appendChild(d);
+  });
+}
+function atualizarPlacarQuizMulti(s){
+  const meu=meuId(); const opId=s.hostId===meu?s.guestId:s.hostId;
+  const meuPts=s.pontosQuiz?.[meu]||0; const opPts=opId?(s.pontosQuiz?.[opId]||0):0;
+  document.getElementById('nomeEuQuiz').textContent=`${s.jogadores[meu]||'Você'}: ${meuPts} pts`;
+  document.getElementById('nomeOponenteQuiz').textContent=`${s.jogadores[opId]||'Oponente'}: ${opPts} pts`;
+}
+async function finalizarQuizMulti(s){
+  let vencedor=null,max=-1;
+  for(let k in s.pontosQuiz||{}){ if((s.pontosQuiz[k]||0)>max){max=s.pontosQuiz[k]; vencedor=k;}}
+  const empate=Object.values(s.pontosQuiz||{}).filter(v=>v===max).length>1;
+  await refSalas.child(codigoSalaAtual).update({status:'finished', vencedor:empate?'empate':vencedor, finalizado:Date.now()});
+}
+function mostrarResultadoQuizMulti(s){
+  if(s._alertou) return; s._alertou=true;
+  const meu=meuId(); const opId=s.hostId===meu?s.guestId:s.hostId;
+  const meuPts=s.pontosQuiz?.[meu]||0; const opPts=opId?(s.pontosQuiz?.[opId]||0):0;
+  const opNome=s.jogadores[opId]||'Oponente';
+  let msg='';
+  if(s.vencedor==='empate'){msg=`🤝 Empate no Quiz!\nVocê: ${meuPts}\n${opNome}: ${opPts}\n+15 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+15;}
+  else if(s.vencedor===meu){msg=`🏆 Você venceu o Quiz!\nVocê: ${meuPts}\n${opNome}: ${opPts}\n+30 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+30;}
+  else{msg=`😢 Perdeu no Quiz!\nVocê: ${meuPts}\n${opNome}: ${opPts}\n+10 💰`; dadosUsuario.moedas=(dadosUsuario.moedas||0)+10;}
+  salvarDados(); alert(msg); setTimeout(()=>voltarMenu(),1500);
+}
+
 async function carregarRankingGeral(){
-  const lista=document.getElementById('listaRankingGeral'); if(!lista) return;
-  lista.innerHTML='<p style="text-align:center">Carregando...</p>';
+  const lista=document.getElementById('listaRankingGeral'); lista.innerHTML='<p style="text-align:center">Carregando...</p>';
   let dados=[];
   if(firebaseOK){
-    try{
-      const snap=await refRanking.orderByChild('pontos').limitToLast(50).once('value');
-      snap.forEach(ch=>dados.push(ch.val()));
-      dados.sort((a,b)=>b.pontos-a.pontos);
-    }catch(e){}
+    try{const snap=await refRanking.orderByChild('pontos').limitToLast(50).once('value'); snap.forEach(ch=>dados.push(ch.val())); dados.sort((a,b)=>b.pontos-a.pontos);}catch{}
   }
-  if(dados.length===0){
-    for(let k in localStorage){
-      if(k.startsWith('luan_') && !k.includes('ultimo')){
-        try{
-          const u=JSON.parse(localStorage.getItem(k));
-          dados.push({nome:k.replace('luan_',''),pontos:Math.max(u.pontosTotal||0,u.pontosRanqueada||0),nivel:Math.max(u.nivelMax||1,u.nivelRanqueada||1),patente:getPatente(Math.max(u.nivelMax||1,u.nivelRanqueada||1)).nome,eMestre:u.eMestre});
-        }catch(e){}
-      }
-    }
-  }
+  if(dados.length===0){for(let k in localStorage){if(k.startsWith('luan_') && !k.includes('ultimo')){try{const u=JSON.parse(localStorage.getItem(k)); dados.push({nome:k.replace('luan_',''),pontos:Math.max(u.pontosTotal||0,u.pontosRanqueada||0),nivel:Math.max(u.nivelMax||1,u.nivelRanqueada||1),patente:getPatente(Math.max(u.nivelMax||1,u.nivelRanqueada||1)).nome,eMestre:u.eMestre||k.includes('Thiago Shelby'), moedas:u.moedas||0});}catch{}}}}
   dados.sort((a,b)=>b.pontos-a.pontos); lista.innerHTML='';
   if(dados.length===0){lista.innerHTML='<p style="text-align:center;opacity:0.6">Nenhum jogador</p>'; return;}
-  dados.slice(0,30).forEach((j,i)=>{
+  dados.slice(0,50).forEach((j,i)=>{
     const div=document.createElement('div'); div.className='item'+(j.nome===usuarioAtual?' voce':'');
-    div.innerHTML=`<div style="font-size:22px;width:40px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º'}</div><div style="flex:1"><strong>${j.nome}${j.eMestre?' 👑':''}</strong><br><small>${j.patente} • Nv ${j.nivel}</small></div><div style="color:#ffd700;font-weight:bold">${j.pontos} pts</div>`;
+    div.innerHTML=`<div style="font-size:22px;width:40px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º'}</div><div style="flex:1"><strong>${j.nome}${j.eMestre?' 👑 DONO':''}</strong><br><small>${j.patente} • Nv ${j.nivel} • 💰 ${j.moedas||0}</small></div><div style="color:#ffd700;font-weight:bold">${j.pontos} pts</div>`;
     lista.appendChild(div);
   });
 }
-async function comprarDicaLoja(){
-  if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!'); return;}
-  if(!EH_MESTRE) dadosUsuario.moedas-=PRECO_DICA;
-  dadosUsuario.dicasExtras=(dadosUsuario.dicasExtras||0)+1;
-  await salvarDados(); atualizarSaldoLoja(); atualizarTelaInicio();
-  alert(EH_MESTRE?'👑 Dica grátis!':'✅ Dica comprada!');
-}
+async function comprarDicaLoja(){if(!EH_MESTRE&&(dadosUsuario.moedas||0)<PRECO_DICA){alert('💰 Sem moedas!');return;} if(!EH_MESTRE) dadosUsuario.moedas-=PRECO_DICA; dadosUsuario.dicasExtras=(dadosUsuario.dicasExtras||0)+1; await salvarDados(); atualizarSaldoLoja(); atualizarTelaInicio(); alert(EH_MESTRE?'👑 Dica grátis!':'✅ Dica comprada!');}
 
 document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('botaoEntrar').onclick=entrar;
@@ -832,6 +820,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnAmigo').onclick=()=>abrirEscolhaModo('amigo');
   document.getElementById('btnEntrarSala').onclick=()=>{tocarSom('clique'); mostrarTela('telaEntrarSala'); document.getElementById('campoCodigoSala').value=''; document.getElementById('msgErroSala').textContent='';};
   document.getElementById('btnQuiz').onclick=()=>{tocarSom('clique'); iniciarQuiz();};
+  document.getElementById('btnQuizAmigo').onclick=()=>{tocarSom('clique'); abrirEscolhaModo('quizAmigo');};
   document.getElementById('btnLoja').onclick=()=>{tocarSom('clique'); mostrarTela('telaLoja');};
   document.getElementById('btnRanking').onclick=()=>{tocarSom('clique'); mostrarTela('telaRanking');};
   document.getElementById('btnSair').onclick=sair;
@@ -844,25 +833,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('btnVoltarEntrar').onclick=()=>mostrarTela('telaInicio');
   document.getElementById('btnProximo').onclick=proximoNivel;
   document.getElementById('botaoDica').onclick=usarDica;
-  document.getElementById('botaoMestre').onclick=acharTodasPalavras;
+  document.getElementById('botaoMestre').onclick=acharUmaMestre;
   document.getElementById('btnComprarMenu').onclick=comprarDicaLoja;
   document.getElementById('btnConfirmarEntrar').onclick=entrarSalaCodigo;
   document.getElementById('btnIniciarSala').onclick=iniciarSalaHost;
-  document.getElementById('btnCopiarCodigo').onclick=()=>{
-    const c=document.getElementById('codigoSalaTexto').textContent;
-    if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c));}
-    else{prompt('Copie o código:',c);}
-  };
+  document.getElementById('btnCopiarCodigo').onclick=()=>{const c=document.getElementById('codigoSalaTexto').textContent; if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>alert('📋 Copiado: '+c)).catch(()=>alert('Código: '+c));} else prompt('Copie:',c);};
   document.querySelectorAll('.som').forEach(b=>b.onclick=alternarSom);
   document.querySelectorAll('[data-dificuldade]').forEach(b=>{b.onclick=()=>iniciarJogoEscolhido(b.dataset.dificuldade);});
-  const senhaInput=document.getElementById('campoSenha');
-  if(senhaInput) senhaInput.addEventListener('keydown', e=>{ if(e.key==='Enter') entrar(); });
-  try{
-    const ultimo=localStorage.getItem('luan_ultimo');
-    if(ultimo) document.getElementById('campoUsuario').value=ultimo;
-  }catch{}
-  const usuarioInput=document.getElementById('campoUsuario');
-  if(usuarioInput) usuarioInput.addEventListener('input', e=>{try{localStorage.setItem('luan_ultimo',e.target.value.trim());}catch{}});
+  document.getElementById('campoSenha')?.addEventListener('keydown', e=>{if(e.key==='Enter') entrar();});
+  try{const ultimo=localStorage.getItem('luan_ultimo'); if(ultimo) document.getElementById('campoUsuario').value=ultimo;}catch{}
+  document.getElementById('campoUsuario')?.addEventListener('input', e=>{try{localStorage.setItem('luan_ultimo',e.target.value.trim());}catch{}});
 });
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
