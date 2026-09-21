@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caça-Palavras Luan Santana</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--dourado:#f2c94c;--vermelho:#d32f2f;--fundo:#121212;--card:#1e1e1e;--texto:#fff;--destaque:#ff9800}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:var(--fundo);color:var(--texto);min-height:100vh}
+.tela{display:none;padding:20px;max-width:500px;margin:0 auto}
+.tela.ativa{display:block;animation:entrada .3s ease}
+@keyframes entrada{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{text-align:center;margin-bottom:20px;color:var(--dourado)}h2{margin-bottom:15px}
+.avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--dourado),var(--vermelho));display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 10px;animation:flutuar 3s ease-in-out infinite}
+@keyframes flutuar{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.coroa{font-size:24px;animation:pulsar 1.5s ease-in-out infinite}
+@keyframes pulsar{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.1)}}
+.card{background:var(--card);padding:25px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+input{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:#2d2d2d;color:#fff;font-size:16px}
+button{width:100%;padding:14px;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;transition:all .2s;margin-top:10px}
+button:active{transform:scale(.97)}
+.btn-principal{background:linear-gradient(135deg,var(--dourado),#e0a800);color:#000}
+.btn-secundario{background:#3a3a3a;color:#fff}
+.erro{color:#ff6b6b;margin-top:10px;animation:tremer .4s}
+@keyframes tremer{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.abas{display:flex;margin-bottom:20px}.aba{flex:1;padding:10px;text-align:center;cursor:pointer;border-bottom:3px solid transparent}
+.aba.ativa{border-bottom-color:var(--dourado);color:var(--dourado)}
+.grid{display:grid;gap:4px;margin:20px auto;max-width:100%;justify-content:center}
+.celula{width:32px;height:32px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;border-radius:4px;font-weight:bold;cursor:pointer;user-select:none;transition:all .15s}
+.celula.selecionada{background:var(--dourado);color:#000}
+.celula.encontrada{background:var(--destaque);color:#fff}
+.palavras{margin-top:20px}.palavra{padding:6px 10px;margin:4px 0;border-radius:6px;background:#2a2a2a}
+.palavra.encontrada{text-decoration:line-through;opacity:.5}
+.barra-topo{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin-bottom:15px}
+.moedas{display:flex;align-items:center;gap:5px}.moeda{color:var(--dourado);font-weight:bold}
+.dica-btn{background:var(--vermelho);color:#fff;padding:8px 12px;font-size:14px;width:auto}
+.timer{font-family:monospace;font-size:18px;color:var(--dourado)}
+.confete{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.confete span{position:absolute;width:10px;height:16px;animation:cair 3s linear infinite}
+@keyframes cair{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
+.ranking-linha{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #333}
+.ranking-linha.destaque{background:#2b2b00}
+.aviso-atualizacao{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--dourado);color:#000;padding:10px 20px;border-radius:8px;z-index:999;font-weight:bold;display:none}
+</style>
+</head>
+<body>
+
+<div class="aviso-atualizacao" id="avisoAtualizacao">🚀 Nova versão disponível! <button onclick="location.reload()" style="width:auto;display:inline-block;background:#000;color:#fff;padding:5px 10px;margin-left:10px">Atualizar</button></div>
+
+<!-- TELA LOGIN -->
+<div class="tela ativa" id="telaLogin">
+  <div class="avatar">🎸</div>
+  <h1 style="text-align:center">Caça-Palavras<br>Luan Santana</h1>
+  <div class="card">
+    <div class="abas">
+      <div class="aba ativa" id="abaEntrar" onclick="trocarAba('entrar')">Entrar</div>
+      <div class="aba" id="abaCriar" onclick="trocarAba('criar')">Criar Conta</div>
+    </div>
+
+    <div id="formEntrar">
+      <input type="text" id="usuarioLogin" placeholder="Nome de usuário">
+      <input type="password" id="senhaLogin" placeholder="Senha">
+      <button class="btn-principal" onclick="fazerLogin()">Entrar</button>
+      <div class="erro" id="erroLogin"></div>
+    </div>
+
+    <div id="formCriar" style="display:none">
+      <input type="text" id="usuarioNovo" placeholder="Nome de usuário">
+      <input type="password" id="senhaNova" placeholder="Senha (mínimo 4 caracteres)">
+      <button class="btn-principal" onclick="criarConta()">Criar Conta</button>
+      <div class="erro" id="erroCriar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA INÍCIO -->
+<div class="tela" id="telaInicio">
+  <div class="barra-topo">
+    <div>
+      <span id="nomeUsuarioTopo"></span>
+      <span id="coroaTopo" class="coroa" style="display:none">👑</span>
+    </div>
+    <div class="moedas">
+      🪙 <span class="moeda" id="saldoMoedas">0</span>
+    </div>
+  </div>
+
+  <h1>Escolha o Nível</h1>
+  <button class="btn-principal" onclick="abrirNivel('facil')">🟢 Fácil (50)</button>
+  <button class="btn-principal" onclick="abrirNivel('dificil')" style="background:linear-gradient(135deg,#ff9800,#e65100)">🟠 Difícil (50)</button>
+  <button class="btn-principal" onclick="abrirNivel('extremo')" style="background:linear-gradient(135deg,#d32f2f,#9a0007)">🔴 Extremo (50)</button>
+  <button class="btn-principal" onclick="abrirNivel('especial')" style="background:linear-gradient(135deg,#9c27b0,#6a0080)">🏆 Especial: Registro Histórico</button>
+  
+  <button class="btn-secundario" onclick="abrirRanking()">🌍 Ranking Global</button>
+  <button class="btn-secundario" onclick="sairConta()">Sair</button>
+</div>
+
+<!-- TELA JOGO -->
+<div class="tela" id="telaJogo">
+  <div class="barra-topo">
+    <button class="btn-secundario" style="width:auto;padding:8px 12px" onclick="voltarInicio()">← Voltar</button>
+    <div class="timer" id="cronometro">00:00</div>
+    <div style="display:flex;gap:8px">
+      <button class="dica-btn" onclick="usarDica()">💡 <span id="contadorDicas">3</span></button>
+      <button class="btn-secundario" style="width:auto;padding:8px 10px" onclick="alternarSom()">🔊</button>
+    </div>
+  </div>
+
+  <h2 id="tituloPuzzle"></h2>
+  <div class="grid" id="grade"></div>
+  <div class="palavras" id="listaPalavras"></div>
+</div>
+
+<!-- TELA RANKING -->
+<div class="tela" id="telaRanking">
+  <div class="barra-topo">
+    <button class="btn-secundario" style="width:auto" onclick="voltarInicio()">← Voltar</button>
+    <h2>🌍 Ranking Global</h2>
+    <div></div>
+  </div>
+  <div id="listaRanking"></div>
+</div>
+
+<!-- TELA VITÓRIA -->
+<div class="tela" id="telaVitoria" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:100;display:none;text-align:center;padding-top:80px">
+  <h1 style="font-size:32px;color:var(--dourado)">🎉 PARABÉNS!</h1>
+  <p style="font-size:20px;margin:20px 0">Tempo: <span id="tempoFinal"></span></p>
+  <p style="color:var(--dourado);margin-bottom:20px">+4 🪙 Luan Coins conquistadas!</p>
+  <button class="btn-principal" onclick="compartilharResultado()">📱 Compartilhar no WhatsApp</button>
+  <button class="btn-secundario" onclick="proximoPuzzle()">Próximo Puzzle →</button>
+  <button class="btn-secundario" onclick="voltarInicio()">Voltar ao Início</button>
+  <div class="confete" id="confete"></div>
+</div>
+
+<script type="module">
+// ========== FIREBASE CONFIG ==========
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getDatabase, ref, push, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",
+  authDomain: "luan-coins.firebaseapp.com",
+  projectId: "luan-coins",
+  storageBucket: "luan-coins.firebasestorage.app",
+  messagingSenderId: "379641584803",
+  appId: "1:379641584803:web:e81d1e1f7b3c8fa7fef316",
+  measurementId: "G-S2F16VKNWT"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ========== DADOS ==========
+const VERSION = "1.0.0";
+const USUARIO_PADRAO = {nome:"Thiago Shelby", senha:"9090iop", moedas:Infinity, isDono:true};
+let usuarioAtual = null;
+let somAtivo = true;
+let cronometro = null;
+let tempoInicio = null;
+let dicasRestantes = 3;
+let nivelAtual = null;
+let indicePuzzle = 0;
+let gradeSelecionada = {linha:-1,coluna:-1};
+
+const puzzles = {
+  facil: gerarPuzzles(14,14,50),
+  dificil: gerarPuzzles(18,18,50),
+  extremo: gerarPuzzles(21,21,50),
+  especial: [{
+    nome: "Registro Histórico (Ao Vivo)",
+    tamanho:25,
+    palavras: ["METEORO","ADRENALINA","NEGA","QUIMICA","AMOR","ACORDANDO","PREDIO","CETOPA","SOGRAO","CHUVA","ARROZ","AGUA","ACUCAR","INCONDICIONAL","MEMORIA","SINAIS","CAFE","LEITE","PROMETE","PALACIOS"],
+    grade: gerarGradeVazia(25)
+  }]
+};
+
+function gerarGradeVazia(n){return Array(n).fill().map(()=>Array(n).fill(""))}
+function gerarPuzzles(tam,qtd){
+  const palavrasBase = ["LUAN","SANTANA","MUSICA","CANCAO","SHOW","PALCO","FAS","CORACAO","ALEGRIA","BRASIL"];
+  return Array(qtd).fill().map((_,i)=>({
+    nome: `Puzzle ${i+1}`,
+    tamanho:tam,
+    palavras: palavrasBase.slice(0,Math.min(8,palavrasBase.length)),
+    grade: gerarGradeVazia(tam)
+  }));
+}
+
+// ========== SOM ==========
+function beep(freq=440,dur=100){if(!somAtivo)return;const a=new AudioContext;const o=a.createOscillator();o.connect(a.destination);o.frequency.value=freq;o.start();o.stop(a.currentTime+dur/1000)}
+function somAcerto(){beep(523,80);setTimeout(()=>beep(659,80),80);setTimeout(()=>beep(784,120),160)}
+function somErro(){beep(200,150)}
+function somVitoria(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,200),i*150))}
+function alternarSom(){somAtivo=!somAtivo;document.querySelector('[onclick*=alternarSom]').textContent=somAtivo?'🔊':'🔇'}
+
+// ========== LOGIN ==========
+function trocarAba(aba){
+  document.getElementById('abaEntrar').classList.toggle('ativa',aba==='entrar');
+  document.getElementById('abaCriar').classList.toggle('ativa',aba==='criar');
+  document.getElementById('formEntrar').style.display=aba==='entrar'?'block':'none';
+  document.getElementById('formCriar').style.display=aba==='criar'?'block':'none';
+  limparErros();
+}
+
+function limparErros(){document.getElementById('erroLogin').textContent='';document.getElementById('erroCriar').textContent=''}
+
+function carregarUsuarios(){
+  const salvos = JSON.parse(localStorage.getItem('usuarios')||'{}');
+  if(!salvos['Thiago Shelby']) salvos['Thiago Shelby'] = USUARIO_PADRAO;
+  return salvos;
+}
+
+function salvarUsuarios(u){localStorage.setItem('usuarios',JSON.stringify(u))}
+
+function fazerLogin(){
+  const usuarios = carregarUsuarios();
+  const nome = document.getElementById('usuarioLogin').value.trim();
+  const senha = document.getElementById('senhaLogin').value;
+  if(!usuarios[nome]) return document.getElementById('erroLogin').textContent='❌ Usuário não encontrado!';
+  if(usuarios[nome].senha!==senha) return document.getElementById('erroLogin').textContent='❌ Senha incorreta!';
+  usuarioAtual = {...usuarios[nome], nome};
+  entrarSistema();
+}
+
+function criarConta(){
+  const nome = document.getElementById('usuarioNovo').value.trim();
+  const senha = document.getElementById('senhaNova').value;
+  if(nome.length<2) return document.getElementById('erroCriar').textContent='❌ Nome muito curto!';
+  if(senha.length<4) return document.getElementById('erroCriar').textContent='❌ Senha precisa de 4+ caracteres!';
+  const usuarios = carregarUsuarios();
+  if(usuarios[nome]) return document.getElementById('erroCriar').textContent='❌ Usuário já existe!';
+  usuarios[nome] = {senha, moedas:4, isDono:false};
+  salvarUsuarios(usuarios);
+  usuarioAtual = {nome, senha, moedas:4, isDono:false};
+  entrarSistema();
+}
+
+function entrarSistema(){
+  document.getElementById('telaLogin').classList.remove('ativa');
+  document.getElementById('telaInicio').classList.add('ativa');
+  document.getElementById('nomeUsuarioTopo').textContent = usuarioAtual.nome;
+  document.getElementById('coroaTopo').style.display = usuarioAtual.isDono?'inline':'none';
+  atualizarMoedas();
+}
+
+function atualizarMoedas(){
+  document.getElementById('saldoMoedas').textContent = usuarioAtual.moedas===Infinity?'∞':usuarioAtual.moedas;
+  const usuarios = carregarUsuarios();
+  usuarios[usuarioAtual.nome] = {...usuarioAtual};
+  salvarUsuarios(usuarios);
+}
+
+function sairConta(){
+  usuarioAtual = null;
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById('telaLogin').classList.add('ativa');
+  document.getElementById('senhaLogin').value='';
+  document.getElementById('senhaNova').value='';
+}
+
+// ========== JOGO ==========
+function abrirNivel(nivel){
+  nivelAtual = nivel; indicePuzzle = 0;
+  document.getElementById('telaInicio').classList.remove('ativa');
+  document.getElementById('telaJogo').classList.add('ativa');
+  carregarPuzzle();
+}
+
+function carregarPuzzle(){
+  const puzzle = puzzles[nivelAtual][indicePuzzle];
+  document.getElementById('tituloPuzzle').textContent = puzzle.nome;
+  dicasRestantes = 3;
+  document.getElementById('contadorDicas').textContent = dicasRestantes;
+  gradeSelecionada = {linha:-1,coluna:-1};
+  preencherGrade(puzzle);
+  renderizarGrade(puzzle);
+  renderizarPalavras(puzzle);
+  tempoInicio = Date.now();
+  if(cronometro) clearInterval(cronometro);
+  cronometro = setInterval(atualizarCronometro,1000);
+}
+
+function preencherGrade(puzzle){
+  const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  puzzle.grade = Array(puzzle.tamanho).fill().map(()=>Array(puzzle.tamanho).fill().map(()=>letras[Math.floor(Math.random()*letras.length)]));
+  puzzle.palavras.forEach(palavra=>{
+    let inserida = false, tentativas=0;
+    while(!inserida && tentativas<100){
+      const dir = Math.random()<.5?1:0;
+      const l = Math.floor(Math.random()*(puzzle.tamanho - (dir?palavra.length:0)));
+      const c = Math.floor(Math.random()*(puzzle.tamanho - (!dir?palavra.length:0)));
+      let ok = true;
+      for(let i=0;i<palavra.length;i++){
+        const gl = dir?l:l+i, gc = dir?c+i:c;
+        if(puzzle.grade[gl][gc]!=='' && puzzle.grade[gl][gc]!==palavra[i]){ok=false;break}
+      }
+      if(ok){
+        for(let i=0;i<palavra.length;i++){
+          const gl = dir?l:l+i, gc = dir?c+i:c;
+          puzzle.grade[gl][gc] = palavra[i];
+        }
+        inserida=true;
+      }
+      tentativas++;
+    }
+  });
+  puzzle.palavrasEncontradas = [];
+}
+
+function renderizarGrade(puzzle){
+  const gradeEl = document.getElementById('grade');
+  gradeEl.innerHTML='';
+  gradeEl.style.gridTemplateColumns = `repeat(${puzzle.tamanho}, 1fr)`;
+  for(let l=0;l<puzzle.tamanho;l++){
+    for(let c=0;c<puzzle.tamanho;c++){
+      const cel = document.createElement('div');
+      cel.className='celula';
+      cel.textContent = puzzle.grade[l][c];
+      cel.dataset.linha=l;cel.dataset.coluna=c;
+      cel.onclick = ()=>clicarCelula(l,c,cel,puzzle);
+      gradeEl.appendChild(cel);
+    }
+  }
+}
+
+function clicarCelula(l,c,cel,puzzle){
+  if(gradeSelecionada.linha===-1){
+    gradeSelecionada={linha:l,coluna:c};
+    cel.classList.add('selecionada');
+  }else{
+    const dl = l - gradeSelecionada.linha;
+    const dc = c - gradeSelecionada.coluna;
+    const max = Math.max(Math.abs(dl),Math.abs(dc));
+    let palavra = '';
+    for(let i=0;i<=max;i++){
+      const cl = gradeSelecionada.linha + (dl===0?0:dl/Math.abs(dl)*i);
+      const cc = gradeSelecionada.coluna + (dc===0?0:dc/Math.abs(dc)*i);
+      if(cl<0||cc<0||cl>=puzzle.tamanho||cc>=puzzle.tamanho){palavra='';break}
+      palavra += puzzle.grade[cl][cc];
+    }
+    const achou = puzzle.palavras.find(p=>p===palavra || p===palavra.split('').reverse().join(''));
+    if(achou && !puzzle.palavrasEncontradas.includes(achou)){
+      somAcerto();
+      puzzle.palavrasEncontradas.push(achou);
+      for(let i=0;i<=max;i++){
+        const cl = gradeSelecionada.linha + (dl===0?0:dl/Math.abs(dl)*i);
+        const cc = gradeSelecionada.coluna + (dc===0?0:dc/Math.abs(dc)*i);
+        document.querySelector(`[data-linha="${cl}"][data-coluna="${cc}"]`).classList.add('encontrada');
+      }
+      document.querySelectorAll('.palavra').forEach(el=>{
+        if(el.dataset.palavra===achou) el.classList.add('encontrada');
+      });
+      if(puzzle.palavrasEncontradas.length === puzzle.palavras.length){
+        clearInterval(cronometro);
+        finalizarJogo();
+      }
+    }else{
+      somErro();
+    }
+    document.querySelectorAll('.celula.selecionada').forEach(c=>c.classList.remove('selecionada'));
+    gradeSelecionada={linha:-1,coluna:-1};
+  }
+}
+
+function renderizarPalavras(puzzle){
+  const lista = document.getElementById('listaPalavras');
+  lista.innerHTML='';
+  puzzle.palavras.forEach(p=>{
+    const el = document.createElement('div');
+    el.className='palavra';
+    el.dataset.palavra=p;
+    el.textContent = p;
+    lista.appendChild(el);
+  });
+}
+
+function atualizarCronometro(){
+  const s = Math.floor((Date.now()-tempoInicio)/1000);
+  const m = Math.floor(s/60), ss = s%60;
+  document.getElementById('cronometro').textContent = `${m.toString().padStart(2,'0')}:${ss.toString().padStart(2,'0')}`;
+}
+
+function usarDica(){
+  if(dicasRestantes>0){
+    dicasRestantes--;
+    document.getElementById('contadorDicas').textContent = dicasRestantes;
+    const puzzle = puzzles[nivelAtual][indicePuzzle];
+    const faltando = puzzle.palavras.filter(p=>!puzzle.palavrasEncontradas.includes(p));
+    if(faltando.length>0){
+      const dica = faltando[Math.floor(Math.random()*faltando.length)];
+      const el = document.querySelector(`[data-palavra="${dica}"]`);
+      el.style.background='#ffd600';
+      setTimeout(()=>el.style.background='',2000);
+    }
+  }else if(usuarioAtual.moedas!==Infinity && usuarioAtual.moedas>=5){
+    if(confirm('Comprar mais dica por 5 🪙?')){
+      usuarioAtual.moedas-=5;
+      atualizarMoedas();
+      dicasRestantes=1;
+      document.getElementById('contadorDicas').textContent=1;
+    }
+  }else if(usuarioAtual.moedas!==Infinity){
+    alert('Moedas insuficientes!');
+  }
+}
+
+async function finalizarJogo(){
+  somVitoria();
+  const tempo = Math.floor((Date.now()-tempoInicio)/1000);
+  const m = Math.floor(tempo/60), s = tempo%60;
+  document.getElementById('tempoFinal').textContent = `${m}m ${s}s`;
+  
+  if(usuarioAtual.moedas!==Infinity){
+    usuarioAtual.moedas+=4;
+    atualizarMoedas();
+  }
+  
+  try{
+    await push(ref(db,'ranking'), {
+      nome: usuarioAtual.nome,
+      tempo: tempo,
+      puzzle: puzzles[nivelAtual][indicePuzzle].nome,
+      data: new Date().toISOString()
+    });
+  }catch(e){console.log('Sem conexão com ranking')}
+  
+  const confete = document.getElementById('confete');
+  confete.innerHTML='';
+  for(let i=0;i<50;i++){
+    const c = document.createElement('span');
+    c.style.left = `${Math.random()*100}%`;
+    c.style.background = ['#f2c94c','#d32f2f','#4caf50','#2196f3'][Math.floor(Math.random()*4)];
+    c.style.animationDelay = `${Math.random()*3}s`;
+    confete.appendChild(c);
+  }
+  
+  document.getElementById('telaVitoria').style.display='block';
+}
+
+function compartilharResultado(){
+  const texto = `🏆 Consegui no Caça-Palavras do Luan Santana! Tempo: ${document.getElementById('tempoFinal').textContent}. Tente superar meu tempo! 🎸`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`);
+}
+
+function proximoPuzzle(){
+  document.getElementById('telaVitoria').style.display='none';
+  indicePuzzle++;
+  if(indicePuzzle >= puzzles[nivelAtual].length){
+    alert('🎉 Você concluiu todos os puzzles deste nível!');
+    voltarInicio();
+  }else{
+    
