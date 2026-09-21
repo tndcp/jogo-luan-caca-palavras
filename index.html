@@ -3,349 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caça-Palavras Luan Santana 🔐</title>
+<title>Caça-Palavras Luan Santana</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-:root{--dourado:#f2c94c;--vermelho:#d32f2f;--verde:#4caf50;--roxo:#9c27b0;--fundo:#1a1a2e;--fundo2:#0f0f1a}
-body{background:linear-gradient(135deg,var(--fundo),var(--fundo2));min-height:100vh;color:#fff;padding:15px}
-.container{max-width:720px;margin:0 auto}
-
-.tela{background:rgba(0,0,0,0.4);border-radius:16px;padding:25px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.05)}
-.escondida{display:none !important}
-h1{text-align:center;color:var(--dourado);margin-bottom:25px;font-size:24px}
-h2{color:var(--dourado);margin-bottom:15px;font-size:18px}
-
-input{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;margin-bottom:12px}
-button{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--dourado),var(--vermelho));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s ease;margin:6px 0}
-button:active{transform:scale(0.97)}
-.botao-secundario{background:linear-gradient(90deg,#444,#222);color:#fff}
-.botao-competitivo{background:linear-gradient(90deg,var(--roxo),var(--vermelho));color:#fff}
-.botao-sair{background:linear-gradient(90deg,#333,#111);color:#aaa;margin-top:20px}
-
-.aviso{font-size:14px;opacity:0.7;margin-top:-8px;margin-bottom:12px;text-align:center}
-.erro{color:#ff6b6b;text-align:center;margin:10px 0;min-height:24px}
-
-.cabecalho{display:flex;justify-content:space-between;align-items:center;padding:15px;background:rgba(0,0,0,0.5);border-radius:12px;margin-bottom:15px;border:1px solid rgba(242,201,76,0.2)}
-.perfil{display:flex;align-items:center;gap:10px}
-.avatar{width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,var(--dourado),var(--vermelho));display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px}
-.nome-usuario{font-weight:bold;font-size:16px}
-.info-nivel{font-size:12px;opacity:0.7}
-.moedas{display:flex;align-items:center;gap:5px;background:rgba(242,201,76,0.15);padding:8px 15px;border-radius:20px}
-.valor-moeda{font-weight:bold;color:var(--dourado);font-size:18px}
-
-.abas{display:flex;gap:8px;margin-bottom:20px}
-.aba{flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.05);text-align:center;cursor:pointer;font-weight:bold;font-size:14px}
-.aba.ativa{background:var(--dourado);color:#000}
-
-.placar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
-.caixa-pontos{background:rgba(242,201,76,0.1);padding:12px;border-radius:10px;text-align:center}
-.titulo-placar{font-size:12px;opacity:0.7;margin-bottom:3px}
-.valor-placar{font-size:20px;font-weight:bold;color:var(--dourado)}
-.caixa-nivel{background:rgba(156,39,176,0.1);border:1px solid rgba(156,39,176,0.3)}
-.texto-nivel{color:var(--roxo)}
-
-.grade{display:grid;gap:4px;margin:20px auto}
-.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;user-select:none}
-.casa.selecionada{background:var(--dourado);color:#000}
-.casa.encontrada{background:var(--verde);color:#fff}
-
-.palavras{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
-.palavra{padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:8px;font-weight:bold}
-.palavra.encontrada{opacity:0.4;text-decoration:line-through;background:rgba(76,175,80,0.2)}
-
+body{background:#1a1a2e;color:#fff;padding:20px;min-height:100vh}
+.container{max-width:450px;margin:0 auto}
+h1{text-align:center;color:#f2c94c;margin-bottom:30px}
+.tela{display:none}
+.tela.ativa{display:block}
+input{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;margin-bottom:15px}
+button{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:linear-gradient(90deg,#f2c94c,#d32f2f);color:#000;font-weight:bold;cursor:pointer;margin:5px 0}
+button.secundario{background:linear-gradient(90deg,#444,#222);color:#fff}
+button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
+.erro{color:#ff6b6b;text-align:center;margin:10px 0}
+.grade{display:grid;gap:5px;margin:20px 0}
+.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer}
+.casa.selecionada{background:#f2c94c;color:#000}
+.casa.encontrada{background:#4caf50;color:#fff}
+.palavras{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.palavra{padding:10px 15px;background:rgba(255,255,255,0.08);border-radius:8px}
+.palavra.encontrada{opacity:0.4;text-decoration:line-through}
+.placar{display:flex;justify-content:space-around;margin:20px 0}
+.caixa{text-align:center}
+.abas{display:flex;gap:8px;margin:20px 0}
+.aba{flex:1;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;text-align:center;cursor:pointer}
+.aba.ativa{background:#f2c94c;color:#000}
 .lista-ranking{display:flex;flex-direction:column;gap:8px;margin-top:15px}
-.item-ranking{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px}
-.posicao{width:30px;text-align:center;font-weight:bold}
-.posicao-1{color:var(--dourado);font-size:20px}
-.posicao-2{color:#c0c0c0}
-.posicao-3{color:#cd7f32}
-.nome-rank{flex:1;font-weight:bold}
-.pontos-rank{color:var(--dourado);font-weight:bold}
-.voce{border:1px solid var(--dourado)}
-
-.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a2e;border:2px solid var(--dourado);border-radius:16px;padding:30px;max-width:90%;width:400px;z-index:100;text-align:center}
-.fundo-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99}
+.item-ranking{display:flex;gap:10px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px}
 </style>
 </head>
 <body>
 <div class="container">
 
-<!-- TELA DE LOGIN -->
-<div id="telaLogin" class="tela">
-  <h1>🔐 Acesse sua Conta</h1>
-  <input type="text" id="campoUsuario" placeholder="Nome de usuário" autocomplete="off">
-  <input type="password" id="campoSenha" placeholder="Sua senha">
-  <div id="mensagemErro" class="erro"></div>
-  <button id="botaoEntrar">Entrar 🔑</button>
-  <button id="botaoCriarConta" class="botao-secundario">📝 Criar nova conta</button>
-  <p class="aviso">Sua conta fica salva neste aparelho</p>
+<!-- TELA LOGIN -->
+<div id="telaLogin" class="tela ativa">
+  <h1>🔐 Entrar</h1>
+  <input type="text" id="usuario" placeholder="Usuário">
+  <input type="password" id="senha" placeholder="Senha">
+  <div id="erroLogin" class="erro"></div>
+  <button onclick="entrar()">Entrar</button>
+  <button class="secundario" onclick="mostrarCadastro()">Criar Conta</button>
 </div>
 
-<!-- TELA DE CADASTRO -->
-<div id="telaCadastro" class="tela escondida">
+<!-- TELA CADASTRO -->
+<div id="telaCadastro" class="tela">
   <h1>📝 Criar Conta</h1>
-  <input type="text" id="novoUsuario" placeholder="Escolha seu nome de usuário" autocomplete="off">
-  <input type="password" id="novaSenha" placeholder="Crie uma senha">
+  <input type="text" id="novoUsuario" placeholder="Escolha seu usuário">
+  <input type="password" id="novaSenha" placeholder="Crie sua senha">
   <input type="password" id="confirmaSenha" placeholder="Repita a senha">
   <div id="erroCadastro" class="erro"></div>
-  <button id="botaoConfirmarCadastro">Criar Conta ✅</button>
-  <button id="botaoVoltarLogin" class="botao-secundario">⬅️ Voltar ao login</button>
+  <button onclick="cadastrar()">Cadastrar</button>
+  <button class="secundario" onclick="mostrarLogin()">Voltar</button>
 </div>
 
-<!-- TELA DE ESCOLHA DE MODO -->
-<div id="telaEscolha" class="tela escondida">
-  <h1>🎸 Bem-vindo, <span id="nomeBemVindo"></span>!</h1>
-  <button id="botaoModoNormal">🎮 Modo Normal</button>
-  <button id="botaoModoExtremo" class="botao-competitivo">🔥 Modo Competitivo EXTREMO</button>
-  <button id="botaoVerStats" class="botao-secundario">📊 Minhas Estatísticas</button>
-  <button id="botaoSair" class="botao-sair">🚪 Sair da conta</button>
+<!-- TELA INÍCIO -->
+<div id="telaInicio" class="tela">
+  <h1>🎸 Bem-vindo, <span id="nomeUsuario"></span>!</h1>
+  <button onclick="iniciarJogo('normal')">🎮 Modo Normal</button>
+  <button class="extremo" onclick="iniciarJogo('extremo')">🔥 Modo Extremo</button>
+  <button class="secundario" onclick="sair()">Sair</button>
 </div>
 
-<!-- TELA DO JOGO -->
-<div id="telaJogo" class="escondida">
-  <div class="cabecalho">
-    <div class="perfil">
-      <div class="avatar" id="avatar">T</div>
-      <div>
-        <div class="nome-usuario" id="mostraNome"></div>
-        <div class="info-nivel">Nível <span id="nivel">1</span> • <span id="modoJogo">Normal</span></div>
-      </div>
-    </div>
-    <div class="moedas">
-      <span>💰</span>
-      <span class="valor-moeda" id="mostraMoedas">0</span>
-    </div>
-  </div>
-
+<!-- TELA JOGO -->
+<div id="telaJogo" class="tela">
   <div class="abas">
-    <div class="aba ativa" data-aba="jogo">🎮 Jogo</div>
-    <div class="aba" data-aba="ranking">🏆 Ranking</div>
-    <div class="aba" data-aba="stats">📊 Stats</div>
+    <div class="aba ativa" onclick="trocarAba('jogo')">Jogo</div>
+    <div class="aba" onclick="trocarAba('ranking')">Ranking</div>
   </div>
 
   <div id="abaJogo">
     <div class="placar">
-      <div class="caixa-pontos">
-        <div class="titulo-placar">Pontos</div>
-        <div class="valor-placar" id="pontos">0</div>
-      </div>
-      <div class="caixa-pontos caixa-nivel">
-        <div class="titulo-placar texto-nivel">Nível</div>
-        <div class="valor-placar texto-nivel" id="numeroNivel">1</div>
-      </div>
-      <div class="caixa-pontos">
-        <div class="titulo-placar">Palavras</div>
-        <div class="valor-placar"><span id="qtdEncontradas">0</span>/<span id="totalPalavras">0</span></div>
-      </div>
+      <div class="caixa"><div>Pontos</div><div id="pontos">0</div></div>
+      <div class="caixa"><div>Nível</div><div id="nivel">1</div></div>
+      <div class="caixa"><div>Palavras</div><div id="contagem">0/0</div></div>
     </div>
     <div class="grade" id="grade"></div>
-    <h3>Palavras a encontrar:</h3>
+    <h3>Palavras:</h3>
     <div class="palavras" id="listaPalavras"></div>
     <br>
-    <button id="botaoProximoNivel">➡️ Próximo Nível</button>
-    <button id="botaoVoltarMenu" class="botao-secundario">🏠 Menu Principal</button>
+    <button onclick="proximoNivel()">Próximo Nível</button>
+    <button class="secundario" onclick="voltarInicio()">Voltar</button>
   </div>
 
-  <div id="abaRanking" class="escondida">
-    <h2>🏆 Ranking Geral</h2>
-    <div class="lista-ranking" id="listaRanking"></div>
-    <button data-voltar="jogo" class="botao-secundario">⬅️ Voltar ao Jogo</button>
+  <div id="abaRanking" class="tela">
+    <h2>🏆 Ranking</h2>
+    <div class="lista-ranking" id="ranking"></div>
+    <button class="secundario" onclick="trocarAba('jogo')">Voltar</button>
   </div>
-
-  <div id="abaStats" class="escondida">
-    <h2>📊 Suas Estatísticas</h2>
-    <p style="margin:10px 0"><strong>Nível mais alto:</strong> <span id="statNivel">1</span></p>
-    <p style="margin:10px 0"><strong>Pontuação total:</strong> <span id="statPontos">0</span></p>
-    <p style="margin:10px 0"><strong>Moedas acumuladas:</strong> <span id="statMoedas">0</span> 💰</p>
-    <p style="margin:10px 0"><strong>Palavras encontradas:</strong> <span id="statPalavras">0</span></p>
-    <p style="margin:10px 0"><strong>Maior sequência:</strong> <span id="statSequencia">0</span> 🔥</p>
-    <button data-voltar="jogo" class="botao-secundario">⬅️ Voltar ao Jogo</button>
-  </div>
-</div>
-
-<div id="fundoModal" class="fundo-modal escondida"></div>
-<div id="modal" class="modal escondida">
-  <h2 id="tituloModal">🎉 Nível Completo!</h2>
-  <p id="textoModal" style="margin:15px 0"></p>
-  <button id="botaoFecharModal">Continuar</button>
 </div>
 
 </div>
 
 <script>
-const bancoPalavras = [
-  'LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA',
-  'BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','PAIXAO','SAUDADE',
-  'SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL',
-  'ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS',
-  'RECORDACAO','PROMESSA','DESTINO','CAMINHO','VIDA','ESPERANCA',
-  'FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO',
-  'VERSOS','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO',
-  'CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO',
-  'CORAGEM','FIDELIDADE','HONRA','TESOURO','JOIA','PEROLA','ALMA'
-];
+const bancoPalavras = ['LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA','BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','SAUDADE','SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL','ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS','RECORDACAO','DESTINO','CAMINHO','VIDA','ESPERANCA','FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO','CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO','CORAGEM','HONRA','TESOURO','JOIA','PEROLA','ALMA'];
 const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-let usuarioAtual = null;
-let modo = 'normal', nivel = 1, pontos = 0;
+let usuarioAtual = null, modo = 'normal', nivel = 1, pontos = 0;
 let grade = [], selecionadas = [], encontradas = [], palavrasRodada = [];
 
-// GERENCIAR CONTAS
 function carregarContas(){
-  const d = localStorage.getItem('contasJogo');
+  const d = localStorage.getItem('contas');
   return d ? JSON.parse(d) : {};
 }
-function salvarContas(contas){
-  localStorage.setItem('contasJogo', JSON.stringify(contas));
+function salvarContas(c){
+  localStorage.setItem('contas', JSON.stringify(c));
 }
 
-function mostrarErroNo(id, texto){
-  const el = document.getElementById(id);
-  el.textContent = texto;
-  setTimeout(()=>el.textContent='',3000);
-}
-
-// TELAS
 function mostrarTela(nome){
-  document.querySelectorAll('.tela').forEach(t=>t.classList.add('escondida'));
-  document.getElementById(nome).classList.remove('escondida');
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById(nome).classList.add('ativa');
 }
 
-// LOGIN
-function fazerLogin(){
-  const user = document.getElementById('campoUsuario').value.trim();
-  const senha = document.getElementById('campoSenha').value;
-  
-  if(!user || !senha){
-    mostrarErroNo('mensagemErro','Preencha usuário e senha!'); return;
-  }
-  
+function mostrarLogin(){ mostrarTela('telaLogin'); }
+function mostrarCadastro(){ mostrarTela('telaCadastro'); }
+
+function entrar(){
+  const u = document.getElementById('usuario').value.trim();
+  const s = document.getElementById('senha').value;
   const contas = carregarContas();
-  if(!contas[user]){
-    mostrarErroNo('mensagemErro','Usuário não encontrado! Cadastre-se primeiro.'); return;
+  
+  if(!u || !s){
+    document.getElementById('erroLogin').textContent = 'Preencha tudo!'; return;
   }
-  if(contas[user].senha !== senha){
-    mostrarErroNo('mensagemErro','Senha incorreta!'); return;
+  if(!contas[u]){
+    document.getElementById('erroLogin').textContent = 'Usuário não existe. Cadastre-se!'; return;
+  }
+  if(contas[u].senha !== s){
+    document.getElementById('erroLogin').textContent = 'Senha errada!'; return;
   }
   
-  usuarioAtual = user;
-  document.getElementById('nomeBemVindo').textContent = user;
-  mostrarTela('telaEscolha');
+  usuarioAtual = u;
+  document.getElementById('nomeUsuario').textContent = u;
+  mostrarTela('telaInicio');
 }
 
-// CADASTRO
 function cadastrar(){
-  const user = document.getElementById('novoUsuario').value.trim();
-  const senha = document.getElementById('novaSenha').value;
-  const confirma = document.getElementById('confirmaSenha').value;
-  
-  if(!user || user.length<3){
-    mostrarErroNo('erroCadastro','Usuário precisa ter pelo menos 3 letras!'); return;
-  }
-  if(!senha || senha.length<4){
-    mostrarErroNo('erroCadastro','Senha precisa ter pelo menos 4 caracteres!'); return;
-  }
-  if(senha !== confirma){
-    mostrarErroNo('erroCadastro','As senhas não coincidem!'); return;
-  }
-  
+  const u = document.getElementById('novoUsuario').value.trim();
+  const s = document.getElementById('novaSenha').value;
+  const c = document.getElementById('confirmaSenha').value;
   const contas = carregarContas();
-  if(contas[user]){
-    mostrarErroNo('erroCadastro','Esse usuário já existe!'); return;
+  
+  if(u.length<3){
+    document.getElementById('erroCadastro').textContent = 'Mínimo 3 letras no usuário!'; return;
+  }
+  if(s.length<4){
+    document.getElementById('erroCadastro').textContent = 'Mínimo 4 caracteres na senha!'; return;
+  }
+  if(s !== c){
+    document.getElementById('erroCadastro').textContent = 'Senhas diferentes!'; return;
+  }
+  if(contas[u]){
+    document.getElementById('erroCadastro').textContent = 'Usuário já existe!'; return;
   }
   
-  contas[user] = {
-    senha: senha,
-    nivelMaximo: 1,
-    pontosTotais: 0,
-    moedas: 0,
-    totalPalavras: 0,
-    maiorSequencia: 0
-  };
+  contas[u] = { senha:s, nivelMax:1, pontosTotal:0 };
   salvarContas(contas);
-  
-  alert('✅ Conta criada! Faça login!');
-  mostrarTela('telaLogin');
-  document.getElementById('campoUsuario').value = user;
+  alert('Conta criada! Faça login!');
+  mostrarLogin();
+  document.getElementById('usuario').value = u;
 }
 
-function sairDaConta(){
-  if(confirm('Sair da conta?')){
+function sair(){
+  if(confirm('Sair?')){
     usuarioAtual = null;
-    document.getElementById('campoUsuario').value = '';
-    document.getElementById('campoSenha').value = '';
-    mostrarTela('telaLogin');
+    document.getElementById('usuario').value = '';
+    document.getElementById('senha').value = '';
+    mostrarLogin();
   }
 }
 
-function verEstatisticas(){
+function iniciarJogo(tipo){
+  modo = tipo;
   const contas = carregarContas();
-  const d = contas[usuarioAtual];
-  alert(
-    `📊 ${usuarioAtual}:\n` +
-    `🏅 Nível: ${d.nivelMaximo}\n` +
-    `⭐ Pontos: ${d.pontosTotais}\n` +
-    `💰 Moedas: ${d.moedas}\n` +
-    `📝 Palavras: ${d.totalPalavras}\n` +
-    `🔥 Sequência: ${d.maiorSequencia}`
-  );
-}
-
-function voltarEscolha(){
-  salvarProgresso();
-  mostrarTela('telaEscolha');
-}
-
-// ENTRAR NO JOGO
-function entrarModo(tipoModo){
-  modo = tipoModo;
-  const contas = carregarContas();
-  const d = contas[usuarioAtual];
-  
-  nivel = d.nivelMaximo > 1 && confirm(`Retomar do Nível ${d.nivelMaximo}?`) ? d.nivelMaximo : 1;
+  nivel = contas[usuarioAtual].nivelMax;
   pontos = 0;
   encontradas = [];
-  
-  document.getElementById('avatar').textContent = usuarioAtual[0].toUpperCase();
-  document.getElementById('mostraNome').textContent = usuarioAtual;
-  document.getElementById('modoJogo').textContent = modo==='extremo'?'EXTREMO 🔥':'Normal';
-  
   mostrarTela('telaJogo');
   iniciarRodada();
 }
 
 function configNivel(n){
   return {
-    tamanho: Math.min(10+Math.floor(n/2), modo==='extremo'?18:14),
-    qtdPalavras: Math.min(6+n, modo==='extremo'?25:15)
+    tam: Math.min(10+Math.floor(n/2), modo==='extremo'?16:12),
+    qtd: Math.min(6+n, modo==='extremo'?20:12)
   };
-}
-
-function salvarProgresso(){
-  if(!usuarioAtual) return;
-  const contas = carregarContas();
-  const d = contas[usuarioAtual];
-  d.nivelMaximo = Math.max(d.nivelMaximo, nivel);
-  d.pontosTotais += pontos;
-  d.moedas += Math.floor(pontos/(modo==='extremo'?4:5));
-  d.totalPalavras += encontradas.length;
-  contas[usuarioAtual] = d;
-  salvarContas(contas);
 }
 
 function iniciarRodada(){
   const cfg = configNivel(nivel);
   selecionadas = []; encontradas = [];
-  
-  palavrasRodada = [...bancoPalavras].sort(()=>Math.random()-0.5).slice(0,cfg.qtdPalavras);
-  grade = Array(cfg.tamanho).fill().map(()=>Array(cfg.tamanho).fill(''));
+  palavrasRodada = [...bancoPalavras].sort(()=>Math.random()-0.5).slice(0,cfg.qtd);
+  grade = Array(cfg.tam).fill().map(()=>Array(cfg.tam).fill(''));
   
   palavrasRodada.forEach(palavra=>{
     let ok=false,t=0;
     while(!ok && t<150){
       const dir=Math.random()>0.5;
-      const maxL=cfg.tamanho-(dir?0:palavra.length);
-      const maxC=cfg.tamanho-(dir?palavra.length:0);
+      const maxL=cfg.tam-(dir?0:palavra.length);
+      const maxC=cfg.tam-(dir?palavra.length:0);
       if(maxL<=0||maxC<=0)break;
       const l=Math.floor(Math.random()*maxL);
       const c=Math.floor(Math.random()*maxC);
@@ -365,68 +220,68 @@ function iniciarRodada(){
     }
   });
   
-  for(let l=0;l<cfg.tamanho;l++)
-    for(let c=0;c<cfg.tamanho;c++)
+  for(let l=0;l<cfg.tam;l++)
+    for(let c=0;c<cfg.tam;c++)
       if(!grade[l][c])grade[l][c]=letras[Math.floor(Math.random()*26)];
   
-  document.getElementById('numeroNivel').textContent=nivel;
-  document.getElementById('nivel').textContent=nivel;
-  document.getElementById('totalPalavras').textContent=palavrasRodada.length;
-  atualizarPlacar(); renderizarGrade();
+  document.getElementById('nivel').textContent = nivel;
+  atualizarPlacar();
+  renderizar();
 }
 
-function renderizarGrade(){
-  const cfg=configNivel(nivel);
-  const gradeEl=document.getElementById('grade');
-  gradeEl.style.gridTemplateColumns=`repeat(${cfg.tamanho},1fr)`;
-  gradeEl.innerHTML='';
+function renderizar(){
+  const cfg = configNivel(nivel);
+  const g = document.getElementById('grade');
+  g.style.gridTemplateColumns = `repeat(${cfg.tam},1fr)`;
+  g.innerHTML = '';
   
-  for(let l=0;l<cfg.tamanho;l++){
-    for(let c=0;c<cfg.tamanho;c++){
-      const div=document.createElement('div');
-      div.className='casa'; div.textContent=grade[l][c];
-      div.addEventListener('click', ()=>clicar(l,c));
-      if(selecionadas.some(p=>p.l===l&&p.c===c))div.classList.add('selecionada');
-      if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))div.classList.add('encontrada');
-      gradeEl.appendChild(div);
+  for(let l=0;l<cfg.tam;l++){
+    for(let c=0;c<cfg.tam;c++){
+      const d = document.createElement('div');
+      d.className = 'casa';
+      d.textContent = grade[l][c];
+      d.onclick = ()=>clicar(l,c);
+      if(selecionadas.some(p=>p.l===l&&p.c===c))d.classList.add('selecionada');
+      if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))d.classList.add('encontrada');
+      g.appendChild(d);
     }
   }
   
-  const listaEl=document.getElementById('listaPalavras'); listaEl.innerHTML='';
+  const lista = document.getElementById('listaPalavras');
+  lista.innerHTML = '';
   palavrasRodada.forEach(p=>{
     const d=document.createElement('div');
-    d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':'');
-    d.textContent=p; listaEl.appendChild(d);
+    d.className = 'palavra' + (encontradas.some(e=>e.texto===p)?' encontrada':'');
+    d.textContent = p;
+    lista.appendChild(d);
   });
 }
 
 function atualizarPlacar(){
-  const contas = carregarContas();
-  document.getElementById('pontos').textContent=pontos;
-  document.getElementById('qtdEncontradas').textContent=encontradas.length;
-  document.getElementById('mostraMoedas').textContent=contas[usuarioAtual].moedas;
+  document.getElementById('pontos').textContent = pontos;
+  document.getElementById('contagem').textContent = `${encontradas.length}/${palavrasRodada.length}`;
 }
 
 function clicar(l,c){
   if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))return;
-  const i=selecionadas.findIndex(p=>p.l===l&&p.c===c);
-  if(i>=0){selecionadas.splice(i);renderizarGrade();return}
+  const i = selecionadas.findIndex(p=>p.l===l&&p.c===c);
+  if(i>=0){selecionadas.splice(i);renderizar();return}
   selecionadas.push({l,c});
   
   if(selecionadas.length>=2){
-    const lin=new Set(selecionadas.map(p=>p.l));
-    const col=new Set(selecionadas.map(p=>p.c));
-    let txt='';
+    const lin = new Set(selecionadas.map(p=>p.l));
+    const col = new Set(selecionadas.map(p=>p.c));
+    let txt = '';
     if(lin.size===1){
       selecionadas.sort((a,b)=>a.c-b.c);
-      txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
     }else if(col.size===1){
       selecionadas.sort((a,b)=>a.l-b.l);
-      txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
     }
     verificar(txt) || verificar(txt.split('').reverse().join(''));
   }
-  renderizarGrade();
+  renderizar();
 }
 
 function verificar(palavra){
@@ -436,13 +291,17 @@ function verificar(palavra){
       linhas:new Set(selecionadas.map(p=>p.l)),
       colunas:new Set(selecionadas.map(p=>p.c))
     });
-    const pts=palavra.length*(modo==='extremo'?20:10);
-    pontos+=pts;
-    selecionadas=[]; salvarProgresso(); atualizarPlacar();
+    const ganho = palavra.length * (modo==='extremo'?20:10);
+    pontos += ganho;
+    selecionadas = [];
+    atualizarPlacar();
     
-    if(encontradas.length===palavrasRodada.length){
-      salvarProgresso();
-      setTimeout(()=>abrirModal(`🎉 Nível ${nivel} Completo!`,`Pontos: ${pontos}`),300);
+    if(encontradas.length === palavrasRodada.length){
+      const contas = carregarContas();
+      contas[usuarioAtual].nivelMax = Math.max(contas[usuarioAtual].nivelMax, nivel+1);
+      contas[usuarioAtual].pontosTotal += pontos;
+      salvarContas(contas);
+      alert(`🎉 Nível ${nivel} completo!\nPontos: ${pontos}`);
     }
     return true;
   }
@@ -450,68 +309,35 @@ function verificar(palavra){
 }
 
 function proximoNivel(){
-  if(encontradas.length<palavrasRodada.length && !confirm('Ainda há palavras! Continuar?'))return;
+  if(encontradas.length < palavrasRodada.length && !confirm('Ainda há palavras! Tem certeza?'))return;
   nivel++; pontos=0; iniciarRodada();
 }
 
-function trocarAba(nome){
-  document.querySelectorAll('.aba').forEach(a=>{
-    a.classList.remove('ativa');
-    if(a.dataset.aba===nome)a.classList.add('ativa');
-  });
-  document.getElementById('abaJogo').classList.toggle('escondida',nome!=='jogo');
-  document.getElementById('abaRanking').classList.toggle('escondida',nome!=='ranking');
-  document.getElementById('abaStats').classList.toggle('escondida',nome!=='stats');
-  if(nome==='ranking')carregarRanking();
-  if(nome==='stats')mostrarStats();
+function voltarInicio(){
+  if(confirm('Voltar ao menu?'))mostrarTela('telaInicio');
 }
 
-function mostrarStats(){
-  const contas = carregarContas();
-  const d = contas[usuarioAtual];
-  document.getElementById('statNivel').textContent=d.nivelMaximo;
-  document.getElementById('statPontos').textContent=d.pontosTotais;
-  document.getElementById('statMoedas').textContent=d.moedas;
-  document.getElementById('statPalavras').textContent=d.totalPalavras;
-  document.getElementById('statSequencia').textContent=d.maiorSequencia;
+function trocarAba(nome){
+  document.querySelectorAll('.aba').forEach(a=>a.classList.remove('ativa'));
+  event.target.classList.add('ativa');
+  document.getElementById('abaJogo').style.display = nome==='jogo'?'block':'none';
+  document.getElementById('abaRanking').style.display = nome==='ranking'?'block':'none';
+  if(nome==='ranking')carregarRanking();
 }
 
 function carregarRanking(){
   const contas = carregarContas();
-  const rank = Object.entries(contas).map(([nome,d])=>({
-    nome, pontos: d.pontosTotais, nivel: d.nivelMaximo
-  })).sort((a,b)=>b.pontos - a.pontos).slice(0,10);
-  
-  const el = document.getElementById('listaRanking'); el.innerHTML='';
-  if(!rank.length){el.innerHTML='<p style="text-align:center;opacity:0.7">Jogue para aparecer! 🏆</p>';return;}
+  const rank = Object.entries(contas).map(([n,d])=>({nome:n,pontos:d.pontosTotal})).sort((a,b)=>b.pontos-a.pontos).slice(0,10);
+  const el = document.getElementById('ranking');
+  el.innerHTML = '';
+  if(!rank.length){el.innerHTML='<p style="text-align:center">Jogue para aparecer!</p>';return;}
   rank.forEach((item,idx)=>{
     const d=document.createElement('div');
-    d.className=`item-ranking ${item.nome===usuarioAtual?'voce':''}`;
-    let posCls='';
-    if(idx===0)posCls='posicao-1';
-    else if(idx===1)posCls='posicao-2';
-    else if(idx===2)posCls='posicao-3';
-    d.innerHTML=`
-      <div class="posicao ${posCls}">${idx+1}º</div>
-      <div class="nome-rank">${item.nome}</div>
-      <div class="pontos-rank">${item.pontos} pts • N${item.nivel}</div>
-    `;
+    d.className='item-ranking';
+    d.innerHTML = `<div>${idx+1}º</div><div>${item.nome}</div><div>${item.pontos} pts</div>`;
     el.appendChild(d);
   });
 }
-
-function abrirModal(titulo,texto){
-  document.getElementById('tituloModal').textContent=titulo;
-  document.getElementById('textoModal').textContent=texto;
-  document.getElementById('fundoModal').classList.remove('escondida');
-  document.getElementById('modal').classList.remove('escondida');
-}
-function fecharModal(){
-  document.getElementById('fundoModal').classList.add('escondida');
-  document.getElementById('modal').classList.add('escondida');
-}
-
-// === BOTÕES FUNCIONANDO ===
-document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('botaoEntrar').addEventListener('click', fazerLogin);
-  docume
+</script>
+</body>
+</html>
