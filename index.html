@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caça-Palavras Luan Santana</title>
+<title>Caça-Palavras Luan Santana 🏆</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
 body{background:#1a1a2e;color:#fff;padding:20px;min-height:100vh}
@@ -15,14 +15,15 @@ input{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;back
 button{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:linear-gradient(90deg,#f2c94c,#d32f2f);color:#000;font-weight:bold;cursor:pointer;margin:5px 0}
 button.secundario{background:linear-gradient(90deg,#444,#222);color:#fff}
 button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
-.erro{color:#ff6b6b;text-align:center;margin:10px 0}
+.erro{color:#ff6b6b;text-align:center;margin:10px 0;min-height:24px}
+.sucesso{color:#4caf50;text-align:center;margin:10px 0}
 .grade{display:grid;gap:5px;margin:20px 0}
-.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer}
+.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;user-select:none}
 .casa.selecionada{background:#f2c94c;color:#000}
 .casa.encontrada{background:#4caf50;color:#fff}
 .palavras{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
 .palavra{padding:10px 15px;background:rgba(255,255,255,0.08);border-radius:8px}
-.palavra.encontrada{opacity:0.4;text-decoration:line-through}
+.palavra.encontrada{opacity:0.4;text-decoration:line-through;background:rgba(76,175,80,0.2)}
 .placar{display:flex;justify-content:space-around;margin:20px 0}
 .caixa{text-align:center}
 .abas{display:flex;gap:8px;margin:20px 0}
@@ -30,6 +31,8 @@ button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
 .aba.ativa{background:#f2c94c;color:#000}
 .lista-ranking{display:flex;flex-direction:column;gap:8px;margin-top:15px}
 .item-ranking{display:flex;gap:10px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px}
+.item-ranking.voce{border:1px solid #f2c94c}
+.carregando{text-align:center;opacity:0.7;padding:20px}
 </style>
 </head>
 <body>
@@ -68,7 +71,7 @@ button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
 <div id="telaJogo" class="tela">
   <div class="abas">
     <div class="aba ativa" onclick="trocarAba('jogo')">Jogo</div>
-    <div class="aba" onclick="trocarAba('ranking')">Ranking</div>
+    <div class="aba" onclick="trocarAba('ranking')">🏆 Ranking Geral</div>
   </div>
 
   <div id="abaJogo">
@@ -78,7 +81,7 @@ button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
       <div class="caixa"><div>Palavras</div><div id="contagem">0/0</div></div>
     </div>
     <div class="grade" id="grade"></div>
-    <h3>Palavras:</h3>
+    <h3>Palavras a encontrar:</h3>
     <div class="palavras" id="listaPalavras"></div>
     <br>
     <button onclick="proximoNivel()">Próximo Nível</button>
@@ -86,86 +89,134 @@ button.extremo{background:linear-gradient(90deg,#9c27b0,#d32f2f);color:#fff}
   </div>
 
   <div id="abaRanking" class="tela">
-    <h2>🏆 Ranking</h2>
-    <div class="lista-ranking" id="ranking"></div>
-    <button class="secundario" onclick="trocarAba('jogo')">Voltar</button>
+    <h2>🏆 Ranking Geral</h2>
+    <div class="lista-ranking" id="ranking">
+      <div class="carregando">Carregando ranking...</div>
+    </div>
+    <button class="secundario" onclick="trocarAba('jogo')">Voltar ao Jogo</button>
   </div>
 </div>
 
 </div>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-database-compat.js"></script>
+
 <script>
-const bancoPalavras = ['LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA','BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','SAUDADE','SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL','ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS','RECORDACAO','DESTINO','CAMINHO','VIDA','ESPERANCA','FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO','CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO','CORAGEM','HONRA','TESOURO','JOIA','PEROLA','ALMA'];
+// === CONFIGURAÇÃO DO FIREBASE (JÁ PREENCHIDA!) ===
+const firebaseConfig = {
+  apiKey: "AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",
+  authDomain: "luan-coins.firebaseapp.com",
+  databaseURL: "https://luan-coins-default-rtdb.firebaseio.com",
+  projectId: "luan-coins",
+  storageBucket: "luan-coins.firebasestorage.app",
+  messagingSenderId: "379641584803",
+  appId: "1:379641584803:web:c1bfc0c0715e3347fef316",
+  measurementId: "G-KVC10MM12Y"
+};
+
+// INICIALIZA FIREBASE
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const refContas = db.ref('contas');
+const refRanking = db.ref('ranking');
+
+// PALAVRAS
+const bancoPalavras = [
+  'LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA',
+  'BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','PAIXAO','SAUDADE',
+  'SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL',
+  'ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS',
+  'RECORDACAO','PROMESSA','DESTINO','CAMINHO','VIDA','ESPERANCA',
+  'FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO',
+  'VERSOS','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO',
+  'CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO',
+  'CORAGEM','FIDELIDADE','HONRA','TESOURO','JOIA','PEROLA','ALMA'
+];
 const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 let usuarioAtual = null, modo = 'normal', nivel = 1, pontos = 0;
 let grade = [], selecionadas = [], encontradas = [], palavrasRodada = [];
+let dadosUsuario = null;
 
-function carregarContas(){
-  const d = localStorage.getItem('contas');
-  return d ? JSON.parse(d) : {};
-}
-function salvarContas(c){
-  localStorage.setItem('contas', JSON.stringify(c));
-}
-
+// TELAS
 function mostrarTela(nome){
   document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
   document.getElementById(nome).classList.add('ativa');
 }
-
 function mostrarLogin(){ mostrarTela('telaLogin'); }
 function mostrarCadastro(){ mostrarTela('telaCadastro'); }
 
-function entrar(){
+// LOGIN
+async function entrar(){
   const u = document.getElementById('usuario').value.trim();
   const s = document.getElementById('senha').value;
-  const contas = carregarContas();
   
   if(!u || !s){
     document.getElementById('erroLogin').textContent = 'Preencha tudo!'; return;
   }
-  if(!contas[u]){
-    document.getElementById('erroLogin').textContent = 'Usuário não existe. Cadastre-se!'; return;
+  
+  const snap = await refContas.child(u).once('value');
+  if(!snap.exists()){
+    document.getElementById('erroLogin').textContent = 'Usuário não existe! Cadastre-se.'; return;
   }
-  if(contas[u].senha !== s){
-    document.getElementById('erroLogin').textContent = 'Senha errada!'; return;
+  
+  const dados = snap.val();
+  if(dados.senha !== s){
+    document.getElementById('erroLogin').textContent = 'Senha incorreta!'; return;
   }
   
   usuarioAtual = u;
+  dadosUsuario = dados;
   document.getElementById('nomeUsuario').textContent = u;
   mostrarTela('telaInicio');
 }
 
-function cadastrar(){
+// CADASTRO
+async function cadastrar(){
   const u = document.getElementById('novoUsuario').value.trim();
   const s = document.getElementById('novaSenha').value;
   const c = document.getElementById('confirmaSenha').value;
-  const contas = carregarContas();
   
-  if(u.length<3){
+  if(u.length < 3){
     document.getElementById('erroCadastro').textContent = 'Mínimo 3 letras no usuário!'; return;
   }
-  if(s.length<4){
+  if(s.length < 4){
     document.getElementById('erroCadastro').textContent = 'Mínimo 4 caracteres na senha!'; return;
   }
   if(s !== c){
     document.getElementById('erroCadastro').textContent = 'Senhas diferentes!'; return;
   }
-  if(contas[u]){
+  
+  const snap = await refContas.child(u).once('value');
+  if(snap.exists()){
     document.getElementById('erroCadastro').textContent = 'Usuário já existe!'; return;
   }
   
-  contas[u] = { senha:s, nivelMax:1, pontosTotal:0 };
-  salvarContas(contas);
-  alert('Conta criada! Faça login!');
+  const novo = {
+    senha: s,
+    nivelMax: 1,
+    pontosTotal: 0,
+    ultimoAcesso: new Date().toLocaleString('pt-BR')
+  };
+  
+  await refContas.child(u).set(novo);
+  await refRanking.child(u).set({
+    nome: u,
+    pontos: 0,
+    nivel: 1
+  });
+  
+  alert('✅ Conta criada! Faça login!');
   mostrarLogin();
   document.getElementById('usuario').value = u;
 }
 
 function sair(){
-  if(confirm('Sair?')){
+  if(confirm('Sair da conta?')){
     usuarioAtual = null;
+    dadosUsuario = null;
     document.getElementById('usuario').value = '';
     document.getElementById('senha').value = '';
     mostrarLogin();
@@ -174,8 +225,7 @@ function sair(){
 
 function iniciarJogo(tipo){
   modo = tipo;
-  const contas = carregarContas();
-  nivel = contas[usuarioAtual].nivelMax;
+  nivel = dadosUsuario.nivelMax;
   pontos = 0;
   encontradas = [];
   mostrarTela('telaJogo');
@@ -184,45 +234,53 @@ function iniciarJogo(tipo){
 
 function configNivel(n){
   return {
-    tam: Math.min(10+Math.floor(n/2), modo==='extremo'?16:12),
-    qtd: Math.min(6+n, modo==='extremo'?20:12)
+    tam: Math.min(10 + Math.floor(n/2), modo==='extremo'?16:12),
+    qtd: Math.min(6 + n, modo==='extremo'?20:12)
   };
 }
 
 function iniciarRodada(){
   const cfg = configNivel(nivel);
   selecionadas = []; encontradas = [];
-  palavrasRodada = [...bancoPalavras].sort(()=>Math.random()-0.5).slice(0,cfg.qtd);
+  
+  palavrasRodada = [...bancoPalavras].sort(()=>Math.random()-0.5).slice(0, cfg.qtd);
   grade = Array(cfg.tam).fill().map(()=>Array(cfg.tam).fill(''));
   
-  palavrasRodada.forEach(palavra=>{
-    let ok=false,t=0;
-    while(!ok && t<150){
-      const dir=Math.random()>0.5;
-      const maxL=cfg.tam-(dir?0:palavra.length);
-      const maxC=cfg.tam-(dir?palavra.length:0);
-      if(maxL<=0||maxC<=0)break;
-      const l=Math.floor(Math.random()*maxL);
-      const c=Math.floor(Math.random()*maxC);
-      let livre=true;
-      for(let i=0;i<palavra.length;i++){
-        const nl=dir?l:l+i, nc=dir?c+i:c;
-        if(grade[nl][nc] && grade[nl][nc]!==palavra[i]){livre=false;break}
-      }
-      if(livre){
-        for(let i=0;i<palavra.length;i++){
-          const nl=dir?l:l+i, nc=dir?c+i:c;
-          grade[nl][nc]=palavra[i];
+  palavrasRodada.forEach(palavra => {
+    let colocada = false, tentativas = 0;
+    while(!colocada && tentativas < 300){
+      const dir = Math.random() > 0.5;
+      const maxL = cfg.tam - (dir ? 0 : palavra.length);
+      const maxC = cfg.tam - (dir ? palavra.length : 0);
+      if(maxL <= 0 || maxC <= 0) break;
+      
+      const l = Math.floor(Math.random() * maxL);
+      const c = Math.floor(Math.random() * maxC);
+      let livre = true;
+      
+      for(let i=0; i<palavra.length; i++){
+        const nl = dir ? l : l + i;
+        const nc = dir ? c + i : c;
+        if(grade[nl][nc] && grade[nl][nc] !== palavra[i]){
+          livre = false; break;
         }
-        ok=true;
       }
-      t++;
+      
+      if(livre){
+        for(let i=0; i<palavra.length; i++){
+          const nl = dir ? l : l + i;
+          const nc = dir ? c + i : c;
+          grade[nl][nc] = palavra[i];
+        }
+        colocada = true;
+      }
+      tentativas++;
     }
   });
   
-  for(let l=0;l<cfg.tam;l++)
-    for(let c=0;c<cfg.tam;c++)
-      if(!grade[l][c])grade[l][c]=letras[Math.floor(Math.random()*26)];
+  for(let l=0; l<cfg.tam; l++)
+    for(let c=0; c<cfg.tam; c++)
+      if(!grade[l][c]) grade[l][c] = letras[Math.floor(Math.random()*26)];
   
   document.getElementById('nivel').textContent = nivel;
   atualizarPlacar();
@@ -232,25 +290,25 @@ function iniciarRodada(){
 function renderizar(){
   const cfg = configNivel(nivel);
   const g = document.getElementById('grade');
-  g.style.gridTemplateColumns = `repeat(${cfg.tam},1fr)`;
+  g.style.gridTemplateColumns = `repeat(${cfg.tam}, 1fr)`;
   g.innerHTML = '';
   
-  for(let l=0;l<cfg.tam;l++){
-    for(let c=0;c<cfg.tam;c++){
+  for(let l=0; l<cfg.tam; l++){
+    for(let c=0; c<cfg.tam; c++){
       const d = document.createElement('div');
       d.className = 'casa';
       d.textContent = grade[l][c];
-      d.onclick = ()=>clicar(l,c);
-      if(selecionadas.some(p=>p.l===l&&p.c===c))d.classList.add('selecionada');
-      if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))d.classList.add('encontrada');
+      d.onclick = () => clicar(l, c);
+      if(selecionadas.some(p=>p.l===l && p.c===c)) d.classList.add('selecionada');
+      if(encontradas.some(e=>e.linhas.has(l) && e.colunas.has(c))) d.classList.add('encontrada');
       g.appendChild(d);
     }
   }
   
   const lista = document.getElementById('listaPalavras');
   lista.innerHTML = '';
-  palavrasRodada.forEach(p=>{
-    const d=document.createElement('div');
+  palavrasRodada.forEach(p => {
+    const d = document.createElement('div');
     d.className = 'palavra' + (encontradas.some(e=>e.texto===p)?' encontrada':'');
     d.textContent = p;
     lista.appendChild(d);
@@ -262,46 +320,63 @@ function atualizarPlacar(){
   document.getElementById('contagem').textContent = `${encontradas.length}/${palavrasRodada.length}`;
 }
 
-function clicar(l,c){
-  if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))return;
-  const i = selecionadas.findIndex(p=>p.l===l&&p.c===c);
-  if(i>=0){selecionadas.splice(i);renderizar();return}
-  selecionadas.push({l,c});
+function clicar(l, c){
+  if(encontradas.some(e=>e.linhas.has(l) && e.colunas.has(c))) return;
+  const i = selecionadas.findIndex(p=>p.l===l && p.c===c);
+  if(i >= 0){ selecionadas.splice(i); renderizar(); return; }
+  selecionadas.push({l, c});
   
-  if(selecionadas.length>=2){
+  if(selecionadas.length >= 2){
     const lin = new Set(selecionadas.map(p=>p.l));
     const col = new Set(selecionadas.map(p=>p.c));
     let txt = '';
-    if(lin.size===1){
-      selecionadas.sort((a,b)=>a.c-b.c);
-      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
-    }else if(col.size===1){
-      selecionadas.sort((a,b)=>a.l-b.l);
-      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
+    
+    if(lin.size === 1){
+      selecionadas.sort((a,b) => a.c - b.c);
+      txt = selecionadas.map(p => grade[p.l][p.c]).join('');
+    } else if(col.size === 1){
+      selecionadas.sort((a,b) => a.l - b.l);
+      txt = selecionadas.map(p => grade[p.l][p.c]).join('');
     }
+    
     verificar(txt) || verificar(txt.split('').reverse().join(''));
   }
   renderizar();
 }
 
-function verificar(palavra){
+async function verificar(palavra){
   if(palavrasRodada.includes(palavra) && !encontradas.some(e=>e.texto===palavra)){
     encontradas.push({
-      texto:palavra,
-      linhas:new Set(selecionadas.map(p=>p.l)),
-      colunas:new Set(selecionadas.map(p=>p.c))
+      texto: palavra,
+      linhas: new Set(selecionadas.map(p=>p.l)),
+      colunas: new Set(selecionadas.map(p=>p.c))
     });
-    const ganho = palavra.length * (modo==='extremo'?20:10);
+    
+    const ganho = palavra.length * (modo==='extremo' ? 20 : 10);
     pontos += ganho;
     selecionadas = [];
     atualizarPlacar();
     
     if(encontradas.length === palavrasRodada.length){
-      const contas = carregarContas();
-      contas[usuarioAtual].nivelMax = Math.max(contas[usuarioAtual].nivelMax, nivel+1);
-      contas[usuarioAtual].pontosTotal += pontos;
-      salvarContas(contas);
-      alert(`🎉 Nível ${nivel} completo!\nPontos: ${pontos}`);
+      // SALVA NA NUVEM
+      const novoNivelMax = Math.max(dadosUsuario.nivelMax, nivel + 1);
+      const novoTotal = dadosUsuario.pontosTotal + pontos;
+      
+      await refContas.child(usuarioAtual).update({
+        nivelMax: novoNivelMax,
+        pontosTotal: novoTotal
+      });
+      
+      await refRanking.child(usuarioAtual).update({
+        nome: usuarioAtual,
+        pontos: novoTotal,
+        nivel: novoNivelMax
+      });
+      
+      dadosUsuario.nivelMax = novoNivelMax;
+      dadosUsuario.pontosTotal = novoTotal;
+      
+      alert(`🎉 Nível ${nivel} completo!\nPontos: ${pontos}\nTotal: ${novoTotal}`);
     }
     return true;
   }
@@ -309,32 +384,50 @@ function verificar(palavra){
 }
 
 function proximoNivel(){
-  if(encontradas.length < palavrasRodada.length && !confirm('Ainda há palavras! Tem certeza?'))return;
-  nivel++; pontos=0; iniciarRodada();
+  if(encontradas.length < palavrasRodada.length && !confirm('Ainda há palavras! Continuar?')) return;
+  nivel++; pontos = 0; iniciarRodada();
 }
 
 function voltarInicio(){
-  if(confirm('Voltar ao menu?'))mostrarTela('telaInicio');
+  if(confirm('Voltar ao menu?')) mostrarTela('telaInicio');
 }
 
 function trocarAba(nome){
   document.querySelectorAll('.aba').forEach(a=>a.classList.remove('ativa'));
   event.target.classList.add('ativa');
-  document.getElementById('abaJogo').style.display = nome==='jogo'?'block':'none';
-  document.getElementById('abaRanking').style.display = nome==='ranking'?'block':'none';
-  if(nome==='ranking')carregarRanking();
+  
+  document.getElementById('abaJogo').style.display = nome==='jogo' ? 'block' : 'none';
+  document.getElementById('abaRanking').style.display = nome==='ranking' ? 'block' : 'none';
+  
+  if(nome === 'ranking') carregarRanking();
 }
 
-function carregarRanking(){
-  const contas = carregarContas();
-  const rank = Object.entries(contas).map(([n,d])=>({nome:n,pontos:d.pontosTotal})).sort((a,b)=>b.pontos-a.pontos).slice(0,10);
+async function carregarRanking(){
   const el = document.getElementById('ranking');
+  el.innerHTML = '<div class="carregando">Carregando...</div>';
+  
+  const snap = await refRanking.orderByChild('pontos').once('value');
+  if(!snap.exists()){
+    el.innerHTML = '<p style="text-align:center;opacity:0.7">Jogue para aparecer no ranking! 🏆</p>';
+    return;
+  }
+  
+  const itens = [];
+  snap.forEach(child => {
+    itens.push({nome: child.key, ...child.val()});
+  });
+  
+  itens.sort((a,b) => b.pontos - a.pontos);
   el.innerHTML = '';
-  if(!rank.length){el.innerHTML='<p style="text-align:center">Jogue para aparecer!</p>';return;}
-  rank.forEach((item,idx)=>{
-    const d=document.createElement('div');
-    d.className='item-ranking';
-    d.innerHTML = `<div>${idx+1}º</div><div>${item.nome}</div><div>${item.pontos} pts</div>`;
+  
+  itens.slice(0, 15).forEach((item, idx) => {
+    const d = document.createElement('div');
+    d.className = `item-ranking ${item.nome === usuarioAtual ? 'voce' : ''}`;
+    d.innerHTML = `
+      <div>${idx+1}º</div>
+      <div><strong>${item.nome}</strong></div>
+      <div>${item.pontos} pts • N${item.nivel}</div>
+    `;
     el.appendChild(d);
   });
 }
