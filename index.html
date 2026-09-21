@@ -48,28 +48,25 @@ button:disabled{opacity:0.4;cursor:not-allowed}
 <body>
 <div class="container">
 
-<!-- TELA LOGIN -->
+<!-- TELA LOGIN — SÓ USUÁRIO, SEM SENHA -->
 <div id="telaLogin" class="tela ativa">
   <h1>🎸 Luan Coins 💰</h1>
-  <input type="text" id="usuario" placeholder="Seu nome de usuário">
-  <input type="password" id="senha" placeholder="Sua senha">
+  <input type="text" id="usuario" placeholder="Digite seu nome de usuário">
   <div id="erroLogin" class="erro"></div>
   <button class="primario" id="btnEntrar">🎵 Entrar</button>
   <button class="secundario" id="btnCadLink">📝 Criar Conta</button>
 </div>
 
-<!-- TELA CADASTRO -->
+<!-- TELA CADASTRO — SÓ NOME, SEM SENHA -->
 <div id="telaCadastro" class="tela">
-  <h1>📝 Nova Conta</h1>
+  <h1>📝 Criar Conta</h1>
   <input type="text" id="novoUsuario" placeholder="Escolha seu nome">
-  <input type="password" id="novaSenha" placeholder="Crie uma senha (mín. 4 caracteres)">
-  <input type="password" id="confirmaSenha" placeholder="Repita a senha">
   <div id="erroCadastro" class="erro"></div>
-  <button class="primario" id="btnCadastrar">✅ Cadastrar</button>
+  <button class="primario" id="btnCadastrar">✅ Criar Conta</button>
   <button class="secundario" id="btnVoltarLogin">← Voltar</button>
 </div>
 
-<!-- TELA INÍCIO — SEM CONVIDAR AMIGO -->
+<!-- TELA INÍCIO -->
 <div id="telaInicio" class="tela">
   <h1>Bem-vindo, <span id="nomeUsuario"></span>!</h1>
   <div class="moedas" id="saldoMoedas">💰 0 Luan Coins</div>
@@ -229,31 +226,30 @@ function atualizarTelaInicio(){
 
 async function entrar(){
   const u = document.getElementById('usuario').value.trim();
-  const s = document.getElementById('senha').value;
   const erro = document.getElementById('erroLogin');
-  if(!u||!s){erro.textContent='Preencha usuário e senha!';return;}
+  if(!u){erro.textContent='Digite seu nome!';return;}
   try {
     const snap = await refContas.child(u).once('value');
-    if(!snap.exists()){erro.textContent='Usuário não encontrado! Crie uma conta.';return;}
-    const d = snap.val();
-    if(d.senha !== s){erro.textContent='Senha incorreta!';return;}
-    usuarioAtual = u; dadosUsuario = d;
+    if(!snap.exists()){
+      erro.textContent='Usuário não existe! Crie conta primeiro.';
+      return;
+    }
+    usuarioAtual = u; dadosUsuario = snap.val();
     erro.textContent = ''; mostrarTela('telaInicio');
   } catch (e) {erro.textContent='Erro: ' + e.message;}
 }
 
 async function cadastrar(){
   const u = document.getElementById('novoUsuario').value.trim();
-  const s = document.getElementById('novaSenha').value;
-  const c = document.getElementById('confirmaSenha').value;
   const erro = document.getElementById('erroCadastro');
   if(u.length<3){erro.textContent='Mínimo 3 letras no nome!';return;}
-  if(s.length<4){erro.textContent='Mínimo 4 caracteres na senha!';return;}
-  if(s!==c){erro.textContent='Senhas diferentes!';return;}
   try {
-    if((await refContas.child(u).once('value')).exists()){erro.textContent='Nome já existe!';return;}
+    if((await refContas.child(u).once('value')).exists()){
+      erro.textContent='Esse nome já existe! Entre direto!';
+      return;
+    }
     const novo = {
-      senha: s, nivelMax: 1, nivelRanqueada: 1,
+      nivelMax: 1, nivelRanqueada: 1,
       pontosTotal: 0, moedas: 50
     };
     await refContas.child(u).set(novo);
@@ -261,7 +257,7 @@ async function cadastrar(){
       nome: u, pontos: 0, nivel: 1,
       nivelRanqueada: 1, patente: PATENTES[0].nome
     });
-    alert('✅ Conta criada! Você começa com 50 💰!');
+    alert('✅ Conta criada! Bem-vindo(a), ' + u + '!');
     mostrarTela('telaLogin');
     document.getElementById('usuario').value = u;
   } catch (e) {erro.textContent='Erro: ' + e.message;}
@@ -496,4 +492,14 @@ function trocarAba(nome){
   document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
   event.target.classList.add('ativa');
   document.getElementById('abaJogo').classList.toggle('oculta', nome !== 'jogo');
-  document.getElementById(
+  document.getElementById('abaLoja').classList.toggle('oculta', nome !== 'lojaJogo');
+  document.getElementById('abaRankingJogo').classList.toggle('oculta', nome !== 'rankingJogo');
+  if(nome === 'rankingJogo') carregarRankingJogo();
+}
+
+async function carregarRankingJogo(){
+  const el = document.getElementById('rankingJogo');
+  el.innerHTML = '<p style="text-align:center">Carregando...</p>';
+  const snap = await refRanking.orderByChild('pontos').limitToFirst(10).once('value');
+  if(!snap.exists()){
+    el.innerHTML = '<p style="text-align:center;opacity:0.7">J
