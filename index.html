@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luan Coins 💰 — Caça-Palavras</title>
+<title>Luan Coins 💰</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
 body{background:#1a1a2e;color:#fff;min-height:100vh;padding:20px}
 .container{max-width:460px;margin:0 auto}
-h1{text-align:center;color:#ffd700;margin-bottom:20px}
+h1{text-align:center;color:#ffd700;margin-bottom:30px;font-size:28px}
 .tela{display:none}
 .tela.ativa{display:block}
 input{width:100%;padding:15px;font-size:16px;border:none;border-radius:12px;background:#2a2a4e;color:#fff;margin-bottom:12px;border:1px solid #444}
-button{width:100%;padding:15px;font-size:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin:5px 0}
+button{width:100%;padding:15px;font-size:16px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin:8px 0;transition:0.2s}
+button:active{transform:scale(0.98)}
 button.primario{background:#ffd700;color:#000}
 button.secundario{background:#374;color:#fff}
 button.ranqueada{background:#9c27b0;color:#fff}
@@ -51,8 +52,8 @@ button:disabled{opacity:0.4;cursor:not-allowed}
   <input type="text" id="usuario" placeholder="Seu nome de usuário">
   <input type="password" id="senha" placeholder="Sua senha">
   <div id="erroLogin" class="erro"></div>
-  <button class="primario" onclick="entrar()">🎵 Entrar</button>
-  <button class="secundario" onclick="mostrarCadastro()">📝 Criar Conta</button>
+  <button class="primario" id="btnEntrar">🎵 Entrar</button>
+  <button class="secundario" id="btnCadLink">📝 Criar Conta</button>
 </div>
 
 <div id="telaCadastro" class="tela">
@@ -61,27 +62,27 @@ button:disabled{opacity:0.4;cursor:not-allowed}
   <input type="password" id="novaSenha" placeholder="Crie uma senha">
   <input type="password" id="confirmaSenha" placeholder="Repita a senha">
   <div id="erroCadastro" class="erro"></div>
-  <button class="primario" onclick="cadastrar()">✅ Cadastrar</button>
-  <button class="secundario" onclick="mostrarLogin()">← Voltar</button>
+  <button class="primario" id="btnCadastrar">✅ Cadastrar</button>
+  <button class="secundario" id="btnVoltarLogin">← Voltar</button>
 </div>
 
 <div id="telaInicio" class="tela">
   <h1>Bem-vindo, <span id="nomeUsuario"></span>!</h1>
   <div class="moedas" id="saldoMoedas">💰 0 Luan Coins</div>
   <div class="patente" id="patenteUsuario"></div>
-  <button class="primario" onclick="iniciarJogo('normal')">🎮 Modo Normal</button>
-  <button class="ranqueada" onclick="iniciarJogo('ranqueada')">🏆 Modo Ranqueada</button>
-  <button class="loja" onclick="mostrarTela('telaLoja')">🛒 Loja de Dicas</button>
-  <button class="secundario" onclick="mostrarTela('telaDesafio')">⚔️ Desafiar Amigo</button>
-  <button class="secundario" onclick="mostrarTela('telaRanking')">📊 Ranking</button>
-  <button class="secundario" onclick="sair()">🚪 Sair</button>
+  <button class="primario" id="btnNormal">🎮 Modo Normal</button>
+  <button class="ranqueada" id="btnRanqueada">🏆 Modo Ranqueada</button>
+  <button class="loja" id="btnLoja">🛒 Loja de Dicas</button>
+  <button class="secundario" id="btnDesafio">⚔️ Desafiar Amigo</button>
+  <button class="secundario" id="btnRanking">📊 Ranking</button>
+  <button class="secundario" id="btnSair">🚪 Sair</button>
 </div>
 
 <div id="telaJogo" class="tela">
   <div class="abas">
-    <div class="aba ativa" onclick="trocarAba('jogo')">Jogo</div>
-    <div class="aba" onclick="trocarAba('lojaJogo')">🛒</div>
-    <div class="aba" onclick="trocarAba('rankingJogo')">🏆</div>
+    <div class="aba ativa" data-aba="jogo">Jogo</div>
+    <div class="aba" data-aba="lojaJogo">🛒</div>
+    <div class="aba" data-aba="rankingJogo">🏆</div>
   </div>
   <div id="abaJogo">
     <div class="moedas" id="saldoJogo"></div>
@@ -91,13 +92,13 @@ button:disabled{opacity:0.4;cursor:not-allowed}
       <div class="caixa"><div>Palavras</div><div id="contagem">0/0</div></div>
     </div>
     <div id="avisoModo" style="text-align:center;margin:10px 0"></div>
-    <button id="botaoDica" class="loja" onclick="comprarDica()">💡 Dica — 15 💰</button>
+    <button id="botaoDica" class="loja">💡 Dica — 15 💰</button>
     <div class="grade" id="grade"></div>
     <h3>Palavras a encontrar:</h3>
     <div class="palavras" id="listaPalavras"></div>
     <br>
-    <button onclick="proximoNivel()">Próximo Nível</button>
-    <button class="secundario" onclick="voltarInicio()">← Voltar ao Início</button>
+    <button id="btnProximo">Próximo Nível</button>
+    <button class="secundario" id="btnVoltarInicio">← Voltar ao Início</button>
   </div>
   <div id="abaLoja" class="oculta">
     <h2>🛒 Loja Rápida</h2>
@@ -106,14 +107,14 @@ button:disabled{opacity:0.4;cursor:not-allowed}
       <h3>💡 Dica</h3>
       <p>Revela a primeira letra de uma palavra</p>
       <p><strong>Preço: 15 💰</strong></p>
-      <button class="loja" onclick="comprarDica()">Comprar</button>
+      <button class="loja" id="btnDicaRapida">Comprar</button>
     </div>
-    <button class="secundario" onclick="trocarAba('jogo')">← Voltar</button>
+    <button class="secundario" data-aba="jogo">← Voltar</button>
   </div>
   <div id="abaRankingJogo" class="oculta">
     <h2>🏆 Ranking</h2>
     <div class="lista" id="rankingJogo"></div>
-    <button class="secundario" onclick="trocarAba('jogo')">← Voltar</button>
+    <button class="secundario" data-aba="jogo">← Voltar</button>
   </div>
 </div>
 
@@ -124,30 +125,30 @@ button:disabled{opacity:0.4;cursor:not-allowed}
     <h3>💡 Dica</h3>
     <p>Mostra a primeira letra de uma palavra escondida</p>
     <p><strong>Preço: 15 Luan Coins 💰</strong></p>
-    <button class="loja" onclick="comprarDicaMenu()">Comprar Dica</button>
+    <button class="loja" id="btnDicaMenu">Comprar Dica</button>
   </div>
   <p style="text-align:center;opacity:0.7;margin-top:20px">Conclua níveis para ganhar +20 moedas! 💰</p>
-  <button class="secundario" onclick="mostrarTela('telaInicio')">← Voltar</button>
+  <button class="secundario" data-tela="telaInicio">← Voltar</button>
 </div>
 
 <div id="telaDesafio" class="tela">
   <h1>⚔️ Desafiar Amigo</h1>
   <input type="text" id="nomeDesafio" placeholder="Nome do amigo para desafiar">
-  <button class="ranqueada" onclick="enviarDesafio()">📩 Enviar Convite Ranqueado</button>
+  <button class="ranqueada" id="btnEnviarDesafio">📩 Enviar Convite Ranqueado</button>
   <div id="resDesafio" class="sucesso"></div>
   <br>
   <h3>📩 Convites Recebidos</h3>
   <div class="lista" id="listaConvites">
     <p style="text-align:center;opacity:0.7">Carregando...</p>
   </div>
-  <button class="secundario" onclick="mostrarTela('telaInicio')">← Voltar</button>
+  <button class="secundario" data-tela="telaInicio">← Voltar</button>
 </div>
 
 <div id="telaRanking" class="tela">
   <h1>🏆 Ranking & Patentes</h1>
   <p style="text-align:center;opacity:0.7;margin-bottom:15px">Patentes sobem apenas no <strong>Modo Ranqueada</strong></p>
   <div class="lista" id="rankingGeral"></div>
-  <button class="secundario" onclick="mostrarTela('telaInicio')">← Voltar</button>
+  <button class="secundario" data-tela="telaInicio">← Voltar</button>
 </div>
 
 </div>
@@ -176,8 +177,7 @@ const firebaseConfig = {
   projectId: "luan-coins",
   storageBucket: "luan-coins.firebasestorage.app",
   messagingSenderId: "379641584803",
-  appId: "1:379641584803:web:c1bfc0c0715e3347fef316",
-  measurementId: "G-KVC10MM12Y"
+  appId: "1:379641584803:web:c1bfc0c0715e3347fef316"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -250,13 +250,11 @@ async function cadastrar(){
     const novo = {senha:s,nivelMax:1,nivelRanqueada:1,pontosTotal:0,moedas:50,ultimoAcesso:new Date().toLocaleString('pt-BR')};
     await refContas.child(u).set(novo);
     await refRanking.child(u).set({nome:u,pontos:0,nivel:1,nivelRanqueada:1,patente:PATENTES[0].nome});
-    alert('✅ Conta criada! Começa com 50 💰!'); mostrarLogin(); document.getElementById('usuario').value=u;
+    alert('✅ Conta criada! Começa com 50 💰!'); mostrarTela('telaLogin'); document.getElementById('usuario').value=u;
   } catch (e) {erro.textContent='Erro: ' + e.message;}
 }
 
-function mostrarLogin(){document.getElementById('erroLogin').textContent='';mostrarTela('telaLogin');}
-function mostrarCadastro(){document.getElementById('erroCadastro').textContent='';mostrarTela('telaCadastro');}
-function sair(){if(confirm('Sair da conta?')){usuarioAtual=null;dadosUsuario=null;mostrarLogin();}}
+function sair(){if(confirm('Sair da conta?')){usuarioAtual=null;dadosUsuario=null;mostrarTela('telaLogin');}}
 
 function iniciarJogo(tipo){
   modo=tipo; nivel=dadosUsuario.nivelMax; pontos=0; encontradas=[]; palavrasComPosicao=[];
@@ -412,7 +410,7 @@ function voltarInicio(){
 
 function trocarAba(nome){
   document.querySelectorAll('.aba').forEach(a=>a.classList.remove('ativa'));
-  event.target.classList.add('ativa');
+  document.querySelector(`[data-aba="${nome}"]`).classList.add('ativa');
   document.getElementById('abaJogo').classList.toggle('oculta',nome!=='jogo');
   document.getElementById('abaLoja').classList.toggle('oculta',nome!=='lojaJogo');
   document.getElementById('abaRankingJogo').classList.toggle('oculta',nome!=='rankingJogo');
@@ -422,4 +420,10 @@ function trocarAba(nome){
 async function carregarRankingJogo(){
   const el=document.getElementById('rankingJogo'); el.innerHTML='<p style="text-align:center">Carregando...</p>';
   const snap=await refRanking.orderByChild('pontos').once('value');
-  if(!snap.exists()){el.innerHTML='<p style="text-align:center">Jogu
+  if(!snap.exists()){el.innerHTML='<p style="text-align:center">Jogue para aparecer!</p>';return;}
+  const itens=[]; snap.forEach(c=>itens.push({nome:c.key,...c.val()}));
+  itens.sort((a,b)=>b.pontos-a.pontos); el.innerHTML='';
+  itens.slice(0,10).forEach((item,idx)=>{
+    const patente=PATENTES.reduce((a,b)=>(item.nivelRanqueada||1)>=b.minNivelRanqueada?b:a,PATENTES[0]);
+    const d=document.createElement('div'); d.className=`item ${item.nome===usuarioAtual?'voce':''}`;
+    d.innerHTML=
