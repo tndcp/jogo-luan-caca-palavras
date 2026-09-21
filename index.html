@@ -10,7 +10,6 @@
 body{background:linear-gradient(135deg,var(--fundo),var(--fundo2));min-height:100vh;color:#fff;padding:15px}
 .container{max-width:720px;margin:0 auto}
 
-/* CABEÇALHO */
 .cabecalho{display:flex;justify-content:space-between;align-items:center;padding:15px;background:rgba(0,0,0,0.5);border-radius:12px;margin-bottom:15px;border:1px solid rgba(242,201,76,0.2)}
 .perfil{display:flex;align-items:center;gap:10px}
 .avatar{width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,var(--dourado),var(--vermelho));display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px}
@@ -18,27 +17,21 @@ body{background:linear-gradient(135deg,var(--fundo),var(--fundo2));min-height:10
 .info-nivel{font-size:12px;opacity:0.7}
 .moedas{display:flex;align-items:center;gap:5px;background:rgba(242,201,76,0.15);padding:8px 15px;border-radius:20px}
 .valor-moeda{font-weight:bold;color:var(--dourado);font-size:18px}
-.dificuldade-badge{background:linear-gradient(90deg,var(--roxo),var(--vermelho));padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold}
 
-/* TELAS */
 .tela{background:rgba(0,0,0,0.4);border-radius:16px;padding:25px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.05)}
 .escondida{display:none}
 h1{text-align:center;color:var(--dourado);margin-bottom:20px;font-size:24px}
-h2{color:var(--dourado);margin-bottom:15px;font-size:18px}
 
-/* ENTRADA */
 input{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;margin-bottom:15px}
-button{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--dourado),var(--vermelho));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s ease}
+button{width:100%;padding:15px;font-size:18px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--dourado),var(--vermelho));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s ease;margin:5px 0}
 button:active{transform:scale(0.97)}
-.botao-secundario{background:linear-gradient(90deg,#444,#222);color:#fff;margin-top:10px}
+.botao-secundario{background:linear-gradient(90deg,#444,#222);color:#fff}
 .botao-competitivo{background:linear-gradient(90deg,var(--roxo),var(--vermelho));color:#fff}
 
-/* ABAS DENTRO DO JOGO */
 .abas{display:flex;gap:8px;margin-bottom:20px}
-.aba{flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.05);text-align:center;cursor:pointer;font-weight:bold;font-size:14px;transition:all 0.2s ease}
+.aba{flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.05);text-align:center;cursor:pointer;font-weight:bold;font-size:14px}
 .aba.ativa{background:var(--dourado);color:#000}
 
-/* PLACAR */
 .placar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
 .caixa-pontos{background:rgba(242,201,76,0.1);padding:12px;border-radius:10px;text-align:center}
 .titulo-placar{font-size:12px;opacity:0.7;margin-bottom:3px}
@@ -46,19 +39,15 @@ button:active{transform:scale(0.97)}
 .caixa-nivel{background:rgba(156,39,176,0.1);border:1px solid rgba(156,39,176,0.3)}
 .texto-nivel{color:var(--roxo)}
 
-/* GRADE DINÂMICA */
-.grade{display:grid;gap:4px;margin:20px auto;max-width:100%}
-.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;user-select:none;transition:all 0.2s ease}
-.casa.selecionada{background:var(--dourado);color:#000;transform:scale(1.05)}
+.grade{display:grid;gap:4px;margin:20px auto}
+.casa{aspect-ratio:1;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;user-select:none}
+.casa.selecionada{background:var(--dourado);color:#000}
 .casa.encontrada{background:var(--verde);color:#fff}
-.casa.destacada{box-shadow:0 0 8px var(--dourado)}
 
-/* PALAVRAS */
 .palavras{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
-.palavra{padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:8px;font-weight:bold;font-size:14px}
+.palavra{padding:8px 12px;background:rgba(255,255,255,0.08);border-radius:8px;font-weight:bold}
 .palavra.encontrada{opacity:0.4;text-decoration:line-through;background:rgba(76,175,80,0.2)}
 
-/* RANKING */
 .lista-ranking{display:flex;flex-direction:column;gap:8px;margin-top:15px}
 .item-ranking{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px}
 .posicao{width:30px;text-align:center;font-weight:bold}
@@ -69,25 +58,21 @@ button:active{transform:scale(0.97)}
 .pontos-rank{color:var(--dourado);font-weight:bold}
 .voce{border:1px solid var(--dourado)}
 
-/* MODAL / FIM DE NÍVEL */
-.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a2e;border:2px solid var(--dourado);border-radius:16px;padding:30px;max-width:90%;width:400px;z-index:100;text-align:center;box-shadow:0 0 30px rgba(242,201,76,0.3)}
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a2e;border:2px solid var(--dourado);border-radius:16px;padding:30px;max-width:90%;width:400px;z-index:100;text-align:center}
 .fundo-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99}
-.escondido{display:none}
 </style>
 </head>
 <body>
 <div class="container">
 
-<!-- TELA DE ENTRADA -->
 <div id="telaEntrada" class="tela">
   <h1>🎸 Caça-Palavras<br>Luan Santana</h1>
-  <input type="text" id="nomeJogador" placeholder="Digite seu nome" autocomplete="off">
+  <input type="text" id="nomeJogador" placeholder="Digite seu nome">
   <button onclick="iniciarJogo('normal')">🎮 Modo Normal</button>
   <button class="botao-competitivo" onclick="iniciarJogo('extremo')">🔥 Modo Competitivo EXTREMO</button>
   <button class="botao-secundario" onclick="carregarEstatisticas()">📊 Minhas Estatísticas</button>
 </div>
 
-<!-- TELA PRINCIPAL DO JOGO -->
 <div id="telaJogo" class="escondida">
   <div class="cabecalho">
     <div class="perfil">
@@ -103,14 +88,12 @@ button:active{transform:scale(0.97)}
     </div>
   </div>
 
-  <!-- ABAS DENTRO DO JOGO -->
   <div class="abas">
     <div class="aba ativa" onclick="trocarAba('jogo')">🎮 Jogo</div>
     <div class="aba" onclick="trocarAba('ranking')">🏆 Ranking</div>
     <div class="aba" onclick="trocarAba('stats')">📊 Stats</div>
   </div>
 
-  <!-- ABA JOGO -->
   <div id="abaJogo">
     <div class="placar">
       <div class="caixa-pontos">
@@ -126,41 +109,33 @@ button:active{transform:scale(0.97)}
         <div class="valor-placar"><span id="qtdEncontradas">0</span>/<span id="totalPalavras">0</span></div>
       </div>
     </div>
-
     <div class="grade" id="grade"></div>
-
     <h3>Palavras a encontrar:</h3>
     <div class="palavras" id="listaPalavras"></div>
-
     <br>
     <button onclick="proximoNivel()">➡️ Próximo Nível</button>
     <button class="botao-secundario" onclick="salvarESair()">💾 Salvar & Sair</button>
   </div>
 
-  <!-- ABA RANKING -->
   <div id="abaRanking" class="escondida">
-    <h2>🏆 Ranking Geral</h2>
+    <h2 style="color:var(--dourado);margin-bottom:15px">🏆 Ranking Geral</h2>
     <div class="lista-ranking" id="listaRanking"></div>
     <button class="botao-secundario" onclick="trocarAba('jogo')">⬅️ Voltar ao Jogo</button>
   </div>
 
-  <!-- ABA ESTATÍSTICAS -->
   <div id="abaStats" class="escondida">
-    <h2>📊 Suas Estatísticas</h2>
-    <div class="tela" style="background:transparent;border:none;padding:0">
-      <p style="margin:10px 0"><strong>Nível mais alto:</strong> <span id="statNivel">1</span></p>
-      <p style="margin:10px 0"><strong>Pontuação total:</strong> <span id="statPontos">0</span></p>
-      <p style="margin:10px 0"><strong>Moedas acumuladas:</strong> <span id="statMoedas">0</span> 💰</p>
-      <p style="margin:10px 0"><strong>Palavras encontradas:</strong> <span id="statPalavras">0</span></p>
-      <p style="margin:10px 0"><strong>Maior sequência:</strong> <span id="statSequencia">0</span> 🔥</p>
-    </div>
+    <h2 style="color:var(--dourado);margin-bottom:15px">📊 Suas Estatísticas</h2>
+    <p style="margin:10px 0"><strong>Nível mais alto:</strong> <span id="statNivel">1</span></p>
+    <p style="margin:10px 0"><strong>Pontuação total:</strong> <span id="statPontos">0</span></p>
+    <p style="margin:10px 0"><strong>Moedas acumuladas:</strong> <span id="statMoedas">0</span> 💰</p>
+    <p style="margin:10px 0"><strong>Palavras encontradas:</strong> <span id="statPalavras">0</span></p>
+    <p style="margin:10px 0"><strong>Maior sequência:</strong> <span id="statSequencia">0</span> 🔥</p>
     <button class="botao-secundario" onclick="trocarAba('jogo')">⬅️ Voltar ao Jogo</button>
   </div>
 </div>
 
-<!-- MODAL FIM DE NÍVEL -->
-<div id="fundoModal" class="fundo-modal escondido"></div>
-<div id="modal" class="modal escondido">
+<div id="fundoModal" class="fundo-modal escondida"></div>
+<div id="modal" class="modal escondida">
   <h2 id="tituloModal">🎉 Nível Completo!</h2>
   <p id="textoModal" style="margin:15px 0"></p>
   <button onclick="fecharModal()">Continuar</button>
@@ -169,159 +144,92 @@ button:active{transform:scale(0.97)}
 </div>
 
 <script>
-// BANCO DE PALAVRAS — INFINITAMENTE EXPANDÍVEL
 const bancoPalavras = [
-  'LUAN', 'SANTANA', 'SERESTA', 'FORRO', 'AMOR', 'CANCAO', 'VIOLAO', 'FESTA',
-  'BRASIL', 'ESTRELA', 'CANTOR', 'MUSICA', 'FANDANGO', 'XOTE', 'BAIAO',
-  'SERTANEJO', 'CERTANEJO', 'CORACAO', 'PAIXAO', 'SAUDADE', 'LAGRIMA',
-  'SONHO', 'ALEGRIA', 'BEIJO', 'ABRACO', 'FAMILIA', 'AMIGOS', 'HINO',
-  'NOITE', 'LUA', 'SOL', 'CHUVA', 'ESTRADA', 'HORIZONTE', 'CIDADE', 'ROCA',
-  'CAVALO', 'CAMPO', 'FLORES', 'JARDIM', 'CANTO', 'VOZ', 'PALCO', 'LUZES',
-  'FAS', 'RECORDACAO', 'PROMESSA', 'DESTINO', 'CAMINHO', 'VIDA', 'ESPERANCA',
-  'FELICIDADE', 'TARDE', 'MANHA', 'INVERNO', 'VERAO', 'OUTONO', 'PRIMAVERA',
-  'CORDA', 'ACORDEON', 'BANDOLIM', 'CAIXA', 'TAMBOR', 'SANFONA', 'PIANO',
-  'GUITARRA', 'BAIXO', 'BATERIA', 'HARMONIA', 'MELODIA', 'RITMO', 'TOM',
-  'VERSOS', 'ESTROFE', 'REFRAO', 'SOLO', 'DUETO', 'GRUPO', 'BANDA',
-  'HISTORIA', 'LEGENDA', 'REALEZA', 'REI', 'RAINHA', 'PRINCEZA', 'HEROI',
-  'GLORIA', 'VITORIA', 'CAMPEAO', 'MEDALHA', 'TROFEU', 'OURO', 'PRATA',
-  'BRONZE', 'FOGO', 'AGUA', 'TERRA', 'AR', 'CEU', 'MAR', 'RIO', 'SERRA',
-  'PLANTAO', 'RAIZ', 'FOLHA', 'FLOR', 'FRUTO', 'SEMENTE', 'NASCER', 'CRESCER',
-  'VIVER', 'AMAR', 'CANTAR', 'DANCAR', 'SORRIR', 'VIBRAR', 'BRILHAR',
-  'ENCANTO', 'MAGIA', 'FE', 'GRAÇA', 'BENCAO', 'ANJO', 'DEUS', 'FÉ',
-  'Paz', 'LUZ', 'GRAÇA', 'VITORIA', 'CONQUISTA', 'SUCESSO', 'FUTURO',
-  'PRESENTE', 'PASSADO', 'JORNADA', 'VIAGEM', 'PARTIDA', 'CHEGADA',
-  'ENCONTRO', 'DESPEDIDA', 'LAMENTO', 'CONSOLO', 'FORCA', 'CORAGEM',
-  'PACO', 'FIDELIDADE', 'RESPEITO', 'HONRA', 'VALOR', 'PRECO', 'RIQUEZA',
-  'TESOURO', 'JOIA', 'PEROLA', 'DIAMANTE', 'BRILHO', 'RAIO', 'FLAMA',
-  'TEMPESTADE', 'VENTO', 'AREIA', 'PEDRA', 'MONTE', 'VALE', 'PRAIA',
-  'ONDA', 'AREIA', 'CONCHA', 'ESTRELA DO MAR', 'SOLIDAO', 'COMPANHIA',
-  'SORRISO', 'OLHAR', 'GESTO', 'PALAVRA', 'SILENCIO', 'GRITO', 'CANCAO',
-  'LEMBRANCAS', 'MEMORIA', 'ALMA', 'CORPO', 'ESPIRITO', 'MENTE', 'SENTIR'
+  'LUAN','SANTANA','SERESTA','FORRO','AMOR','CANCAO','VIOLAO','FESTA',
+  'BRASIL','ESTRELA','CANTOR','MUSICA','CORACAO','PAIXAO','SAUDADE',
+  'SONHO','ALEGRIA','BEIJO','FAMILIA','AMIGOS','NOITE','LUA','SOL',
+  'ESTRADA','CIDADE','ROCA','CAMPO','FLORES','CANTO','PALCO','FAS',
+  'RECORDACAO','PROMESSA','DESTINO','CAMINHO','VIDA','ESPERANCA',
+  'FELICIDADE','SANFONA','PIANO','GUITARRA','BATERIA','MELODIA','RITMO',
+  'VERSOS','REFRAO','BANDA','HISTORIA','LEGENDA','TROFEU','OURO',
+  'CEU','MAR','RIO','SERRA','PEDRA','DIAMANTE','BRILHO','FOGO',
+  'CORAGEM','FIDELIDADE','HONRA','TESOURO','JOIA','PEROLA','ALMA'
 ];
-
 const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-// ESTADO DO JOGO
-let jogador = '';
-let modo = 'normal';
-let nivel = 1;
-let pontos = 0;
-let pontosTotais = 0;
-let moedas = 0;
-let sequenciaAtual = 0;
-let maiorSequencia = 0;
-let totalPalavrasEncontradas = 0;
-let nivelMaximo = 1;
-let grade = [];
-let selecionadas = [];
-let encontradas = [];
-let palavrasRodada = [];
-let ranking = [];
+let jogador='', modo='normal', nivel=1, pontos=0, pontosTotais=0, moedas=0;
+let sequenciaAtual=0, maiorSequencia=0, totalPalavrasEncontradas=0, nivelMaximo=1;
+let grade=[], selecionadas=[], encontradas=[], palavrasRodada=[], ranking=[];
 
-// CONFIGURAÇÕES POR NÍVEL
 function configNivel(n){
-  const base = {
-    tamanho: Math.min(10 + Math.floor(n/2), 16),
-    qtdPalavras: Math.min(6 + n, 20),
-    embaralhar: n > 5,
-    tempo: 0 // sem tempo, mas pode adicionar
+  return {
+    tamanho: Math.min(10+Math.floor(n/2), modo==='extremo'?18:14),
+    qtdPalavras: Math.min(6+n, modo==='extremo'?25:15)
   };
-  if(modo === 'extremo'){
-    base.tamanho = Math.min(10 + n, 18);
-    base.qtdPalavras = Math.min(8 + Math.floor(n*1.5), 30);
-  }
-  return base;
 }
 
-// SALVAR / CARREGAR
 function salvarProgresso(){
-  const dados = {
-    nome: jogador,
-    nivelMaximo,
-    pontosTotais,
-    moedas,
-    totalPalavrasEncontradas,
-    maiorSequencia,
-    ranking
-  };
-  localStorage.setItem('jogoLuan', JSON.stringify(dados));
+  localStorage.setItem('jogoLuan', JSON.stringify({
+    nome:jogador, nivelMaximo, pontosTotais, moedas,
+    totalPalavrasEncontradas, maiorSequencia, ranking
+  }));
 }
 
 function carregarProgresso(){
-  const d = localStorage.getItem('jogoLuan');
+  const d=localStorage.getItem('jogoLuan');
   if(d){
-    const obj = JSON.parse(d);
-    jogador = obj.nome || '';
-    nivelMaximo = obj.nivelMaximo || 1;
-    pontosTotais = obj.pontosTotais || 0;
-    moedas = obj.moedas || 0;
-    totalPalavrasEncontradas = obj.totalPalavrasEncontradas || 0;
-    maiorSequencia = obj.maiorSequencia || 0;
-    ranking = obj.ranking || [];
+    const obj=JSON.parse(d);
+    jogador=obj.nome||'';
+    nivelMaximo=obj.nivelMaximo||1;
+    pontosTotais=obj.pontosTotais||0;
+    moedas=obj.moedas||0;
+    totalPalavrasEncontradas=obj.totalPalavrasEncontradas||0;
+    maiorSequencia=obj.maiorSequencia||0;
+    ranking=obj.ranking||[];
   }
 }
 
-// INICIAR
 function iniciarJogo(tipoModo){
-  const nome = document.getElementById('nomeJogador').value.trim();
-  if(!nome){ alert('Digite seu nome! 🎸'); return; }
-  
-  jogador = nome;
-  modo = tipoModo;
+  const nome=document.getElementById('nomeJogador').value.trim();
+  if(!nome){alert('Digite seu nome! 🎸');return}
+  jogador=nome; modo=tipoModo;
   carregarProgresso();
+  nivel = (nivelMaximo>1 && confirm(`Retomar do Nível ${nivelMaximo}?`)) ? nivelMaximo : 1;
+  pontos=0; encontradas=[];
   
-  if(nivelMaximo > 1 && confirm(`Retomar do Nível ${nivelMaximo}?\nCancela para começar do 1.`)){
-    nivel = nivelMaximo;
-  } else {
-    nivel = 1;
-    pontos = 0;
-    encontradas = [];
-  }
-  
-  // Interface
-  document.getElementById('avatar').textContent = jogador[0].toUpperCase();
-  document.getElementById('mostraNome').textContent = jogador;
-  document.getElementById('modoJogo').textContent = modo === 'extremo' ? 'EXTREMO 🔥' : 'Normal';
+  document.getElementById('avatar').textContent=jogador[0].toUpperCase();
+  document.getElementById('mostraNome').textContent=jogador;
+  document.getElementById('modoJogo').textContent=modo==='extremo'?'EXTREMO 🔥':'Normal';
   document.getElementById('telaEntrada').classList.add('escondida');
   document.getElementById('telaJogo').classList.remove('escondida');
-  
   iniciarRodada();
 }
 
-// INICIAR RODADA / NÍVEL
 function iniciarRodada(){
-  const cfg = configNivel(nivel);
-  selecionadas = [];
-  encontradas = [];
-  sequenciaAtual = 0;
+  const cfg=configNivel(nivel);
+  selecionadas=[]; encontradas=[]; sequenciaAtual=0;
   
-  // Pegar palavras únicas
-  const embaralhado = [...bancoPalavras].sort(()=>Math.random()-0.5);
-  palavrasRodada = embaralhado.slice(0, cfg.qtdPalavras);
-  
-  // Montar grade
+  palavrasRodada = [...bancoPalavras].sort(()=>Math.random()-0.5).slice(0,cfg.qtdPalavras);
   grade = Array(cfg.tamanho).fill().map(()=>Array(cfg.tamanho).fill(''));
   
-  palavrasRodada.forEach(palavra => {
-    let ok=false, t=0;
+  palavrasRodada.forEach(palavra=>{
+    let ok=false,t=0;
     while(!ok && t<150){
-      const dir = Math.random()>0.5;
-      const maxL = cfg.tamanho - (dir ? 0 : palavra.length);
-      const maxC = cfg.tamanho - (dir ? palavra.length : 0);
-      if(maxL<=0 || maxC<=0) break;
-      const l = Math.floor(Math.random()*maxL);
-      const c = Math.floor(Math.random()*maxC);
-      let livre = true;
-      for(let i=0; i<palavra.length; i++){
-        const nl = dir ? l : l+i;
-        const nc = dir ? c+i : c;
+      const dir=Math.random()>0.5;
+      const maxL=cfg.tamanho-(dir?0:palavra.length);
+      const maxC=cfg.tamanho-(dir?palavra.length:0);
+      if(maxL<=0||maxC<=0)break;
+      const l=Math.floor(Math.random()*maxL);
+      const c=Math.floor(Math.random()*maxC);
+      let livre=true;
+      for(let i=0;i<palavra.length;i++){
+        const nl=dir?l:l+i, nc=dir?c+i:c;
         if(grade[nl][nc] && grade[nl][nc]!==palavra[i]){livre=false;break}
       }
       if(livre){
-        for(let i=0; i<palavra.length; i++){
-          const nl = dir ? l : l+i;
-          const nc = dir ? c+i : c;
-          grade[nl][nc] = palavra[i];
+        for(let i=0;i<palavra.length;i++){
+          const nl=dir?l:l+i, nc=dir?c+i:c;
+          grade[nl][nc]=palavra[i];
         }
         ok=true;
       }
@@ -329,78 +237,64 @@ function iniciarRodada(){
     }
   });
   
-  // Preencher letras
-  for(let l=0; l<cfg.tamanho; l++)
-    for(let c=0; c<cfg.tamanho; c++)
-      if(!grade[l][c]) grade[l][c] = letras[Math.floor(Math.random()*26)];
+  for(let l=0;l<cfg.tamanho;l++)
+    for(let c=0;c<cfg.tamanho;c++)
+      if(!grade[l][c])grade[l][c]=letras[Math.floor(Math.random()*26)];
   
-  // Atualizar display
-  document.getElementById('numeroNivel').textContent = nivel;
-  document.getElementById('nivel').textContent = nivel;
-  document.getElementById('totalPalavras').textContent = palavrasRodada.length;
-  atualizarPlacar();
-  renderizarGrade();
+  document.getElementById('numeroNivel').textContent=nivel;
+  document.getElementById('nivel').textContent=nivel;
+  document.getElementById('totalPalavras').textContent=palavrasRodada.length;
+  atualizarPlacar(); renderizarGrade();
 }
 
-// RENDERIZAR
 function renderizarGrade(){
-  const cfg = configNivel(nivel);
-  const gradeEl = document.getElementById('grade');
-  gradeEl.style.gridTemplateColumns = `repeat(${cfg.tamanho}, 1fr)`;
-  gradeEl.innerHTML = '';
+  const cfg=configNivel(nivel);
+  const gradeEl=document.getElementById('grade');
+  gradeEl.style.gridTemplateColumns=`repeat(${cfg.tamanho},1fr)`;
+  gradeEl.innerHTML='';
   
-  for(let l=0; l<cfg.tamanho; l++){
-    for(let c=0; c<cfg.tamanho; c++){
-      const div = document.createElement('div');
-      div.className = 'casa';
-      div.textContent = grade[l][c];
-      div.onclick = () => clicar(l,c);
-      
-      if(selecionadas.some(p=>p.l===l && p.c===c)) div.classList.add('selecionada');
-      if(encontradas.some(e=>e.linhas.has(l) && e.colunas.has(c))) div.classList.add('encontrada');
-      
+  for(let l=0;l<cfg.tamanho;l++){
+    for(let c=0;c<cfg.tamanho;c++){
+      const div=document.createElement('div');
+      div.className='casa'; div.textContent=grade[l][c];
+      div.onclick=()=>clicar(l,c);
+      if(selecionadas.some(p=>p.l===l&&p.c===c))div.classList.add('selecionada');
+      if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))div.classList.add('encontrada');
       gradeEl.appendChild(div);
     }
   }
   
-  // Lista palavras
-  const listaEl = document.getElementById('listaPalavras');
-  listaEl.innerHTML = '';
-  palavrasRodada.forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'palavra' + (encontradas.some(e=>e.texto===p) ? ' encontrada' : '');
-    d.textContent = p;
-    listaEl.appendChild(d);
+  const listaEl=document.getElementById('listaPalavras'); listaEl.innerHTML='';
+  palavrasRodada.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='palavra'+(encontradas.some(e=>e.texto===p)?' encontrada':'');
+    d.textContent=p; listaEl.appendChild(d);
   });
 }
 
 function atualizarPlacar(){
-  document.getElementById('pontos').textContent = pontos;
-  document.getElementById('qtdEncontradas').textContent = encontradas.length;
-  document.getElementById('mostraMoedas').textContent = moedas;
+  document.getElementById('pontos').textContent=pontos;
+  document.getElementById('qtdEncontradas').textContent=encontradas.length;
+  document.getElementById('mostraMoedas').textContent=moedas;
 }
 
-// CLICAR
 function clicar(l,c){
-  if(encontradas.some(e=>e.linhas.has(l) && e.colunas.has(c))) return;
-  
-  const i = selecionadas.findIndex(p=>p.l===l && p.c===c);
+  if(encontradas.some(e=>e.linhas.has(l)&&e.colunas.has(c)))return;
+  const i=selecionadas.findIndex(p=>p.l===l&&p.c===c);
   if(i>=0){selecionadas.splice(i);renderizarGrade();return}
   selecionadas.push({l,c});
   
   if(selecionadas.length>=2){
-    const lin = new Set(selecionadas.map(p=>p.l));
-    const col = new Set(selecionadas.map(p=>p.c));
-    let txt = '';
-    
+    const lin=new Set(selecionadas.map(p=>p.l));
+    const col=new Set(selecionadas.map(p=>p.c));
+    let txt='';
     if(lin.size===1){
       selecionadas.sort((a,b)=>a.c-b.c);
-      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
-    } else if(col.size===1){
+      txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
+    }else if(col.size===1){
       selecionadas.sort((a,b)=>a.l-b.l);
-      txt = selecionadas.map(p=>grade[p.l][p.c]).join('');
+      txt=selecionadas.map(p=>grade[p.l][p.c]).join('');
     }
-    
     verificar(txt) || verificar(txt.split('').reverse().join(''));
   }
   renderizarGrade();
@@ -409,74 +303,52 @@ function clicar(l,c){
 function verificar(palavra){
   if(palavrasRodada.includes(palavra) && !encontradas.some(e=>e.texto===palavra)){
     encontradas.push({
-      texto: palavra,
-      linhas: new Set(selecionadas.map(p=>p.l)),
-      colunas: new Set(selecionadas.map(p=>p.c))
+      texto:palavra,
+      linhas:new Set(selecionadas.map(p=>p.l)),
+      colunas:new Set(selecionadas.map(p=>p.c))
     });
-    
-    const pts = palavra.length * (modo==='extremo' ? 20 : 10);
-    pontos += pts;
-    pontosTotais += pts;
-    moedas += Math.floor(pts / (modo==='extremo' ? 4 : 5));
+    const pts=palavra.length*(modo==='extremo'?20:10);
+    pontos+=pts; pontosTotais+=pts;
+    moedas+=Math.floor(pts/(modo==='extremo'?4:5));
     totalPalavrasEncontradas++;
     sequenciaAtual++;
-    if(sequenciaAtual > maiorSequencia) maiorSequencia = sequenciaAtual;
+    if(sequenciaAtual>maiorSequencia)maiorSequencia=sequenciaAtual;
+    selecionadas=[]; salvarProgresso(); atualizarPlacar();
     
-    selecionadas = [];
-    salvarProgresso();
-    atualizarPlacar();
-    
-    // TODAS ENCONTRADAS
-    if(encontradas.length === palavrasRodada.length){
-      nivelMaximo = Math.max(nivelMaximo, nivel+1);
-      salvarProgresso();
-      salvarNoRanking();
-      
-      setTimeout(()=>{
-        abrirModal(
-          `🎉 Nível ${nivel} Completo!`,
-          `Pontos: ${pontos}\nMoedas: +${Math.floor(pontos/(modo==='extremo'?4:5))} 💰\nPróximo nível: ${nivel+1}${modo==='extremo'?'\n🔥 Modo Extremo! Mais difícil!':''}`
-        );
-      }, 300);
+    if(encontradas.length===palavrasRodada.length){
+      nivelMaximo=Math.max(nivelMaximo,nivel+1);
+      salvarProgresso(); salvarNoRanking();
+      setTimeout(()=>abrirModal(`🎉 Nível ${nivel} Completo!`,`Pontos: ${pontos}\nMoedas: +${Math.floor(pontos/(modo==='extremo'?4:5))} 💰`),300);
     }
     return true;
   }
   return false;
 }
 
-// PRÓXIMO NÍVEL
 function proximoNivel(){
-  if(encontradas.length < palavrasRodada.length && !confirm('Ainda há palavras! Tem certeza?')) return;
-  nivel++;
-  pontos = 0;
-  iniciarRodada();
+  if(encontradas.length<palavrasRodada.length && !confirm('Ainda há palavras! Tem certeza?'))return;
+  nivel++; pontos=0; iniciarRodada();
 }
 
-// RANKING
 function salvarNoRanking(){
-  ranking = ranking.filter(r=>r.nome!==jogador);
-  ranking.push({nome:jogador, pontos:pontosTotais, nivel:nivel, data:new Date().toLocaleDateString('pt-BR')});
-  ranking.sort((a,b)=>b.pontos - a.pontos);
-  ranking = ranking.slice(0,15);
-  salvarProgresso();
+  ranking=ranking.filter(r=>r.nome!==jogador);
+  ranking.push({nome:jogador,pontos:pontosTotais,nivel:nivel,data:new Date().toLocaleDateString('pt-BR')});
+  ranking.sort((a,b)=>b.pontos-a.pontos);
+  ranking=ranking.slice(0,15); salvarProgresso();
 }
 
 function carregarRanking(){
-  const el = document.getElementById('listaRanking');
-  el.innerHTML = '';
-  if(!ranking.length){
-    el.innerHTML = '<p style="text-align:center;opacity:0.7">Jogue para aparecer no ranking! 🏆</p>';
-    return;
-  }
-  ranking.forEach((item, idx)=>{
-    const d = document.createElement('div');
-    d.className = `item-ranking ${item.nome===jogador?'voce':''}`;
-    let posClass = '';
-    if(idx===0) posClass='posicao-1';
-    else if(idx===1) posClass='posicao-2';
-    else if(idx===2) posClass='posicao-3';
-    d.innerHTML = `
-      <div class="posicao ${posClass}">${idx+1}º</div>
+  const el=document.getElementById('listaRanking'); el.innerHTML='';
+  if(!ranking.length){el.innerHTML='<p style="text-align:center;opacity:0.7">Jogue para aparecer! 🏆</p>';return}
+  ranking.forEach((item,idx)=>{
+    const d=document.createElement('div');
+    d.className=`item-ranking ${item.nome===jogador?'voce':''}`;
+    let posCls='';
+    if(idx===0)posCls='posicao-1';
+    else if(idx===1)posCls='posicao-2';
+    else if(idx===2)posCls='posicao-3';
+    d.innerHTML=`
+      <div class="posicao ${posCls}">${idx+1}º</div>
       <div class="nome-rank">${item.nome}</div>
       <div class="pontos-rank">${item.pontos} pts • N${item.nivel}</div>
     `;
@@ -484,33 +356,30 @@ function carregarRanking(){
   });
 }
 
-// ESTATÍSTICAS
 function carregarEstatisticas(){
   carregarProgresso();
-  document.getElementById('statNivel').textContent = nivelMaximo;
-  document.getElementById('statPontos').textContent = pontosTotais;
-  document.getElementById('statMoedas').textContent = moedas;
-  document.getElementById('statPalavras').textContent = totalPalavrasEncontradas;
-  document.getElementById('statSequencia').textContent = maiorSequencia;
+  document.getElementById('statNivel').textContent=nivelMaximo;
+  document.getElementById('statPontos').textContent=pontosTotais;
+  document.getElementById('statMoedas').textContent=moedas;
+  document.getElementById('statPalavras').textContent=totalPalavrasEncontradas;
+  document.getElementById('statSequencia').textContent=maiorSequencia;
+  document.getElementById('telaEntrada').classList.add('escondida');
+  document.getElementById('telaJogo').classList.remove('escondida');
+  trocarAba('stats');
 }
 
-// ABAS
 function trocarAba(nome){
   document.querySelectorAll('.aba').forEach(a=>a.classList.remove('ativa'));
   event.target.classList.add('ativa');
-  
-  document.getElementById('abaJogo').classList.toggle('escondida', nome!=='jogo');
-  document.getElementById('abaRanking').classList.toggle('escondida', nome!=='ranking');
-  document.getElementById('abaStats').classList.toggle('escondida', nome!=='stats');
-  
-  if(nome==='ranking') carregarRanking();
-  if(nome==='stats') carregarEstatisticas();
+  document.getElementById('abaJogo').classList.toggle('escondida',nome!=='jogo');
+  document.getElementById('abaRanking').classList.toggle('escondida',nome!=='ranking');
+  document.getElementById('abaStats').classList.toggle('escondida',nome!=='stats');
+  if(nome==='ranking')carregarRanking();
 }
 
-// MODAL
-function abrirModal(titulo, texto){
-  document.getElementById('tituloModal').textContent = titulo;
-  document.getElementById('textoModal').textContent = texto;
+function abrirModal(titulo,texto){
+  document.getElementById('tituloModal').textContent=titulo;
+  document.getElementById('textoModal').textContent=texto;
   document.getElementById('fundoModal').classList.remove('escondida');
   document.getElementById('modal').classList.remove('escondida');
 }
@@ -519,5 +388,12 @@ function fecharModal(){
   document.getElementById('modal').classList.add('escondida');
 }
 
-// SALVAR E SAIR
-function s
+function salvarESair(){
+  salvarProgresso(); alert('✅ Salvo!');
+  document.getElementById('telaEntrada').classList.remove('escondida');
+  document.getElementById('telaJogo').classList.add('escondida');
+  document.getElementById('nomeJogador').value=jogador;
+}
+</script>
+</body>
+</html>
