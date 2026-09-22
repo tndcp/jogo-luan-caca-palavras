@@ -4,30 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luan Santana — Caça-Palavras & Adedonha</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#bd3193">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Luan Santana">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/lucide@1/dist/umd/lucide.min.js"></script>
-<!-- PeerJS para Conexão P2P Multi-servidor -->
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
-:root{--bg:#fdf9fb;--card:#fff;--text:#0f172a;--muted:#64748b;--accent:#bd3193;--accent-soft:rgba(189,49,147,.14);--accent2:#0891b2;--accent2-soft:rgba(8,145,178,.14);--border:rgba(15,23,42,.08);--ok:#16a34a;--warn:#d97706;--err:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}
+:root{
+  --bg:#fdf9fb;--card:#ffffff;--text:#0f172a;--muted:#64748b;
+  --accent:#bd3193;--accent-soft:rgba(189,49,147,.14);--accent2:#0891b2;
+  --accent2-soft:rgba(8,145,178,.14);--border:rgba(15,23,42,.08);
+  --ok:#16a34a;--warn:#d97706;--err:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--text);background-image:radial-gradient(circle at 15% 10%,rgba(189,49,147,.08),transparent 40%),radial-gradient(circle at 85% 90%,rgba(8,145,178,.08),transparent 40%);min-height:100vh}
+body{
+  font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  background-image:radial-gradient(circle at 15% 10%, rgba(189,49,147,.08), transparent 40%),
+                    radial-gradient(circle at 85% 90%, rgba(8,145,178,.08), transparent 40%);
+  min-height:100vh;-webkit-tap-highlight-color:transparent
+}
 .hidden{display:none!important}
-button{font-family:inherit;cursor:pointer;border:none;outline:none}
-input,select,textarea{font-family:inherit;outline:none}
+button,input,select{font-family:inherit;outline:none}
+button{cursor:pointer;border:none}
+input,select{border:1.5px solid var(--border);border-radius:10px}
 .screen{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.brand .logo{width:44px;height:44px;border-radius:12px;flex:none;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff}
+.brand .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem}
 .brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px;line-height:1.5}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
-.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;background:var(--bg);transition:border-color .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;transition:transform .1s,box-shadow .15s,background .15s}
+.field input,.field select{width:100%;padding:12px 14px;background:var(--bg);transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;transition:transform .1s, box-shadow .15s, background .15s}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(189,49,147,.3)}
 .btn-primary:hover{background:#a82a82}
@@ -37,221 +53,488 @@ input,select,textarea{font-family:inherit;outline:none}
 .btn-ghost:hover{color:var(--accent)}
 .btn-block{width:100%}
 .btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:24px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
-.topbar .user{display:flex;align-items:center;gap:10px;font-weight:700}
-.avatar{width:36px;height:36px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
+.btn-danger{background:var(--err);color:#fff}
+.btn-danger:hover{background:#b91c1c}
+.auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}
+.auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}
+.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.4}
+.msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}
+.msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:24px;flex-wrap:wrap}
+.user{display:flex;align-items:center;gap:10px;font-weight:700}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
+.admin-badge{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
 .menu-title{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
-.menu-sub{color:var(--muted);margin-bottom:28px}
+.menu-sub{color:var(--muted);margin-bottom:28px;line-height:1.5}
 .game-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px}
-.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s, box-shadow .15s, border-color .15s}
 .game-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}
-.game-card .icon-big{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff}
+.game-card .icon-big{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff;font-size:1.6rem}
 .game-card h3{font-size:1.25rem;font-weight:800;margin-bottom:6px}
 .game-card p{color:var(--muted);font-size:.9rem;line-height:1.5}
+.game-card.ranking{border:2px solid var(--accent);background:linear-gradient(135deg,var(--card),var(--accent-soft))}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat .n{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.stat .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .lobby-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:520px;margin:0 auto;box-shadow:var(--shadow)}
 .lobby-box h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
-.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem}
+.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem;line-height:1.5}
 .room-code{font-size:2rem;font-weight:800;letter-spacing:.3em;text-align:center;background:var(--accent-soft);color:var(--accent);border:2px dashed var(--accent);border-radius:12px;padding:18px;margin:14px 0;user-select:all}
 .lobby-status{text-align:center;padding:14px;border-radius:10px;font-weight:600;margin:12px 0}
 .lobby-status.wait{background:var(--accent2-soft);color:var(--accent2)}
 .lobby-status.ok{background:rgba(22,163,74,.1);color:var(--ok)}
-.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600}
+.lobby-status.err{background:rgba(220,38,38,.1);color:var(--err)}
+.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600;border:1px solid var(--border)}
+.game-hud{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:16px}
+.hud-pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--border)}
+.hud-pill b{color:var(--accent);font-variant-numeric:tabular-nums}
+.timer{font-variant-numeric:tabular-nums}
+.timer.low{color:var(--err);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.game-layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+@media(max-width:860px){.game-layout{grid-template-columns:1fr}}
+.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow:auto}
+#cacaBoard{display:grid;gap:3px;user-select:none;touch-action:none;margin:0 auto;width:max-content}
+.cell{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;border-radius:8px;background:var(--bg);transition:all .1s;cursor:pointer;text-transform:uppercase;border:1.5px solid transparent}
+@media(max-width:500px){.cell{width:30px;height:30px;font-size:.9rem}}
+.cell.sel{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.05)}
+.cell.found{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.cell.hint{background:var(--warn);color:#fff;animation:pulse 1s infinite}
+.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;position:sticky;top:16px}
+.side-panel h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;font-weight:700}
+.word-list{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto}
+.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:8px 10px;border-radius:8px;background:var(--bg);transition:all .15s}
+.word-item.done{text-decoration:line-through;opacity:.45;background:rgba(8,145,178,.08)}
+.word-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}
+.word-item.done .dot{background:var(--ok)}
+.stop-letter{font-size:4rem;font-weight:800;text-align:center;color:var(--accent);background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1;border:2px dashed var(--accent)}
+.stop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.stop-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.stop-field input{width:100%;padding:10px 12px;border-radius:8px;font-size:.95rem;background:var(--bg);text-transform:uppercase;font-weight:600}
+.stop-field input:focus{border-color:var(--accent)}
+.stop-field input:disabled{opacity:.6;cursor:not-allowed}
+.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.08)}
+.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.08)}
+.score-big{font-size:2.5rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:var(--card);border-radius:20px;padding:28px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.modal.large{max-width:900px}
+.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;line-height:1.3}
+.modal p{color:var(--muted);margin-bottom:18px;font-size:.92rem;line-height:1.55}
+.modal .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.switch{position:relative;display:inline-block;width:52px;height:28px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:.2s;cursor:pointer}
+.slider:before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .slider{background:var(--accent)}
+.switch input:checked + .slider:before{transform:translateX(24px)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-row .info b{display:block;font-size:.95rem}
+.setting-row .info span{font-size:.8rem;color:var(--muted);line-height:1.4;display:block;margin-top:2px}
+.assist-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.12);color:var(--warn);border:1px solid var(--warn);font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;font-size:.9rem;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:all .25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:16px;cursor:pointer;background:none}
 .back-btn:hover{color:var(--accent)}
+.ranking-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.ranking-tab{padding:8px 16px;border-radius:999px;font-weight:700;font-size:.85rem;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;transition:all .15s}
+.ranking-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ranking-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.ranking-table th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);font-weight:700}
+.ranking-table td{padding:12px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ranking-table tr.me{background:var(--accent-soft);font-weight:700}
+.pos{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;background:var(--bg);border:1px solid var(--border)}
+.pos.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;border-color:#f59e0b}
+.pos.silver{background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#fff;border-color:#9ca3af}
+.pos.bronze{background:linear-gradient(135deg,#fdba74,#ea580c);color:#fff;border-color:#ea580c}
+.player-cell{display:flex;align-items:center;gap:8px;font-weight:600}
+.player-cell .avatar{width:28px;height:28px;font-size:.75rem}
+.admin-icon{font-size:.7rem;background:var(--accent);color:#fff;padding:2px 6px;border-radius:999px;font-weight:800}
+.search-box{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);font-weight:600;margin-bottom:12px}
+.podium-item{text-align:center}
+.notif-badge{position:absolute;top:-6px;right:-6px;background:var(--err);color:#fff;font-size:.65rem;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:999px}
 </style>
 </head>
 <body>
 
+<!-- Tela de Login -->
 <div id="loginScreen" class="auth-wrap">
   <div class="auth-card">
-    <div class="brand"><div class="logo"><i data-lucide="music-4" style="width:22px;height:22px"></i></div><h1>Luan Santana</h1></div>
-    <p class="sub">Caça-palavras & Adedonha multiplayer.</p>
-    <div class="field"><label>Seu Nome</label><input id="loginUser" type="text" placeholder="Digite seu nome"></div>
-    <button class="btn btn-primary btn-block" id="btnLogin"><i data-lucide="play" style="width:18px;height:18px"></i> Entrar no Jogo</button>
+    <div class="brand"><div class="logo">LS</div><h1>Luan Santana</h1></div>
+    <p class="sub">Caça-palavras & Adedonha com Ranking Global</p>
+    <div id="authMsg" class="msg"></div>
+    <div id="loginForm">
+      <div class="field"><label>Usuário</label><input id="loginUser" type="text" placeholder="Seu nome"></div>
+      <div class="field"><label>Senha</label><input id="loginPass" type="password" placeholder="Sua senha"></div>
+      <button class="btn btn-primary btn-block" id="btnLogin">Entrar</button>
+      <div class="auth-toggle">Não tem conta? <a id="goRegister">Cadastre-se</a></div>
+      <div style="margin-top:14px;font-size:.75rem;color:var(--muted);background:var(--bg);padding:10px;border-radius:8px">
+        Admin: <b>Thiago Shelby</b> / 9090iop
+      </div>
+    </div>
+    <div id="registerForm" class="hidden">
+      <div class="field"><label>Usuário</label><input id="regUser" type="text" placeholder="Nome"></div>
+      <div class="field"><label>Senha</label><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"></div>
+      <button class="btn btn-primary btn-block" id="btnRegister">Criar conta</button>
+      <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar</a></div>
+    </div>
   </div>
 </div>
 
+<!-- Menu Principal -->
 <div id="menuScreen" class="screen hidden">
   <div class="topbar">
-    <div class="user"><div class="avatar" id="userAvatar">U</div><span id="userName">Usuário</span></div>
-    <button class="btn btn-ghost btn-sm" id="btnLogout"><i data-lucide="log-out" style="width:16px;height:16px"></i> Sair</button>
+    <div class="user">
+      <div class="avatar" id="userAvatar">T</div>
+      <div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">ADM</span></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn btn-secondary btn-sm" id="btnNotif" style="position:relative">
+        🔔 <span id="notifCount" class="hidden notif-badge">0</span>
+      </button>
+      <button class="btn btn-primary btn-sm hidden" id="btnInstallPWA" style="background:#0f172a">📲 Instalar</button>
+      <button class="btn btn-secondary btn-sm" id="btnRanking">🏆 Ranking</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel">⚙️ ADM</button>
+      <button class="btn btn-ghost btn-sm" id="btnLogout">Sair</button>
+    </div>
   </div>
-  <h2 class="menu-title">Escolha o jogo:</h2>
+  <h2 class="menu-title">Olá, <span id="menuHello">jogador</span>!</h2>
+  <p class="menu-sub">Suas pontuações vão para o ranking global. Você vê todo mundo e todo mundo te vê.</p>
   <div class="game-cards">
-    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)"><i data-lucide="search" style="width:26px;height:26px"></i></div><h3>Caça-Palavras</h3><p>Jogue solo ou multiplayer com amigo.</p></div>
+    <div class="game-card" id="cardCaca">
+      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)">🔍</div>
+      <h3>Caça-Palavras</h3>
+      <p>Encontre palavras do Luan. Pontua no ranking.</p>
+    </div>
+    <div class="game-card" id="cardStop">
+      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)">⏱️</div>
+      <h3>Adedonha</h3>
+      <p>Preencha rápido. Única vale mais.</p>
+    </div>
+    <div class="game-card ranking" id="cardRanking">
+      <div class="icon-big" style="background:linear-gradient(135deg,#f59e0b,#bd3193)">🏆</div>
+      <h3>Ranking Global</h3>
+      <p id="rankingPreview">Carregando...</p>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas</div></div>
+    <div class="stat"><div class="n" id="statVitorias">0</div><div class="l">Vitórias</div></div>
+    <div class="stat"><div class="n" id="statRecorde">—</div><div class="l">Recorde</div></div>
+    <div class="stat"><div class="n" id="statGlobalPos">—</div><div class="l">Posição global</div></div>
   </div>
 </div>
 
+<!-- Ranking -->
+<div id="rankingScreen" class="screen hidden">
+  <button class="back-btn" id="rankingBack">← Voltar</button>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+    <div>
+      <h2 class="menu-title" style="margin:0">🏆 Ranking Global</h2>
+      <p class="menu-sub" style="margin:0">Todos veem todos 🌍</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm" id="btnExportRanking">📤 Exportar</button>
+      <button class="btn btn-secondary btn-sm" id="btnRefreshRanking">🔄 Atualizar</button>
+    </div>
+  </div>
+  <div id="podium" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px;align-items:end">
+    <div class="podium-item" id="podium2" style="transform:translateY(10px)">
+      <div style="font-size:2rem">🥈</div>
+      <div class="avatar" id="podium2Avatar" style="margin:8px auto">?</div>
+      <div id="podium2Name" style="font-weight:800;font-size:.9rem">—</div>
+      <div id="podium2Score" style="font-weight:700">0 pts</div>
+    </div>
+    <div class="podium-item" id="podium1" style="order:2">
+      <div style="font-size:2.6rem">👑</div><div style="font-size:1.8rem">🥇</div>
+      <div class="avatar" id="podium1Avatar" style="margin:8px auto;width:44px;height:44px;font-size:1.1rem">?</div>
+      <div id="podium1Name" style="font-weight:800">—</div>
+      <div id="podium1Score" style="font-weight:800;color:#92400e;font-size:1.1rem">0 pts</div>
+    </div>
+    <div class="podium-item" id="podium3" style="transform:translateY(20px)">
+      <div style="font-size:2rem">🥉</div>
+      <div class="avatar" id="podium3Avatar" style="margin:8px auto">?</div>
+      <div id="podium3Name" style="font-weight:800;font-size:.9rem">—</div>
+      <div id="podium3Score" style="font-weight:700">0 pts</div>
+    </div>
+  </div>
+  <div id="rewardsBar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+    <span style="background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:700">🏅 Top 3 = Medalha</span>
+    <span style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #f59e0b;color:#92400e;padding:6px 12px;border-radius:999px;font-size:.78rem;font-weight:700">👑 Top 1 = Coroa + 1000 moedas</span>
+  </div>
+  <div class="board-wrap" style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px">
+      <div class="stat" style="margin:0"><div class="n" id="rankTotalPlayers">0</div><div class="l">Jogadores</div></div>
+      <div class="stat" style="margin:0"><div class="n" id="rankTotalPlays">0</div><div class="l">Partidas</div></div>
+      <div class="stat" style="margin:0"><div class="n" id="rankTopScore">0</div><div class="l">Maior Pontuação</div></div>
+      <div class="stat" style="margin:0"><div class="n" id="rankAvgScore">0</div><div class="l">Média</div></div>
+    </div>
+    <input id="rankingSearch" class="search-box" placeholder="🔍 Buscar jogador...">
+    <div class="ranking-tabs">
+      <button class="ranking-tab active" data-filter="all">🌍 Geral</button>
+      <button class="ranking-tab" data-filter="caca">🔍 Caça</button>
+      <button class="ranking-tab" data-filter="stop">⏱️ Adedonha</button>
+      <button class="ranking-tab" data-filter="me">👤 Eu</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="ranking-table">
+        <thead><tr><th>#</th><th>Jogador</th><th>Pontos</th><th>Jogo</th><th>Tempo</th><th>Data</th></tr></thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
+    </div>
+    <div id="myRankCard" class="hidden" style="margin-top:14px;padding:12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px">
+      <b>Você:</b> <span id="myRankPos">—</span> • Melhor: <span id="myRankBest">—</span> pts
+    </div>
+  </div>
+</div>
+
+<!-- Sala de Jogo -->
 <div id="lobbyScreen" class="screen hidden">
-  <button class="back-btn" id="lobbyBack"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Voltar</button>
+  <button class="back-btn" id="lobbyBack">← Menu</button>
   <div class="lobby-box">
-    <h2>Sala Multiplayer</h2>
-    <p>Crie uma sala ou digite o código do seu amigo abaixo:</p>
+    <h2 id="lobbyTitle">Jogar</h2>
+    <p id="lobbyDesc">Solo ou com amigos via código.</p>
     <div id="lobbyCreate">
-      <button class="btn btn-primary btn-block" id="btnCreateRoom"><i data-lucide="plus-circle" style="width:18px;height:18px"></i> Criar Sala</button>
-      <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou entrar em uma —</div>
-      <div class="field"><label>Código da sala</label><input id="joinCode" type="text" maxlength="6" placeholder="Ex: AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center"></div>
-      <button class="btn btn-secondary btn-block" id="btnJoinRoom"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar na Sala</button>
+      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px">👤 Solo (offline)</button>
+      <button class="btn btn-primary btn-block" id="btnCreateRoom">➕ Criar sala online</button>
+      <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div>
+      <div class="field"><label>Digite o código</label><input id="joinCode" type="text" maxlength="6" placeholder="AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:800"></div>
+      <button class="btn btn-secondary btn-block" id="btnJoinRoom">Entrar na sala</button>
+      <div id="onlineStatus" style="margin-top:12px;font-size:.8rem;text-align:center;color:var(--muted)"></div>
     </div>
     <div id="lobbyRoom" class="hidden">
-      <div class="lobby-status wait" id="lobbyStatus">Conectando ao servidor...</div>
-      <div>Código da sua sala:</div>
+      <div class="lobby-status wait" id="lobbyStatus">Aguardando jogador...</div>
+      <div style="font-size:.85rem;font-weight:600;margin-top:8px">Código da sala:</div>
       <div class="room-code" id="roomCodeDisplay">------</div>
-      <div class="opponent hidden" id="opponentLine"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--ok)"></i> <span id="opponentName">Amigo</span> conectado!</div>
-      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px"><i data-lucide="play" style="width:18px;height:18px"></i> Começar partida</button>
+      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode">📋 Copiar código</button>
+      <div class="opponent hidden" id="opponentLine">✅ <span id="opponentName">—</span> conectado!</div>
+      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px">▶️ Iniciar partida</button>
+      <button class="btn btn-ghost btn-block btn-sm" id="btnLeaveRoom" style="margin-top:8px">Sair da sala</button>
     </div>
   </div>
 </div>
 
+<!-- Caça-Palavras -->
+<div id="cacaScreen" class="screen hidden">
+  <div class="game-hud">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="back-btn" id="cacaBack" style="margin:0">← Sair</button>
+      <span class="hud-pill">🔍 <span id="cacaFound">0</span>/<span id="cacaTotal">0</span></span>
+      <span class="hud-pill timer">⏰ <span id="cacaTimer">00:00</span></span>
+      <span class="hud-pill hidden" id="cacaOppScore">Adversário: <b id="cacaOppN">0</b></span>
+      <span class="assist-badge hidden" id="cacaAssistBadge">Assistente</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm hidden" id="btnCacaHint">💡 Dica</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve">🪄 Revelar tudo</button>
+      <button class="btn btn-secondary btn-sm" id="btnCacaNew">🔄 Novo jogo</button>
+    </div>
+  </div>
+  <div class="game-layout">
+    <div class="board-wrap"><div id="cacaBoard"></div></div>
+    <div class="side-panel">
+      <h4>Palavras a encontrar</h4>
+      <div class="word-list" id="cacaWordList"></div>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:12px">Arraste para selecionar. Sua pontuação entra no ranking global 🌍</p>
+    </div>
+  </div>
+</div>
+
+<!-- Adedonha / Stop -->
+<div id="stopScreen" class="screen hidden">
+  <div class="game-hud">
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="back-btn" id="stopBack" style="margin:0">← Sair</button>
+      <span class="hud-pill">🔤 Letra: <b id="stopLetter">—</b></span>
+      <span class="hud-pill timer">⏰ <span id="stopTimer">01:30</span></span>
+      <span class="assist-badge hidden" id="stopAssistBadge">Assistente ativo</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm hidden" id="btnStopFill">🪄 Preencher respostas</button>
+      <button class="btn btn-primary btn-sm" id="btnStopStop">🛑 STOP!</button>
+    </div>
+  </div>
+  <div class="game-layout">
+    <div class="board-wrap">
+      <div class="stop-letter" id="stopLetterBig">?</div>
+      <div class="stop-grid" id="stopGrid"></div>
+      <div id="stopResults" class="hidden" style="margin-top:20px">
+        <h4>Resultado Final</h4>
+        <div class="score-big" id="stopScore">0</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <h4>Regras</h4>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:16px">
+        ✅ Resposta válida: 10 pontos<br>
+        ⚠️ Mesma resposta do adversário: 5 pontos<br>
+        ❌ Começa com letra errada: 0 pontos<br>
+        Resultado entra no ranking global 🌍
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Painel Admin -->
+<div id="adminOverlay" class="overlay hidden">
+  <div class="modal large">
+    <h2>⚙️ Painel Administrativo — Thiago Shelby</h2>
+    <p>Você tem acesso completo: gerenciar usuários, ranking, sistema e assistente.</p>
+    <div class="ranking-tabs" style="margin-bottom:16px">
+      <button class="ranking-tab active" data-tab="dash">📊 Painel Geral</button>
+      <button class="ranking-tab" data-tab="users">👥 Usuários</button>
+      <button class="ranking-tab" data-tab="ranking">🏆 Ranking</button>
+      <button class="ranking-tab" data-tab="assist">🤖 Assistente</button>
+      <button class="ranking-tab" data-tab="system">🔧 Sistema</button>
+    </div>
+    <div id="adminDash" class="admin-section">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
+        <div class="stat"><div class="n" id="dashUsers">0</div><div class="l">Usuários</div></div>
+        <div class="stat"><div class="n" id="dashAdmins">0</div><div class="l">Administradores</div></div>
+        <div class="stat"><div class="n" id="dashPlays">0</div><div class="l">Partidas</div></div>
+        <div class="stat"><div class="n" id="dashRanking">0</div><div class="l">Registros no Ranking</div></div>
+      </div>
+      <div class="setting-row"><div class="info"><b>🏆 Maior Pontuação</b><span id="dashTopPlayer">—</span></div><span id="dashTopScore" class="admin-badge">—</span></div>
+      <div class="setting-row"><div class="info"><b>👤 Mais Ativo</b><span id="dashActive">—</span></div></div>
+      <div class="setting-row"><div class="info"><b>📈 Média de Pontos</b><span>Global</span></div><b id="dashAvg">—</b></div>
+    </div>
+    <div id="adminUsers" class="admin-section hidden">
+      <input id="userSearch" class="search-box" placeholder="🔍 Buscar usuário...">
+      <div style="overflow-x:auto;max-height:360px;overflow-y:auto">
+        <table class="ranking-table">
+          <thead><tr><th>Usuário</th><th>Função</th><th>Jogos</th><th>Vitórias</th><th>Recorde</th><th>Ações</th></tr></thead>
+          <tbody id="userTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="adminRanking" class="admin-section hidden">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn btn-secondary btn-sm" id="btnClearRanking">🗑️ Limpar Ranking</button>
+        <button class="btn btn-secondary btn-sm" id="btnExportJSON">📤 Exportar JSON</button>
+        <button class="btn btn-secondary btn-sm" id="btnExportCSV">📊 Exportar CSV</button>
+        <button class="btn btn-secondary btn-sm" id="btnFakeData">➕ Gerar Dados de Teste</button>
+      </div>
+      <div style="overflow-x:auto;max-height:360px;overflow-y:auto">
+        <table class="ranking-table">
+          <thead><tr><th>Posição</th><th>Jogador</th><th>Pontos</th><th>Jogo</th><th>Data</th><th>Ação</th></tr></thead>
+          <tbody id="adminRankingBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="adminAssist" class="admin-section hidden">
+      <div class="setting-row">
+        <div class="info"><b>🤖 Assistente</b><span>Exibir dicas e revelar respostas</span></div>
+        <label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="info"><b>🎮 Auto-Jogador</b><span>O assistente joga sozinho automaticamente</span></div>
+        <label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label>
+      </div>
+      <div class="setting-row" id="speedRow" style="display:none">
+        <div class="info"><b>⚡ Velocidade do Auto-Jogo</b></div>
+        <select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-weight:700">
+          <option value="devagar">Devagar</option>
+          <option value="normal" selected>Normal</option>
+          <option value="rapido">Rápido</option>
+        </select>
+      </div>
+    </div>
+    <div id="adminSystem" class="admin-section hidden">
+      <div class="setting-row">
+        <div class="info"><b>📦 Exportar Tudo</b><span>Backup completo do sistema</span></div>
+        <button class="btn btn-secondary btn-sm" id="btnExportAll">Baixar Backup</button>
+      </div>
+      <div class="setting-row">
+        <div class="info"><b>🔄 Resetar Meus Dados</b></div>
+        <button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar Estatísticas</button>
+      </div>
+      <div class="setting-row">
+        <div class="info"><b>⚠️ Reset de Fábrica</b><span>Apaga tudo exceto sua conta de admin</span></div>
+        <button class="btn btn-danger btn-sm" id="btnFactoryReset">Reset Completo</button>
+      </div>
+      <div class="setting-row">
+        <div class="info"><b>🔒 Modo Manutenção</b><span>Apenas administradores conseguem entrar</span></div>
+        <label class="switch"><input type="checkbox" id="toggleMaint"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="actions"><button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar Painel</button></div>
+  </div>
+</div>
+
+<!-- Notificações -->
+<div id="notifOverlay" class="overlay hidden">
+  <div class="modal" style="max-width:460px">
+    <h2>🔔 Suas Notificações</h2>
+    <p>Você será avisado quando alguém te ultrapassar no ranking global.</p>
+    <div id="notifList" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin:12px 0"></div>
+    <p id="notifEmpty" style="text-align:center;color:var(--muted);padding:20px">Nenhuma notificação ainda. Continue jogando! 🚀</p>
+    <div class="actions">
+      <button class="btn btn-secondary btn-sm" id="btnClearNotif">🗑️ Limpar Todas</button>
+      <button class="btn btn-primary" id="btnCloseNotif">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tela de Fim de Jogo -->
+<div id="endOverlay" class="overlay hidden">
+  <div class="modal" style="text-align:center">
+    <div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:2rem">🏆</div>
+    <h2 id="endTitle">Fim de Jogo!</h2>
+    <p id="endText">Parabéns pela participação!</p>
+    <div class="score-big" id="endScore">0</div>
+    <div id="endRankInfo" style="margin:10px 0;padding:10px;background:var(--accent-soft);border-radius:10px;display:none"></div>
+    <div class="actions" style="justify-content:center">
+      <button class="btn btn-primary" id="btnPlayAgain">🔄 Jogar Novamente</button>
+      <button class="btn btn-secondary" id="btnEndMenu">Voltar ao Menu</button>
+      <button class="btn btn-secondary" id="btnEndRanking">🏆 Ver Ranking</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tela de Recompensa -->
+<div id="rewardOverlay" class="overlay hidden">
+  <div class="modal" style="text-align:center;max-width:420px">
+    <div id="rewardIcon" style="font-size:3.5rem;margin-bottom:12px">🏆</div>
+    <h2 id="rewardTitle">Você entrou no Top 3!</h2>
+    <p id="rewardText">Parabéns! Você ganhou uma medalha e moedas.</p>
+    <div id="rewardPrize" style="background:var(--accent-soft);border:2px dashed var(--accent);padding:14px;border-radius:12px;margin:12px 0;font-weight:800;color:var(--accent);font-size:1.1rem">+500 moedas</div>
+    <div class="actions" style="justify-content:center">
+      <button class="btn btn-primary" id="btnClaimReward">🎉 Resgatar Prêmio</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast / Mensagem Rápida -->
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-lucide.createIcons();
-
-let currentUser = "";
-let peer = null;
-let conn = null;
-
-// Configuração ICE STUN para conexão 100% direta (passa por firewalls e roteadores)
-const peerConfig = {
-  config: {
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' },
-      { urls: 'stun:stun2.l.google.com:19302' },
-      { urls: 'stun:stun.cloudflare.com:3478' }
-    ]
-  }
-};
-
-// Telas
-const loginScreen = document.getElementById('loginScreen');
-const menuScreen = document.getElementById('menuScreen');
-const lobbyScreen = document.getElementById('lobbyScreen');
-
-// Login
-document.getElementById('btnLogin').addEventListener('click', () => {
-  const name = document.getElementById('loginUser').value.trim();
-  if(!name) return alert('Digite seu nome!');
-  currentUser = name;
-  document.getElementById('userName').innerText = currentUser;
-  document.getElementById('userAvatar').innerText = currentUser.charAt(0).toUpperCase();
-  loginScreen.classList.add('hidden');
-  menuScreen.classList.remove('hidden');
-});
-
-document.getElementById('btnLogout').addEventListener('click', () => {
-  if(peer) peer.destroy();
-  location.reload();
-});
-
-document.getElementById('cardCaca').addEventListener('click', () => {
-  menuScreen.classList.add('hidden');
-  lobbyScreen.classList.remove('hidden');
-});
-
-document.getElementById('lobbyBack').addEventListener('click', () => {
-  if(peer) peer.destroy();
-  lobbyScreen.classList.add('hidden');
-  menuScreen.classList.remove('hidden');
-  resetLobbyUI();
-});
-
-// Gerar Código de Sala Limpo
-function generateCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
-}
-
-// CRIAR SALA (Host)
-document.getElementById('btnCreateRoom').addEventListener('click', () => {
-  const roomCode = generateCode();
-  const fullPeerId = "LS-GAME-" + roomCode;
+// ==============================================
+// NÚCLEO DO SISTEMA
+// ==============================================
+const G = {
+  user: null,
+  assist: false,
+  humanAssist: false,
+  assistSpeed: 'normal',
+  mode: 'solo',
+  selectedGame: null,
+  timers: [],
+  peer: null,
+  conn: null,
+  isHost: false,
+  currentRoomCode: null,
+  oppName: null,
+  oppScore: 0,
   
-  document.getElementById('lobbyCreate').classList.add('hidden');
-  document.getElementById('lobbyRoom').classList.remove('hidden');
-  document.getElementById('roomCodeDisplay').innerText = roomCode;
-  document.getElementById('lobbyStatus').innerText = "Aguardando seu amigo colocar o código...";
-
-  peer = new Peer(fullPeerId, peerConfig);
-
-  peer.on('open', (id) => {
-    console.log('Sala criada com ID:', id);
-  });
-
-  peer.on('connection', (connection) => {
-    conn = connection;
-    setupConnectionEvents();
-  });
-
-  peer.on('error', (err) => {
-    console.error('Erro na sala:', err);
-    alert('Erro ao gerar código da sala. Tentando novamente...');
-    resetLobbyUI();
-  });
-});
-
-// ENTRAR NA SALA (Guest)
-document.getElementById('btnJoinRoom').addEventListener('click', () => {
-  const inputCode = document.getElementById('joinCode').value.trim().toUpperCase();
-  if(inputCode.length !== 6) return alert('Digite o código de 6 dígitos corretamente!');
-
-  const targetPeerId = "LS-GAME-" + inputCode;
-  
-  document.getElementById('lobbyCreate').classList.add('hidden');
-  document.getElementById('lobbyRoom').classList.remove('hidden');
-  document.getElementById('roomCodeDisplay').innerText = inputCode;
-  document.getElementById('lobbyStatus').innerText = "Conectando imediatamente...";
-
-  // Peer do Convidado
-  peer = new Peer(peerConfig);
-
-  peer.on('open', () => {
-    conn = peer.connect(targetPeerId, { reliable: true });
-    setupConnectionEvents();
-  });
-
-  peer.on('error', (err) => {
-    console.error('Erro ao conectar:', err);
-    alert('Não foi possível encontrar a sala. Verifique se o código está correto ou se a sala já foi criada.');
-    resetLobbyUI();
-  });
-});
-
-// Trata os eventos de conexão sem falhas
-function setupConnectionEvents() {
-  conn.on('open', () => {
-    document.getElementById('lobbyStatus').className = "lobby-status ok";
-    document.getElementById('lobbyStatus').innerText = "Conectado com sucesso!";
-    document.getElementById('opponentLine').classList.remove('hidden');
-    document.getElementById('btnStartOnline').classList.remove('hidden');
-    
-    // Envia nome para o outro jogador
-    conn.send({ type: 'JOIN_INFO', name: currentUser });
-  });
-
-  conn.on('data', (data) => {
-    if(data.type === 'JOIN_INFO') {
-      document.getElementById('opponentName').innerText = data.name;
-    }
-  });
-
-  conn.on('close', () => {
-    alert('Seu amigo desconectou.');
-    resetLobbyUI();
-  });
-}
-
-function resetLobbyUI() {
-  document.getElementById('lobbyCreate').classList.remove('hidden');
-  document.getElementById('lobbyRoom').classList.add('hidden');
-  document.getElementById('opponentLine').classList.add('hidden');
-  document.getElementById('btnStartOnline').classList.add('hidden');
-  document.getElementById('lobbyStatus').className = "lobby-status wait";
-  document.getElementById('joinCode').value = "";
-}
-</script>
-</body>
-</html>
+  // Armazenamento
+  store: {
+    get(k) {
+      try { const v = localStorage.getItem('luan_' + k); return v ? JSON.parse(v) : null; }
+      catch { return null; }
+    },
+    set(k, v) {
+      try { localStorage.setItem('luan_' + k, JSON.stringify(v)); }
+      catch { console.warn('Storage error
