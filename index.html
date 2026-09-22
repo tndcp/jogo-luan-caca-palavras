@@ -26,9 +26,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luan Santana — Caça-Palavras & Adedonha</title>
 <meta name="theme-color" content="#bd3193">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Luan Santana">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -51,15 +48,26 @@ button{cursor:pointer;border:none}
 input,select{border:1.5px solid var(--border);border-radius:10px}
 .screen{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:var(--shadow)}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:440px;box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .brand .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem}
 .brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px;line-height:1.5}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:18px;line-height:1.5}
+.auth-tabs{display:flex;gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:18px;border:1px solid var(--border)}
+.auth-tab{flex:1;text-align:center;padding:10px 12px;border-radius:8px;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .15s;color:var(--muted)}
+.auth-tab.active{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(15,23,42,.08);border:1px solid var(--border)}
 .field{margin-bottom:14px}
-.field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
-.field input,.field select{width:100%;padding:12px 14px;background:var(--bg);transition:border-color .15s}
-.field input:focus,.field select:focus{border-color:var(--accent)}
+.field label{display:block;font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input-wrap .i-icon{position:absolute;left:12px;color:var(--muted);font-size:1rem;pointer-events:none}
+.input-wrap input{width:100%;padding:12px 40px 12px 36px;background:var(--bg);transition:border-color .15s;font-weight:500}
+.input-wrap input:focus{border-color:var(--accent)}
+.toggle-pass{position:absolute;right:8px;background:transparent;color:var(--muted);font-size:1.1rem;padding:4px 6px;border-radius:6px}
+.toggle-pass:hover{color:var(--accent);background:var(--accent-soft)}
+.remember-row{display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px;font-size:.85rem}
+.remember-row label{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;cursor:pointer}
+.remember-row a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.82rem}
+.remember-row a:hover{text-decoration:underline}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;transition:transform .1s, box-shadow .15s, background .15s}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(189,49,147,.3)}
@@ -72,8 +80,7 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
 .btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}
 .btn-danger{background:var(--err);color:#fff}
 .btn-danger:hover{background:#b91c1c}
-.auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}
-.auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}
+.auth-footer{text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted);line-height:1.4}
 .msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.4}
 .msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}
 .msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
@@ -172,42 +179,49 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
 .search-box{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);font-weight:600;margin-bottom:12px}
 .podium-item{text-align:center}
 .notif-badge{position:absolute;top:-6px;right:-6px;background:var(--err);color:#fff;font-size:.65rem;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:999px}
+/* Stop Setup */
+.cat-chip{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .15s}
+.cat-chip:hover{border-color:var(--accent)}
+.cat-chip.selected{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.cat-chip input{accent-color:var(--accent)}
+.letter-btn{padding:10px 0;font-weight:800;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);transition:all .15s}
+.letter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.letter-btn.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+.roleta{font-size:3.5rem;font-weight:800;text-align:center;color:var(--accent);background:var(--accent-soft);border:2px dashed var(--accent);border-radius:16px;padding:16px;margin:12px 0;transition:transform .1s}
+.roleta.spin{animation:spinScale .15s infinite}
+@keyframes spinScale{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
 
 <div id="loginScreen" class="auth-wrap">
   <div class="auth-card">
-    <div class="brand"><div class="logo">LS</div><h1>Luan Santana</h1></div>
-    <p class="sub">Caça-palavras & Adedonha com Ranking Global</p>
+    <div class="brand"><div class="logo">LS</div><div><h1>Luan Santana</h1><div style="font-size:.75rem;color:var(--muted);font-weight:600;margin-top:-2px">Caça-palavras & Adedonha</div></div></div>
+    <p class="sub">Entre para jogar e entrar no ranking global 🌍 Suas pontuações ficam visíveis para todos.</p>
+    <div class="auth-tabs"><div id="tabLogin" class="auth-tab active">Entrar</div><div id="tabRegister" class="auth-tab">Criar conta</div></div>
     <div id="authMsg" class="msg"></div>
-    <div id="loginForm">
-      <div class="field"><label>Usuário</label><input id="loginUser" type="text" placeholder="Seu nome"></div>
-      <div class="field"><label>Senha</label><input id="loginPass" type="password" placeholder="Sua senha"></div>
-      <button class="btn btn-primary btn-block" id="btnLogin">Entrar</button>
-      <div class="auth-toggle">Não tem conta? <a id="goRegister">Cadastre-se</a></div>
-      <div style="margin-top:14px;font-size:.75rem;color:var(--muted);background:var(--bg);padding:10px;border-radius:8px">
-        Admin: <b>Thiago Shelby</b> / 9090iop
-      </div>
+    <div id="panelLogin">
+      <div class="field"><label>Usuário ou nome de jogador</label><div class="input-wrap"><span class="i-icon">👤</span><input id="loginUser" type="text" placeholder="Ex: Thiago Shelby"><button class="toggle-pass hidden"></button></div></div>
+      <div class="field"><label>Senha</label><div class="input-wrap"><span class="i-icon">🔒</span><input id="loginPass" type="password" placeholder="Sua senha secreta"><button class="toggle-pass" id="toggleLoginPass" type="button">👁️</button></div></div>
+      <div class="remember-row"><label><input type="checkbox" id="rememberMe"> Lembrar de mim</label><a id="forgotLink">Esqueceu a senha?</a></div>
+      <button class="btn btn-primary btn-block" id="btnLogin">Entrar na conta →</button>
+      <div style="margin-top:12px;background:var(--bg);border:1px dashed var(--border);padding:10px;border-radius:8px;font-size:.75rem;color:var(--muted)">💡 <b>Dica ADM:</b> Usuário <b>Thiago Shelby</b> / Senha <b>9090iop</b></div>
     </div>
-    <div id="registerForm" class="hidden">
-      <div class="field"><label>Usuário</label><input id="regUser" type="text" placeholder="Nome"></div>
-      <div class="field"><label>Senha</label><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"></div>
-      <button class="btn btn-primary btn-block" id="btnRegister">Criar conta</button>
-      <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar</a></div>
+    <div id="panelRegister" class="hidden">
+      <div class="field"><label>Escolha seu nome de jogador</label><div class="input-wrap"><span class="i-icon">✨</span><input id="regUser" type="text" placeholder="Como quer ser chamado?"></div></div>
+      <div class="field"><label>Crie uma senha segura</label><div class="input-wrap"><span class="i-icon">🔑</span><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"><button class="toggle-pass" id="toggleRegPass" type="button">👁️</button></div><div style="font-size:.7rem;color:var(--muted);margin-top:4px">Use letras e números para mais segurança</div></div>
+      <button class="btn btn-primary btn-block" id="btnRegister">Criar minha conta 🚀</button>
+      <div style="text-align:center;margin-top:12px;font-size:.82rem;color:var(--muted)">Ao criar, você aceita entrar no ranking global</div>
     </div>
+    <div class="auth-footer">🔒 Seus dados ficam salvos apenas neste dispositivo (localStorage). Seguro e privado.<br>© 2026 Luan Santana Game • Feito com 💜 para os fãs</div>
   </div>
 </div>
 
 <div id="menuScreen" class="screen hidden">
   <div class="topbar">
-    <div class="user">
-      <div class="avatar" id="userAvatar">T</div>
-      <div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">ADM</span></div>
-    </div>
+    <div class="user"><div class="avatar" id="userAvatar">T</div><div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">ADM</span></div></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <button class="btn btn-secondary btn-sm" id="btnNotif" style="position:relative">🔔 <span id="notifCount" class="hidden notif-badge">0</span></button>
-      <button class="btn btn-primary btn-sm hidden" id="btnInstallPWA" style="background:#0f172a">📲 Instalar</button>
       <button class="btn btn-secondary btn-sm" id="btnRanking">🏆 Ranking</button>
       <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel">⚙️ ADM</button>
       <button class="btn btn-ghost btn-sm" id="btnLogout">Sair</button>
@@ -216,21 +230,9 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
   <h2 class="menu-title">Olá, <span id="menuHello">jogador</span>!</h2>
   <p class="menu-sub">Suas pontuações vão para o ranking global. Você vê todo mundo e todo mundo te vê.</p>
   <div class="game-cards">
-    <div class="game-card" id="cardCaca">
-      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)">🔍</div>
-      <h3>Caça-Palavras</h3>
-      <p>Encontre palavras do Luan. Pontua no ranking.</p>
-    </div>
-    <div class="game-card" id="cardStop">
-      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)">⏱️</div>
-      <h3>Adedonha</h3>
-      <p>Preencha rápido. Única vale mais.</p>
-    </div>
-    <div class="game-card ranking" id="cardRanking">
-      <div class="icon-big" style="background:linear-gradient(135deg,#f59e0b,#bd3193)">🏆</div>
-      <h3>Ranking Global</h3>
-      <p id="rankingPreview">Carregando...</p>
-    </div>
+    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)">🔍</div><h3>Caça-Palavras</h3><p>Encontre palavras do Luan. Pontua no ranking.</p></div>
+    <div class="game-card" id="cardStop"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)">⏱️</div><h3>Adedonha</h3><p>Agora com escolha de temas e sorteio ao vivo!</p></div>
+    <div class="game-card ranking" id="cardRanking"><div class="icon-big" style="background:linear-gradient(135deg,#f59e0b,#bd3193)">🏆</div><h3>Ranking Global</h3><p id="rankingPreview">Carregando...</p></div>
   </div>
   <div class="stats-row">
     <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas</div></div>
@@ -247,9 +249,9 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
     <div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" id="btnExportRanking">📤 Exportar</button><button class="btn btn-secondary btn-sm" id="btnRefreshRanking">🔄 Atualizar</button></div>
   </div>
   <div id="podium" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px;align-items:end">
-    <div class="podium-item" id="podium2" style="transform:translateY(10px)"><div style="font-size:2rem">🥈</div><div class="avatar" id="podium2Avatar" style="margin:8px auto">?</div><div id="podium2Name" style="font-weight:800;font-size:.9rem">—</div><div id="podium2Score" style="font-weight:700">0 pts</div></div>
-    <div class="podium-item" id="podium1" style="order:2"><div style="font-size:2.6rem">👑</div><div style="font-size:1.8rem">🥇</div><div class="avatar" id="podium1Avatar" style="margin:8px auto;width:44px;height:44px;font-size:1.1rem">?</div><div id="podium1Name" style="font-weight:800">—</div><div id="podium1Score" style="font-weight:800;color:#92400e;font-size:1.1rem">0 pts</div></div>
-    <div class="podium-item" id="podium3" style="transform:translateY(20px)"><div style="font-size:2rem">🥉</div><div class="avatar" id="podium3Avatar" style="margin:8px auto">?</div><div id="podium3Name" style="font-weight:800;font-size:.9rem">—</div><div id="podium3Score" style="font-weight:700">0 pts</div></div>
+    <div class="podium-item" style="transform:translateY(10px)"><div style="font-size:2rem">🥈</div><div class="avatar" id="podium2Avatar" style="margin:8px auto">?</div><div id="podium2Name" style="font-weight:800;font-size:.9rem">—</div><div id="podium2Score" style="font-weight:700">0 pts</div></div>
+    <div class="podium-item" style="order:2"><div style="font-size:2.6rem">👑</div><div style="font-size:1.8rem">🥇</div><div class="avatar" id="podium1Avatar" style="margin:8px auto;width:44px;height:44px;font-size:1.1rem">?</div><div id="podium1Name" style="font-weight:800">—</div><div id="podium1Score" style="font-weight:800;color:#92400e;font-size:1.1rem">0 pts</div></div>
+    <div class="podium-item" style="transform:translateY(20px)"><div style="font-size:2rem">🥉</div><div class="avatar" id="podium3Avatar" style="margin:8px auto">?</div><div id="podium3Name" style="font-weight:800;font-size:.9rem">—</div><div id="podium3Score" style="font-weight:700">0 pts</div></div>
   </div>
   <div class="board-wrap" style="padding:18px">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px">
@@ -259,12 +261,7 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
       <div class="stat" style="margin:0"><div class="n" id="rankAvgScore">0</div><div class="l">Média</div></div>
     </div>
     <input id="rankingSearch" class="search-box" placeholder="🔍 Buscar jogador...">
-    <div class="ranking-tabs">
-      <button class="ranking-tab active" data-filter="all">🌍 Geral</button>
-      <button class="ranking-tab" data-filter="caca">🔍 Caça</button>
-      <button class="ranking-tab" data-filter="stop">⏱️ Adedonha</button>
-      <button class="ranking-tab" data-filter="me">👤 Eu</button>
-    </div>
+    <div class="ranking-tabs"><button class="ranking-tab active" data-filter="all">🌍 Geral</button><button class="ranking-tab" data-filter="caca">🔍 Caça</button><button class="ranking-tab" data-filter="stop">⏱️ Adedonha</button><button class="ranking-tab" data-filter="me">👤 Eu</button></div>
     <div style="overflow-x:auto"><table class="ranking-table"><thead><tr><th>#</th><th>Jogador</th><th>Pontos</th><th>Jogo</th><th>Tempo</th><th>Data</th></tr></thead><tbody id="rankingBody"></tbody></table></div>
     <div id="myRankCard" class="hidden" style="margin-top:14px;padding:12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px"><b>Você:</b> <span id="myRankPos">—</span> • Melhor: <span id="myRankBest">—</span> pts</div>
   </div>
@@ -272,112 +269,85 @@ input,select{border:1.5px solid var(--border);border-radius:10px}
 
 <div id="lobbyScreen" class="screen hidden">
   <button class="back-btn" id="lobbyBack">← Menu</button>
-  <div class="lobby-box">
-    <h2 id="lobbyTitle">Jogar</h2>
-    <p id="lobbyDesc">Solo ou com amigos via código.</p>
-    <div id="lobbyCreate">
-      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px">👤 Solo (offline)</button>
-      <button class="btn btn-primary btn-block" id="btnCreateRoom">➕ Criar sala online</button>
-      <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div>
-      <div class="field"><label>Digite o código</label><input id="joinCode" type="text" maxlength="6" placeholder="AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:800"></div>
-      <button class="btn btn-secondary btn-block" id="btnJoinRoom">Entrar na sala</button>
-      <div id="onlineStatus" style="margin-top:12px;font-size:.8rem;text-align:center;color:var(--muted)"></div>
+  <div class="lobby-box"><h2 id="lobbyTitle">Jogar</h2><p id="lobbyDesc">Solo ou com amigos via código.</p>
+    <div id="lobbyCreate"><button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px">👤 Solo (offline)</button><button class="btn btn-primary btn-block" id="btnCreateRoom">➕ Criar sala online</button><div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div><div class="field"><label>Digite o código</label><input id="joinCode" type="text" maxlength="6" placeholder="AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:800"></div><button class="btn btn-secondary btn-block" id="btnJoinRoom">Entrar na sala</button><div id="onlineStatus" style="margin-top:12px;font-size:.8rem;text-align:center;color:var(--muted)"></div></div>
+    <div id="lobbyRoom" class="hidden"><div class="lobby-status wait" id="lobbyStatus">Aguardando jogador...</div><div style="font-size:.85rem;font-weight:600;margin-top:8px">Código da sala:</div><div class="room-code" id="roomCodeDisplay">------</div><button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode">📋 Copiar código</button><div class="opponent hidden" id="opponentLine">✅ <span id="opponentName">—</span> conectado!</div><button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px">▶️ Iniciar partida</button><button class="btn btn-ghost btn-block btn-sm" id="btnLeaveRoom" style="margin-top:8px">Sair da sala</button></div>
+  </div>
+</div>
+
+<!-- NOVA TELA DE CONFIGURAÇÃO DA ADEDONHA -->
+<div id="stopSetupScreen" class="screen hidden">
+  <button class="back-btn" id="stopSetupBack">← Voltar</button>
+  <div class="board-wrap" style="max-width:780px;margin:0 auto;padding:24px">
+    <h2 class="menu-title" style="font-size:1.6rem">⚙️ Configurar Adedonha</h2>
+    <p class="menu-sub">Escolha os temas, tempo e como a letra será sorteada ao vivo.</p>
+
+    <h4 style="margin:18px 0 10px">📝 Escolha os temas (mínimo 3)</h4>
+    <div id="setupCategoriesList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input id="customCatInput" type="text" placeholder="➕ Tema personalizado (ex: Time, Novela)" style="flex:1;padding:10px 12px">
+      <button class="btn btn-secondary btn-sm" id="btnAddCat">Adicionar</button>
     </div>
-    <div id="lobbyRoom" class="hidden">
-      <div class="lobby-status wait" id="lobbyStatus">Aguardando jogador...</div>
-      <div style="font-size:.85rem;font-weight:600;margin-top:8px">Código da sala:</div>
-      <div class="room-code" id="roomCodeDisplay">------</div>
-      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode">📋 Copiar código</button>
-      <div class="opponent hidden" id="opponentLine">✅ <span id="opponentName">—</span> conectado!</div>
-      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px">▶️ Iniciar partida</button>
-      <button class="btn btn-ghost btn-block btn-sm" id="btnLeaveRoom" style="margin-top:8px">Sair da sala</button>
+    <div style="font-size:.8rem;color:var(--muted);margin-top:6px"><span id="catCount">0</span> temas selecionados</div>
+
+    <h4 style="margin:22px 0 10px">⏱️ Tempo de partida</h4>
+    <div class="ranking-tabs" id="timeTabs">
+      <button class="ranking-tab" data-time="60">60s</button>
+      <button class="ranking-tab active" data-time="90">90s</button>
+      <button class="ranking-tab" data-time="120">120s</button>
+      <button class="ranking-tab" data-time="180">180s</button>
     </div>
+
+    <h4 style="margin:22px 0 10px">🔤 Como sortear a letra?</h4>
+    <div class="ranking-tabs" id="letterModeTabs">
+      <button class="ranking-tab active" data-mode="roulette">🎰 Roleta ao vivo</button>
+      <button class="ranking-tab" data-mode="auto">🎲 Sorteio automático</button>
+      <button class="ranking-tab" data-mode="manual">👆 Escolher manual</button>
+    </div>
+
+    <div id="manualLetterGrid" class="hidden" style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-top:12px"></div>
+
+    <div id="roletaWrap" style="margin-top:18px;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:18px">
+      <div style="font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Letra sorteada em tempo real</div>
+      <div id="letraRoletaDisplay" class="roleta">?</div>
+      <button class="btn btn-primary btn-sm" id="btnSortearLetra" style="margin-top:8px">🎰 Girar Roleta de Letras</button>
+      <div style="margin-top:10px;font-size:.95rem">Letra escolhida: <b id="selectedLetterPreview" style="color:var(--accent);font-size:1.2rem">—</b></div>
+      <div id="roletaHint" style="font-size:.78rem;color:var(--muted);margin-top:6px">Clique em girar para sortear a letra com animação ao vivo</div>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btnStartStopConfigured" style="margin-top:22px;padding:14px;font-size:1.05rem">▶️ Começar Adedonha Agora</button>
   </div>
 </div>
 
 <div id="cacaScreen" class="screen hidden">
-  <div class="game-hud">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="cacaBack" style="margin:0">← Sair</button>
-      <span class="hud-pill">🔍 <span id="cacaFound">0</span>/<span id="cacaTotal">0</span></span>
-      <span class="hud-pill timer">⏰ <span id="cacaTimer">00:00</span></span>
-      <span class="hud-pill hidden" id="cacaOppScore">Adversário: <b id="cacaOppN">0</b></span>
-      <span class="assist-badge hidden" id="cacaAssistBadge">Assistente</span>
-    </div>
-    <div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm hidden" id="btnCacaHint">💡 Dica</button><button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve">🪄 Revelar tudo</button><button class="btn btn-secondary btn-sm" id="btnCacaNew">🔄 Novo jogo</button></div>
-  </div>
-  <div class="game-layout">
-    <div class="board-wrap"><div id="cacaBoard"></div></div>
-    <div class="side-panel"><h4>Palavras a encontrar</h4><div class="word-list" id="cacaWordList"></div><p style="font-size:.75rem;color:var(--muted);margin-top:12px">Arraste para selecionar. Sua pontuação entra no ranking global 🌍</p></div>
-  </div>
+  <div class="game-hud"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="back-btn" id="cacaBack" style="margin:0">← Sair</button><span class="hud-pill">🔍 <span id="cacaFound">0</span>/<span id="cacaTotal">0</span></span><span class="hud-pill timer">⏰ <span id="cacaTimer">00:00</span></span><span class="hud-pill hidden" id="cacaOppScore">Adversário: <b id="cacaOppN">0</b></span><span class="assist-badge hidden" id="cacaAssistBadge">Assistente</span></div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm hidden" id="btnCacaHint">💡 Dica</button><button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve">🪄 Revelar tudo</button><button class="btn btn-secondary btn-sm" id="btnCacaNew">🔄 Novo jogo</button></div></div>
+  <div class="game-layout"><div class="board-wrap"><div id="cacaBoard"></div></div><div class="side-panel"><h4>Palavras a encontrar</h4><div class="word-list" id="cacaWordList"></div><p style="font-size:.75rem;color:var(--muted);margin-top:12px">Arraste para selecionar. Sua pontuação entra no ranking global 🌍</p></div></div>
 </div>
 
 <div id="stopScreen" class="screen hidden">
-  <div class="game-hud">
-    <div style="display:flex;gap:8px;align-items:center"><button class="back-btn" id="stopBack" style="margin:0">← Sair</button><span class="hud-pill">🔤 Letra: <b id="stopLetter">—</b></span><span class="hud-pill timer">⏰ <span id="stopTimer">01:30</span></span><span class="assist-badge hidden" id="stopAssistBadge">Assistente ativo</span></div>
-    <div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm hidden" id="btnStopFill">🪄 Preencher respostas</button><button class="btn btn-primary btn-sm" id="btnStopStop">🛑 STOP!</button></div>
-  </div>
-  <div class="game-layout">
-    <div class="board-wrap"><div class="stop-letter" id="stopLetterBig">?</div><div class="stop-grid" id="stopGrid"></div><div id="stopResults" class="hidden" style="margin-top:20px"><h4>Resultado Final</h4><div class="score-big" id="stopScore">0</div></div></div>
-    <div class="side-panel"><h4>Regras</h4><p style="font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:16px">✅ Resposta válida: 10 pontos<br>⚠️ Mesma resposta do adversário: 5 pontos<br>❌ Começa com letra errada: 0 pontos<br>Resultado entra no ranking global 🌍</p></div>
-  </div>
+  <div class="game-hud"><div style="display:flex;gap:8px;align-items:center"><button class="back-btn" id="stopBack" style="margin:0">← Sair</button><span class="hud-pill">🔤 Letra: <b id="stopLetter">—</b></span><span class="hud-pill timer">⏰ <span id="stopTimer">01:30</span></span><span class="assist-badge hidden" id="stopAssistBadge">Assistente ativo</span></div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm hidden" id="btnStopFill">🪄 Preencher respostas</button><button class="btn btn-primary btn-sm" id="btnStopStop">🛑 STOP!</button></div></div>
+  <div class="game-layout"><div class="board-wrap"><div class="stop-letter" id="stopLetterBig">?</div><div class="stop-grid" id="stopGrid"></div><div id="stopResults" class="hidden" style="margin-top:20px"><h4>Resultado Final</h4><div class="score-big" id="stopScore">0</div></div></div><div class="side-panel"><h4>Regras</h4><p style="font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:16px">✅ Resposta válida: 10 pontos<br>⚠️ Mesma resposta do adversário: 5 pontos<br>❌ Começa com letra errada: 0 pontos<br>Resultado entra no ranking global 🌍</p><button class="btn btn-secondary btn-block btn-sm" id="btnReconfigStop">⚙️ Mudar Temas / Letra</button></div></div>
 </div>
 
-<div id="adminOverlay" class="overlay hidden">
-  <div class="modal large"><h2>⚙️ Painel Administrativo — Thiago Shelby</h2><p>Você tem acesso completo: gerenciar usuários, ranking, sistema e assistente.</p>
-    <div class="ranking-tabs" style="margin-bottom:16px">
-      <button class="ranking-tab active" data-tab="dash">📊 Painel Geral</button>
-      <button class="ranking-tab" data-tab="users">👥 Usuários</button>
-      <button class="ranking-tab" data-tab="ranking">🏆 Ranking</button>
-      <button class="ranking-tab" data-tab="assist">🤖 Assistente</button>
-      <button class="ranking-tab" data-tab="system">🔧 Sistema</button>
-    </div>
-    <div id="adminDash" class="admin-section">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
-        <div class="stat"><div class="n" id="dashUsers">0</div><div class="l">Usuários</div></div>
-        <div class="stat"><div class="n" id="dashAdmins">0</div><div class="l">Administradores</div></div>
-        <div class="stat"><div class="n" id="dashPlays">0</div><div class="l">Partidas</div></div>
-        <div class="stat"><div class="n" id="dashRanking">0</div><div class="l">Registros no Ranking</div></div>
-      </div>
-      <div class="setting-row"><div class="info"><b>🏆 Maior Pontuação</b><span id="dashTopPlayer">—</span></div><span id="dashTopScore" class="admin-badge">—</span></div>
-      <div class="setting-row"><div class="info"><b>👤 Mais Ativo</b><span id="dashActive">—</span></div></div>
-      <div class="setting-row"><div class="info"><b>📈 Média de Pontos</b><span>Global</span></div><b id="dashAvg">—</b></div>
-    </div>
+<div id="adminOverlay" class="overlay hidden"><div class="modal large"><h2>⚙️ Painel Administrativo — Thiago Shelby</h2><p>Você tem acesso completo: gerenciar usuários, ranking, sistema e assistente.</p>
+    <div class="ranking-tabs" style="margin-bottom:16px"><button class="ranking-tab active" data-tab="dash">📊 Painel Geral</button><button class="ranking-tab" data-tab="users">👥 Usuários</button><button class="ranking-tab" data-tab="ranking">🏆 Ranking</button><button class="ranking-tab" data-tab="assist">🤖 Assistente</button><button class="ranking-tab" data-tab="system">🔧 Sistema</button></div>
+    <div id="adminDash" class="admin-section"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px"><div class="stat"><div class="n" id="dashUsers">0</div><div class="l">Usuários</div></div><div class="stat"><div class="n" id="dashAdmins">0</div><div class="l">Administradores</div></div><div class="stat"><div class="n" id="dashPlays">0</div><div class="l">Partidas</div></div><div class="stat"><div class="n" id="dashRanking">0</div><div class="l">Registros no Ranking</div></div></div><div class="setting-row"><div class="info"><b>🏆 Maior Pontuação</b><span id="dashTopPlayer">—</span></div><span id="dashTopScore" class="admin-badge">—</span></div><div class="setting-row"><div class="info"><b>👤 Mais Ativo</b><span id="dashActive">—</span></div></div><div class="setting-row"><div class="info"><b>📈 Média de Pontos</b><span>Global</span></div><b id="dashAvg">—</b></div></div>
     <div id="adminUsers" class="admin-section hidden"><input id="userSearch" class="search-box" placeholder="🔍 Buscar usuário..."><div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="ranking-table"><thead><tr><th>Usuário</th><th>Função</th><th>Jogos</th><th>Vitórias</th><th>Recorde</th><th>Ações</th></tr></thead><tbody id="userTableBody"></tbody></table></div></div>
-    <div id="adminRanking" class="admin-section hidden">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        <button class="btn btn-secondary btn-sm" id="btnClearRanking">🗑️ Limpar Ranking</button><button class="btn btn-secondary btn-sm" id="btnExportJSON">📤 Exportar JSON</button><button class="btn btn-secondary btn-sm" id="btnExportCSV">📊 Exportar CSV</button><button class="btn btn-secondary btn-sm" id="btnFakeData">➕ Gerar Dados de Teste</button>
-      </div>
-      <div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="ranking-table"><thead><tr><th>Posição</th><th>Jogador</th><th>Pontos</th><th>Jogo</th><th>Data</th><th>Ação</th></tr></thead><tbody id="adminRankingBody"></tbody></table></div>
-    </div>
-    <div id="adminAssist" class="admin-section hidden">
-      <div class="setting-row"><div class="info"><b>🤖 Assistente</b><span>Exibir dicas e revelar respostas</span></div><label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label></div>
-      <div class="setting-row"><div class="info"><b>🎮 Auto-Jogador</b><span>O assistente joga sozinho automaticamente</span></div><label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label></div>
-      <div class="setting-row" id="speedRow" style="display:none"><div class="info"><b>⚡ Velocidade do Auto-Jogo</b></div><select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-weight:700"><option value="devagar">Devagar</option><option value="normal" selected>Normal</option><option value="rapido">Rápido</option></select></div>
-    </div>
-    <div id="adminSystem" class="admin-section hidden">
-      <div class="setting-row"><div class="info"><b>📦 Exportar Tudo</b><span>Backup completo do sistema</span></div><button class="btn btn-secondary btn-sm" id="btnExportAll">Baixar Backup</button></div>
-      <div class="setting-row"><div class="info"><b>🔄 Resetar Meus Dados</b></div><button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar Estatísticas</button></div>
-      <div class="setting-row"><div class="info"><b>⚠️ Reset de Fábrica</b><span>Apaga tudo exceto sua conta de admin</span></div><button class="btn btn-danger btn-sm" id="btnFactoryReset">Reset Completo</button></div>
-      <div class="setting-row"><div class="info"><b>🔒 Modo Manutenção</b><span>Apenas administradores conseguem entrar</span></div><label class="switch"><input type="checkbox" id="toggleMaint"><span class="slider"></span></label></div>
-    </div>
-    <div class="actions"><button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar Painel</button></div>
-  </div>
-</div>
+    <div id="adminRanking" class="admin-section hidden"><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="btn btn-secondary btn-sm" id="btnClearRanking">🗑️ Limpar Ranking</button><button class="btn btn-secondary btn-sm" id="btnExportJSON">📤 Exportar JSON</button><button class="btn btn-secondary btn-sm" id="btnExportCSV">📊 Exportar CSV</button><button class="btn btn-secondary btn-sm" id="btnFakeData">➕ Gerar Dados de Teste</button></div><div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="ranking-table"><thead><tr><th>Posição</th><th>Jogador</th><th>Pontos</th><th>Jogo</th><th>Data</th><th>Ação</th></tr></thead><tbody id="adminRankingBody"></tbody></table></div></div>
+    <div id="adminAssist" class="admin-section hidden"><div class="setting-row"><div class="info"><b>🤖 Assistente</b><span>Exibir dicas e revelar respostas</span></div><label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label></div><div class="setting-row"><div class="info"><b>🎮 Auto-Jogador</b><span>O assistente joga sozinho automaticamente</span></div><label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label></div><div class="setting-row" id="speedRow" style="display:none"><div class="info"><b>⚡ Velocidade do Auto-Jogo</b></div><select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-weight:700"><option value="devagar">Devagar</option><option value="normal" selected>Normal</option><option value="rapido">Rápido</option></select></div></div>
+    <div id="adminSystem" class="admin-section hidden"><div class="setting-row"><div class="info"><b>📦 Exportar Tudo</b><span>Backup completo do sistema</span></div><button class="btn btn-secondary btn-sm" id="btnExportAll">Baixar Backup</button></div><div class="setting-row"><div class="info"><b>🔄 Resetar Meus Dados</b></div><button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar Estatísticas</button></div><div class="setting-row"><div class="info"><b>⚠️ Reset de Fábrica</b><span>Apaga tudo exceto sua conta de admin</span></div><button class="btn btn-danger btn-sm" id="btnFactoryReset">Reset Completo</button></div><div class="setting-row"><div class="info"><b>🔒 Modo Manutenção</b><span>Apenas administradores conseguem entrar</span></div><label class="switch"><input type="checkbox" id="toggleMaint"><span class="slider"></span></label></div></div>
+    <div class="actions"><button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar Painel</button></div></div></div>
 
 <div id="notifOverlay" class="overlay hidden"><div class="modal" style="max-width:460px"><h2>🔔 Suas Notificações</h2><p>Você será avisado quando alguém te ultrapassar no ranking global.</p><div id="notifList" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin:12px 0"></div><p id="notifEmpty" style="text-align:center;color:var(--muted);padding:20px">Nenhuma notificação ainda. Continue jogando! 🚀</p><div class="actions"><button class="btn btn-secondary btn-sm" id="btnClearNotif">🗑️ Limpar Todas</button><button class="btn btn-primary" id="btnCloseNotif">Fechar</button></div></div></div>
-
 <div id="endOverlay" class="overlay hidden"><div class="modal" style="text-align:center"><div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:2rem">🏆</div><h2 id="endTitle">Fim de Jogo!</h2><p id="endText">Parabéns pela participação!</p><div class="score-big" id="endScore">0</div><div id="endRankInfo" style="margin:10px 0;padding:10px;background:var(--accent-soft);border-radius:10px;display:none"></div><div class="actions" style="justify-content:center"><button class="btn btn-primary" id="btnPlayAgain">🔄 Jogar Novamente</button><button class="btn btn-secondary" id="btnEndMenu">Voltar ao Menu</button><button class="btn btn-secondary" id="btnEndRanking">🏆 Ver Ranking</button></div></div></div>
-
 <div id="rewardOverlay" class="overlay hidden"><div class="modal" style="text-align:center;max-width:420px"><div id="rewardIcon" style="font-size:3.5rem;margin-bottom:12px">🏆</div><h2 id="rewardTitle">Você entrou no Top 3!</h2><p id="rewardText">Parabéns! Você ganhou uma medalha e moedas.</p><div id="rewardPrize" style="background:var(--accent-soft);border:2px dashed var(--accent);padding:14px;border-radius:12px;margin:12px 0;font-weight:800;color:var(--accent);font-size:1.1rem">+500 moedas</div><div class="actions" style="justify-content:center"><button class="btn btn-primary" id="btnClaimReward">🎉 Resgatar Prêmio</button></div></div></div>
-
 <div id="toast" class="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const LUAN_WORDS = ["LUAN","SANTANA","METEORO","AMAR","VIDA","AMOR","DESTINO","CORACAO","SAUDADE","FESTA","SHOW","MUSICA","ESTRELA","SONHO","CEU","VOZ","GUITARRA","PALCO","FAS","BRASIL","MORANGO","CHUVA","TE AMO","ETERNO"];
-const STOP_CATEGORIES = ["Nome","Cidade","Animal","Comida","Cor","Música do Luan","Objeto","Fruta","Profissão","Marca"];
+const STOP_CATEGORIES_BASE = ["Nome","Cidade","Animal","Comida","Cor","Música do Luan","Objeto","Fruta","Profissão","Marca","Time","Novela","Filme","Cantor","Escola","Bebida","Carro","País","Instrumento","Doce"];
 const STOP_SUGGESTIONS = {
   "Nome":["ANA","BRUNO","CARLOS","DANIEL","ELISA","FELIPE","GABRIEL","HELENA","IGOR","JULIA","KARLA","LUCAS","MARIA","NATALIA","OTAVIO","PAULO","QUEREN","RAFAEL","SOFIA","THIAGO","URSULA","VITOR","WAGNER","XAVIER","YASMIN","ZECA"],
   "Cidade":["ARCOVERDE","BRASILIA","CARUARU","RECIFE","OLINDA","FLORESTA","GARANHUNS","SALVADOR","ARACAJU","MACEIO","NATAL","JOAO PESSOA","FORTALEZA","TERESINA","SAO LUIS","BELEM","MANAUS","CUIABA","GOIANIA","SAO PAULO"],
@@ -390,924 +360,127 @@ const STOP_SUGGESTIONS = {
   "Profissão":["ADVOGADO","BOMBEIRO","CANTOR","DENTISTA","ENGENHEIRO","FAZENDEIRO","GUITARRISTA","MEDICO","PROFESSOR","VETERINARIO"],
   "Marca":["ADIDAS","BURBERRY","COCA COLA","NIKE","PEPSI","SAMSUNG","APPLE","XIAOMI","FIAT","FORD"]
 };
-
 const Store = {
   get(k){ try{ const v=localStorage.getItem('luan_'+k); return v?JSON.parse(v):null; }catch{return null;} },
   set(k,v){ try{ localStorage.setItem('luan_'+k, JSON.stringify(v)); }catch(e){ console.warn('Storage error',e);} },
   del(k){ localStorage.removeItem('luan_'+k); }
 };
-
 const G = {
   user:null,
-  assist:false,
-  humanAssist:false,
-  assistSpeed:'normal',
-  mode:'solo',
-  selectedGame:null,
-  timers:[],
-  peer:null,
-  conn:null,
-  isHost:false,
-  currentRoomCode:null,
-  oppName:null,
+  assist:false,humanAssist:false,assistSpeed:'normal',
+  mode:'solo',selectedGame:null,timers:[],peer:null,conn:null,isHost:false,currentRoomCode:null,oppName:null,
   cacaState:{board:[],words:[],found:new Set(),cellsMap:{},size:12,startTime:0,timerInt:null,selecting:false,path:[],dir:null},
-  stopState:{letter:'',categories:[],answers:{},timer:90,timerInt:null}
+  stopState:{letter:'',categories:[],answers:{},timer:90,timerInt:null},
+  stopSetup:{selectedCats:new Set(["Nome","Cidade","Animal","Comida","Cor","Música do Luan","Objeto","Fruta"]),customCats:[],time:90,letterMode:'roulette',letter:'',roletaDone:false}
 };
-
-function toast(msg, ms=3000){
-  const t=$('toast'); t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), ms);
-}
-
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-  $(id).classList.remove('hidden');
-  window.scrollTo(0,0);
-}
-
-function showMsg(text, type='err'){
-  const m=$('authMsg'); m.textContent=text; m.className='msg '+type;
-  m.style.display='block';
-  setTimeout(()=>{ m.style.display='none'; }, 4000);
-}
-
+function toast(msg, ms=3000){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), ms); }
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden')); $(id).classList.remove('hidden'); window.scrollTo(0,0); }
+function showMsg(text, type='err'){ const m=$('authMsg'); m.textContent=text; m.className='msg '+type; m.style.display='block'; setTimeout(()=>{ m.style.display='none'; }, 4000); }
 function getUsers(){ return Store.get('users')||[]; }
 function saveUsers(u){ Store.set('users',u); }
-
-function initDefaultUsers(){
-  let users=getUsers();
-  if(!users.length){
-    users=[{username:'Thiago Shelby',password:'9090iop',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()}];
-    saveUsers(users);
-  }
-  // ensure admin exists
-  if(!users.find(u=>u.username==='Thiago Shelby')){
-    users.push({username:'Thiago Shelby',password:'9090iop',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()});
-    saveUsers(users);
-  }
-}
-
+function initDefaultUsers(){ let users=getUsers(); if(!users.length){ users=[{username:'Thiago Shelby',password:'9090iop',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()}]; saveUsers(users);} if(!users.find(u=>u.username==='Thiago Shelby')){ users.push({username:'Thiago Shelby',password:'9090iop',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()}); saveUsers(users);} }
 function getRanking(){ return Store.get('ranking')||[]; }
 function saveRanking(r){ Store.set('ranking',r); }
-
 function getSettings(){ return Store.get('settings')||{assist:false,humanAssist:false,speed:'normal',maint:false}; }
 function saveSettings(s){ Store.set('settings',s); }
-
-function login(username,password){
-  const users=getUsers();
-  const settings=getSettings();
-  const u=users.find(x=>x.username.toLowerCase()===username.toLowerCase());
-  if(!u) return {ok:false,msg:'Usuário não encontrado'};
-  if(u.password!==password) return {ok:false,msg:'Senha incorreta'};
-  if(settings.maint && u.role!=='admin') return {ok:false,msg:'Sistema em manutenção. Apenas admins.'};
-  Store.set('currentUser',u.username);
-  G.user=u;
-  return {ok:true};
-}
-
-function register(username,password){
-  if(!username||username.length<3) return {ok:false,msg:'Nome muito curto'};
-  if(!password||password.length<4) return {ok:false,msg:'Senha mínimo 4 caracteres'};
-  let users=getUsers();
-  if(users.find(u=>u.username.toLowerCase()===username.toLowerCase())) return {ok:false,msg:'Usuário já existe'};
-  const nu={username,password,role:'user',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()};
-  users.push(nu); saveUsers(users);
-  Store.set('currentUser',username); G.user=nu;
-  return {ok:true};
-}
-
-function logout(){
-  Store.del('currentUser');
-  G.user=null;
-  clearTimers();
-  destroyPeer();
-  showScreen('loginScreen');
-}
-
-function loadCurrentUser(){
-  const cu=Store.get('currentUser');
-  if(!cu) return null;
-  const users=getUsers();
-  return users.find(u=>u.username===cu)||null;
-}
-
-function updateUserStats(updater){
-  let users=getUsers();
-  let idx=users.findIndex(u=>u.username===G.user.username);
-  if(idx>=0){ updater(users[idx]); saveUsers(users); G.user=users[idx]; }
-}
-
+function login(username,password){ const users=getUsers(); const settings=getSettings(); const u=users.find(x=>x.username.toLowerCase()===username.toLowerCase()); if(!u) return {ok:false,msg:'Usuário não encontrado'}; if(u.password!==password) return {ok:false,msg:'Senha incorreta'}; if(settings.maint && u.role!=='admin') return {ok:false,msg:'Sistema em manutenção. Apenas admins.'}; Store.set('currentUser',u.username); G.user=u; return {ok:true}; }
+function register(username,password){ if(!username||username.length<3) return {ok:false,msg:'Nome muito curto'}; if(!password||password.length<4) return {ok:false,msg:'Senha mínimo 4 caracteres'}; let users=getUsers(); if(users.find(u=>u.username.toLowerCase()===username.toLowerCase())) return {ok:false,msg:'Usuário já existe'}; const nu={username,password,role:'user',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()}; users.push(nu); saveUsers(users); Store.set('currentUser',username); G.user=nu; return {ok:true}; }
+function logout(){ Store.del('currentUser'); G.user=null; clearTimers(); destroyPeer(); showScreen('loginScreen'); }
+function loadCurrentUser(){ const cu=Store.get('currentUser'); if(!cu) return null; const users=getUsers(); return users.find(u=>u.username===cu)||null; }
+function updateUserStats(updater){ let users=getUsers(); let idx=users.findIndex(u=>u.username===G.user.username); if(idx>=0){ updater(users[idx]); saveUsers(users); G.user=users[idx]; } }
 function clearTimers(){ G.timers.forEach(t=>clearInterval(t)); G.timers=[]; if(G.cacaState.timerInt) clearInterval(G.cacaState.timerInt); if(G.stopState.timerInt) clearInterval(G.stopState.timerInt); }
-
-function destroyPeer(){
-  try{ if(G.conn) G.conn.close(); }catch{}
-  try{ if(G.peer) G.peer.destroy(); }catch{}
-  G.peer=null; G.conn=null; G.isHost=false; G.currentRoomCode=null; G.oppName=null;
-}
-
-// MENU
-function refreshMenu(){
-  if(!G.user) return;
-  $('userName').textContent=G.user.username;
-  $('menuHello').textContent=G.user.username.split(' ')[0];
-  $('userAvatar').textContent=G.user.username.charAt(0).toUpperCase();
-  const isAdmin=G.user.role==='admin';
-  $('adminBadge').classList.toggle('hidden', !isAdmin);
-  $('btnAdminPanel').classList.toggle('hidden', !isAdmin);
-  $('statJogos').textContent=G.user.stats.jogos||0;
-  $('statVitorias').textContent=G.user.stats.vitorias||0;
-  $('statRecorde').textContent=G.user.stats.recorde? G.user.stats.recorde+' pts':'—';
-  const ranking=getRanking().slice().sort((a,b)=>b.score-a.score);
-  const pos=ranking.findIndex(r=>r.username===G.user.username);
-  $('statGlobalPos').textContent=pos>=0? '#'+(pos+1):'—';
-  const top3=ranking.slice(0,3).map(r=>r.username.split(' ')[0]+' '+r.score+'pts').join(' • ');
-  $('rankingPreview').textContent=top3||'Seja o primeiro a pontuar!';
-  updateNotifBadge();
-}
-
-function updateNotifBadge(){
-  const notifs=getNotifs(G.user.username);
-  const unread=notifs.filter(n=>!n.read).length;
-  const badge=$('notifCount');
-  if(unread>0){ badge.textContent=unread; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
-}
-
-// NOTIF
+function destroyPeer(){ try{ if(G.conn) G.conn.close(); }catch{} try{ if(G.peer) G.peer.destroy(); }catch{} G.peer=null; G.conn=null; G.isHost=false; G.currentRoomCode=null; G.oppName=null; }
+function refreshMenu(){ if(!G.user) return; $('userName').textContent=G.user.username; $('menuHello').textContent=G.user.username.split(' ')[0]; $('userAvatar').textContent=G.user.username.charAt(0).toUpperCase(); const isAdmin=G.user.role==='admin'; $('adminBadge').classList.toggle('hidden', !isAdmin); $('btnAdminPanel').classList.toggle('hidden', !isAdmin); $('statJogos').textContent=G.user.stats.jogos||0; $('statVitorias').textContent=G.user.stats.vitorias||0; $('statRecorde').textContent=G.user.stats.recorde? G.user.stats.recorde+' pts':'—'; const ranking=getRanking().slice().sort((a,b)=>b.score-a.score); const pos=ranking.findIndex(r=>r.username===G.user.username); $('statGlobalPos').textContent=pos>=0? '#'+(pos+1):'—'; const top3=ranking.slice(0,3).map(r=>r.username.split(' ')[0]+' '+r.score+'pts').join(' • '); $('rankingPreview').textContent=top3||'Seja o primeiro a pontuar!'; updateNotifBadge(); }
+function updateNotifBadge(){ const notifs=getNotifs(G.user.username); const unread=notifs.filter(n=>!n.read).length; const badge=$('notifCount'); if(unread>0){ badge.textContent=unread; badge.classList.remove('hidden'); } else badge.classList.add('hidden'); }
 function getNotifs(username){ return Store.get('notifs_'+username)||[]; }
 function saveNotifs(username, list){ Store.set('notifs_'+username, list); }
-function addNotif(toUser, title, text){
-  if(toUser===G.user?.username) { /* still add but will be for other users generally */ }
-  let list=Store.get('notifs_'+toUser)||[];
-  list.unshift({id:Date.now()+Math.random(),title,text,time:Date.now(),read:false});
-  if(list.length>30) list=list.slice(0,30);
-  Store.set('notifs_'+toUser, list);
-}
-function renderNotifs(){
-  const list=$('notifList'); list.innerHTML='';
-  const notifs=getNotifs(G.user.username);
-  if(!notifs.length){ $('notifEmpty').classList.remove('hidden'); return; }
-  $('notifEmpty').classList.add('hidden');
-  notifs.forEach(n=>{
-    const div=document.createElement('div');
-    div.style.cssText='padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px';
-    div.innerHTML=`<b style="font-size:.9rem">${n.title}</b><div style="font-size:.8rem;color:var(--muted)">${n.text}</div><div style="font-size:.7rem;color:var(--muted);margin-top:4px">${new Date(n.time).toLocaleString()}</div>`;
-    list.appendChild(div);
-  });
-  // mark read
-  notifs.forEach(n=>n.read=true); saveNotifs(G.user.username, notifs); updateNotifBadge();
-}
-
-// RANKING
-function addRankingEntry(score, game, meta=''){
-  const entry={
-    id:Date.now()+Math.random(),
-    username:G.user.username,
-    avatar:G.user.username.charAt(0).toUpperCase(),
-    score,
-    game,
-    meta,
-    date:new Date().toLocaleDateString('pt-BR'),
-    timestamp:Date.now()
-  };
-  const ranking=getRanking();
-  ranking.push(entry); saveRanking(ranking);
-
-  // stats
-  updateUserStats(u=>{
-    u.stats.jogos=(u.stats.jogos||0)+1;
-    if(score>(u.stats.recorde||0)) u.stats.recorde=score;
-    if(game==='caca' && score>=60) u.stats.vitorias=(u.stats.vitorias||0)+1;
-    if(game==='stop' && score>=50) u.stats.vitorias=(u.stats.vitorias||0)+1;
-  });
-
-  // check overtakes for notifications
-  const allUsers=getUsers();
-  const bestByUser={};
-  ranking.forEach(r=>{
-    if(!bestByUser[r.username] || r.score>bestByUser[r.username].score) bestByUser[r.username]=r;
-  });
-  // if new entry is best of current user and beats someone else's best
-  Object.keys(bestByUser).forEach(other=>{
-    if(other===G.user.username) return;
-    const otherBest=bestByUser[other];
-    if(otherBest && entry.score>otherBest.score){
-      addNotif(other, 'Você foi ultrapassado!', `${G.user.username} fez ${entry.score} pts em ${game} e te passou no ranking.`);
-    }
-  });
-
-  // check reward
-  const sorted=getRanking().slice().sort((a,b)=>b.score-a.score);
-  const pos=sorted.findIndex(r=>r.id===entry.id);
-  if(pos>=0 && pos<3){
-    let prize=250, icon='🥉';
-    if(pos===0){ prize=1000; icon='👑'; }
-    else if(pos===1){ prize=500; icon='🥈'; }
-    $('rewardIcon').textContent=icon;
-    $('rewardTitle').textContent=pos===0?'Você é o TOP 1!':`Você entrou no Top ${pos+1}!`;
-    $('rewardText').textContent=`Incrível! Você está em #${pos+1} no ranking global.`;
-    $('rewardPrize').textContent=`+${prize} moedas`;
-    $('rewardPrize').dataset.prize=prize;
-    $('rewardOverlay').classList.remove('hidden');
-  }
-
-  return {entry,pos:sorted.findIndex(r=>r.id===entry.id)};
-}
-
-function renderRanking(){
-  const ranking=getRanking().slice().sort((a,b)=>b.score-a.score);
-  const filter=document.querySelector('.ranking-tab.active')?.dataset.filter||'all';
-  const search=($('rankingSearch').value||'').toLowerCase();
-  let filtered=ranking;
-  if(filter==='caca') filtered=filtered.filter(r=>r.game==='caca');
-  if(filter==='stop') filtered=filtered.filter(r=>r.game==='stop');
-  if(filter==='me') filtered=filtered.filter(r=>r.username===G.user.username);
-  if(search) filtered=filtered.filter(r=>r.username.toLowerCase().includes(search));
-
-  $('rankTotalPlayers').textContent=new Set(ranking.map(r=>r.username)).size;
-  $('rankTotalPlays').textContent=ranking.length;
-  $('rankTopScore').textContent=ranking.length? Math.max(...ranking.map(r=>r.score)):0;
-  $('rankAvgScore').textContent=ranking.length? Math.round(ranking.reduce((s,r)=>s+r.score,0)/ranking.length):0;
-
-  // podium top 3 geral sempre
-  const top3=ranking.slice(0,3);
-  const podiumIds=['podium1','podium2','podium3'];
-  const names=['podium1Name','podium2Name','podium3Name'];
-  const avatars=['podium1Avatar','podium2Avatar','podium3Avatar'];
-  const scores=['podium1Score','podium2Score','podium3Score'];
-  for(let i=0;i<3;i++){
-    const r=top3[i];
-    $(names[i]).textContent=r? r.username:'—';
-    $(avatars[i]).textContent=r? r.avatar:'?';
-    $(scores[i]).textContent=r? r.score+' pts':'0 pts';
-  }
-
-  const tbody=$('rankingBody'); tbody.innerHTML='';
-  filtered.slice(0,100).forEach((r,i)=>{
-    const globalPos=ranking.indexOf(r);
-    const tr=document.createElement('tr');
-    if(r.username===G.user.username) tr.classList.add('me');
-    let posClass=''; if(globalPos===0) posClass='gold'; else if(globalPos===1) posClass='silver'; else if(globalPos===2) posClass='bronze';
-    tr.innerHTML=`<td><div class="pos ${posClass}">${globalPos+1}</div></td>
-      <td><div class="player-cell"><div class="avatar">${r.avatar}</div> ${r.username} ${getUsers().find(u=>u.username===r.username)?.role==='admin'?'<span class="admin-icon">ADM</span>':''}</div></td>
-      <td><b>${r.score}</b></td><td>${r.game}</td><td>${r.meta||'—'}</td><td>${r.date}</td>`;
-    tbody.appendChild(tr);
-  });
-
-  const myBest=filtered.filter(r=>r.username===G.user.username).sort((a,b)=>b.score-a.score)[0];
-  if(myBest){
-    const pos=ranking.findIndex(r=>r.id===myBest.id);
-    $('myRankCard').classList.remove('hidden');
-    $('myRankPos').textContent='#'+(pos+1);
-    $('myRankBest').textContent=myBest.score;
-  } else $('myRankCard').classList.add('hidden');
-}
-
-// LOBBY / ONLINE
+function addNotif(toUser, title, text){ let list=Store.get('notifs_'+toUser)||[]; list.unshift({id:Date.now()+Math.random(),title,text,time:Date.now(),read:false}); if(list.length>30) list=list.slice(0,30); Store.set('notifs_'+toUser, list); }
+function renderNotifs(){ const list=$('notifList'); list.innerHTML=''; const notifs=getNotifs(G.user.username); if(!notifs.length){ $('notifEmpty').classList.remove('hidden'); return; } $('notifEmpty').classList.add('hidden'); notifs.forEach(n=>{ const div=document.createElement('div'); div.style.cssText='padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px'; div.innerHTML=`<b style="font-size:.9rem">${n.title}</b><div style="font-size:.8rem;color:var(--muted)">${n.text}</div><div style="font-size:.7rem;color:var(--muted);margin-top:4px">${new Date(n.time).toLocaleString()}</div>`; list.appendChild(div); }); notifs.forEach(n=>n.read=true); saveNotifs(G.user.username, notifs); updateNotifBadge(); }
+function addRankingEntry(score, game, meta=''){ const entry={id:Date.now()+Math.random(),username:G.user.username,avatar:G.user.username.charAt(0).toUpperCase(),score,game,meta,date:new Date().toLocaleDateString('pt-BR'),timestamp:Date.now()}; const ranking=getRanking(); ranking.push(entry); saveRanking(ranking); updateUserStats(u=>{ u.stats.jogos=(u.stats.jogos||0)+1; if(score>(u.stats.recorde||0)) u.stats.recorde=score; if(game==='caca' && score>=60) u.stats.vitorias=(u.stats.vitorias||0)+1; if(game==='stop' && score>=50) u.stats.vitorias=(u.stats.vitorias||0)+1; }); const bestByUser={}; getRanking().forEach(r=>{ if(!bestByUser[r.username] || r.score>bestByUser[r.username].score) bestByUser[r.username]=r; }); Object.keys(bestByUser).forEach(other=>{ if(other===G.user.username) return; const otherBest=bestByUser[other]; if(otherBest && entry.score>otherBest.score){ addNotif(other, 'Você foi ultrapassado!', `${G.user.username} fez ${entry.score} pts em ${game} e te passou no ranking.`); } }); const sorted=getRanking().slice().sort((a,b)=>b.score-a.score); const pos=sorted.findIndex(r=>r.id===entry.id); if(pos>=0 && pos<3){ let prize=250, icon='🥉'; if(pos===0){ prize=1000; icon='👑'; } else if(pos===1){ prize=500; icon='🥈'; } $('rewardIcon').textContent=icon; $('rewardTitle').textContent=pos===0?'Você é o TOP 1!':`Você entrou no Top ${pos+1}!`; $('rewardText').textContent=`Incrível! Você está em #${pos+1} no ranking global.`; $('rewardPrize').textContent=`+${prize} moedas`; $('rewardPrize').dataset.prize=prize; $('rewardOverlay').classList.remove('hidden'); } return {entry,pos}; }
+function renderRanking(){ const ranking=getRanking().slice().sort((a,b)=>b.score-a.score); const filter=document.querySelector('.ranking-tab.active[data-filter]')?.dataset.filter||'all'; const search=($('rankingSearch').value||'').toLowerCase(); let filtered=ranking; if(filter==='caca') filtered=filtered.filter(r=>r.game==='caca'); if(filter==='stop') filtered=filtered.filter(r=>r.game==='stop'); if(filter==='me') filtered=filtered.filter(r=>r.username===G.user.username); if(search) filtered=filtered.filter(r=>r.username.toLowerCase().includes(search)); $('rankTotalPlayers').textContent=new Set(ranking.map(r=>r.username)).size; $('rankTotalPlays').textContent=ranking.length; $('rankTopScore').textContent=ranking.length? Math.max(...ranking.map(r=>r.score)):0; $('rankAvgScore').textContent=ranking.length? Math.round(ranking.reduce((s,r)=>s+r.score,0)/ranking.length):0; const top3=ranking.slice(0,3); const names=['podium1Name','podium2Name','podium3Name']; const avatars=['podium1Avatar','podium2Avatar','podium3Avatar']; const scores=['podium1Score','podium2Score','podium3Score']; for(let i=0;i<3;i++){ const r=top3[i]; $(names[i]).textContent=r? r.username:'—'; $(avatars[i]).textContent=r? r.avatar:'?'; $(scores[i]).textContent=r? r.score+' pts':'0 pts'; } const tbody=$('rankingBody'); tbody.innerHTML=''; filtered.slice(0,100).forEach((r,i)=>{ const globalPos=ranking.indexOf(r); const tr=document.createElement('tr'); if(r.username===G.user.username) tr.classList.add('me'); let posClass=''; if(globalPos===0) posClass='gold'; else if(globalPos===1) posClass='silver'; else if(globalPos===2) posClass='bronze'; tr.innerHTML=`<td><div class="pos ${posClass}">${globalPos+1}</div></td><td><div class="player-cell"><div class="avatar">${r.avatar}</div> ${r.username} ${getUsers().find(u=>u.username===r.username)?.role==='admin'?'<span class="admin-icon">ADM</span>':''}</div></td><td><b>${r.score}</b></td><td>${r.game}</td><td>${r.meta||'—'}</td><td>${r.date}</td>`; tbody.appendChild(tr); }); const myBest=filtered.filter(r=>r.username===G.user.username).sort((a,b)=>b.score-a.score)[0]; if(myBest){ const pos=ranking.findIndex(r=>r.id===myBest.id); $('myRankCard').classList.remove('hidden'); $('myRankPos').textContent='#'+(pos+1); $('myRankBest').textContent=myBest.score; } else $('myRankCard').classList.add('hidden'); }
 function genCode(){ const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let c=''; for(let i=0;i<6;i++) c+=chars[Math.floor(Math.random()*chars.length)]; return c; }
+function openLobby(game){ G.selectedGame=game; $('lobbyTitle').textContent=game==='caca'?'Caça-Palavras':'Adedonha'; $('lobbyDesc').textContent=game==='caca'?'Encontre as palavras antes do tempo acabar.':'Configure temas e letra sorteada ao vivo!'; $('lobbyCreate').classList.remove('hidden'); $('lobbyRoom').classList.add('hidden'); $('joinCode').value=''; $('onlineStatus').textContent=''; showScreen('lobbyScreen'); }
+function startSolo(){ G.mode='solo'; if(G.selectedGame==='caca') initCaca(); else showStopSetup(); }
+function createRoom(){ const code=genCode(); G.currentRoomCode=code; G.isHost=true; $('roomCodeDisplay').textContent=code; $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden'); $('lobbyStatus').textContent='Criando sala...'; $('lobbyStatus').className='lobby-status wait'; $('btnStartOnline').classList.add('hidden'); $('opponentLine').classList.add('hidden'); try{ if(typeof Peer==='undefined'){ throw new Error('PeerJS offline'); } G.peer=new Peer('luan-'+code); G.peer.on('open', ()=>{ $('lobbyStatus').textContent='Sala criada! Compartilhe o código.'; $('lobbyStatus').className='lobby-status ok'; $('onlineStatus').textContent='Aguardando oponente...'; }); G.peer.on('connection', conn=>{ G.conn=conn; setupConn(); }); G.peer.on('error', e=>{ $('lobbyStatus').textContent='Modo online indisponível, jogue solo.'; $('lobbyStatus').className='lobby-status err'; }); }catch(e){ $('lobbyStatus').textContent='PeerJS offline - jogando solo ainda funciona.'; $('lobbyStatus').className='lobby-status wait'; $('btnStartOnline').classList.remove('hidden'); toast('Online offline, mas solo funciona 100%'); } }
+function joinRoom(){ const code=$('joinCode').value.trim().toUpperCase(); if(code.length<4){ toast('Código inválido'); return; } G.currentRoomCode=code; G.isHost=false; $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden'); $('roomCodeDisplay').textContent=code; $('lobbyStatus').textContent='Conectando em '+code+'...'; $('lobbyStatus').className='lobby-status wait'; try{ if(typeof Peer==='undefined'){ throw new Error('PeerJS offline'); } G.peer=new Peer(); G.peer.on('open', ()=>{ const conn=G.peer.connect('luan-'+code); G.conn=conn; conn.on('open', ()=>{ setupConn(); }); setTimeout(()=>{ if(!G.oppName){ $('lobbyStatus').textContent='Sala não encontrada. Tente criar.'; $('lobbyStatus').className='lobby-status err'; } }, 4000); }); }catch(e){ $('lobbyStatus').textContent='Modo online offline'; $('lobbyStatus').className='lobby-status err'; } }
+function setupConn(){ if(!G.conn) return; G.conn.on('open', ()=>{ G.conn.send({type:'hello',name:G.user.username}); $('lobbyStatus').textContent='Conectado!'; $('lobbyStatus').className='lobby-status ok'; $('opponentLine').classList.remove('hidden'); $('opponentName').textContent='Aguardando...'; if(G.isHost) $('btnStartOnline').classList.remove('hidden'); }); G.conn.on('data', data=>{ if(data.type==='hello'){ G.oppName=data.name; $('opponentName').textContent=data.name; $('opponentLine').classList.remove('hidden'); $('lobbyStatus').textContent='Oponente conectado: '+data.name; if(!G.isHost){ G.conn.send({type:'hello',name:G.user.username}); $('lobbyStatus').textContent='Pronto para jogar com '+data.name; } } if(data.type==='start'){ G.mode='online'; if(data.game==='caca') initCacaOnline(data.payload); else initStopOnline(data.payload); } if(data.type==='caca_score'){ $('cacaOppScore').classList.remove('hidden'); $('cacaOppN').textContent=data.found; } if(data.type==='stop_result'){ G.stopState.oppAnswers=data.answers; } }); G.conn.on('close', ()=>{ toast('Oponente desconectou'); }); }
+function leaveRoom(){ destroyPeer(); $('lobbyCreate').classList.remove('hidden'); $('lobbyRoom').classList.add('hidden'); }
+function startOnlineGame(){ if(!G.selectedGame) return; G.mode='online'; if(G.selectedGame==='caca'){ const payload=generateCacaData(); G.conn?.send({type:'start',game:'caca',payload}); initCacaOnline(payload); } else { // for stop, host already configured? if not, open setup first
+ if(!G.stopSetup.letter){ toast('Configure a Adedonha primeiro'); showStopSetup(); return; } const payload={letter:G.stopSetup.letter,categories:Array.from(G.stopSetup.selectedCats),time:G.stopSetup.time}; G.conn?.send({type:'start',game:'stop',payload}); initStopOnline(payload); } }
 
-function openLobby(game){
-  G.selectedGame=game;
-  $('lobbyTitle').textContent=game==='caca'?'Caça-Palavras':'Adedonha';
-  $('lobbyDesc').textContent=game==='caca'?'Encontre as palavras antes do tempo acabar.':'Preencha rápido com a letra sorteada.';
-  $('lobbyCreate').classList.remove('hidden');
-  $('lobbyRoom').classList.add('hidden');
-  $('joinCode').value='';
-  $('onlineStatus').textContent='';
-  showScreen('lobbyScreen');
-}
+// STOP SETUP
+function showStopSetup(){ showScreen('stopSetupScreen'); renderSetupCategories(); renderManualLetters(); updateCatCount(); updateSetupUI(); }
+function renderSetupCategories(){ const list=$('setupCategoriesList'); list.innerHTML=''; const allCats=[...STOP_CATEGORIES_BASE, ...G.stopSetup.customCats]; allCats.forEach(cat=>{ const div=document.createElement('label'); div.className='cat-chip'+(G.stopSetup.selectedCats.has(cat)?' selected':''); const checked=G.stopSetup.selectedCats.has(cat)?'checked':''; div.innerHTML=`<input type="checkbox" ${checked} value="${cat}" style="display:none"> <span style="width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;background:#fff">${G.stopSetup.selectedCats.has(cat)?'✓':''}</span> ${cat}`; div.onclick=()=>{ if(G.stopSetup.selectedCats.has(cat)){ G.stopSetup.selectedCats.delete(cat); div.classList.remove('selected'); div.querySelector('span').textContent=''; } else { G.stopSetup.selectedCats.add(cat); div.classList.add('selected'); div.querySelector('span').textContent='✓'; } updateCatCount(); }; list.appendChild(div); }); }
+function updateCatCount(){ $('catCount').textContent=G.stopSetup.selectedCats.size; }
+function renderManualLetters(){ const grid=$('manualLetterGrid'); grid.innerHTML=''; 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l=>{ const b=document.createElement('button'); b.className='letter-btn'; b.textContent=l; b.onclick=()=>{ document.querySelectorAll('.letter-btn').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); G.stopSetup.letter=l; G.stopSetup.roletaDone=true; $('selectedLetterPreview').textContent=l; $('letraRoletaDisplay').textContent=l; $('letraRoletaDisplay').classList.remove('spin'); toast(`Letra ${l} escolhida`); }; grid.appendChild(b); }); }
+function updateSetupUI(){ document.querySelectorAll('#timeTabs .ranking-tab').forEach(b=>{ b.classList.toggle('active', parseInt(b.dataset.time)===G.stopSetup.time); }); document.querySelectorAll('#letterModeTabs .ranking-tab').forEach(b=>{ b.classList.toggle('active', b.dataset.mode===G.stopSetup.letterMode); }); $('manualLetterGrid').classList.toggle('hidden', G.stopSetup.letterMode!=='manual'); $('roletaWrap').classList.toggle('hidden', false); if(G.stopSetup.letter) { $('selectedLetterPreview').textContent=G.stopSetup.letter; $('letraRoletaDisplay').textContent=G.stopSetup.letter; } }
+function sortearLetraRoleta(){ const display=$('letraRoletaDisplay'); display.classList.add('spin'); let count=0; const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); const interval=setInterval(()=>{ const rnd=letters[Math.floor(Math.random()*letters.length)]; display.textContent=rnd; count++; if(count>20){ clearInterval(interval); // desacelera
+ let slow=0; const slowInt=setInterval(()=>{ const rnd2=letters[Math.floor(Math.random()*letters.length)]; display.textContent=rnd2; slow++; if(slow>10){ clearInterval(slowInt); const final=letters[Math.floor(Math.random()*letters.length)]; display.textContent=final; display.classList.remove('spin'); G.stopSetup.letter=final; G.stopSetup.roletaDone=true; $('selectedLetterPreview').textContent=final; toast(`Letra sorteada: ${final} 🎲`); } }, 120); } }, 80); }
+function startStopConfigured(){ if(G.stopSetup.selectedCats.size<3){ toast('Escolha pelo menos 3 temas!'); return; } if(!G.stopSetup.letter || !G.stopSetup.roletaDone){ if(G.stopSetup.letterMode==='auto'){ G.stopSetup.letter='ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*26)]; G.stopSetup.roletaDone=true; $('selectedLetterPreview').textContent=G.stopSetup.letter; $('letraRoletaDisplay').textContent=G.stopSetup.letter; } else if(G.stopSetup.letterMode==='roulette' && !G.stopSetup.letter){ sortearLetraRoleta(); toast('Gire a roleta primeiro ou aguarde o sorteio'); return; } else { toast('Escolha uma letra'); return; } } const payload={letter:G.stopSetup.letter,categories:Array.from(G.stopSetup.selectedCats),time:G.stopSetup.time}; if(G.mode==='online' && G.isHost){ G.conn?.send({type:'start',game:'stop',payload}); } initStopOnline(payload); }
 
-function startSolo(){
-  G.mode='solo';
-  if(G.selectedGame==='caca') initCaca();
-  else initStop();
-}
-
-function createRoom(){
-  const code=genCode();
-  G.currentRoomCode=code; G.isHost=true;
-  $('roomCodeDisplay').textContent=code;
-  $('lobbyCreate').classList.add('hidden');
-  $('lobbyRoom').classList.remove('hidden');
-  $('lobbyStatus').textContent='Criando sala...'; $('lobbyStatus').className='lobby-status wait';
-  $('btnStartOnline').classList.add('hidden');
-  $('opponentLine').classList.add('hidden');
-
-  try{
-    if(typeof Peer==='undefined'){ throw new Error('PeerJS offline'); }
-    G.peer=new Peer('luan-'+code);
-    G.peer.on('open', ()=>{
-      $('lobbyStatus').textContent='Sala criada! Compartilhe o código.';
-      $('lobbyStatus').className='lobby-status ok';
-      $('onlineStatus').textContent='Aguardando oponente...';
-    });
-    G.peer.on('connection', conn=>{
-      G.conn=conn;
-      setupConn();
-    });
-    G.peer.on('error', e=>{
-      console.warn(e);
-      $('lobbyStatus').textContent='Modo online indisponível, jogue solo.';
-      $('lobbyStatus').className='lobby-status err';
-    });
-  }catch(e){
-    $('lobbyStatus').textContent='PeerJS offline - jogando solo ainda funciona.';
-    $('lobbyStatus').className='lobby-status wait';
-    $('btnStartOnline').classList.remove('hidden');
-    toast('Online offline, mas solo funciona 100%');
-  }
-}
-
-function joinRoom(){
-  const code=$('joinCode').value.trim().toUpperCase();
-  if(code.length<4){ toast('Código inválido'); return; }
-  G.currentRoomCode=code; G.isHost=false;
-  $('lobbyCreate').classList.add('hidden');
-  $('lobbyRoom').classList.remove('hidden');
-  $('roomCodeDisplay').textContent=code;
-  $('lobbyStatus').textContent='Conectando em '+code+'...';
-  $('lobbyStatus').className='lobby-status wait';
-
-  try{
-    if(typeof Peer==='undefined'){ throw new Error('PeerJS offline'); }
-    G.peer=new Peer();
-    G.peer.on('open', ()=>{
-      const conn=G.peer.connect('luan-'+code);
-      G.conn=conn;
-      conn.on('open', ()=>{ setupConn(); });
-      conn.on('error', ()=>{ $('lobbyStatus').textContent='Não foi possível conectar.'; $('lobbyStatus').className='lobby-status err'; });
-      setTimeout(()=>{
-        if(!G.oppName){ $('lobbyStatus').textContent='Sala não encontrada. Tente criar.'; $('lobbyStatus').className='lobby-status err'; }
-      }, 4000);
-    });
-  }catch(e){
-    $('lobbyStatus').textContent='Modo online offline';
-    $('lobbyStatus').className='lobby-status err';
-  }
-}
-
-function setupConn(){
-  if(!G.conn) return;
-  G.conn.on('open', ()=>{
-    G.conn.send({type:'hello',name:G.user.username});
-    $('lobbyStatus').textContent='Conectado!'; $('lobbyStatus').className='lobby-status ok';
-    $('opponentLine').classList.remove('hidden');
-    $('opponentName').textContent='Aguardando...';
-    if(G.isHost) $('btnStartOnline').classList.remove('hidden');
-  });
-  G.conn.on('data', data=>{
-    if(data.type==='hello'){
-      G.oppName=data.name;
-      $('opponentName').textContent=data.name;
-      $('opponentLine').classList.remove('hidden');
-      $('lobbyStatus').textContent='Oponente conectado: '+data.name;
-      if(!G.isHost){
-        G.conn.send({type:'hello',name:G.user.username});
-        $('lobbyStatus').textContent='Pronto para jogar com '+data.name;
-      }
-    }
-    if(data.type==='start'){
-      G.mode='online';
-      if(data.game==='caca') initCacaOnline(data.payload);
-      else initStopOnline(data.payload);
-    }
-    if(data.type==='caca_score'){
-      $('cacaOppScore').classList.remove('hidden');
-      $('cacaOppN').textContent=data.found;
-    }
-    if(data.type==='stop_result'){
-      G.stopState.oppAnswers=data.answers;
-      // will be handled in stop validation
-    }
-  });
-  G.conn.on('close', ()=>{ toast('Oponente desconectou'); $('lobbyStatus').textContent='Oponente desconectou'; $('lobbyStatus').className='lobby-status err'; });
-}
-
-function leaveRoom(){
-  destroyPeer();
-  $('lobbyCreate').classList.remove('hidden');
-  $('lobbyRoom').classList.add('hidden');
-}
-
-function startOnlineGame(){
-  if(!G.selectedGame) return;
-  G.mode='online';
-  if(G.selectedGame==='caca'){
-    const payload=generateCacaData();
-    G.conn?.send({type:'start',game:'caca',payload});
-    initCacaOnline(payload);
-  } else {
-    const letter=randomLetter();
-    const cats=STOP_CATEGORIES.slice(0,8);
-    const payload={letter,categories:cats};
-    G.conn?.send({type:'start',game:'stop',payload});
-    initStopOnline(payload);
-  }
-}
-
-// CACA LOGIC
+// CACA
 function randomLetter(){ const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; return letters[Math.floor(Math.random()*letters.length)]; }
-
-function generateCacaData(){
-  const size=12;
-  const words=LUAN_WORDS.slice().sort(()=>Math.random()-0.5).slice(0,8).map(w=>w.toUpperCase().replace(/[^A-Z ]/g,'').replace(/ /g,'').slice(0,10)).filter(Boolean);
-  const board=Array.from({length:size},()=>Array(size).fill(null));
-  const placed=[];
-  const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]];
-  function canPlace(word,r,c,dr,dc){
-    for(let i=0;i<word.length;i++){ let rr=r+i*dr, cc=c+i*dc; if(rr<0||rr>=size||cc<0||cc>=size) return false; if(board[rr][cc] && board[rr][cc]!==word[i]) return false; }
-    return true;
-  }
-  words.forEach(word=>{
-    for(let attempt=0;attempt<120;attempt++){
-      const drdc=dirs[Math.floor(Math.random()*dirs.length)];
-      const dr=drdc[0], dc=drdc[1];
-      const r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size);
-      if(canPlace(word,r,c,dr,dc)){
-        const cells=[];
-        for(let i=0;i<word.length;i++){ let rr=r+i*dr, cc=c+i*dc; board[rr][cc]=word[i]; cells.push({r:rr,c:cc}); }
-        placed.push({word,cells,dr,dc});
-        break;
-      }
-    }
-  });
-  const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  for(let r=0;r<size;r++) for(let c=0;c<size;c++) if(!board[r][c]) board[r][c]=alphabet[Math.floor(Math.random()*alphabet.length)];
-  return {size,board,placed,words:placed.map(p=>p.word)};
-}
-
+function generateCacaData(){ const size=12; const words=LUAN_WORDS.slice().sort(()=>Math.random()-0.5).slice(0,8).map(w=>w.toUpperCase().replace(/[^A-Z ]/g,'').replace(/ /g,'').slice(0,10)).filter(Boolean); const board=Array.from({length:size},()=>Array(size).fill(null)); const placed=[]; const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]]; function canPlace(word,r,c,dr,dc){ for(let i=0;i<word.length;i++){ let rr=r+i*dr, cc=c+i*dc; if(rr<0||rr>=size||cc<0||cc>=size) return false; if(board[rr][cc] && board[rr][cc]!==word[i]) return false; } return true; } words.forEach(word=>{ for(let attempt=0;attempt<120;attempt++){ const drdc=dirs[Math.floor(Math.random()*dirs.length)]; const dr=drdc[0], dc=drdc[1]; const r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size); if(canPlace(word,r,c,dr,dc)){ const cells=[]; for(let i=0;i<word.length;i++){ let rr=r+i*dr, cc=c+i*dc; board[rr][cc]=word[i]; cells.push({r:rr,c:cc}); } placed.push({word,cells,dr,dc}); break; } } }); const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; for(let r=0;r<size;r++) for(let c=0;c<size;c++) if(!board[r][c]) board[r][c]=alphabet[Math.floor(Math.random()*alphabet.length)]; return {size,board,placed,words:placed.map(p=>p.word)}; }
 function initCaca(){ const data=generateCacaData(); initCacaOnline(data); }
-
-function initCacaOnline(data){
-  showScreen('cacaScreen');
-  G.cacaState={board:data.board,placed:data.placed,words:data.words,found:new Set(),cellsMap:{},size:data.size,startTime:Date.now(),timerInt:null,selecting:false,path:[],dir:null,score:0};
-  // build cellsMap for quick lookup
-  data.placed.forEach(p=>{ p.cells.forEach(cell=>{ const key=cell.r+'-'+cell.c; G.cacaState.cellsMap[key]=p.word; }); });
-  renderCacaBoard();
-  renderCacaWords();
-  startCacaTimer();
-  updateAssistUI();
-  if(G.assist && G.humanAssist){ startAutoCaca(); }
-}
-
-function renderCacaBoard(){
-  const boardEl=$('cacaBoard');
-  boardEl.innerHTML='';
-  boardEl.style.gridTemplateColumns=`repeat(${G.cacaState.size}, 1fr)`;
-  for(let r=0;r<G.cacaState.size;r++){
-    for(let c=0;c<G.cacaState.size;c++){
-      const cell=document.createElement('div');
-      cell.className='cell';
-      cell.dataset.r=r; cell.dataset.c=c;
-      cell.textContent=G.cacaState.board[r][c];
-      cell.addEventListener('mousedown', onCellStart);
-      cell.addEventListener('mouseenter', onCellEnter);
-      cell.addEventListener('touchstart', e=>{ e.preventDefault(); onCellStart(e); }, {passive:false});
-      cell.addEventListener('touchmove', e=>{ e.preventDefault(); const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); if(t&&t.classList.contains('cell')) onCellEnter({target:t}); }, {passive:false});
-      boardEl.appendChild(cell);
-    }
-  }
-  $('cacaTotal').textContent=G.cacaState.words.length;
-  $('cacaFound').textContent=0;
-  // global mouse up
-  document.addEventListener('mouseup', onCellEnd);
-  document.addEventListener('touchend', onCellEnd);
-}
-
-function renderCacaWords(){
-  const list=$('cacaWordList'); list.innerHTML='';
-  G.cacaState.words.forEach(w=>{
-    const div=document.createElement('div'); div.className='word-item'; div.dataset.word=w;
-    div.innerHTML=`<span class="dot"></span> ${w}`;
-    if(G.cacaState.found.has(w)) div.classList.add('done');
-    list.appendChild(div);
-  });
-}
-
-function onCellStart(e){
-  const target=e.target.closest? e.target.closest('.cell'): e.target;
-  if(!target) return;
-  G.cacaState.selecting=true;
-  G.cacaState.path=[target];
-  G.cacaState.dir=null;
-  clearSelection();
-  target.classList.add('sel');
-  e.preventDefault();
-}
-
-function onCellEnter(e){
-  if(!G.cacaState.selecting) return;
-  const target=e.target.closest? e.target.closest('.cell'): e.target;
-  if(!target || !target.classList.contains('cell')) return;
-  if(G.cacaState.path.includes(target)) return;
-  // check direction
-  if(G.cacaState.path.length===1){
-    // allow any adjacent? but for word search we allow any straight line, not necessarily adjacent? Let's allow any linear.
-    const first=G.cacaState.path[0];
-    const r1=parseInt(first.dataset.r), c1=parseInt(first.dataset.c);
-    const r2=parseInt(target.dataset.r), c2=parseInt(target.dataset.c);
-    const dr=Math.sign(r2-r1), dc=Math.sign(c2-c1);
-    // must be straight: dr==0 or dc==0 or abs dr==abs dc
-    if(dr===0 && dc===0) return;
-    if(!(dr===0 || dc===0 || Math.abs(r2-r1)===Math.abs(c2-c1))) return;
-    G.cacaState.dir={dr,dc};
-  } else {
-    // must continue same dir
-    const first=G.cacaState.path[0];
-    const last=G.cacaState.path[G.cacaState.path.length-1];
-    const r1=parseInt(first.dataset.r), c1=parseInt(first.dataset.c);
-    const rLast=parseInt(last.dataset.r), cLast=parseInt(last.dataset.c);
-    const r2=parseInt(target.dataset.r), c2=parseInt(target.dataset.c);
-    // check if target is continuation of line from first in dir
-    const dr=G.cacaState.dir.dr, dc=G.cacaState.dir.dc;
-    const expectedR=r1+dr*G.cacaState.path.length;
-    const expectedC=c1+dc*G.cacaState.path.length;
-    if(r2!==expectedR || c2!==expectedC) return;
-  }
-  G.cacaState.path.push(target);
-  target.classList.add('sel');
-}
-
-function onCellEnd(){
-  if(!G.cacaState.selecting) return;
-  G.cacaState.selecting=false;
-  const word=G.cacaState.path.map(c=>c.textContent).join('');
-  const rev=word.split('').reverse().join('');
-  let foundWord=null;
-  if(G.cacaState.words.includes(word) && !G.cacaState.found.has(word)) foundWord=word;
-  else if(G.cacaState.words.includes(rev) && !G.cacaState.found.has(rev)) foundWord=rev;
-  if(foundWord){
-    G.cacaState.found.add(foundWord);
-    G.cacaState.path.forEach(c=>{ c.classList.remove('sel'); c.classList.add('found'); });
-    document.querySelector(`.word-item[data-word="${foundWord}"]`)?.classList.add('done');
-    $('cacaFound').textContent=G.cacaState.found.size;
-    toast(`Achou: ${foundWord}!`);
-    G.cacaState.score+=10;
-    if(G.conn) G.conn.send({type:'caca_score',found:G.cacaState.found.size});
-    if(G.cacaState.found.size===G.cacaState.words.length){ endCacaGame(true); }
-  } else {
-    clearSelection();
-  }
-  G.cacaState.path=[]; G.cacaState.dir=null;
-}
-
+function initCacaOnline(data){ showScreen('cacaScreen'); G.cacaState={board:data.board,placed:data.placed,words:data.words,found:new Set(),cellsMap:{},size:data.size,startTime:Date.now(),timerInt:null,selecting:false,path:[],dir:null,score:0}; data.placed.forEach(p=>{ p.cells.forEach(cell=>{ const key=cell.r+'-'+cell.c; G.cacaState.cellsMap[key]=p.word; }); }); renderCacaBoard(); renderCacaWords(); startCacaTimer(); updateAssistUI(); if(G.assist && G.humanAssist){ startAutoCaca(); } }
+function renderCacaBoard(){ const boardEl=$('cacaBoard'); boardEl.innerHTML=''; boardEl.style.gridTemplateColumns=`repeat(${G.cacaState.size}, 1fr)`; for(let r=0;r<G.cacaState.size;r++){ for(let c=0;c<G.cacaState.size;c++){ const cell=document.createElement('div'); cell.className='cell'; cell.dataset.r=r; cell.dataset.c=c; cell.textContent=G.cacaState.board[r][c]; cell.addEventListener('mousedown', onCellStart); cell.addEventListener('mouseenter', onCellEnter); cell.addEventListener('touchstart', e=>{ e.preventDefault(); onCellStart(e); }, {passive:false}); cell.addEventListener('touchmove', e=>{ e.preventDefault(); const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); if(t&&t.classList.contains('cell')) onCellEnter({target:t}); }, {passive:false}); boardEl.appendChild(cell); } } $('cacaTotal').textContent=G.cacaState.words.length; $('cacaFound').textContent=0; document.addEventListener('mouseup', onCellEnd); document.addEventListener('touchend', onCellEnd); }
+function renderCacaWords(){ const list=$('cacaWordList'); list.innerHTML=''; G.cacaState.words.forEach(w=>{ const div=document.createElement('div'); div.className='word-item'; div.dataset.word=w; div.innerHTML=`<span class="dot"></span> ${w}`; if(G.cacaState.found.has(w)) div.classList.add('done'); list.appendChild(div); }); }
+function onCellStart(e){ const target=e.target.closest? e.target.closest('.cell'): e.target; if(!target) return; G.cacaState.selecting=true; G.cacaState.path=[target]; G.cacaState.dir=null; clearSelection(); target.classList.add('sel'); e.preventDefault(); }
+function onCellEnter(e){ if(!G.cacaState.selecting) return; const target=e.target.closest? e.target.closest('.cell'): e.target; if(!target || !target.classList.contains('cell')) return; if(G.cacaState.path.includes(target)) return; if(G.cacaState.path.length===1){ const first=G.cacaState.path[0]; const r1=parseInt(first.dataset.r), c1=parseInt(first.dataset.c); const r2=parseInt(target.dataset.r), c2=parseInt(target.dataset.c); const dr=Math.sign(r2-r1), dc=Math.sign(c2-c1); if(dr===0 && dc===0) return; if(!(dr===0 || dc===0 || Math.abs(r2-r1)===Math.abs(c2-c1))) return; G.cacaState.dir={dr,dc}; } else { const first=G.cacaState.path[0]; const dr=G.cacaState.dir.dr, dc=G.cacaState.dir.dc; const expectedR=parseInt(first.dataset.r)+dr*G.cacaState.path.length; const expectedC=parseInt(first.dataset.c)+dc*G.cacaState.path.length; const r2=parseInt(target.dataset.r), c2=parseInt(target.dataset.c); if(r2!==expectedR || c2!==expectedC) return; } G.cacaState.path.push(target); target.classList.add('sel'); }
+function onCellEnd(){ if(!G.cacaState.selecting) return; G.cacaState.selecting=false; const word=G.cacaState.path.map(c=>c.textContent).join(''); const rev=word.split('').reverse().join(''); let foundWord=null; if(G.cacaState.words.includes(word) && !G.cacaState.found.has(word)) foundWord=word; else if(G.cacaState.words.includes(rev) && !G.cacaState.found.has(rev)) foundWord=rev; if(foundWord){ G.cacaState.found.add(foundWord); G.cacaState.path.forEach(c=>{ c.classList.remove('sel'); c.classList.add('found'); }); document.querySelector(`.word-item[data-word="${foundWord}"]`)?.classList.add('done'); $('cacaFound').textContent=G.cacaState.found.size; toast(`Achou: ${foundWord}!`); G.cacaState.score+=10; if(G.conn) G.conn.send({type:'caca_score',found:G.cacaState.found.size}); if(G.cacaState.found.size===G.cacaState.words.length){ endCacaGame(true); } } else { clearSelection(); } G.cacaState.path=[]; G.cacaState.dir=null; }
 function clearSelection(){ document.querySelectorAll('.cell.sel').forEach(c=>c.classList.remove('sel')); }
+function startCacaTimer(){ if(G.cacaState.timerInt) clearInterval(G.cacaState.timerInt); const start=Date.now(); G.cacaState.timerInt=setInterval(()=>{ const elapsed=Math.floor((Date.now()-start)/1000); const m=String(Math.floor(elapsed/60)).padStart(2,'0'), s=String(elapsed%60).padStart(2,'0'); $('cacaTimer').textContent=`${m}:${s}`; G.timers.push(G.cacaState.timerInt); },1000); }
+function endCacaGame(victory){ clearInterval(G.cacaState.timerInt); const elapsed=Math.floor((Date.now()-G.cacaState.startTime)/1000); const timeBonus=Math.max(0, 120-elapsed); const score=G.cacaState.found.size*10 + timeBonus + (victory?50:0); const meta=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`; const res=addRankingEntry(score,'caca',meta); showEndGame(victory? 'Você venceu!':'Fim de jogo', victory? `Encontrou ${G.cacaState.found.size}/${G.cacaState.words.length} em ${meta}`:`Você encontrou ${G.cacaState.found.size}/${G.cacaState.words.length}`, score, res.pos); }
+function hintCaca(){ const unfound=G.cacaState.words.filter(w=>!G.cacaState.found.has(w)); if(!unfound.length) return; const w=unfound[0]; const placed=G.cacaState.placed.find(p=>p.word===w); if(!placed) return; const firstCell=placed.cells[0]; const el=document.querySelector(`.cell[data-r="${firstCell.r}"][data-c="${firstCell.c}"]`); if(el){ el.classList.add('hint'); setTimeout(()=>el.classList.remove('hint'), 2000); toast(`Dica: ${w} começa em linha ${firstCell.r+1}`); } }
+function solveCaca(){ G.cacaState.words.forEach(w=>G.cacaState.found.add(w)); document.querySelectorAll('.cell').forEach(c=>c.classList.add('found')); document.querySelectorAll('.word-item').forEach(i=>i.classList.add('done')); $('cacaFound').textContent=G.cacaState.words.length; setTimeout(()=>endCacaGame(true), 500); }
+function startAutoCaca(){ if(!G.humanAssist) return; const speedMap={devagar:1500,normal:800,rapido:300}; const interval=speedMap[G.assistSpeed]||800; const autoInt=setInterval(()=>{ const list=G.cacaState.words.filter(w=>!G.cacaState.found.has(w)); if(!list.length || !G.humanAssist){ clearInterval(autoInt); return; } const w=list[0]; const placed=G.cacaState.placed.find(p=>p.word===w); if(!placed) return; placed.cells.forEach(cell=>{ const el=document.querySelector(`.cell[data-r="${cell.r}"][data-c="${cell.c}"]`); if(el) el.classList.add('found'); }); G.cacaState.found.add(w); document.querySelector(`.word-item[data-word="${w}"]`)?.classList.add('done'); $('cacaFound').textContent=G.cacaState.found.size; if(G.cacaState.found.size===G.cacaState.words.length){ clearInterval(autoInt); endCacaGame(true); } }, interval); G.timers.push(autoInt); }
 
-function startCacaTimer(){
-  if(G.cacaState.timerInt) clearInterval(G.cacaState.timerInt);
-  const start=Date.now();
-  G.cacaState.timerInt=setInterval(()=>{
-    const elapsed=Math.floor((Date.now()-start)/1000);
-    const m=String(Math.floor(elapsed/60)).padStart(2,'0'), s=String(elapsed%60).padStart(2,'0');
-    $('cacaTimer').textContent=`${m}:${s}`;
-    G.timers.push(G.cacaState.timerInt);
-  },1000);
-}
-
-function endCacaGame(victory){
-  clearInterval(G.cacaState.timerInt);
-  const elapsed=Math.floor((Date.now()-G.cacaState.startTime)/1000);
-  const timeBonus=Math.max(0, 120-elapsed);
-  const score=G.cacaState.found.size*10 + timeBonus + (victory?50:0);
-  const meta=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
-  const res=addRankingEntry(score,'caca',meta);
-  showEndGame(victory? 'Você venceu!':'Fim de jogo', victory? `Encontrou ${G.cacaState.found.size}/${G.cacaState.words.length} em ${meta}`:`Você encontrou ${G.cacaState.found.size}/${G.cacaState.words.length}`, score, res.pos);
-}
-
-function hintCaca(){
-  const unfound=G.cacaState.words.filter(w=>!G.cacaState.found.has(w));
-  if(!unfound.length) return;
-  const w=unfound[0];
-  const placed=G.cacaState.placed.find(p=>p.word===w);
-  if(!placed) return;
-  const firstCell=placed.cells[0];
-  const el=document.querySelector(`.cell[data-r="${firstCell.r}"][data-c="${firstCell.c}"]`);
-  if(el){ el.classList.add('hint'); setTimeout(()=>el.classList.remove('hint'), 2000); toast(`Dica: ${w} começa em linha ${firstCell.r+1}`); }
-}
-
-function solveCaca(){
-  G.cacaState.words.forEach(w=>G.cacaState.found.add(w));
-  document.querySelectorAll('.cell').forEach(c=>c.classList.add('found'));
-  document.querySelectorAll('.word-item').forEach(i=>i.classList.add('done'));
-  $('cacaFound').textContent=G.cacaState.words.length;
-  setTimeout(()=>endCacaGame(true), 500);
-}
-
-function startAutoCaca(){
-  if(!G.humanAssist) return;
-  let idx=0;
-  const unfound=()=>G.cacaState.words.filter(w=>!G.cacaState.found.has(w));
-  const speedMap={devagar:1500,normal:800,rapido:300};
-  const interval=speedMap[G.assistSpeed]||800;
-  const autoInt=setInterval(()=>{
-    const list=unfound();
-    if(!list.length || !G.humanAssist){ clearInterval(autoInt); return; }
-    const w=list[0];
-    const placed=G.cacaState.placed.find(p=>p.word===w);
-    if(!placed) return;
-    placed.cells.forEach(cell=>{
-      const el=document.querySelector(`.cell[data-r="${cell.r}"][data-c="${cell.c}"]`);
-      if(el) el.classList.add('found');
-    });
-    G.cacaState.found.add(w);
-    document.querySelector(`.word-item[data-word="${w}"]`)?.classList.add('done');
-    $('cacaFound').textContent=G.cacaState.found.size;
-    if(G.cacaState.found.size===G.cacaState.words.length){ clearInterval(autoInt); endCacaGame(true); }
-  }, interval);
-  G.timers.push(autoInt);
-}
-
-// STOP LOGIC
-function initStop(){ initStopOnline({letter:randomLetter(),categories:STOP_CATEGORIES.slice(0,8)}); }
-
-function initStopOnline(payload){
-  showScreen('stopScreen');
-  G.stopState.letter=payload.letter;
-  G.stopState.categories=payload.categories;
-  G.stopState.answers={};
-  G.stopState.timer=90;
-  $('stopLetter').textContent=payload.letter;
-  $('stopLetterBig').textContent=payload.letter;
-  renderStopGrid();
-  startStopTimer();
-  updateAssistUI();
-  if(G.assist && G.humanAssist) startAutoStop();
-}
-
-function renderStopGrid(){
-  const grid=$('stopGrid'); grid.innerHTML='';
-  G.stopState.categories.forEach(cat=>{
-    const div=document.createElement('div'); div.className='stop-field';
-    div.innerHTML=`<label>${cat}</label><input type="text" data-cat="${cat}" placeholder="Começa com ${G.stopState.letter}..." autocomplete="off">`;
-    grid.appendChild(div);
-  });
-  grid.querySelectorAll('input').forEach(inp=>{
-    inp.addEventListener('input', e=>{ e.target.value=e.target.value.toUpperCase(); });
-  });
-}
-
-function startStopTimer(){
-  if(G.stopState.timerInt) clearInterval(G.stopState.timerInt);
-  $('stopTimer').textContent='01:30';
-  G.stopState.timer=90;
-  G.stopState.timerInt=setInterval(()=>{
-    G.stopState.timer--;
-    const m=String(Math.floor(G.stopState.timer/60)).padStart(2,'0'), s=String(G.stopState.timer%60).padStart(2,'0');
-    $('stopTimer').textContent=`${m}:${s}`;
-    if(G.stopState.timer<=10) $('stopTimer').classList.add('low'); else $('stopTimer').classList.remove('low');
-    if(G.stopState.timer<=0){ clearInterval(G.stopState.timerInt); finishStop(); }
-  },1000);
-  G.timers.push(G.stopState.timerInt);
-}
-
-function finishStop(){
-  clearInterval(G.stopState.timerInt);
-  const letter=G.stopState.letter;
-  let score=0;
-  const inputs=document.querySelectorAll('#stopGrid input');
-  inputs.forEach(inp=>{
-    const cat=inp.dataset.cat;
-    const val=inp.value.trim();
-    G.stopState.answers[cat]=val;
-    if(!val){ inp.classList.add('wrong'); return; }
-    if(!val.toUpperCase().startsWith(letter)){ inp.classList.add('wrong'); return; }
-    if(val.length<2){ inp.classList.add('wrong'); return; }
-    inp.classList.add('correct');
-    score+=10;
-  });
-  // if online and opponent answers exist, check duplicates for 5 pts logic
-  if(G.stopState.oppAnswers){
-    Object.keys(G.stopState.answers).forEach(cat=>{
-      const myAns=(G.stopState.answers[cat]||'').toUpperCase();
-      const oppAns=(G.stopState.oppAnswers[cat]||'').toUpperCase();
-      if(myAns && oppAns && myAns===oppAns){
-        score-=5; // from 10 to 5
-        const inp=document.querySelector(`input[data-cat="${cat}"]`);
-        if(inp){ inp.classList.remove('correct'); inp.style.borderColor='var(--warn)'; }
-      }
-    });
-  }
-  $('stopScore').textContent=score;
-  $('stopResults').classList.remove('hidden');
-  const res=addRankingEntry(score,'stop',`Letra ${letter}`);
-  G.conn?.send({type:'stop_result',answers:G.stopState.answers});
-  showEndGame(score>=50?'Excelente!':'Fim do Stop!', `Letra ${letter} - ${score} pontos`, score, res.pos);
-}
-
-function fillStopAssist(){
-  const letter=G.stopState.letter;
-  document.querySelectorAll('#stopGrid input').forEach(inp=>{
-    const cat=inp.dataset.cat;
-    const suggs=STOP_SUGGESTIONS[cat]||[];
-    let pick=suggs.find(s=>s.startsWith(letter));
-    if(!pick){
-      // generate fake starting with letter
-      pick=letter + (cat.toLowerCase().slice(0,4)) + ' ' + Math.floor(Math.random()*100);
-      // make it look plausible
-      if(cat==='Nome') pick=letter+'IANA';
-      if(cat==='Cidade') pick=letter+'ARACAJU';
-      if(cat==='Cor') pick=letter+'ARANJA';
-    }
-    inp.value=pick;
-  });
-  toast('Respostas preenchidas (assistente)');
-}
-
-function startAutoStop(){
-  if(!G.humanAssist) return;
-  const speedMap={devagar:2000,normal:900,rapido:200};
-  const delay=speedMap[G.assistSpeed]||900;
-  setTimeout(()=>{ if(G.humanAssist) fillStopAssist(); }, delay);
-  setTimeout(()=>{ if(G.humanAssist) finishStop(); }, delay+3000);
-}
-
-// END GAME
-function showEndGame(title,text,score,pos){
-  $('endTitle').textContent=title;
-  $('endText').textContent=text;
-  $('endScore').textContent=score+' pts';
-  const info=$('endRankInfo');
-  if(pos>=0){
-    info.style.display='block';
-    info.innerHTML=`Posição global: <b>#${pos+1}</b> • Sua melhor pontuação entra no ranking 🌍`;
-  } else info.style.display='none';
-  $('endOverlay').classList.remove('hidden');
-}
-
-// ASSIST UI
-function updateAssistUI(){
-  const on=G.assist;
-  $('cacaAssistBadge').classList.toggle('hidden', !on);
-  $('stopAssistBadge').classList.toggle('hidden', !on);
-  $('btnCacaHint').classList.toggle('hidden', !on);
-  $('btnCacaSolve').classList.toggle('hidden', !on);
-  $('btnStopFill').classList.toggle('hidden', !on);
-}
-
-function loadAssistSettings(){
-  const s=getSettings();
-  G.assist=s.assist; G.humanAssist=s.humanAssist; G.assistSpeed=s.speed||'normal';
-  $('toggleAssist').checked=G.assist;
-  $('toggleHuman').checked=G.humanAssist;
-  $('assistSpeed').value=G.assistSpeed;
-  $('speedRow').style.display=G.humanAssist?'flex':'none';
-  updateAssistUI();
-}
-
-// ADMIN
-function openAdmin(){
-  if(G.user.role!=='admin'){ toast('Acesso negado'); return; }
-  $('adminOverlay').classList.remove('hidden');
-  renderAdminDash();
-  renderAdminUsers();
-  renderAdminRanking();
-  loadAssistSettings();
-  $('toggleMaint').checked=getSettings().maint||false;
-}
-
-function renderAdminDash(){
-  const users=getUsers();
-  const ranking=getRanking();
-  $('dashUsers').textContent=users.length;
-  $('dashAdmins').textContent=users.filter(u=>u.role==='admin').length;
-  $('dashPlays').textContent=users.reduce((s,u)=>s+(u.stats.jogos||0),0);
-  $('dashRanking').textContent=ranking.length;
-  const top=ranking.slice().sort((a,b)=>b.score-a.score)[0];
-  $('dashTopPlayer').textContent=top? `${top.username} (${top.game})`:'—';
-  $('dashTopScore').textContent=top? top.score+' pts':'—';
-  // most active
-  let most=users.slice().sort((a,b)=>(b.stats.jogos||0)-(a.stats.jogos||0))[0];
-  $('dashActive').textContent=most? `${most.username} - ${most.stats.jogos} jogos`:'—';
-  $('dashAvg').textContent=ranking.length? Math.round(ranking.reduce((s,r)=>s+r.score,0)/ranking.length)+' pts':'—';
-}
-
-function renderAdminUsers(filter=''){
-  const users=getUsers();
-  const tbody=$('userTableBody'); tbody.innerHTML='';
-  users.filter(u=>!filter||u.username.toLowerCase().includes(filter.toLowerCase())).forEach(u=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td><div class="player-cell"><div class="avatar">${u.username.charAt(0).toUpperCase()}</div> ${u.username}</div></td>
-      <td>${u.role==='admin'?'<span class="admin-badge">ADM</span>':'Usuário'}</td>
-      <td>${u.stats.jogos||0}</td><td>${u.stats.vitorias||0}</td><td>${u.stats.recorde||0}</td>
-      <td style="display:flex;gap:4px;flex-wrap:wrap">
-        ${u.username!=='Thiago Shelby'?`<button class="btn btn-secondary btn-sm" onclick="toggleAdminRole('${u.username}')">${u.role==='admin'?'Remover ADM':'Tornar ADM'}</button>`:''}
-        ${u.username!==G.user.username?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.username}')">Excluir</button>`:''}
-        <button class="btn btn-secondary btn-sm" onclick="resetUserStats('${u.username}')">Zerar</button>
-      </td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function renderAdminRanking(){
-  const ranking=getRanking().slice().sort((a,b)=>b.score-a.score);
-  const tbody=$('adminRankingBody'); tbody.innerHTML='';
-  ranking.slice(0,100).forEach((r,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>#${i+1}</td><td>${r.username}</td><td>${r.score}</td><td>${r.game}</td><td>${r.date}</td><td><button class="btn btn-danger btn-sm" onclick="deleteRanking('${r.id}')">Apagar</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-window.toggleAdminRole=(username)=>{
-  let users=getUsers();
-  const u=users.find(x=>x.username===username);
-  if(!u) return;
-  if(u.username==='Thiago Shelby' && u.role==='admin'){ toast('Não pode remover o admin principal'); return; }
-  u.role=u.role==='admin'?'user':'admin';
-  saveUsers(users);
-  if(G.user.username===username) G.user=u;
-  renderAdminUsers($('userSearch').value);
-  renderAdminDash();
-  toast(`${username} agora é ${u.role}`);
-};
-
-window.deleteUser=(username)=>{
-  if(!confirm(`Excluir ${username}? Isso apaga tudo dele.`)) return;
-  if(username==='Thiago Shelby'){ toast('Não pode excluir o admin principal'); return; }
-  let users=getUsers().filter(u=>u.username!==username);
-  saveUsers(users);
-  // remove ranking and notifs
-  saveRanking(getRanking().filter(r=>r.username!==username));
-  Store.del('notifs_'+username);
-  renderAdminUsers();
-  renderAdminDash();
-  renderAdminRanking();
-  toast('Usuário excluído');
-};
-
-window.resetUserStats=(username)=>{
-  let users=getUsers();
-  const u=users.find(x=>x.username===username);
-  if(!u) return;
-  u.stats={jogos:0,vitorias:0,recorde:0,coins:u.stats.coins||0};
-  saveUsers(users);
-  renderAdminUsers();
-  toast('Estatísticas zeradas');
-};
-
-window.deleteRanking=(id)=>{
-  let ranking=getRanking().filter(r=>String(r.id)!==String(id));
-  saveRanking(ranking);
-  renderAdminRanking();
-  renderAdminDash();
-  renderRanking();
-  toast('Registro removido');
-};
-
-// EXPORT
-function exportJSON(data, filename){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=filename; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportCSV(){
-  const ranking=getRanking();
-  let csv='Posicao,Usuario,Pontos,Jogo,Tempo,Data\n';
-  ranking.slice().sort((a,b)=>b.score-a.score).forEach((r,i)=>{
-    csv+=`${i+1},"${r.username}",${r.score},${r.game},"${r.meta||''}",${r.date}\n`;
-  });
-  const blob=new Blob([csv],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='ranking-luan-santana.csv'; a.click();
-  URL.revokeObjectURL(url);
-}
-
-// PWA
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt', e=>{
-  e.preventDefault(); deferredPrompt=e;
-  $('btnInstallPWA').classList.remove('hidden');
-});
+// STOP
+function initStopOnline(payload){ showScreen('stopScreen'); G.stopState.letter=payload.letter; G.stopState.categories=payload.categories; G.stopState.answers={}; G.stopState.timer=payload.time||90; $('stopLetter').textContent=payload.letter; $('stopLetterBig').textContent=payload.letter; renderStopGrid(); startStopTimer(payload.time||90); updateAssistUI(); if(G.assist && G.humanAssist) startAutoStop(); }
+function renderStopGrid(){ const grid=$('stopGrid'); grid.innerHTML=''; G.stopState.categories.forEach(cat=>{ const div=document.createElement('div'); div.className='stop-field'; div.innerHTML=`<label>${cat}</label><input type="text" data-cat="${cat}" placeholder="Começa com ${G.stopState.letter}..." autocomplete="off">`; grid.appendChild(div); }); grid.querySelectorAll('input').forEach(inp=>{ inp.addEventListener('input', e=>{ e.target.value=e.target.value.toUpperCase(); }); }); }
+function startStopTimer(initial=90){ if(G.stopState.timerInt) clearInterval(G.stopState.timerInt); $('stopTimer').textContent=`${String(Math.floor(initial/60)).padStart(2,'0')}:${String(initial%60).padStart(2,'0')}`; G.stopState.timer=initial; G.stopState.timerInt=setInterval(()=>{ G.stopState.timer--; const m=String(Math.floor(G.stopState.timer/60)).padStart(2,'0'), s=String(G.stopState.timer%60).padStart(2,'0'); $('stopTimer').textContent=`${m}:${s}`; if(G.stopState.timer<=10) $('stopTimer').classList.add('low'); else $('stopTimer').classList.remove('low'); if(G.stopState.timer<=0){ clearInterval(G.stopState.timerInt); finishStop(); } },1000); G.timers.push(G.stopState.timerInt); }
+function finishStop(){ clearInterval(G.stopState.timerInt); const letter=G.stopState.letter; let score=0; const inputs=document.querySelectorAll('#stopGrid input'); inputs.forEach(inp=>{ const cat=inp.dataset.cat; const val=inp.value.trim(); G.stopState.answers[cat]=val; if(!val){ inp.classList.add('wrong'); return; } if(!val.toUpperCase().startsWith(letter)){ inp.classList.add('wrong'); return; } if(val.length<2){ inp.classList.add('wrong'); return; } inp.classList.add('correct'); score+=10; }); if(G.stopState.oppAnswers){ Object.keys(G.stopState.answers).forEach(cat=>{ const myAns=(G.stopState.answers[cat]||'').toUpperCase(); const oppAns=(G.stopState.oppAnswers[cat]||'').toUpperCase(); if(myAns && oppAns && myAns===oppAns){ score-=5; } }); } $('stopScore').textContent=score; $('stopResults').classList.remove('hidden'); const res=addRankingEntry(score,'stop',`Letra ${letter}`); G.conn?.send({type:'stop_result',answers:G.stopState.answers}); showEndGame(score>=50?'Excelente!':'Fim do Stop!', `Letra ${letter} - ${score} pontos`, score, res.pos); }
+function fillStopAssist(){ const letter=G.stopState.letter; document.querySelectorAll('#stopGrid input').forEach(inp=>{ const cat=inp.dataset.cat; const suggs=STOP_SUGGESTIONS[cat]||[]; let pick=suggs.find(s=>s.startsWith(letter)); if(!pick){ if(cat==='Nome') pick=letter+'IANA'; else if(cat==='Cidade') pick=letter+'RACAJU'; else pick=letter+cat.toLowerCase().slice(0,4); } inp.value=pick; }); toast('Respostas preenchidas (assistente)'); }
+function startAutoStop(){ if(!G.humanAssist) return; const speedMap={devagar:2000,normal:900,rapido:200}; const delay=speedMap[G.assistSpeed]||900; setTimeout(()=>{ if(G.humanAssist) fillStopAssist(); }, delay); setTimeout(()=>{ if(G.humanAssist) finishStop(); }, delay+3000); }
+function showEndGame(title,text,score,pos){ $('endTitle').textContent=title; $('endText').textContent=text; $('endScore').textContent=score+' pts'; const info=$('endRankInfo'); if(pos>=0){ info.style.display='block'; info.innerHTML=`Posição global: <b>#${pos+1}</b> • Sua melhor pontuação entra no ranking 🌍`; } else info.style.display='none'; $('endOverlay').classList.remove('hidden'); }
+function updateAssistUI(){ const on=G.assist; $('cacaAssistBadge').classList.toggle('hidden', !on); $('stopAssistBadge').classList.toggle('hidden', !on); $('btnCacaHint').classList.toggle('hidden', !on); $('btnCacaSolve').classList.toggle('hidden', !on); $('btnStopFill').classList.toggle('hidden', !on); }
+function loadAssistSettings(){ const s=getSettings(); G.assist=s.assist; G.humanAssist=s.humanAssist; G.assistSpeed=s.speed||'normal'; $('toggleAssist').checked=G.assist; $('toggleHuman').checked=G.humanAssist; $('assistSpeed').value=G.assistSpeed; $('speedRow').style.display=G.humanAssist?'flex':'none'; updateAssistUI(); }
+function openAdmin(){ if(G.user.role!=='admin'){ toast('Acesso negado'); return; } $('adminOverlay').classList.remove('hidden'); renderAdminDash(); renderAdminUsers(); renderAdminRanking(); loadAssistSettings(); $('toggleMaint').checked=getSettings().maint||false; }
+function renderAdminDash(){ const users=getUsers(); const ranking=getRanking(); $('dashUsers').textContent=users.length; $('dashAdmins').textContent=users.filter(u=>u.role==='admin').length; $('dashPlays').textContent=users.reduce((s,u)=>s+(u.stats.jogos||0),0); $('dashRanking').textContent=ranking.length; const top=ranking.slice().sort((a,b)=>b.score-a.score)[0]; $('dashTopPlayer').textContent=top? `${top.username} (${top.game})`:'—'; $('dashTopScore').textContent=top? top.score+' pts':'—'; let most=users.slice().sort((a,b)=>(b.stats.jogos||0)-(a.stats.jogos||0))[0]; $('dashActive').textContent=most? `${most.username} - ${most.stats.jogos} jogos`:'—'; $('dashAvg').textContent=ranking.length? Math.round(ranking.reduce((s,r)=>s+r.score,0)/ranking.length)+' pts':'—'; }
+function renderAdminUsers(filter=''){ const users=getUsers(); const tbody=$('userTableBody'); tbody.innerHTML=''; users.filter(u=>!filter||u.username.toLowerCase().includes(filter.toLowerCase())).forEach(u=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td><div class="player-cell"><div class="avatar">${u.username.charAt(0).toUpperCase()}</div> ${u.username}</div></td><td>${u.role==='admin'?'<span class="admin-badge">ADM</span>':'Usuário'}</td><td>${u.stats.jogos||0}</td><td>${u.stats.vitorias||0}</td><td>${u.stats.recorde||0}</td><td style="display:flex;gap:4px;flex-wrap:wrap">${u.username!=='Thiago Shelby'?`<button class="btn btn-secondary btn-sm" onclick="toggleAdminRole('${u.username}')">${u.role==='admin'?'Remover ADM':'Tornar ADM'}</button>`:''}${u.username!==G.user.username?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.username}')">Excluir</button>`:''}<button class="btn btn-secondary btn-sm" onclick="resetUserStats('${u.username}')">Zerar</button></td>`; tbody.appendChild(tr); }); }
+function renderAdminRanking(){ const ranking=getRanking().slice().sort((a,b)=>b.score-a.score); const tbody=$('adminRankingBody'); tbody.innerHTML=''; ranking.slice(0,100).forEach((r,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>#${i+1}</td><td>${r.username}</td><td>${r.score}</td><td>${r.game}</td><td>${r.date}</td><td><button class="btn btn-danger btn-sm" onclick="deleteRanking('${r.id}')">Apagar</button></td>`; tbody.appendChild(tr); }); }
+window.toggleAdminRole=(username)=>{ let users=getUsers(); const u=users.find(x=>x.username===username); if(!u) return; if(u.username==='Thiago Shelby' && u.role==='admin'){ toast('Não pode remover o admin principal'); return; } u.role=u.role==='admin'?'user':'admin'; saveUsers(users); if(G.user.username===username) G.user=u; renderAdminUsers($('userSearch').value); renderAdminDash(); toast(`${username} agora é ${u.role}`); };
+window.deleteUser=(username)=>{ if(!confirm(`Excluir ${username}? Isso apaga tudo dele.`)) return; if(username==='Thiago Shelby'){ toast('Não pode excluir o admin principal'); return; } let users=getUsers().filter(u=>u.username!==username); saveUsers(users); saveRanking(getRanking().filter(r=>r.username!==username)); Store.del('notifs_'+username); renderAdminUsers(); renderAdminDash(); renderAdminRanking(); toast('Usuário excluído'); };
+window.resetUserStats=(username)=>{ let users=getUsers(); const u=users.find(x=>x.username===username); if(!u) return; u.stats={jogos:0,vitorias:0,recorde:0,coins:u.stats.coins||0}; saveUsers(users); renderAdminUsers(); toast('Estatísticas zeradas'); };
+window.deleteRanking=(id)=>{ let ranking=getRanking().filter(r=>String(r.id)!==String(id)); saveRanking(ranking); renderAdminRanking(); renderAdminDash(); renderRanking(); toast('Registro removido'); };
+function exportJSON(data, filename){ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url); }
+function exportCSV(){ const ranking=getRanking(); let csv='Posicao,Usuario,Pontos,Jogo,Tempo,Data\n'; ranking.slice().sort((a,b)=>b.score-a.score).forEach((r,i)=>{ csv+=`${i+1},"${r.username}",${r.score},${r.game},"${r.meta||''}",${r.date}\n`; }); const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ranking-luan-santana.csv'; a.click(); URL.revokeObjectURL(url); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  initDefaultUsers();
-  loadAssistSettings();
-  const cu=loadCurrentUser();
-  if(cu){ G.user=cu; showScreen('menuScreen'); refreshMenu(); renderRanking(); }
-  else showScreen('loginScreen');
-
-  // Auth
-  $('goRegister').onclick=()=>{ $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); };
-  $('goLogin').onclick=()=>{ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); };
+  initDefaultUsers(); loadAssistSettings();
+  const cu=loadCurrentUser(); if(cu){ G.user=cu; showScreen('menuScreen'); refreshMenu(); renderRanking(); } else showScreen('loginScreen');
+  // tabs login
+  $('tabLogin').onclick=()=>{ $('tabLogin').classList.add('active'); $('tabRegister').classList.remove('active'); $('panelLogin').classList.remove('hidden'); $('panelRegister').classList.add('hidden'); };
+  $('tabRegister').onclick=()=>{ $('tabRegister').classList.add('active'); $('tabLogin').classList.remove('active'); $('panelRegister').classList.remove('hidden'); $('panelLogin').classList.add('hidden'); };
+  // toggle pass
+  $('toggleLoginPass').onclick=()=>{ const i=$('loginPass'); i.type=i.type==='password'?'text':'password'; $('toggleLoginPass').textContent=i.type==='password'?'👁️':'🙈'; };
+  $('toggleRegPass').onclick=()=>{ const i=$('regPass'); i.type=i.type==='password'?'text':'password'; $('toggleRegPass').textContent=i.type==='password'?'👁️':'🙈'; };
+  // remember
+  const remembered=Store.get('rememberedUser'); if(remembered) $('loginUser').value=remembered;
+  $('forgotLink').onclick=()=>toast('Fale com o ADM Thiago Shelby para recuperar a senha');
   $('btnLogin').onclick=()=>{
     const u=$('loginUser').value.trim(), p=$('loginPass').value;
     if(!u||!p){ showMsg('Preencha usuário e senha'); return; }
-    const res=login(u,p);
-    if(!res.ok){ showMsg(res.msg,'err'); return; }
-    showScreen('menuScreen'); refreshMenu(); renderRanking();
-    toast(`Bem-vindo, ${G.user.username}!`);
+    const res=login(u,p); if(!res.ok){ showMsg(res.msg,'err'); return; }
+    if($('rememberMe').checked) Store.set('rememberedUser', u);
+    showScreen('menuScreen'); refreshMenu(); renderRanking(); toast(`Bem-vindo, ${G.user.username}!`);
   };
   $('btnRegister').onclick=()=>{
     const u=$('regUser').value.trim(), p=$('regPass').value;
-    const res=register(u,p);
-    if(!res.ok){ showMsg(res.msg,'err'); return; }
-    showScreen('menuScreen'); refreshMenu(); renderRanking();
-    toast('Conta criada!');
+    const res=register(u,p); if(!res.ok){ showMsg(res.msg,'err'); return; }
+    showScreen('menuScreen'); refreshMenu(); renderRanking(); toast('Conta criada!');
   };
   $('btnLogout').onclick=logout;
-
-  // Menu cards
   $('cardCaca').onclick=()=>openLobby('caca');
   $('cardStop').onclick=()=>openLobby('stop');
   $('cardRanking').onclick=()=>{ showScreen('rankingScreen'); renderRanking(); };
@@ -1316,15 +489,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   $('btnRefreshRanking').onclick=()=>{ renderRanking(); toast('Ranking atualizado'); };
   $('btnExportRanking').onclick=exportCSV;
   $('rankingSearch').addEventListener('input', renderRanking);
-  document.querySelectorAll('.ranking-tab[data-filter]').forEach(btn=>{
-    btn.onclick=()=>{
-      document.querySelectorAll('.ranking-tab[data-filter]').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      renderRanking();
-    };
-  });
-
-  // Lobby
+  document.querySelectorAll('.ranking-tab[data-filter]').forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('.ranking-tab[data-filter]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRanking(); }; });
   $('lobbyBack').onclick=()=>{ leaveRoom(); showScreen('menuScreen'); };
   $('btnSolo').onclick=startSolo;
   $('btnCreateRoom').onclick=createRoom;
@@ -1332,117 +497,47 @@ document.addEventListener('DOMContentLoaded', ()=>{
   $('btnCopyCode').onclick=()=>{ navigator.clipboard.writeText($('roomCodeDisplay').textContent).then(()=>toast('Código copiado!')); };
   $('btnLeaveRoom').onclick=leaveRoom;
   $('btnStartOnline').onclick=startOnlineGame;
-
-  // Caca
+  // stop setup
+  $('stopSetupBack').onclick=()=>showScreen('lobbyScreen');
+  $('btnAddCat').onclick=()=>{ const val=$('customCatInput').value.trim(); if(!val){ toast('Digite um tema'); return; } if(val.length<2){ toast('Tema muito curto'); return; } if(STOP_CATEGORIES_BASE.includes(val) || G.stopSetup.customCats.includes(val)){ toast('Tema já existe'); return; } G.stopSetup.customCats.push(val); G.stopSetup.selectedCats.add(val); $('customCatInput').value=''; renderSetupCategories(); updateCatCount(); toast(`Tema "${val}" adicionado`); };
+  $('customCatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') $('btnAddCat').click(); });
+  document.querySelectorAll('#timeTabs .ranking-tab').forEach(b=>{ b.onclick=()=>{ document.querySelectorAll('#timeTabs .ranking-tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); G.stopSetup.time=parseInt(b.dataset.time); }; });
+  document.querySelectorAll('#letterModeTabs .ranking-tab').forEach(b=>{ b.onclick=()=>{ document.querySelectorAll('#letterModeTabs .ranking-tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); G.stopSetup.letterMode=b.dataset.mode; if(b.dataset.mode==='manual'){ $('manualLetterGrid').classList.remove('hidden'); } else { $('manualLetterGrid').classList.add('hidden'); } updateSetupUI(); }; });
+  $('btnSortearLetra').onclick=sortearLetraRoleta;
+  $('btnStartStopConfigured').onclick=startStopConfigured;
+  $('btnReconfigStop').onclick=showStopSetup;
   $('cacaBack').onclick=()=>{ clearInterval(G.cacaState.timerInt); showScreen('menuScreen'); refreshMenu(); };
   $('btnCacaNew').onclick=initCaca;
   $('btnCacaHint').onclick=hintCaca;
   $('btnCacaSolve').onclick=solveCaca;
-
-  // Stop
   $('stopBack').onclick=()=>{ clearInterval(G.stopState.timerInt); showScreen('menuScreen'); refreshMenu(); };
   $('btnStopStop').onclick=finishStop;
   $('btnStopFill').onclick=fillStopAssist;
-
-  // End overlay
-  $('btnPlayAgain').onclick=()=>{ $('endOverlay').classList.add('hidden'); if(G.selectedGame==='caca') initCaca(); else initStop(); };
+  $('btnPlayAgain').onclick=()=>{ $('endOverlay').classList.add('hidden'); if(G.selectedGame==='caca') initCaca(); else showStopSetup(); };
   $('btnEndMenu').onclick=()=>{ $('endOverlay').classList.add('hidden'); showScreen('menuScreen'); refreshMenu(); };
   $('btnEndRanking').onclick=()=>{ $('endOverlay').classList.add('hidden'); showScreen('rankingScreen'); renderRanking(); };
-
-  // Reward
-  $('btnClaimReward').onclick=()=>{
-    const prize=parseInt($('rewardPrize').dataset.prize||'250');
-    updateUserStats(u=>{ u.stats.coins=(u.stats.coins||0)+prize; });
-    $('rewardOverlay').classList.add('hidden');
-    toast(`+${prize} moedas resgatadas!`);
-    refreshMenu();
-  };
-
-  // Notif
+  $('btnClaimReward').onclick=()=>{ const prize=parseInt($('rewardPrize').dataset.prize||'250'); updateUserStats(u=>{ u.stats.coins=(u.stats.coins||0)+prize; }); $('rewardOverlay').classList.add('hidden'); toast(`+${prize} moedas resgatadas!`); refreshMenu(); };
   $('btnNotif').onclick=()=>{ renderNotifs(); $('notifOverlay').classList.remove('hidden'); };
   $('btnCloseNotif').onclick=()=>$('notifOverlay').classList.add('hidden');
   $('btnClearNotif').onclick=()=>{ saveNotifs(G.user.username, []); renderNotifs(); updateNotifBadge(); toast('Notificações limpas'); };
   $('notifOverlay').addEventListener('click', e=>{ if(e.target===$('notifOverlay')) $('notifOverlay').classList.add('hidden'); });
-
-  // Admin
   $('btnAdminPanel').onclick=openAdmin;
   $('btnCloseAdmin').onclick=()=>$('adminOverlay').classList.add('hidden');
   $('adminOverlay').addEventListener('click', e=>{ if(e.target===$('adminOverlay')) $('adminOverlay').classList.add('hidden'); });
-  document.querySelectorAll('[data-tab]').forEach(btn=>{
-    btn.onclick=()=>{
-      document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.admin-section').forEach(s=>s.classList.add('hidden'));
-      const tab=btn.dataset.tab;
-      if(tab==='dash') $('adminDash').classList.remove('hidden');
-      if(tab==='users') $('adminUsers').classList.remove('hidden');
-      if(tab==='ranking') $('adminRanking').classList.remove('hidden');
-      if(tab==='assist') $('adminAssist').classList.remove('hidden');
-      if(tab==='system') $('adminSystem').classList.remove('hidden');
-    };
-  });
+  document.querySelectorAll('[data-tab]').forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('[data-tab]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.admin-section').forEach(s=>s.classList.add('hidden')); const tab=btn.dataset.tab; if(tab==='dash') $('adminDash').classList.remove('hidden'); if(tab==='users') $('adminUsers').classList.remove('hidden'); if(tab==='ranking') $('adminRanking').classList.remove('hidden'); if(tab==='assist') $('adminAssist').classList.remove('hidden'); if(tab==='system') $('adminSystem').classList.remove('hidden'); }; });
   $('userSearch').addEventListener('input', e=>renderAdminUsers(e.target.value));
   $('btnClearRanking').onclick=()=>{ if(confirm('Limpar todo ranking?')){ saveRanking([]); renderAdminRanking(); renderAdminDash(); renderRanking(); toast('Ranking limpo'); } };
   $('btnExportJSON').onclick=()=>exportJSON(getRanking(),'ranking.json');
   $('btnExportCSV').onclick=exportCSV;
-  $('btnFakeData').onclick=()=>{
-    const names=['Ana','Bruno','Carlos','Duda','Elisa','Felipe','Gabi','Luan','Maria','Thiago','Sofia','Lucas'];
-    for(let i=0;i<10;i++){
-      const name=names[Math.floor(Math.random()*names.length)]+' '+Math.floor(Math.random()*100);
-      const score=Math.floor(Math.random()*150)+20;
-      const game=Math.random()>0.5?'caca':'stop';
-      getRanking().push({id:Date.now()+i,username:name,avatar:name.charAt(0),score,game,meta:game==='caca'?'01:20':`Letra ${randomLetter()}`,date:new Date().toLocaleDateString('pt-BR'),timestamp:Date.now()});
-    }
-    saveRanking(getRanking());
-    renderAdminRanking(); renderAdminDash(); renderRanking();
-    toast('Dados de teste gerados');
-  };
+  $('btnFakeData').onclick=()=>{ const names=['Ana','Bruno','Carlos','Duda','Elisa','Felipe','Gabi','Luan','Maria','Thiago','Sofia','Lucas']; let ranking=getRanking(); for(let i=0;i<10;i++){ const name=names[Math.floor(Math.random()*names.length)]+' '+Math.floor(Math.random()*100); const score=Math.floor(Math.random()*150)+20; const game=Math.random()>0.5?'caca':'stop'; ranking.push({id:Date.now()+i,username:name,avatar:name.charAt(0),score,game,meta:game==='caca'?'01:20':`Letra ${randomLetter()}`,date:new Date().toLocaleDateString('pt-BR'),timestamp:Date.now()}); } saveRanking(ranking); renderAdminRanking(); renderAdminDash(); renderRanking(); toast('Dados de teste gerados'); };
   $('toggleAssist').onchange=e=>{ const s=getSettings(); s.assist=e.target.checked; saveSettings(s); G.assist=s.assist; updateAssistUI(); };
-  $('toggleHuman').onchange=e=>{ const s=getSettings(); s.humanAssist=e.target.checked; saveSettings(s); G.humanAssist=s.humanAssist; $('speedRow').style.display=s.humanAssist?'flex':'none'; if(s.humanAssist){ toast('Auto-jogador ativado'); } };
+  $('toggleHuman').onchange=e=>{ const s=getSettings(); s.humanAssist=e.target.checked; saveSettings(s); G.humanAssist=s.humanAssist; $('speedRow').style.display=s.humanAssist?'flex':'none'; };
   $('assistSpeed').onchange=e=>{ const s=getSettings(); s.speed=e.target.value; saveSettings(s); G.assistSpeed=s.speed; };
   $('btnExportAll').onclick=()=>exportJSON({users:getUsers(),ranking:getRanking(),settings:getSettings()},'backup-luan-santana.json');
   $('btnClearStats').onclick=()=>{ if(confirm('Limpar suas estatísticas?')){ updateUserStats(u=>{ u.stats={jogos:0,vitorias:0,recorde:0,coins:u.stats.coins||0}; }); renderAdminDash(); refreshMenu(); toast('Estatísticas limpas'); } };
-  $('btnFactoryReset').onclick=()=>{
-    if(!confirm('RESET TOTAL: Apaga usuários, ranking e notificações, mantendo apenas sua conta de admin. Continuar?')) return;
-    const me=G.user.username;
-    let users=getUsers().filter(u=>u.username===me || u.username==='Thiago Shelby');
-    // reset stats of remaining
-    users.forEach(u=>{ if(u.username!==me) u.stats={jogos:0,vitorias:0,recorde:0,coins:0}; });
-    saveUsers(users);
-    saveRanking([]);
-    localStorage.clear(); // will clear all luan_ keys, need restore admin
-    initDefaultUsers();
-    // restore current admin
-    if(me!=='Thiago Shelby'){
-      let us=getUsers();
-      if(!us.find(u=>u.username===me)) us.push({username:me,password:'1234',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()});
-      saveUsers(us);
-      Store.set('currentUser',me);
-    } else Store.set('currentUser','Thiago Shelby');
-    toast('Sistema resetado');
-    setTimeout(()=>location.reload(), 800);
-  };
+  $('btnFactoryReset').onclick=()=>{ if(!confirm('RESET TOTAL: Apaga usuários, ranking e notificações, mantendo apenas sua conta de admin. Continuar?')) return; const me=G.user.username; let users=getUsers().filter(u=>u.username===me || u.username==='Thiago Shelby'); saveUsers(users); saveRanking([]); localStorage.clear(); initDefaultUsers(); let us=getUsers(); if(!us.find(u=>u.username===me)) us.push({username:me,password:'1234',role:'admin',stats:{jogos:0,vitorias:0,recorde:0,coins:0},createdAt:Date.now()}); saveUsers(us); Store.set('currentUser',me); toast('Sistema resetado'); setTimeout(()=>location.reload(), 800); };
   $('toggleMaint').onchange=e=>{ const s=getSettings(); s.maint=e.target.checked; saveSettings(s); toast(s.maint?'Modo manutenção ativado':'Manutenção desativada'); };
-
-  // PWA install
-  $('btnInstallPWA').onclick=async()=>{
-    if(!deferredPrompt){ toast('Instalação não disponível agora'); return; }
-    deferredPrompt.prompt();
-    const {outcome}=await deferredPrompt.userChoice;
-    if(outcome==='accepted') toast('App instalado!');
-    deferredPrompt=null;
-    $('btnInstallPWA').classList.add('hidden');
-  };
-
-  // close overlays on esc
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape'){
-      $('adminOverlay').classList.add('hidden');
-      $('notifOverlay').classList.add('hidden');
-      $('endOverlay').classList.add('hidden');
-      $('rewardOverlay').classList.add('hidden');
-    }
-  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ $('adminOverlay').classList.add('hidden'); $('notifOverlay').classList.add('hidden'); $('endOverlay').classList.add('hidden'); $('rewardOverlay').classList.add('hidden'); } });
 });
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
