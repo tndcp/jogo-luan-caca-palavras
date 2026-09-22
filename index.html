@@ -1,831 +1,761 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head><style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html) {
-  font-family: "Optimistic", system-ui, sans-serif;
-}
-:where(code, pre, kbd, samp) {
-  font-family: "Optimistic Mono", ui-monospace, monospace;
-}
-</style>
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luan Santana — Caça-Palavras & Adedonha</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#bd3193">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Luan Santana">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@1/dist/umd/lucide.min.js"></script>
+<!-- Adicionado PeerJS para conexão multiplayer online P2P -->
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
-:root{--bg:#fdf9fb;--card:#ffffff;--text:#0f172a;--muted:#64748b;--accent:#bd3193;--accent-soft:rgba(189,49,147,.14);--accent2:#0891b2;--accent2-soft:rgba(8,145,178,.14);--border:rgba(15,23,42,.08);--ok:#16a34a;--warn:#d97706;--err:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}
-*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--text);background-image:radial-gradient(circle at 15% 10%, rgba(189,49,147,.08), transparent 40%),radial-gradient(circle at 85% 90%, rgba(8,145,178,.08), transparent 40%);min-height:100vh;-webkit-tap-highlight-color:transparent}
-.hidden{display:none!important}button{font-family:inherit;cursor:pointer;border:none;outline:none}input,select{font-family:inherit;outline:none}
-.screen{max-width:1100px;margin:0 auto;padding:24px 16px 60px}.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:var(--shadow)}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}.brand .logo{width:44px;height:44px;border-radius:12px;flex:none;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem}.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px;line-height:1.5}
-.field{margin-bottom:14px}.field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}.field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;background:var(--bg);transition:border-color .15s}.field input:focus,.field select:focus{border-color:var(--accent)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;transition:transform .1s, box-shadow .15s, background .15s, border-color .15s}.btn:active{transform:scale(.97)}.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(189,49,147,.3)}.btn-primary:hover{background:#a82a82}.btn-secondary{background:var(--card);border:1.5px solid var(--border);color:var(--text)}.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}.btn-ghost{background:transparent;color:var(--muted)}.btn-ghost:hover{color:var(--accent)}.btn-block{width:100%}.btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}.btn-danger{background:var(--err);color:#fff}.btn-danger:hover{background:#b91c1c}
-.auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}.auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.4}.msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}.msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:24px;box-shadow:0 2px 8px rgba(15,23,42,.04);flex-wrap:wrap}.topbar .user{display:flex;align-items:center;gap:10px;font-weight:700}.avatar{width:36px;height:36px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}.admin-badge{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
-.menu-title{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}.menu-sub{color:var(--muted);margin-bottom:28px;line-height:1.5}.game-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px}.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s, box-shadow .15s, border-color .15s;position:relative;overflow:hidden}.game-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}.game-card .icon-big{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff;font-size:1.6rem}.game-card h3{font-size:1.25rem;font-weight:800;margin-bottom:6px}.game-card p{color:var(--muted);font-size:.9rem;line-height:1.5}.game-card.ranking{border:2px solid var(--accent);background:linear-gradient(135deg,var(--card),var(--accent-soft))}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}.stat .n{font-size:1.5rem;font-weight:800;color:var(--accent)}.stat .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
-.lobby-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:520px;margin:0 auto;box-shadow:var(--shadow)}.lobby-box h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem;line-height:1.5}.room-code{font-size:2rem;font-weight:800;letter-spacing:.3em;text-align:center;background:var(--accent-soft);color:var(--accent);border:2px dashed var(--accent);border-radius:12px;padding:18px;margin:14px 0;user-select:all}.lobby-status{text-align:center;padding:14px;border-radius:10px;font-weight:600;margin:12px 0}.lobby-status.wait{background:var(--accent2-soft);color:var(--accent2)}.lobby-status.ok{background:rgba(22,163,74,.1);color:var(--ok)}.lobby-status.err{background:rgba(220,38,38,.1);color:var(--err)}.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600;border:1px solid var(--border)}
-.game-hud{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:16px}.hud-pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--border)}.hud-pill b{color:var(--accent);font-variant-numeric:tabular-nums}.timer{font-variant-numeric:tabular-nums}.timer.low{color:var(--err);animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.5}}
-.game-layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}@media(max-width:860px){.game-layout{grid-template-columns:1fr}}.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow:auto}#cacaBoard{display:grid;gap:3px;user-select:none;touch-action:none;margin:0 auto;width:max-content}.cell{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;border-radius:8px;background:var(--bg);transition:background .1s, color .1s, transform .1s;cursor:pointer;text-transform:uppercase;border:1.5px solid transparent}@media(max-width:500px){.cell{width:30px;height:30px;font-size:.9rem}}.cell.sel{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.05)}.cell.found{background:var(--accent2);color:#fff;border-color:var(--accent2)}.cell.hint{background:var(--warn);color:#fff;animation:pulse 1s infinite}
-.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;position:sticky;top:16px}.side-panel h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;font-weight:700}.word-list{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto}.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:8px 10px;border-radius:8px;background:var(--bg);transition:all .15s}.word-item.done{text-decoration:line-through;opacity:.45;background:rgba(8,145,178,.08)}.word-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}.word-item.done .dot{background:var(--ok)}
-.stop-letter{font-size:4rem;font-weight:800;text-align:center;color:var(--accent);background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1;border:2px dashed var(--accent)}.stop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.stop-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}.stop-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;background:var(--bg);text-transform:uppercase;font-weight:600}.stop-field input:focus{border-color:var(--accent)}.stop-field input:disabled{opacity:.6;cursor:not-allowed}.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.08)}.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.08)}
-.score-big{font-size:2.5rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0}.overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.modal{background:var(--card);border-radius:20px;padding:28px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}.modal.large{max-width:900px}.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;line-height:1.3}.modal p{color:var(--muted);margin-bottom:18px;font-size:.92rem;line-height:1.55}.modal .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.switch{position:relative;display:inline-block;width:52px;height:28px;flex:none}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:.2s;cursor:pointer}.slider:before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}.switch input:checked + .slider{background:var(--accent)}.switch input:checked + .slider:before{transform:translateX(24px)}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}.setting-row:last-child{border-bottom:none}.setting-row .info b{display:block;font-size:.95rem}.setting-row .info span{font-size:.8rem;color:var(--muted);line-height:1.4;display:block;margin-top:2px}
-.assist-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.12);color:var(--warn);border:1px solid var(--warn);font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;font-size:.9rem;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s, transform .25s;pointer-events:none;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:16px;cursor:pointer;background:none}.back-btn:hover{color:var(--accent)}.footer-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:30px;line-height:1.5}
-.ranking-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.ranking-tab{padding:8px 16px;border-radius:999px;font-weight:700;font-size:.85rem;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;transition:all .15s}.ranking-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.ranking-table{width:100%;border-collapse:collapse;font-size:.9rem}.ranking-table th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);font-weight:700}.ranking-table td{padding:12px 8px;border-bottom:1px solid var(--border);vertical-align:middle}.ranking-table tr.me{background:var(--accent-soft);font-weight:700}.ranking-table tr:hover{background:var(--bg)}.pos{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;background:var(--bg);border:1px solid var(--border)}.pos.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;border-color:#f59e0b}.pos.silver{background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#fff;border-color:#9ca3af}.pos.bronze{background:linear-gradient(135deg,#fdba74,#ea580c);color:#fff;border-color:#ea580c}.player-cell{display:flex;align-items:center;gap:8px;font-weight:600}.player-cell .avatar{width:28px;height:28px;font-size:.75rem}.admin-icon{font-size:.7rem;background:var(--accent);color:#fff;padding:2px 6px;border-radius:999px;font-weight:800}
-.admin-tabs{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}.admin-tab{white-space:nowrap;padding:8px 14px;border-radius:8px;font-weight:700;font-size:.82rem;border:1.5px solid var(--border);background:var(--bg);cursor:pointer}.admin-tab.active{background:var(--text);color:#fff;border-color:var(--text)}.admin-section{display:none}.admin-section.active{display:block}.user-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:10px}.user-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:8px;border-bottom:2px solid var(--border)}.user-table td{padding:10px 8px;border-bottom:1px solid var(--border)}.search-box{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);font-weight:600;margin-bottom:12px}
+:root{--bg:#fdf9fb;--card:#fff;--text:#0f172a;--muted:#64748b;--accent:#bd3193;--accent-soft:rgba(189,49,147,.14);--accent2:#0891b2;--accent2-soft:rgba(8,145,178,.14);--border:rgba(15,23,42,.08);--ok:#16a34a;--warn:#d97706;--err:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--bg);color:var(--text);background-image:radial-gradient(circle at 15% 10%,rgba(189,49,147,.08),transparent 40%),radial-gradient(circle at 85% 90%,rgba(8,145,178,.08),transparent 40%);min-height:100vh}
+.hidden{display:none!important}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:inherit;outline:none}
+.screen{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.brand .logo{width:44px;height:44px;border-radius:12px;flex:none;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;background:var(--bg);transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;transition:transform .1s,box-shadow .15s,background .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(189,49,147,.3)}
+.btn-primary:hover{background:#a82a82}
+.btn-secondary{background:var(--card);border:1.5px solid var(--border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--muted)}
+.btn-ghost:hover{color:var(--accent)}
+.btn-danger{background:var(--err);color:#fff}
+.btn-danger:hover{background:#b91c1c}
+.btn-block{width:100%}
+.btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}
+.btn-xs{padding:4px 8px;font-size:.75rem;border-radius:6px}
+.auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}
+.auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}
+.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none}
+.msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}
+.msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:24px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.topbar .user{display:flex;align-items:center;gap:10px;font-weight:700}
+.avatar{width:36px;height:36px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
+.admin-badge{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.banned-badge{background:rgba(220,38,38,.08);color:var(--err);border:1px solid var(--err);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.menu-title{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.menu-sub{color:var(--muted);margin-bottom:28px}
+.game-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px}
+.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;position:relative;overflow:hidden}
+.game-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}
+.game-card .icon-big{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff}
+.game-card h3{font-size:1.25rem;font-weight:800;margin-bottom:6px}
+.game-card p{color:var(--muted);font-size:.9rem;line-height:1.5}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat .n{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.stat .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.lobby-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:520px;margin:0 auto;box-shadow:var(--shadow)}
+.lobby-box h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem}
+.room-code{font-size:2rem;font-weight:800;letter-spacing:.3em;text-align:center;background:var(--accent-soft);color:var(--accent);border:2px dashed var(--accent);border-radius:12px;padding:18px;margin:14px 0;user-select:all}
+.lobby-status{text-align:center;padding:14px;border-radius:10px;font-weight:600;margin:12px 0}
+.lobby-status.wait{background:var(--accent2-soft);color:var(--accent2)}
+.lobby-status.ok{background:rgba(22,163,74,.1);color:var(--ok)}
+.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600}
+.game-hud{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:16px}
+.hud-pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--border)}
+.hud-pill b{color:var(--accent);font-variant-numeric:tabular-nums}
+.timer{font-variant-numeric:tabular-nums}
+.timer.low{color:var(--err);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.game-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
+@media(max-width:860px){.game-layout{grid-template-columns:1fr}}
+.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow-x:auto}
+#cacaBoard{display:grid;gap:2px;user-select:none;touch-action:none;margin:0 auto;width:max-content}
+.cell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;border-radius:6px;background:var(--bg);transition:background .1s,color .1s;cursor:pointer;text-transform:uppercase}
+.cell.sel{background:var(--accent);color:#fff}
+.cell.found{background:var(--accent2);color:#fff}
+.cell.hint{background:var(--warn);color:#fff;animation:pulse 1s infinite}
+.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+.side-panel h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;font-weight:700}
+.word-list{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto}
+.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:6px 10px;border-radius:8px;background:var(--bg);justify-content:space-between}
+.word-item.done{text-decoration:line-through;opacity:.45}
+.word-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}
+.word-item.done .dot{background:var(--ok)}
+.stop-letter{font-size:4rem;font-weight:800;text-align:center;color:var(--accent);background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1}
+.progress{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin:-6px 0 16px}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:100%;transition:width .25s linear}
+.stop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.stop-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.stop-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;background:var(--bg);text-transform:uppercase}
+.stop-field input:focus{border-color:var(--accent)}
+.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.06)}
+.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.06)}
+.results-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:8px 0}
+.results-table th,.results-table td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:left}
+.results-table th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.score-big{font-size:2.5rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:var(--card);border-radius:20px;padding:28px;max-width:600px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.modal p{color:var(--muted);margin-bottom:18px;font-size:.92rem;line-height:1.55}
+.modal .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:10px 14px;font-weight:700;font-size:.85rem;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;transition:all .15s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.switch{position:relative;display:inline-block;width:52px;height:28px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:.2s;cursor:pointer}
+.slider:before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked+.slider{background:var(--accent)}
+.switch input:checked+.slider:before{transform:translateX(24px)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-row .info b{display:block;font-size:.95rem}
+.setting-row .info span{font-size:.8rem;color:var(--muted)}
+.user-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.user-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:var(--bg);border-radius:10px;flex-wrap:wrap}
+.user-info{display:flex;align-items:center;gap:10px}
+.user-actions{display:flex;gap:6px;flex-wrap:wrap}
+.word-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.word-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg);border-radius:8px;font-weight:600;font-size:.9rem}
+.word-badge .del{color:var(--err);cursor:pointer;margin-left:4px;font-weight:800}
+.assist-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.12);color:var(--warn);border:1px solid var(--warn);font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:.9rem;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:16px;cursor:pointer;background:none}
+.back-btn:hover{color:var(--accent)}
+.footer-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:30px}
+pre{background:var(--bg);padding:12px;border-radius:8px;overflow-x:auto;font-size:.75rem;max-height:150px;margin:8px 0}
 </style>
 </head>
 <body>
-
 <div id="loginScreen" class="auth-wrap">
   <div class="auth-card">
-    <div class="brand"><div class="logo">LS</div><h1>Luan Santana</h1></div>
-    <p class="sub">Caça-palavras & Adedonha com <b>Ranking Global</b></p>
+    <div class="brand"><div class="logo"><i data-lucide="music-4" style="width:22px;height:22px"></i></div><h1>Luan Santana</h1></div>
+    <p class="sub">Caça-palavras do Luan Santana & Adedonha — jogue solo ou com amigos.</p>
     <div id="authMsg" class="msg"></div>
     <div id="loginForm">
-      <div class="field"><label>Usuário</label><input id="loginUser" type="text" placeholder="Seu nome"></div>
-      <div class="field"><label>Senha</label><input id="loginPass" type="password" placeholder="Sua senha"></div>
-      <button class="btn btn-primary btn-block" id="btnLogin">Entrar</button>
+      <div class="field"><label>Usuário</label><input id="loginUser" type="text" autocomplete="username" placeholder="Seu nome de usuário"></div>
+      <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+      <button class="btn btn-primary btn-block" id="btnLogin"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar</button>
       <div class="auth-toggle">Não tem conta? <a id="goRegister">Cadastre-se</a></div>
-      <div style="margin-top:14px;font-size:.75rem;color:var(--muted);background:var(--bg);padding:10px;border-radius:8px">Admin: <b>Thiago Shelby</b> / 9090iop<br>Ranking global 🌍</div>
     </div>
     <div id="registerForm" class="hidden">
-      <div class="field"><label>Usuário</label><input id="regUser" type="text" placeholder="Nome"></div>
-      <div class="field"><label>Senha</label><input id="regPass" type="password" placeholder="Mínimo 4"></div>
-      <button class="btn btn-primary btn-block" id="btnRegister">Criar conta</button>
-      <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar</a></div>
+      <div class="field"><label>Escolha um usuário</label><input id="regUser" type="text" placeholder="Nome de usuário"></div>
+      <div class="field"><label>Escolha uma senha</label><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"></div>
+      <button class="btn btn-primary btn-block" id="btnRegister"><i data-lucide="user-plus" style="width:18px;height:18px"></i> Criar conta</button>
+      <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar ao login</a></div>
     </div>
   </div>
 </div>
-
 <div id="menuScreen" class="screen hidden">
   <div class="topbar">
-    <div class="user"><div class="avatar" id="userAvatar">T</div><div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">ADM</span></div></div>
+    <div class="user"><div class="avatar" id="userAvatar">T</div><div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">Conta Admin</span></div></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm hidden" id="btnInstallPWA" style="background:#0f172a">📲 Instalar</button>
-      <button class="btn btn-secondary btn-sm" id="btnRanking">🏆 Ranking</button>
-      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel">⚙️ ADM</button>
-      <button class="btn btn-ghost btn-sm" id="btnLogout">Sair</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel"><i data-lucide="settings-2" style="width:16px;height:16px"></i> Painel Admin</button>
+      <button class="btn btn-ghost btn-sm" id="btnLogout"><i data-lucide="log-out" style="width:16px;height:16px"></i> Sair</button>
     </div>
   </div>
   <h2 class="menu-title">Olá, <span id="menuHello">jogador</span>!</h2>
-  <p class="menu-sub">Suas pontuações vão pro ranking global. Você vê todo mundo e todo mundo te vê.</p>
+  <p class="menu-sub">Escolha um jogo e um modo de jogo. No modo online você convida amigos com um código de sala.</p>
   <div class="game-cards">
-    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)">🔍</div><h3>Caça-Palavras</h3><p>Encontre palavras do Luan. Pontua no ranking.</p></div>
-    <div class="game-card" id="cardStop"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)">⏱️</div><h3>Adedonha</h3><p>Preencha rápido. Única vale mais.</p></div>
-    <div class="game-card ranking" id="cardRanking"><div class="icon-big" style="background:linear-gradient(135deg,#f59e0b,#bd3193)">🏆</div><h3>Ranking Global</h3><p id="rankingPreview">Carregando...</p></div>
+    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)"><i data-lucide="search" style="width:26px;height:26px"></i></div><h3>Caça-Palavras</h3><p>Tudo sobre o cantor Luan Santana: músicas, álbuns, turnês e carreira.</p></div>
+    <div class="game-card" id="cardStop"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)"><i data-lucide="timer" style="width:26px;height:26px"></i></div><h3>Adedonha / Stop</h3><p>Clássico jogo de categorias com uma letra sorteada. Pontuação acumulada.</p></div>
   </div>
   <div class="stats-row">
-    <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas</div></div>
+    <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas jogadas</div></div>
     <div class="stat"><div class="n" id="statVitorias">0</div><div class="l">Vitórias</div></div>
-    <div class="stat"><div class="n" id="statRecorde">—</div><div class="l">Recorde</div></div>
-    <div class="stat"><div class="n" id="statGlobalPos">—</div><div class="l">Posição global</div></div>
+    <div class="stat"><div class="n" id="statRecorde">—</div><div class="l">Recorde (pontos)</div></div>
   </div>
+  <p class="footer-note">Funciona offline (modo solo). Modo online requer internet e usa conexão peer-to-peer.</p>
 </div>
-
-<div id="rankingScreen" class="screen hidden">
-  <button class="back-btn" id="rankingBack">← Voltar</button>
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px">
-    <div><h2 class="menu-title" style="margin:0">🏆 Ranking Global</h2><p class="menu-sub" style="margin:0">Todos veem todos 🌍</p></div>
-    <div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" id="btnExportRanking">📤 Exportar</button><button class="btn btn-secondary btn-sm" id="btnRefreshRanking">🔄 Atualizar</button></div>
-  </div>
-  <div class="board-wrap" style="padding:18px">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px">
-      <div class="stat" style="margin:0"><div class="n" id="rankTotalPlayers">0</div><div class="l">Jogadores</div></div>
-      <div class="stat" style="margin:0"><div class="n" id="rankTotalPlays">0</div><div class="l">Partidas</div></div>
-      <div class="stat" style="margin:0"><div class="n" id="rankTopScore">0</div><div class="l">Top score</div></div>
-      <div class="stat" style="margin:0"><div class="n" id="rankAvgScore">0</div><div class="l">Média</div></div>
-    </div>
-    <input id="rankingSearch" class="search-box" placeholder="🔍 Buscar jogador...">
-    <div class="ranking-tabs">
-      <button class="ranking-tab active" data-filter="all">🌍 Geral</button>
-      <button class="ranking-tab" data-filter="caca">🔍 Caça</button>
-      <button class="ranking-tab" data-filter="stop">⏱️ Stop</button>
-      <button class="ranking-tab" data-filter="me">👤 Eu</button>
-    </div>
-    <div style="overflow-x:auto">
-      <table class="ranking-table"><thead><tr><th>#</th><th>Jogador</th><th>Pts</th><th>Jogo</th><th>Tempo</th><th>Data</th></tr></thead><tbody id="rankingBody"></tbody></table>
-    </div>
-    <div id="myRankCard" class="hidden" style="margin-top:14px;padding:12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><b>Você:</b> <span id="myRankPos">—</span> • Melhor <span id="myRankBest">—</span> pts</div><div style="font-size:.8rem;color:var(--muted)">Visível para todos 🌍</div></div>
-  </div>
-</div>
-
 <div id="lobbyScreen" class="screen hidden">
-  <button class="back-btn" id="lobbyBack">← Menu</button>
+  <button class="back-btn" id="lobbyBack"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Voltar ao menu</button>
   <div class="lobby-box">
-    <h2 id="lobbyTitle">Jogar online</h2>
-    <p id="lobbyDesc">Solo ou com amigos via código.</p>
+    <h2 id="lobbyTitle">Jogar online com amigos</h2>
+    <p id="lobbyDesc">Crie uma sala e compartilhe o código, ou entre em uma sala existente.</p>
     <div id="lobbyCreate">
-      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px">👤 Solo (offline)</button>
-      <button class="btn btn-primary btn-block" id="btnCreateRoom">➕ Criar sala</button>
+      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px"><i data-lucide="user" style="width:18px;height:18px"></i> Jogar sozinho (offline)</button>
+      <button class="btn btn-primary btn-block" id="btnCreateRoom"><i data-lucide="plus-circle" style="width:18px;height:18px"></i> Criar nova sala</button>
       <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div>
-      <div class="field"><label>Código</label><input id="joinCode" type="text" maxlength="6" placeholder="AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:800"></div>
-      <button class="btn btn-secondary btn-block" id="btnJoinRoom">Entrar</button>
-      <div id="onlineStatus" style="margin-top:12px;font-size:.8rem;text-align:center;color:var(--muted)"></div>
+      <div class="field"><label>Código da sala</label><input id="joinCode" type="text" maxlength="6" placeholder="Ex: AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center"></div>
+      <button class="btn btn-secondary btn-block" id="btnJoinRoom"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar na sala</button>
     </div>
     <div id="lobbyRoom" class="hidden">
-      <div class="lobby-status wait" id="lobbyStatus">Aguardando...</div>
-      <div style="font-size:.85rem;font-weight:600;margin-top:8px">Código:</div>
+      <div class="lobby-status wait" id="lobbyStatus">Aguardando conexão...</div>
+      <div>Compartilhe este código com seu amigo:</div>
       <div class="room-code" id="roomCodeDisplay">------</div>
-      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode">📋 Copiar</button>
-      <div class="opponent hidden" id="opponentLine">✅ <span id="opponentName">—</span> conectado!</div>
-      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px">▶️ Começar</button>
-      <button class="btn btn-ghost btn-block btn-sm" id="btnLeaveRoom" style="margin-top:8px">Sair</button>
+      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode"><i data-lucide="copy" style="width:16px;height:16px"></i> Copiar código</button>
+      <div class="opponent hidden" id="opponentLine"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--ok)"></i> <span id="opponentName">—</span> conectado!</div>
+      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px"><i data-lucide="play" style="width:18px;height:18px"></i> Começar partida</button>
     </div>
   </div>
 </div>
 
+<!-- Telas de Jogo (Caça Palavras e Adedonha) e Overlays mantidas iguais à sua estrutura -->
 <div id="cacaScreen" class="screen hidden">
   <div class="game-hud">
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="cacaBack" style="margin:0">← Sair</button>
-      <span class="hud-pill">🔍 <span id="cacaFound">0</span>/<span id="cacaTotal">0</span></span>
-      <span class="hud-pill timer">⏰ <span id="cacaTimer">00:00</span></span>
-      <span class="hud-pill hidden" id="cacaOppScore">👥 <b id="cacaOppN">0</b></span>
-      <span class="assist-badge hidden" id="cacaAssistBadge">Assistente</span>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-secondary btn-sm hidden" id="btnCacaHint">💡 Dica</button>
-      <button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve">🪄 Revelar</button>
-      <button class="btn btn-secondary btn-sm" id="btnCacaNew">🔄 Novo</button>
+      <button class="back-btn" id="cacaBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
+      <span class="hud-pill"><i data-lucide="search" style="width:15px;height:15px"></i> Encontradas <b id="cacaFound">0</b>/<span id="cacaTotal">0</span></span>
+      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="cacaTimer">00:00</span></span>
+      <span class="hud-pill hidden" id="cacaOppScore"><i data-lucide="users" style="width:15px;height:15px"></i> Ele(a): <b id="cacaOppN">0</b></span>
     </div>
   </div>
   <div class="game-layout">
     <div class="board-wrap"><div id="cacaBoard"></div></div>
-    <div class="side-panel"><h4>Palavras</h4><div class="word-list" id="cacaWordList"></div><p style="font-size:.75rem;color:var(--muted);margin-top:12px">Arraste para selecionar. Pontua no ranking 🌍</p></div>
+    <div class="side-panel"><h4>Palavras — Luan Santana</h4><div class="word-list" id="cacaWordList"></div></div>
   </div>
 </div>
 
 <div id="stopScreen" class="screen hidden">
   <div class="game-hud">
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="back-btn" id="stopBack" style="margin:0">← Sair</button>
-      <span class="hud-pill">🔤 <b id="stopLetter">—</b></span>
-      <span class="hud-pill timer">⏰ <span id="stopTimer">01:30</span></span>
-      <span class="assist-badge hidden" id="stopAssistBadge">Assistente</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="back-btn" id="stopBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
+      <span class="hud-pill"><i data-lucide="type" style="width:15px;height:15px"></i> Letra: <b id="stopLetter">—</b></span>
+      <span class="hud-pill" id="stopRound">Rodada 1/3</span>
+      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="stopTimer">01:30</span></span>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-secondary btn-sm hidden" id="btnStopFill">🪄 Preencher</button>
-      <button class="btn btn-primary btn-sm" id="btnStopStop">🛑 STOP!</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" id="btnStopStop"><i data-lucide="octagon" style="width:15px;height:15px"></i> STOP!</button>
     </div>
   </div>
   <div class="game-layout">
-    <div class="board-wrap"><div class="stop-letter" id="stopLetterBig">?</div><div class="stop-grid" id="stopGrid"></div></div>
-    <div class="side-panel"><h4>Regras</h4><p style="font-size:.85rem;color:var(--muted);line-height:1.6">Única 10pts, repetida 5pts. Vai pro ranking.</p><div id="stopResults" class="hidden" style="margin-top:16px"><h4>Resultado</h4><div class="score-big" id="stopScore">0</div></div></div>
+    <div class="board-wrap">
+      <div class="stop-letter" id="stopLetterBig">?</div>
+      <div class="progress"><div class="progress-bar" id="stopProgress"></div></div>
+      <div class="stop-grid" id="stopGrid"></div>
+    </div>
+    <div class="side-panel">
+      <h4>Como funciona</h4>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6">Preencha cada categoria com a letra sorteada. Quando o tempo acabar ou alguém gritar <b>STOP</b>, as respostas são corrigidas.</p>
+      <div id="stopResults" class="hidden" style="margin-top:16px">
+        <h4>Resultado da rodada <span id="stopRoundRes">1</span></h4>
+        <table class="results-table">
+          <thead><tr><th>Categoria</th><th>Sua resposta</th><th id="oppTh" class="hidden">Adversário</th><th>Pts</th></tr></thead>
+          <tbody id="stopResultsBody"></tbody>
+        </table>
+        <div class="score-big" id="stopScore">0</div>
+        <button class="btn btn-primary btn-block" id="btnNextRound" style="margin-top:14px">Próxima rodada</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <div id="adminOverlay" class="overlay hidden">
-  <div class="modal large">
-    <h2>⚙️ Painel ADM — Thiago Shelby (Direitos Totais)</h2>
-    <p>Você tem <b>todos os direitos</b>: usuários, ranking global, ban, promover ADM, exportar, resetar.</p>
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="dash">📊 Dashboard</button>
-      <button class="admin-tab" data-tab="users">👥 Usuários</button>
-      <button class="admin-tab" data-tab="ranking">🏆 Ranking</button>
-      <button class="admin-tab" data-tab="assist">🤖 Assistente</button>
-      <button class="admin-tab" data-tab="system">🔧 Sistema</button>
+  <div class="modal">
+    <h2><i data-lucide="settings-2" style="width:20px;height:20px;display:inline;vertical-align:-3px;color:var(--accent)"></i> Painel de Administração</h2>
+    <div class="tabs">
+      <div class="tab active" data-tab="game">Jogo</div>
+      <div class="tab" data-tab="words">Palavras</div>
     </div>
-    <div class="admin-section active" id="adminDash">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
-        <div class="stat"><div class="n" id="dashUsers">0</div><div class="l">Usuários</div></div>
-        <div class="stat"><div class="n" id="dashAdmins">0</div><div class="l">Admins</div></div>
-        <div class="stat"><div class="n" id="dashPlays">0</div><div class="l">Partidas</div></div>
-        <div class="stat"><div class="n" id="dashRanking">0</div><div class="l">Ranking</div></div>
+    <div class="tab-content active" id="tab-game">
+      <div class="setting-row">
+        <div class="info"><b>Rodadas do Adedonha</b></div>
+        <select id="cfgRounds"><option value="1">1 rodada</option><option value="3" selected>3 rodadas</option><option value="5">5 rodadas</option></select>
       </div>
-      <div class="setting-row"><div class="info"><b>Top 1 Global</b><span id="dashTopPlayer">—</span></div><span class="admin-badge" id="dashTopScore">—</span></div>
-      <div class="setting-row"><div class="info"><b>Mais ativo</b><span id="dashActive">—</span></div></div>
-      <div class="setting-row"><div class="info"><b>Média pontos</b><span>Global</span></div><b id="dashAvg">—</b></div>
-    </div>
-    <div class="admin-section" id="adminUsers">
-      <input id="userSearch" class="search-box" placeholder="🔍 Buscar usuário...">
-      <div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="user-table"><thead><tr><th>Usuário</th><th>Tipo</th><th>Jogos</th><th>Vitórias</th><th>Recorde</th><th>Ações</th></tr></thead><tbody id="userTableBody"></tbody></table></div>
-    </div>
-    <div class="admin-section" id="adminRanking">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        <button class="btn btn-secondary btn-sm" id="btnClearRanking">🗑️ Limpar ranking</button>
-        <button class="btn btn-secondary btn-sm" id="btnExportJSON">📤 JSON</button>
-        <button class="btn btn-secondary btn-sm" id="btnExportCSV">📊 CSV</button>
-        <button class="btn btn-secondary btn-sm" id="btnFakeData">➕ Teste</button>
+      <div class="setting-row">
+        <div class="info"><b>Tempo por rodada (seg)</b></div>
+        <select id="cfgTime"><option value="60">60</option><option value="90" selected>90</option><option value="120">120</option></select>
       </div>
-      <div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="user-table"><thead><tr><th>#</th><th>Jogador</th><th>Pts</th><th>Jogo</th><th>Data</th><th>Ação</th></tr></thead><tbody id="adminRankingBody"></tbody></table></div>
+      <div class="setting-row">
+        <div class="info"><b>Tamanho da Grade (Caça)</b></div>
+        <select id="cfgBoardSize"><option value="10">10x10</option><option value="14" selected>14x14</option><option value="16">16x16</option></select>
+      </div>
+      <button class="btn btn-primary btn-block" id="btnSaveGameCfg" style="margin-top:14px"><i data-lucide="save"></i> Salvar</button>
     </div>
-    <div class="admin-section" id="adminAssist">
-      <div class="setting-row"><div class="info"><b>Assistente</b><span>Dicas e revelar</span></div><label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label></div>
-      <div class="setting-row"><div class="info"><b>Auto Humanizado</b><span>Joga sozinho</span></div><label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label></div>
-      <div class="setting-row" id="speedRow" style="display:none"><div class="info"><b>Velocidade</b></div><select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-weight:700;font-size:.85rem"><option value="devagar">Devagar</option><option value="normal" selected>Normal</option><option value="rapido">Rápido</option></select></div>
+    <div class="tab-content" id="tab-words">
+      <div class="field"><label>Adicionar palavra</label><input type="text" id="newWordInput"></div>
+      <button class="btn btn-primary btn-sm" id="btnAddWord">Adicionar</button>
+      <div class="word-badges" id="wordBadgesContainer"></div>
     </div>
-    <div class="admin-section" id="adminSystem">
-      <div class="setting-row"><div class="info"><b>Exportar tudo</b><span>Backup completo</span></div><button class="btn btn-secondary btn-sm" id="btnExportAll">📤 Exportar</button></div>
-      <div class="setting-row"><div class="info"><b>Limpar meus recordes</b></div><button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar</button></div>
-      <div class="setting-row"><div class="info"><b>Reset fábrica</b><span>Apaga tudo exceto você</span></div><button class="btn btn-danger btn-sm" id="btnFactoryReset">⚠️ Reset</button></div>
-      <div class="setting-row"><div class="info"><b>Manutenção</b><span>Só ADM entra</span></div><label class="switch"><input type="checkbox" id="toggleMaint"><span class="slider"></span></label></div>
-      <div style="margin-top:14px;padding:10px;background:var(--bg);border-radius:10px;font-size:.8rem;color:var(--muted)"><b>Seus direitos ADM:</b> Ver todos, deletar, banir, promover ADM, limpar ranking, exportar, gerar testes, controlar assistente, modo manutenção. Seu selo 👑 aparece no ranking.</div>
-    </div>
-    <div class="actions"><button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar</button></div>
+    <div class="actions" style="margin-top:20px"><button class="btn btn-secondary btn-block" id="btnCloseAdmin">Fechar</button></div>
   </div>
 </div>
 
 <div id="endOverlay" class="overlay hidden">
   <div class="modal" style="text-align:center">
-    <div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:2rem">🏆</div>
-    <h2 id="endTitle">Fim!</h2><p id="endText">—</p><div class="score-big" id="endScore">0</div>
-    <div id="endRankInfo" class="hidden" style="margin:10px 0;padding:10px;background:var(--accent-soft);border-radius:10px;font-size:.85rem"></div>
-    <div class="actions" style="justify-content:center"><button class="btn btn-primary" id="btnPlayAgain">🔄 De novo</button><button class="btn btn-secondary" id="btnEndMenu">Menu</button><button class="btn btn-secondary" id="btnEndRanking">🏆 Ranking</button></div>
+    <div id="endIcon" style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i data-lucide="trophy" style="width:30px;height:30px"></i></div>
+    <h2 id="endTitle">Fim de jogo!</h2>
+    <p id="endText">Confira seu desempenho.</p>
+    <div class="score-big" id="endScore">0</div>
+    <div class="actions" style="justify-content:center">
+      <button class="btn btn-secondary" id="btnEndMenu"><i data-lucide="home" style="width:16px;height:16px"></i> Voltar ao menu</button>
+    </div>
   </div>
 </div>
-
 <div id="toast" class="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-const G={user:null,assist:false,humanAssist:false,assistSpeed:'normal',mode:'solo',selectedGame:null,timers:[],peer:null,conn:null,isHost:false,currentRoomCode:null,oppName:null,oppScore:0};
-G.store={get(k){try{const v=localStorage.getItem('luan_'+k);return v?JSON.parse(v):null}catch(e){return null}},set(k,v){try{localStorage.setItem('luan_'+k,JSON.stringify(v))}catch(e){}}};
-let users=G.store.get('users');
-if(!users){users={'Thiago Shelby':{pass:'9090iop',admin:true,stats:{jogos:0,vitorias:0,recorde:0},assist:false,humanAssist:false,assistSpeed:'normal',createdAt:Date.now()}};G.store.set('users',users);}
-else if(!users['Thiago Shelby']){users['Thiago Shelby']={pass:'9090iop',admin:true,stats:{jogos:0,vitorias:0,recorde:0},assist:false,humanAssist:false,assistSpeed:'normal',createdAt:Date.now()};G.store.set('users',users);}
-G.users=users;G.saveUsers=()=>G.store.set('users',G.users);
-G.clearTimers=()=>{G.timers.forEach(h=>{clearTimeout(h);clearInterval(h)});G.timers=[]};G.later=(fn,ms)=>{const h=setTimeout(fn,ms);G.timers.push(h);return h};G.every=(fn,ms)=>{const h=setInterval(fn,ms);G.timers.push(h);return h};
-G.mulberry32=(seed)=>{return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
-G.genRoomCode=()=>{const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s};
-G.fmtTime=(s)=>{const m=Math.floor(s/60),ss=s%60;return(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss};
-G.toast=(msg)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(G._toastH);G._toastH=setTimeout(()=>t.classList.remove('show'),2800)};
-G.isAdmin=()=>!!(G.user&&G.users[G.user]&&G.users[G.user].admin);
-G.Ranking={
- getAll(){let r=G.store.get('ranking_global');if(!r)r=[];return r},
- save(arr){G.store.set('ranking_global',arr)},
- add(score,game,meta={}){
-  if(!G.user)return null;
-  const entry={id:Date.now()+'_'+Math.random().toString(36).slice(2,7),user:G.user,score:parseInt(score,10)||0,game:game||G.selectedGame||'unknown',duration:meta.duration||0,date:Date.now(),isAdmin:G.isAdmin(),timeStr:meta.timeStr||''};
-  const all=this.getAll();all.push(entry);if(all.length>500){all.sort((a,b)=>b.score-a.score);all.splice(300)}this.save(all);
-  try{if(G.conn)G.conn.send({type:'ranking_sync',ranking:all.slice(0,100)})}catch(e){}
-  return entry;
- },
- mergeRemote(remoteArr){
-  if(!Array.isArray(remoteArr))return;
-  const local=this.getAll();const map=new Map(local.map(e=>[e.id,e]));
-  remoteArr.forEach(e=>{if(!map.has(e.id)&&e.user&&typeof e.score==='number'){map.set(e.id,e)}});
-  const merged=Array.from(map.values()).sort((a,b)=>b.score-a.score).slice(0,500);this.save(merged);
- },
- clear(){this.save([])},remove(id){const all=this.getAll().filter(e=>e.id!==id);this.save(all)},
- getFiltered(filter='all',search=''){
-  let all=this.getAll().slice().sort((a,b)=>b.score-a.score);
-  if(filter==='caca')all=all.filter(e=>e.game==='caca');
-  if(filter==='stop')all=all.filter(e=>e.game==='stop');
-  if(filter==='me'&&G.user)all=all.filter(e=>e.user===G.user);
-  if(search){const s=search.toLowerCase();all=all.filter(e=>e.user.toLowerCase().includes(s))}
-  return all;
- },
- getUserBest(user){const all=this.getAll().filter(e=>e.user===user);if(!all.length)return 0;return Math.max(...all.map(e=>e.score))},
- getUserPos(user){
-  const sorted=this.getAll().slice().sort((a,b)=>b.score-a.score);
-  const bestMap=new Map();sorted.forEach(e=>{if(!bestMap.has(e.user)||e.score>bestMap.get(e.user).score)bestMap.set(e.user,e)});
-  const uniq=Array.from(bestMap.values()).sort((a,b)=>b.score-a.score);
-  const idx=uniq.findIndex(e=>e.user===user);return idx>=0?idx+1:null;
- }
-};
-</script>
-<script>
+// ================= CORE & UTILS =================
 (function(){
-const $=id=>document.getElementById(id);
-const msgEl=$('authMsg');
-const showMsg=(t,err)=>{msgEl.className='msg '+(err?'err':'ok');msgEl.textContent=t;msgEl.style.display='block'};
-const hideMsg=()=>{msgEl.className='msg';msgEl.style.display='none'};
-$('goRegister').addEventListener('click',()=>{$('loginForm').classList.add('hidden');$('registerForm').classList.remove('hidden');hideMsg()});
-$('goLogin').addEventListener('click',()=>{$('registerForm').classList.add('hidden');$('loginForm').classList.remove('hidden');hideMsg()});
-function enterMenu(){
- $('loginScreen').classList.add('hidden');$('menuScreen').classList.remove('hidden');
- const u=G.user;$('userName').textContent=u;$('menuHello').textContent=u;$('userAvatar').textContent=u.charAt(0).toUpperCase();
- const isAdmin=G.isAdmin();
- $('adminBadge').classList.toggle('hidden',!isAdmin);$('btnAdminPanel').classList.toggle('hidden',!isAdmin);
- const st=G.users[u].stats||{jogos:0,vitorias:0,recorde:0};
- $('statJogos').textContent=st.jogos||0;$('statVitorias').textContent=st.vitorias||0;$('statRecorde').textContent=(st.recorde&&st.recorde>0)?st.recorde:'—';
- $('statGlobalPos').textContent=G.Ranking.getUserPos(u)?'#'+G.Ranking.getUserPos(u):'—';
- G.assist=!!(G.users[u]&&G.users[u].assist);G.humanAssist=!!(G.users[u]&&G.users[u].humanAssist);G.assistSpeed=(G.users[u]&&G.users[u].assistSpeed)||'normal';
- updateRankingPreview();
-}
-function updateRankingPreview(){
- const top=G.Ranking.getAll().slice().sort((a,b)=>b.score-a.score)[0];
- const el=document.getElementById('rankingPreview');
- if(el){if(top)el.textContent=`Top 1: ${top.user} com ${top.score} pts • ${G.Ranking.getAll().length} partidas`;else el.textContent='Seja o primeiro! Jogue e pontue.'}
-}
-G.enterMenu=enterMenu;G.updateRankingPreview=updateRankingPreview;
-$('btnLogin').addEventListener('click',()=>{
- const u=$('loginUser').value.trim(),p=$('loginPass').value;
- if(!u||!p){showMsg('Preencha usuário e senha.',true);return}
- const maint=G.store.get('maintenance');const rec=G.users[u];
- if(maint&&(!rec||!rec.admin)){showMsg('Manutenção ativa. Só admins.',true);return}
- if(!rec||rec.pass!==p){showMsg('Usuário ou senha incorretos.',true);return}
- G.user=u;G.store.set('session',u);showMsg('Login OK!',false);setTimeout(enterMenu,400);
-});
-$('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnLogin').click()});
-$('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnLogin').click()});
-$('btnRegister').addEventListener('click',()=>{
- const maint=G.store.get('maintenance');if(maint){showMsg('Manutenção: cadastros bloqueados.',true);return}
- const u=$('regUser').value.trim(),p=$('regPass').value;
- if(!u||!p){showMsg('Preencha os dois.',true);return}
- if(p.length<4){showMsg('Senha mínimo 4.',true);return}
- if(G.users[u]){showMsg('Usuário já existe.',true);return}
- const banned=G.store.get('banned')||[];if(banned.includes(u)){showMsg('Usuário banido.',true);return}
- G.users[u]={pass:p,admin:false,stats:{jogos:0,vitorias:0,recorde:0},assist:false,humanAssist:false,assistSpeed:'normal',createdAt:Date.now()};
- G.saveUsers();showMsg('Conta criada! Faça login.',false);$('regUser').value='';$('regPass').value='';
- setTimeout(()=>{$('registerForm').classList.add('hidden');$('loginForm').classList.remove('hidden');hideMsg()},900);
-});
-$('btnLogout').addEventListener('click',()=>{G.user=null;G.store.set('session',null);$('menuScreen').classList.add('hidden');$('rankingScreen').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('loginUser').value='';$('loginPass').value='';hideMsg()});
-const sess=G.store.get('session');if(sess&&G.users[sess]){G.user=sess;enterMenu()}
+  var G = window.G = {
+    user: null, mode: 'solo', selectedGame: null, timers: [], peer: null, conn: null,
+    isHost: false, roomCode: null, oppName: null, oppScore: 0,
+    cfg: { stopRounds: 3, stopTime: 90, cacaWordCount: 10, cacaBoardSize: 14 },
+    defaultWords: ["METEORO", "SINAIS", "TEESPERANDO", "ESCREVIAI", "CANTOR", "SERTANEJO", "VIOLAO", "AMOR", "SHOW", "ACORDANDOPREDIO", "CHUVA"],
+    customWords: [],
+    gameState: {}
+  };
+  G.store = {
+    get: function(k){try{return JSON.parse(localStorage.getItem('luan_'+k));}catch(e){return null;}},
+    set: function(k,v){localStorage.setItem('luan_'+k,JSON.stringify(v));}
+  };
+  
+  var users = G.store.get('users');
+  if(!users) users = {'Thiago Shelby':{pass:'admin123',admin:true,stats:{jogos:0,vitorias:0,recorde:0}}};
+  G.users = users;
+  G.saveUsers = function(){ G.store.set('users',G.users); };
+  
+  var savedCfg = G.store.get('config'); if(savedCfg) G.cfg = Object.assign(G.cfg, savedCfg);
+  var savedWords = G.store.get('customWords'); if(savedWords) G.customWords = savedWords;
+  G.saveCfg = function(){ G.store.set('config',G.cfg); };
+  G.saveWords = function(){ G.store.set('customWords',G.customWords); };
+
+  G.clearTimers = function(){ G.timers.forEach(function(h){clearTimeout(h);clearInterval(h);}); G.timers=[]; };
+  G.later = function(fn,ms){ var h=setTimeout(fn,ms); G.timers.push(h); return h; };
+  G.every = function(fn,ms){ var h=setInterval(fn,ms); G.timers.push(h); return h; };
+  G.roomCode = function(){ var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s; };
+  G.fmtTime = function(s){ var m=Math.floor(s/60),ss=s%60; return(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; };
+  G.toast = function(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2500); };
+  G.icons = function(){ if(window.lucide) try{lucide.createIcons();}catch(e){} };
 })();
-</script>
-<script>
+
+// ================= UI & AUTH =================
 (function(){
-const $=id=>document.getElementById(id);
-const onlineAvailable=()=>typeof Peer!=='undefined'&&!!window.Peer;
-function show(id){['menuScreen','lobbyScreen','cacaScreen','stopScreen','rankingScreen'].forEach(s=>$(s).classList.toggle('hidden',s!==id));window.scrollTo(0,0)}
-G.show=show;
-function pickMode(game){
- G.selectedGame=game;
- $('lobbyTitle').textContent=(game==='caca'?'Caça-Palavras':'Adedonha')+' — modo';
- $('lobbyDesc').textContent=onlineAvailable()?'Solo ou online com código.':'Offline - solo.';
- $('lobbyCreate').classList.remove('hidden');$('lobbyRoom').classList.add('hidden');
- $('onlineStatus').textContent=onlineAvailable()?'✅ Online pronto • Ranking sincroniza':'⚠️ Offline';
- show('lobbyScreen');
-}
-function startGame(){closePeer();if(G.selectedGame==='caca'){G.Caca.start()}else{G.Stop.start()}}
-G.startGame=startGame;
-$('cardCaca').addEventListener('click',()=>pickMode('caca'));
-$('cardStop').addEventListener('click',()=>pickMode('stop'));
-$('cardRanking').addEventListener('click',()=>openRanking());
-$('btnRanking').addEventListener('click',()=>openRanking());
-$('rankingBack').addEventListener('click',()=>{show('menuScreen');G.enterMenu()});
-$('lobbyBack').addEventListener('click',()=>{closePeer();show('menuScreen')});
-$('cacaBack').addEventListener('click',()=>{G.Caca.quit();show('menuScreen');G.enterMenu()});
-$('stopBack').addEventListener('click',()=>{G.Stop.quit();show('menuScreen');G.enterMenu()});
-$('btnSolo').addEventListener('click',()=>{G.mode='solo';startGame()});
-function closePeer(){try{if(G.conn){G.conn.close();G.conn=null}}catch(e){}try{if(G.peer){G.peer.destroy();G.peer=null}}catch(e){}G.isHost=false;G.currentRoomCode=null;G.oppName=null;G.oppScore=0}
-G.closePeer=closePeer;
-function onConnOpen(conn){
- G.conn=conn;$('lobbyStatus').textContent='Conectado!';$('lobbyStatus').className='lobby-status ok';
- try{conn.send({type:'hello',name:G.user});conn.send({type:'ranking_sync',ranking:G.Ranking.getAll().slice(0,100)})}catch(e){}
- conn.on('data',d=>handleMsg(d));
- conn.on('close',()=>{G.toast('Conexão encerrada.');closePeer();show('menuScreen');G.enterMenu()});
- conn.on('error',()=>G.toast('Erro conexão.'));
-}
-function handleMsg(d){
- if(!d||!d.type)return;
- if(d.type==='hello'){G.oppName=d.name;$('opponentName').textContent=d.name;$('opponentLine').classList.remove('hidden');$('btnStartOnline').classList.remove('hidden');if(!G.isHost){try{G.conn.send({type:'hello',name:G.user});G.conn.send({type:'ranking_sync',ranking:G.Ranking.getAll().slice(0,100)})}catch(e){}$('btnStartOnline').classList.add('hidden')}}
- else if(d.type==='ranking_sync'){G.Ranking.mergeRemote(d.ranking||[]);G.updateRankingPreview()}
- else if(d.type==='start'){G.mode='online';if(G.selectedGame==='caca'){G.Caca.startOnline(d.seed,d.words)}else{G.Stop.startOnline(d.letter)}}
- else if(d.type==='found'){G.oppScore=d.score||(G.oppScore+1);const el=$('cacaOppN');if(el)el.textContent=G.oppScore;if(G.selectedGame==='caca'&&G.Caca&&G.Caca.total&&d.score>=G.Caca.total){const my=$('cacaFound')?parseInt($('cacaFound').textContent||'0',10):0;$('endTitle').textContent='Adversário venceu!';$('endText').textContent=`Ele encontrou todas primeiro. Você ${my}.`;$('endScore').textContent=my;$('endOverlay').classList.remove('hidden');G.clearTimers()}}
- else if(d.type==='stop'){if(G.selectedGame==='stop')G.Stop.remoteStop()}
- else if(d.type==='answers'){if(G.selectedGame==='stop')G.Stop.receiveAnswers(d.answers,d.name)}
- else if(d.type==='assist'){G.toast((d.name||'Adversário')+' ativou Assistente.')}
-}
-$('btnCreateRoom').addEventListener('click',()=>{
- if(!onlineAvailable()){G.toast('Online indisponível. Solo.');return}
- const code=G.genRoomCode();G.isHost=true;G.currentRoomCode=code;
- try{
-  G.peer=new Peer(code);
-  G.peer.on('open',()=>{$('lobbyCreate').classList.add('hidden');$('lobbyRoom').classList.remove('hidden');$('roomCodeDisplay').textContent=code;$('lobbyStatus').textContent='Aguardando amigo...';$('lobbyStatus').className='lobby-status wait'});
-  G.peer.on('connection',conn=>{conn.on('open',()=>onConnOpen(conn))});
-  G.peer.on('error',err=>{if(err&&err.type==='unavailable-id'){$('btnCreateRoom').click();return}$('lobbyStatus').textContent='Erro: '+(err?.message||'');$('lobbyStatus').className='lobby-status err';G.toast('Erro sala: '+(err?.message||''))});
- }catch(e){G.toast('Falha criar sala.')}
-});
-$('btnJoinRoom').addEventListener('click',()=>{
- if(!onlineAvailable()){G.toast('Offline. Solo.');return}
- const code=($('joinCode').value||'').trim().toUpperCase();if(code.length<4){G.toast('Código inválido.');return}
- G.isHost=false;G.currentRoomCode=code;
- try{
-  G.peer=new Peer();
-  G.peer.on('open',()=>{
-   const conn=G.peer.connect(code,{reliable:true});
-   conn.on('open',()=>{$('lobbyCreate').classList.add('hidden');$('lobbyRoom').classList.remove('hidden');$('roomCodeDisplay').textContent=code;$('lobbyStatus').textContent='Conectado! Aguardando host...';$('lobbyStatus').className='lobby-status ok';onConnOpen(conn);$('btnStartOnline').classList.add('hidden')});
-   conn.on('error',()=>G.toast('Não entrou. Código?'));
-   setTimeout(()=>{if(!G.conn){G.toast('Sala não encontrada.');}},6000);
-  });
-  G.peer.on('error',err=>{G.toast('Erro: '+(err?.message||''))});
- }catch(e){G.toast('Falha conectar.')}
-});
-$('btnCopyCode').addEventListener('click',()=>{
- const c=$('roomCodeDisplay').textContent;if(navigator.clipboard){navigator.clipboard.writeText(c).then(()=>G.toast('Copiado: '+c)).catch(()=>G.toast('Código: '+c))}else{G.toast('Código: '+c)}
-});
-$('btnLeaveRoom').addEventListener('click',()=>{closePeer();$('lobbyRoom').classList.add('hidden');$('lobbyCreate').classList.remove('hidden')});
-$('btnStartOnline').addEventListener('click',()=>{
- if(!G.conn){G.toast('Aguardando adversário.');return}
- G.mode='online';
- if(G.selectedGame==='caca'){const seed=Math.floor(Math.random()*1e9);const words=G.Caca.pickWords(seed);try{G.conn.send({type:'start',seed,words})}catch(e){}G.Caca.startOnline(seed,words)}
- else{const letter=G.Stop.randomLetter();try{G.conn.send({type:'start',letter})}catch(e){}G.Stop.startOnline(letter)}
-});
-G.broadcastFound=(word,score)=>{try{if(G.conn)G.conn.send({type:'found',word,score})}catch(e){}};
-G.broadcastStop=()=>{try{if(G.conn)G.conn.send({type:'stop'})}catch(e){}};
-G.broadcastAnswers=(answers)=>{try{if(G.conn)G.conn.send({type:'answers',answers,name:G.user})}catch(e){}};
-G.broadcastAssist=(on)=>{try{if(G.conn)G.conn.send({type:'assist',on,name:G.user})}catch(e){}};
-let currentFilter='all';
-function openRanking(){show('rankingScreen');renderRanking()}
-G.openRanking=openRanking;
-function renderRanking(){
- const search=($('rankingSearch').value||'').trim();
- const data=G.Ranking.getFiltered(currentFilter,search);
- const tbody=$('rankingBody');tbody.innerHTML='';
- const totalPlayers=new Set(G.Ranking.getAll().map(e=>e.user)).size;
- const totalPlays=G.Ranking.getAll().length;
- const top=G.Ranking.getAll().slice().sort((a,b)=>b.score-a.score)[0];
- const avg=totalPlays?Math.round(G.Ranking.getAll().reduce((s,e)=>s+e.score,0)/totalPlays):0;
- $('rankTotalPlayers').textContent=totalPlayers;$('rankTotalPlays').textContent=totalPlays;$('rankTopScore').textContent=top?top.score:0;$('rankAvgScore').textContent=avg;
- if(!data.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nenhum registro${search?' para "'+search+'"':''}. Seja o primeiro!</td></tr>`}
- else{data.slice(0,100).forEach((e,idx)=>{const isMe=e.user===G.user;const pos=idx+1;let posClass='';if(pos===1)posClass='gold';else if(pos===2)posClass='silver';else if(pos===3)posClass='bronze';const date=new Date(e.date).toLocaleDateString('pt-BR');const gameIcon=e.game==='caca'?'🔍':e.game==='stop'?'⏱️':'🎮';const tr=document.createElement('tr');if(isMe)tr.className='me';tr.innerHTML=`<td><div class="pos ${posClass}">${pos}</div></td><td><div class="player-cell"><div class="avatar">${e.user.charAt(0).toUpperCase()}</div>${e.user} ${e.isAdmin?'<span class="admin-icon">👑 ADM</span>':''} ${isMe?'<span style="font-size:.7rem;background:var(--accent);color:#fff;padding:2px 6px;border-radius:999px">VOCÊ</span>':''}</div></td><td><b style="color:var(--accent)">${e.score}</b></td><td>${gameIcon} ${e.game}</td><td>${e.timeStr||G.fmtTime(e.duration||0)}</td><td style="font-size:.8rem;color:var(--muted)">${date}</td>`;tbody.appendChild(tr)})}
- if(G.user){const pos=G.Ranking.getUserPos(G.user);const best=G.Ranking.getUserBest(G.user);$('myRankCard').classList.remove('hidden');$('myRankPos').textContent=pos?'#'+pos:'Sem ranking';$('myRankBest').textContent=best}
-}
-$('rankingSearch').addEventListener('input',renderRanking);
-$('btnRefreshRanking').addEventListener('click',()=>{renderRanking();G.toast('Ranking atualizado!')});
-document.querySelectorAll('.ranking-tab').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.ranking-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=btn.dataset.filter;renderRanking()})});
-$('btnExportRanking').addEventListener('click',()=>{const data=G.Ranking.getAll();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ranking-luan-santana.json';a.click();URL.revokeObjectURL(url)});
-})();
-</script>
-<script>
-(function(){
-const $=id=>document.getElementById(id);
-const SIZE=14;
-const WORDS=['LUAN','SANTANA','METEORO','ADRENALINA','NEGA','QUIMICA','ACORDANDO','PREDIO','TOPA','MORENA','INESQUECIVEL','JUNTOS','CHOCOLATE','LOUCA','ACUSTICO','SERTANEJO','VIOLAO','SHOW','TURNE','CANTOR','DEJAVU','REVANCHE','EMOCIONAL','NOITE','TEMPO','VIVA','MORRO','TEATRO'];
-const DIRS=[[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
-let board=[],found={},placements={},foundCount=0,startTs=0,selecting=false,selCells=[],startCell=null,bound=false;
-function pickWords(sd){const rng=G.mulberry32(sd);const pool=[...WORDS];for(let i=pool.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}return pool.slice(0,14)}
-function buildBoard(sd,words){
- const rng=G.mulberry32(sd);board=[];found={};placements={};foundCount=0;
- for(let i=0;i<SIZE;i++){board.push(Array(SIZE).fill(''))}
- let attempts=0;
- while(attempts<3){
-  let okAll=true;
-  for(let i=0;i<SIZE;i++)for(let j=0;j<SIZE;j++)board[i][j]='';
-  placements={};
-  for(const w of words){
-   let placed=false;
-   for(let tries=0;tries<250;tries++){
-    const dir=DIRS[Math.floor(rng()*DIRS.length)];
-    const r=Math.floor(rng()*SIZE),c=Math.floor(rng()*SIZE);
-    const er=r+dir[0]*(w.length-1),ec=c+dir[1]*(w.length-1);
-    if(er<0||er>=SIZE||ec<0||ec>=SIZE)continue;
-    let ok=true;for(let k=0;k<w.length;k++){const rr=r+dir[0]*k,cc=c+dir[1]*k;if(board[rr][cc]!==''&&board[rr][cc]!==w[k]){ok=false;break}}
-    if(!ok)continue;
-    for(let k=0;k<w.length;k++)board[r+dir[0]*k][c+dir[1]*k]=w[k];
-    placements[w]={r,c,dir};placed=true;break;
-   }
-   if(!placed){okAll=false;break}
+  var G=window.G, $ = function(id){return document.getElementById(id);};
+  var msgEl = $('authMsg');
+  function showMsg(t,err){ msgEl.className='msg '+(err?'err':'ok'); msgEl.style.display='block'; msgEl.textContent=t; }
+  
+  $('goRegister').onclick = function(){ $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); msgEl.style.display='none'; };
+  $('goLogin').onclick = function(){ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); msgEl.style.display='none'; };
+  
+  function enterMenu(){
+    $('loginScreen').classList.add('hidden'); $('menuScreen').classList.remove('hidden');
+    var u = G.user, st = G.users[u].stats || {jogos:0,vitorias:0,recorde:0};
+    $('userName').textContent = u; $('menuHello').textContent = u;
+    $('userAvatar').textContent = u.charAt(0).toUpperCase();
+    var isAdmin = !!(G.users[u] && G.users[u].admin);
+    $('adminBadge').classList.toggle('hidden', !isAdmin);
+    $('btnAdminPanel').classList.toggle('hidden', !isAdmin);
+    $('statJogos').textContent = st.jogos; $('statVitorias').textContent = st.vitorias;
+    $('statRecorde').textContent = st.recorde > 0 ? st.recorde : '—';
+    G.icons();
   }
-  if(okAll)break;attempts++;
- }
- const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
- for(let i=0;i<SIZE;i++)for(let j=0;j<SIZE;j++)if(board[i][j]==='')board[i][j]=alpha[Math.floor(rng()*26)];
-}
-function renderBoard(){
- const el=$('cacaBoard');el.innerHTML='';el.style.gridTemplateColumns=`repeat(${SIZE},1fr)`;
- const frag=document.createDocumentFragment();
- for(let i=0;i<SIZE;i++)for(let j=0;j<SIZE;j++){const d=document.createElement('div');d.className='cell';d.textContent=board[i][j];d.dataset.r=i;d.dataset.c=j;frag.appendChild(d)}
- el.appendChild(frag);renderWordList();
-}
-function renderWordList(){
- const list=$('cacaWordList');list.innerHTML='';
- Object.keys(placements).sort().forEach(w=>{const d=document.createElement('div');d.className='word-item'+(found[w]?' done':'');d.innerHTML=`<span class="dot"></span>${w}`;d.dataset.word=w;list.appendChild(d)});
- $('cacaTotal').textContent=Object.keys(placements).length;G.Caca.total=Object.keys(placements).length;$('cacaFound').textContent=foundCount;
-}
-function cellAt(r,c){return document.querySelector(`#cacaBoard .cell[data-r="${r}"][data-c="${c}"]`)}
-function getLineCells(a,b){
- const dr=b.r-a.r,dc=b.c-a.c;if(dr===0&&dc===0)return[cellAt(a.r,a.c)];
- const len=Math.max(Math.abs(dr),Math.abs(dc));
- if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc))return null;
- const sr=dr===0?0:dr/Math.abs(dr),sc=dc===0?0:dc/Math.abs(dc);
- const cells=[];for(let k=0;k<=len;k++){const c=cellAt(a.r+sr*k,a.c+sc*k);if(!c)return null;cells.push(c)}return cells;
-}
-function clearSel(){document.querySelectorAll('#cacaBoard .cell.sel').forEach(c=>c.classList.remove('sel'));selCells=[]}
-function checkSelection(){
- if(selCells.length<1){clearSel();return}
- const str=selCells.map(c=>c.textContent).join('');const rev=str.split('').reverse().join('');
- let hit=null;Object.keys(placements).forEach(w=>{if(!found[w]&&(w===str||w===rev))hit=w});
- if(hit){
-  found[hit]=true;foundCount++;
-  selCells.forEach(c=>{c.classList.remove('sel');c.classList.add('found')});
-  const li=document.querySelector(`#cacaWordList .word-item[data-word="${hit}"]`);if(li)li.classList.add('done');
-  $('cacaFound').textContent=foundCount;G.toast('Encontrou: '+hit);G.broadcastFound(hit,foundCount);
-  if(foundCount===Object.keys(placements).length)win();
- }else{clearSel()}selCells=[];
-}
-function bindSelection(){
- const boardEl=$('cacaBoard');
- function posFromEl(el){if(!el||!el.classList.contains('cell'))return null;return{r:parseInt(el.dataset.r,10),c:parseInt(el.dataset.c,10),el}}
- function onDown(e){
-  const t=e.target.closest?e.target.closest('.cell'):null;const p=t?posFromEl(t):null;if(!p)return;
-  e.preventDefault();selecting=true;startCell=p;clearSel();selCells=[p.el];p.el.classList.add('sel');
- }
- function onMove(e){
-  if(!selecting||!startCell)return;
-  const pt=e.touches?e.touches[0]:e;const el=document.elementFromPoint(pt.clientX,pt.clientY);
-  if(!el||!el.classList.contains('cell'))return;
-  const p=posFromEl(el);const line=getLineCells(startCell,p);if(!line)return;
-  clearSel();selCells=line.filter(Boolean);selCells.forEach(c=>c.classList.add('sel'));
- }
- function onUp(){if(!selecting)return;selecting=false;checkSelection()}
- boardEl.addEventListener('pointerdown',onDown);window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp);
- boardEl.addEventListener('touchstart',onDown,{passive:false});boardEl.addEventListener('touchmove',onMove,{passive:false});window.addEventListener('touchend',onUp);
- boardEl.addEventListener('mousedown',onDown);boardEl.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);
-}
-function tick(){const s=Math.floor((Date.now()-startTs)/1000);$('cacaTimer').textContent=G.fmtTime(s)}
-function startTimer(){startTs=Date.now();G.every(tick,500)}
-function win(){
- G.clearTimers();const s=Math.floor((Date.now()-startTs)/1000);const score=Math.max(10,1000-s*4);
- const u=G.users[G.user];u.stats.jogos=(u.stats.jogos||0)+1;
- const won=G.mode==='solo'||(G.mode==='online'&&foundCount>G.oppScore);
- if(won)u.stats.vitorias=(u.stats.vitorias||0)+1;if(score>(u.stats.recorde||0))u.stats.recorde=score;G.saveUsers();
- const entry=G.Ranking.add(score,'caca',{duration:s,timeStr:G.fmtTime(s)});
- const pos=G.Ranking.getUserPos(G.user);
- $('endTitle').textContent=G.mode==='online'?(foundCount>G.oppScore?'Você venceu!':'Empate / Derrota'):'Parabéns!';$('endText').textContent=`Você encontrou todas as ${foundCount} palavras em ${G.fmtTime(s)}. Pontuação: ${score}.`;$('endScore').textContent=score;
- const rankInfo=$('endRankInfo');rankInfo.classList.remove('hidden');rankInfo.innerHTML=`🌍 Ranking Global: <b>#${pos||'—'}</b> • Sua pontuação foi registrada e todos vão ver! ${entry.isAdmin?'👑 ADM':''}`;$('endOverlay').classList.remove('hidden');
-}
-function revealWord(w){
- const pl=placements[w];if(!pl||found[w])return;
- for(let k=0;k<w.length;k++){const c=cellAt(pl.r+pl.dir[0]*k,pl.c+pl.dir[1]*k);if(c)c.classList.add('found')}
- found[w]=true;foundCount++;const li=document.querySelector(`#cacaWordList .word-item[data-word="${w}"]`);if(li)li.classList.add('done');
- $('cacaFound').textContent=foundCount;G.broadcastFound(w,foundCount);
- if(foundCount===Object.keys(placements).length)win();
-}
-function hint(){
- const unfound=Object.keys(placements).filter(w=>!found[w]);if(!unfound.length)return;
- const w=unfound[Math.floor(Math.random()*unfound.length)];const pl=placements[w];const c=cellAt(pl.r,pl.c);
- if(c){c.classList.add('hint');setTimeout(()=>c.classList.remove('hint'),2500)}G.toast(`Dica: palavra com ${w.length} letras começa aqui.`);
-}
-function solveAll(){Object.keys(placements).forEach(w=>{if(!found[w])revealWord(w)})}
-function autoCacaStep(){
- if(!G.assist||!G.humanAssist)return;const unfound=Object.keys(placements).filter(w=>!found[w]);if(!unfound.length)return;
- const w=unfound[Math.floor(Math.random()*unfound.length)];revealWord(w);
- const sp=G.assistSpeed||'normal';const range=sp==='devagar'?[8000,15000]:sp==='rapido'?[1500,4000]:[4000,8000];
- G.later(autoCacaStep,range[0]+Math.random()*(range[1]-range[0]));
-}
-function applyAssistUI(){
- const on=G.assist;$('cacaAssistBadge').classList.toggle('hidden',!on);$('btnCacaHint').classList.toggle('hidden',!on);$('btnCacaSolve').classList.toggle('hidden',!on);
- if(on){G.broadcastAssist(true);if(G.humanAssist){$('cacaAssistBadge').textContent='Assistente jogando';G.later(autoCacaStep,2000)}else $('cacaAssistBadge').textContent='Assistente ativo'}
-}
-function start(){
- G.show('cacaScreen');G.clearTimers();const sd=Math.floor(Math.random()*1e9);const words=pickWords(sd);
- buildBoard(sd,words);renderBoard();$('cacaOppScore').classList.add('hidden');applyAssistUI();startTimer();if(!bound){bindSelection();bound=true}
-}
-function startOnline(sd,words){
- G.show('cacaScreen');G.clearTimers();G.oppScore=0;buildBoard(sd,words);renderBoard();
- $('cacaOppScore').classList.remove('hidden');$('cacaOppN').textContent='0';applyAssistUI();startTimer();if(!bound){bindSelection();bound=true}
-}
-function quit(){G.clearTimers()}
-$('btnCacaNew').addEventListener('click',()=>{if(G.mode==='online'){G.toast('No online só o anfitrião inicia nova partida.');return}start()});
-$('btnCacaHint').addEventListener('click',hint);$('btnCacaSolve').addEventListener('click',()=>{solveAll()});
-G.Caca={pickWords,start,startOnline,quit,get total(){return Object.keys(placements).length}};
+  
+  $('btnLogin').onclick = function(){
+    var u=$('loginUser').value.trim(), p=$('loginPass').value;
+    if(!u||!p){ showMsg('Preencha todos os campos.',true); return; }
+    if(G.users[u] && G.users[u].pass === p){ G.user=u; enterMenu(); }
+    else showMsg('Usuário ou senha incorretos.',true);
+  };
+  $('btnRegister').onclick = function(){
+    var u=$('regUser').value.trim(), p=$('regPass').value;
+    if(!u||p.length<4){ showMsg('Usuário e senha (min 4 chars) requeridos.',true); return; }
+    if(G.users[u]){ showMsg('Usuário já existe.',true); return; }
+    G.users[u] = {pass:p, admin:false, stats:{jogos:0,vitorias:0,recorde:0}};
+    G.saveUsers(); G.user=u; enterMenu();
+  };
+  $('btnLogout').onclick = function(){ G.user=null; $('menuScreen').classList.add('hidden'); $('loginScreen').classList.remove('hidden'); $('loginUser').value=''; $('loginPass').value=''; msgEl.style.display='none';};
+
+  // ADMIN PANEL
+  $('btnAdminPanel').onclick = function(){ 
+    $('adminOverlay').classList.remove('hidden');
+    $('cfgRounds').value = G.cfg.stopRounds;
+    $('cfgTime').value = G.cfg.stopTime;
+    $('cfgBoardSize').value = G.cfg.cacaBoardSize;
+    renderAdminWords();
+  };
+  $('btnCloseAdmin').onclick = function(){ $('adminOverlay').classList.add('hidden'); };
+  
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.onclick = function(){
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      tab.classList.add('active');
+      $('tab-'+tab.dataset.tab).classList.add('active');
+    };
+  });
+
+  $('btnSaveGameCfg').onclick = function(){
+    G.cfg.stopRounds = parseInt($('cfgRounds').value);
+    G.cfg.stopTime = parseInt($('cfgTime').value);
+    G.cfg.cacaBoardSize = parseInt($('cfgBoardSize').value);
+    G.saveCfg(); G.toast("Configurações salvas!");
+  };
+
+  function renderAdminWords(){
+    var c = $('wordBadgesContainer'); c.innerHTML='';
+    var all = G.defaultWords.concat(G.customWords);
+    all.forEach(function(w){
+      var b = document.createElement('div'); b.className = 'word-badge';
+      b.innerHTML = w + (G.customWords.includes(w) ? ' <span class="del" data-w="'+w+'">&times;</span>' : '');
+      c.appendChild(b);
+    });
+    c.querySelectorAll('.del').forEach(function(btn){
+      btn.onclick = function(){
+        G.customWords = G.customWords.filter(x => x !== btn.dataset.w);
+        G.saveWords(); renderAdminWords();
+      }
+    });
+  }
+  $('btnAddWord').onclick = function(){
+    var w = $('newWordInput').value.trim().toUpperCase().replace(/[^A-Z]/g, '');
+    if(w && !G.defaultWords.includes(w) && !G.customWords.includes(w)){
+      G.customWords.push(w); G.saveWords(); $('newWordInput').value=''; renderAdminWords();
+    }
+  };
+  
+  // MENU & LOBBY
+  function setupLobby(game){
+    G.selectedGame = game;
+    $('menuScreen').classList.add('hidden'); $('lobbyScreen').classList.remove('hidden');
+    $('lobbyRoom').classList.add('hidden'); $('lobbyCreate').classList.remove('hidden');
+  }
+  $('cardCaca').onclick = function(){ setupLobby('caca'); };
+  $('cardStop').onclick = function(){ setupLobby('stop'); };
+  $('lobbyBack').onclick = function(){ 
+    if(G.conn) G.conn.close(); if(G.peer) G.peer.destroy();
+    $('lobbyScreen').classList.add('hidden'); $('menuScreen').classList.remove('hidden'); 
+  };
+  
+  function endGame(score){
+    $('cacaScreen').classList.add('hidden'); $('stopScreen').classList.add('hidden');
+    $('endOverlay').classList.remove('hidden');
+    $('endScore').textContent = score + " pts";
+    G.users[G.user].stats.jogos++;
+    if(score > G.users[G.user].stats.recorde) G.users[G.user].stats.recorde = score;
+    G.saveUsers();
+  }
+  $('btnEndMenu').onclick = function(){ $('endOverlay').classList.add('hidden'); enterMenu(); };
+
+  // ================= MULTIPLAYER (PeerJS) =================
+  $('btnSolo').onclick = function(){ 
+    G.mode = 'solo'; $('lobbyScreen').classList.add('hidden'); 
+    if(G.selectedGame === 'caca') initCaca(); else initStop(); 
+  };
+
+  function setupPeer(id, isHost){
+    G.peer = new Peer('luan-game-' + id);
+    G.peer.on('open', function(pid){
+      $('roomCodeDisplay').textContent = id;
+      $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden');
+      $('lobbyStatus').textContent = isHost ? "Aguardando amigo..." : "Conectando...";
+      
+      if(!isHost){
+        G.conn = G.peer.connect('luan-game-' + id);
+        setupConn(G.conn);
+      }
+    });
+    if(isHost){
+      G.peer.on('connection', function(conn){
+        G.conn = conn; setupConn(conn);
+      });
+    }
+  }
+
+  function setupConn(conn){
+    conn.on('open', function(){
+      $('lobbyStatus').className = 'lobby-status ok'; $('lobbyStatus').textContent = "Conectado!";
+      $('opponentLine').classList.remove('hidden');
+      $('opponentName').textContent = "Amigo";
+      if(G.isHost) $('btnStartOnline').classList.remove('hidden');
+      
+      conn.send({type: 'hello', name: G.user, game: G.selectedGame, cfg: G.cfg});
+    });
+    
+    conn.on('data', function(data){
+      if(data.type === 'hello'){
+        $('opponentName').textContent = data.name; G.oppName = data.name;
+        if(!G.isHost) { G.selectedGame = data.game; G.cfg = data.cfg; }
+      }
+      if(data.type === 'start'){
+        $('lobbyScreen').classList.add('hidden');
+        if(G.selectedGame === 'caca') { G.gameState = data.state; initCaca(true); }
+        else initStop();
+      }
+      if(data.type === 'caca_score'){
+        $('cacaOppN').textContent = data.score;
+        if(data.score >= G.gameState.words.length) { G.toast("Seu oponente terminou!"); G.later(()=>endGame(G.gameState.myScore), 3000); }
+      }
+      if(data.type === 'stop_stop'){
+        G.toast("Oponente gritou STOP!");
+        endStopRound(data.answers);
+      }
+    });
+  }
+
+  $('btnCreateRoom').onclick = function(){ G.isHost = true; G.mode = 'online'; setupPeer(G.roomCode(), true); };
+  $('btnJoinRoom').onclick = function(){ 
+    var c = $('joinCode').value.trim().toUpperCase();
+    if(c.length === 6) { G.isHost = false; G.mode = 'online'; setupPeer(c, false); }
+  };
+  $('btnStartOnline').onclick = function(){
+    if(G.selectedGame === 'caca'){
+      var allW = G.defaultWords.concat(G.customWords);
+      var w = allW.sort(()=>Math.random()-0.5).slice(0, G.cfg.cacaWordCount);
+      var gridData = buildCacaGrid(w, G.cfg.cacaBoardSize);
+      G.gameState = {words: w, grid: gridData.grid};
+      G.conn.send({type: 'start', state: G.gameState});
+      $('lobbyScreen').classList.add('hidden'); initCaca(true);
+    } else {
+      G.conn.send({type: 'start'});
+      $('lobbyScreen').classList.add('hidden'); initStop();
+    }
+  };
+
+  // ================= CAÇA PALAVRAS =================
+  var cacaEls = { board: $('cacaBoard'), list: $('cacaWordList'), found: $('cacaFound'), total: $('cacaTotal'), timer: $('cacaTimer') };
+  var cacaState = { grid:[], words:[], found:[], isDrag:false, startCell:null, time:0 };
+  
+  function buildCacaGrid(wordList, size){
+    var grid = Array(size).fill(0).map(()=>Array(size).fill(''));
+    var placed = [];
+    var dirs = [[0,1], [1,0], [1,1], [1,-1]];
+    
+    wordList.forEach(w => {
+      var p = false;
+      for(var i=0; i<100 && !p; i++){
+        var d = dirs[Math.floor(Math.random()*dirs.length)];
+        var r = Math.floor(Math.random()*size), c = Math.floor(Math.random()*size);
+        var can = true;
+        for(var j=0; j<w.length; j++){
+          var nr = r + d[0]*j, nc = c + d[1]*j;
+          if(nr<0 || nr>=size || nc<0 || nc>=size || (grid[nr][nc] !== '' && grid[nr][nc] !== w[j])) { can = false; break; }
+        }
+        if(can){
+          for(var j=0; j<w.length; j++){ grid[r + d[0]*j][c + d[1]*j] = w[j]; }
+          p = true;
+        }
+      }
+    });
+    for(var i=0; i<size; i++) for(var j=0; j<size; j++) if(grid[i][j]==='') grid[i][j] = String.fromCharCode(65+Math.floor(Math.random()*26));
+    return {grid: grid};
+  }
+
+  function initCaca(fromOnline){
+    $('cacaScreen').classList.remove('hidden');
+    G.clearTimers(); cacaState.time = 0; cacaState.found = []; G.gameState.myScore = 0;
+    
+    if(G.mode === 'online') {
+      $('cacaOppScore').classList.remove('hidden'); $('cacaOppN').textContent = '0';
+    } else {
+      $('cacaOppScore').classList.add('hidden');
+      var allW = G.defaultWords.concat(G.customWords);
+      G.gameState.words = allW.sort(()=>Math.random()-0.5).slice(0, G.cfg.cacaWordCount);
+      var gd = buildCacaGrid(G.gameState.words, G.cfg.cacaBoardSize);
+      G.gameState.grid = gd.grid;
+    }
+    
+    var size = G.cfg.cacaBoardSize;
+    cacaEls.board.style.gridTemplateColumns = `repeat(${size}, 34px)`;
+    cacaEls.board.innerHTML = '';
+    
+    for(var r=0; r<size; r++){
+      for(var c=0; c<size; c++){
+        var div = document.createElement('div');
+        div.className = 'cell'; div.textContent = G.gameState.grid[r][c];
+        div.dataset.r = r; div.dataset.c = c;
+        cacaEls.board.appendChild(div);
+      }
+    }
+    
+    cacaEls.list.innerHTML = '';
+    G.gameState.words.forEach(w => {
+      var item = document.createElement('div'); item.className='word-item'; item.id='word-'+w;
+      item.innerHTML = '<span>'+w+'</span><div class="dot"></div>';
+      cacaEls.list.appendChild(item);
+    });
+    
+    cacaEls.total.textContent = G.gameState.words.length;
+    cacaEls.found.textContent = 0;
+    
+    setupCacaInput();
+    G.every(function(){ cacaState.time++; cacaEls.timer.textContent = G.fmtTime(cacaState.time); }, 1000);
+  }
+
+  function setupCacaInput(){
+    var cells = document.querySelectorAll('.cell');
+    var isDown = false, startR, startC, currentCells = [];
+    
+    function clearSel(){ cells.forEach(c=>c.classList.remove('sel')); currentCells=[]; }
+    
+    cells.forEach(cell => {
+      cell.onmousedown = function(){ isDown = true; startR=parseInt(this.dataset.r); startC=parseInt(this.dataset.c); clearSel(); };
+      cell.onmouseenter = function(){
+        if(!isDown) return;
+        clearSel();
+        var er=parseInt(this.dataset.r), ec=parseInt(this.dataset.c);
+        var dr = Math.sign(er - startR), dc = Math.sign(ec - startC);
+        var len = Math.max(Math.abs(er - startR), Math.abs(ec - startC));
+        for(var i=0; i<=len; i++){
+          var nr = startR + dr*i, nc = startC + dc*i;
+          var cDiv = document.querySelector(`.cell[data-r="${nr}"][data-c="${nc}"]`);
+          if(cDiv) { cDiv.classList.add('sel'); currentCells.push(cDiv); }
+        }
+      };
+      cell.onmouseup = function(){
+        if(!isDown) return;
+        isDown = false;
+        var word = currentCells.map(c=>c.textContent).join('');
+        var wordRev = word.split('').reverse().join('');
+        
+        var foundW = G.gameState.words.find(w => !cacaState.found.includes(w) && (w === word || w === wordRev));
+        if(foundW){
+          cacaState.found.push(foundW);
+          currentCells.forEach(c=>{ c.classList.remove('sel'); c.classList.add('found'); });
+          $('word-'+foundW).classList.add('done');
+          G.gameState.myScore++;
+          cacaEls.found.textContent = G.gameState.myScore;
+          
+          if(G.mode === 'online' && G.conn) G.conn.send({type: 'caca_score', score: G.gameState.myScore});
+          
+          if(cacaState.found.length === G.gameState.words.length){
+            G.toast("Você encontrou todas!");
+            G.later(()=>endGame(G.gameState.myScore * 10 - Math.floor(cacaState.time/10)), 1500);
+          }
+        } else {
+          clearSel();
+        }
+      };
+    });
+    cacaEls.board.onmouseleave = function(){ if(isDown){ isDown=false; clearSel(); } };
+  }
+
+  $('cacaBack').onclick = function(){ G.clearTimers(); enterMenu(); };
+
+  // ================= ADEDONHA =================
+  var stopState = { round:1, letter:'', cats:['Música', 'Álbum ou DVD', 'Nome Comum', 'Lugar', 'Objeto'], time:0, scores:[] };
+  
+  function initStop(){
+    $('stopScreen').classList.remove('hidden');
+    stopState.round = 1; stopState.scores = [];
+    $('stopGrid').innerHTML = '';
+    stopState.cats.forEach((c,i) => {
+      var d = document.createElement('div'); d.className = 'stop-field';
+      d.innerHTML = `<label>${c}</label><input type="text" id="stopInp_${i}" autocomplete="off">`;
+      $('stopGrid').appendChild(d);
+    });
+    startStopRound();
+  }
+
+  function startStopRound(){
+    var chars = "ABCDEFGHIJKLMNOPRSTUVZ";
+    stopState.letter = chars[Math.floor(Math.random()*chars.length)];
+    $('stopLetterBig').textContent = stopState.letter;
+    $('stopLetter').textContent = stopState.letter;
+    $('stopRound').textContent = `Rodada ${stopState.round}/${G.cfg.stopRounds}`;
+    $('stopResults').classList.add('hidden');
+    
+    for(var i=0; i<stopState.cats.length; i++){
+      var inp = $('stopInp_'+i); inp.value=''; inp.disabled=false;
+      inp.className = '';
+    }
+    
+    stopState.time = G.cfg.stopTime;
+    G.clearTimers();
+    updateStopTimer();
+    G.every(function(){
+      stopState.time--; updateStopTimer();
+      if(stopState.time <= 0) handleStopBtn();
+    }, 1000);
+  }
+  
+  function updateStopTimer(){
+    $('stopTimer').textContent = G.fmtTime(stopState.time);
+    var pct = (stopState.time / G.cfg.stopTime)*100;
+    $('stopProgress').style.width = pct + '%';
+  }
+
+  function getStopAnswers(){
+    var a = [];
+    for(var i=0; i<stopState.cats.length; i++) a.push($('stopInp_'+i).value.trim().toUpperCase());
+    return a;
+  }
+
+  function handleStopBtn(){
+    G.clearTimers();
+    for(var i=0; i<stopState.cats.length; i++) $('stopInp_'+i).disabled = true;
+    
+    if(G.mode === 'online' && G.conn){
+      G.conn.send({type: 'stop_stop', answers: getStopAnswers()});
+      G.toast("Aguardando respostas do oponente...");
+    } else {
+      endStopRound(null); // Solo
+    }
+  }
+  $('btnStopStop').onclick = handleStopBtn;
+
+  function endStopRound(oppAnswers){
+    $('stopResults').classList.remove('hidden');$('stopRoundRes').textContent = stopState.round;
+    var myAns = getStopAnswers(), tbody = $('stopResultsBody');
+    tbody.innerHTML = '';
+    
+    var roundScore = 0;
+    for(var i=0; i<stopState.cats.length; i++){
+      var ans = myAns[i];
+      var valid = ans.length > 1 && ans.startsWith(stopState.letter);
+      var pts = 0;
+      
+      var tr = document.createElement('tr');
+      var tdCat = document.createElement('td'); tdCat.textContent = stopState.cats[i];
+      var tdMy = document.createElement('td'); tdMy.textContent = ans || '—';
+      var tdPts = document.createElement('td');
+      
+      if(valid){
+        if(oppAnswers){
+          var oAns = oppAnswers[i];
+          if(oAns && oAns.length>1 && oAns.startsWith(stopState.letter)){
+            if(ans === oAns) { pts = 5; } else { pts = 10; }
+          } else { pts = 10; }
+        } else {
+          pts = 10; // Solo
+        }
+      }
+      
+      $('stopInp_'+i).className = pts > 0 ? 'correct' : (ans ? 'wrong' : '');
+      tdPts.innerHTML = `<b>${pts}</b>`;
+      tr.appendChild(tdCat); tr.appendChild(tdMy); 
+      
+      if(G.mode === 'online') {
+        var tdOpp = document.createElement('td'); tdOpp.textContent = oppAnswers[i] || '—';
+        tr.appendChild(tdOpp); $('oppTh').classList.remove('hidden');
+      } else $('oppTh').classList.add('hidden');
+      
+      tr.appendChild(tdPts); tbody.appendChild(tr);
+      roundScore += pts;
+    }
+    
+    $('stopScore').textContent = roundScore;
+    stopState.scores.push(roundScore);
+  }
+
+  $('btnNextRound').onclick = function(){
+    if(stopState.round >= G.cfg.stopRounds){
+      var total = stopState.scores.reduce((a,b)=>a+b, 0);
+      endGame(total);
+    } else {
+      stopState.round++;
+      startStopRound();
+    }
+  };
+
+  $('stopBack').onclick = function(){ G.clearTimers(); enterMenu(); };
+
+  G.icons();
 })();
 </script>
-<script>
-(function(){
-const $=id=>document.getElementById(id);
-const CATEGORIES=['Nome','Cor','Animal','Comida','País','Profissão','Objeto','Marca','Filme/Série','Flor'];
-const TIME=90;
-let letter='',startTs=0,stopped=false,graded=false,myAnswers=null,oppAnswers=null;
-const DICT={
-A:{Nome:'Ana',Cor:'Azul',Animal:'Arara',Comida:'Arroz',País:'Argentina',Profissão:'Advogado',Objeto:'Anel',Marca:'Apple','Filme/Série':'Avatar',Flor:'Azaleia'},
-B:{Nome:'Bruno',Cor:'Branco',Animal:'Baleia',Comida:'Banana',País:'Brasil',Profissão:'Bombeiro',Objeto:'Bola',Marca:'BMW','Filme/Série':'Batman',Flor:'Begônia'},
-C:{Nome:'Carla',Cor:'Cinza',Animal:'Cachorro',Comida:'Café',País:'Canadá',Profissão:'Carpinteiro',Objeto:'Caneta',Marca:'Coca-Cola','Filme/Série':'Coringa',Flor:'Cravo'},
-D:{Nome:'Diego',Cor:'Dourado',Animal:'Dinossauro',Comida:'Doce',País:'Dinamarca',Profissão:'Dentista',Objeto:'Dado',Marca:'Disney','Filme/Série':'Duna',Flor:'Dália'},
-E:{Nome:'Eduardo',Cor:'Esmeralda',Animal:'Elefante',Comida:'Espaguete',País:'Espanha',Profissão:'Enfermeiro',Objeto:'Espelho',Marca:'Energizer','Filme/Série':'E.T.',Flor:'Estrelícia'},
-F:{Nome:'Fernanda',Cor:'Fúcsia',Animal:'Foca',Comida:'Feijão',País:'França',Profissão:'Farmacêutico',Objeto:'Faca',Marca:'Ferrari','Filme/Série':'Frozen',Flor:'Flor do deserto'},
-G:{Nome:'Gabriel',Cor:'Grená',Animal:'Gato',Comida:'Goiaba',País:'Grécia',Profissão:'Gari',Objeto:'Garrafa',Marca:'Google','Filme/Série':'Gladiador',Flor:'Girassol'},
-H:{Nome:'Helena',Cor:'Hortelã',Animal:'Hipopótamo',Comida:'Hambúrguer',País:'Holanda',Profissão:'Historiador',Objeto:'Helicóptero',Marca:'HP','Filme/Série':'Hulk',Flor:'Hibisco'},
-I:{Nome:'Igor',Cor:'Índigo',Animal:'Iguana',Comida:'Iogurte',País:'Itália',Profissão:'Ilustrador',Objeto:'Ímã',Marca:'Instagram','Filme/Série':'Interestelar',Flor:'Íris'},
-J:{Nome:'João',Cor:'Jade',Animal:'Jacaré',Comida:'Jabuticaba',País:'Japão',Profissão:'Jardineiro',Objeto:'Jarra',Marca:'Jack Daniels','Filme/Série':'Jumanji',Flor:'Jasmim'},
-K:{Nome:'Karen',Cor:'Kaki',Animal:'Koala',Comida:'Kiwi',País:'Kuwait',Profissão:'Kartista',Objeto:'Ketchup',Marca:'Kodak','Filme/Série':'King Kong',Flor:'Kalanchoe'},
-L:{Nome:'Lucas',Cor:'Lilás',Animal:'Leão',Comida:'Laranja',País:'Luxemburgo',Profissão:'Lixeiro',Objeto:'Lápis',Marca:'Lacoste','Filme/Série':'La La Land',Flor:'Lírio'},
-M:{Nome:'Mariana',Cor:'Marrom',Animal:'Macaco',Comida:'Maçã',País:'México',Profissão:'Médico',Objeto:'Martelo',Marca:'Microsoft','Filme/Série':'Matrix',Flor:'Margarida'},
-N:{Nome:'Natalia',Cor:'Neon',Animal:'Naja',Comida:'Nhoque',País:'Noruega',Profissão:'Nutricionista',Objeto:'Navalha',Marca:'Nestlé','Filme/Série':'Naruto',Flor:'Narciso'},
-O:{Nome:'Otávio',Cor:'Oliva',Animal:'Ornitorrinco',Comida:'Ovo',País:'Omã',Profissão:'Oceanógrafo',Objeto:'Óculos',Marca:'Oracle','Filme/Série':'007',Flor:'Orquídea'},
-P:{Nome:'Pedro',Cor:'Prata',Animal:'Panda',Comida:'Pizza',País:'Portugal',Profissão:'Padeiro',Objeto:'Prato',Marca:'Puma','Filme/Série':'Pantera Negra',Flor:'Peônia'},
-Q:{Nome:'Quésia',Cor:'Queima',Animal:'Quati',Comida:'Queijo',País:'Catar',Profissão:'Químico',Objeto:'Quadro',Marca:'Quaker','Filme/Série':'Que Horas Ela Volta?',Flor:'Quaresmeira'},
-R:{Nome:'Rafael',Cor:'Rosa',Animal:'Raposa',Comida:'Rabanada',País:'Rússia',Profissão:'Radialista',Objeto:'Régua',Marca:'Ray-Ban','Filme/Série':'Ratatouille',Flor:'Rosa'},
-S:{Nome:'Sofia',Cor:'Salmão',Animal:'Sapo',Comida:'Sorvete',País:'Suíça',Profissão:'Sapateiro',Objeto:'Sapato',Marca:'Samsung','Filme/Série':'Shrek',Flor:'Samambaia'},
-T:{Nome:'Thiago',Cor:'Turquesa',Animal:'Tigre',Comida:'Tapioca',País:'Tailândia',Profissão:'Taxista',Objeto:'Tesoura',Marca:'Toyota','Filme/Série':'Titanic',Flor:'Tulipa'},
-U:{Nome:'Ursula',Cor:'Uva',Animal:'Urso',Comida:'Uva',País:'Ucrânia',Profissão:'Urologista',Objeto:'Umbrela',Marca:'Unilever','Filme/Série':'Up',Flor:'Uva-da-serra'},
-V:{Nome:'Vinicius',Cor:'Vermelho',Animal:'Vaca',Comida:'Vatapá',País:'Venezuela',Profissão:'Veterinário',Objeto:'Vaso',Marca:'Vans','Filme/Série':'Vingadores',Flor:'Violeta'},
-W:{Nome:'Wesley',Cor:'Wine',Animal:'Wombat',Comida:'Waffle',País:'Wallis e Futuna',Profissão:'Web designer',Objeto:'Walkman',Marca:'WhatsApp','Filme/Série':'WALL-E',Flor:'Wisteria'},
-X:{Nome:'Xuxa',Cor:'Xadrez',Animal:'Xexéu',Comida:'Xis',País:'',Profissão:'Xilofonista',Objeto:'Xilofone',Marca:'Xbox','Filme/Série':'X-Men',Flor:'Xanana'},
-Y:{Nome:'Yasmin',Cor:'Amarelo',Animal:'Yak',Comida:'Yakisoba',País:'Iêmen',Profissão:'Yoguista',Objeto:'Ioiô',Marca:'YouTube','Filme/Série':'You',Flor:'Yuca'},
-Z:{Nome:'Zoe',Cor:'Zaffre',Animal:'Zebra',Comida:'Zucchini',País:'Zimbábue',Profissão:'Zoólogo',Objeto:'Zíper',Marca:'Zara','Filme/Série':'Zootopia',Flor:'Zínia'}
-};
-function randomLetter(){const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';return alpha[Math.floor(Math.random()*26)]}
-G.Stop={randomLetter};
-function renderGrid(){
- const grid=$('stopGrid');grid.innerHTML='';
- CATEGORIES.forEach(cat=>{const d=document.createElement('div');d.className='stop-field';d.innerHTML=`<label>${cat}</label><input type="text" data-cat="${cat}" autocomplete="off" maxlength="40" placeholder="Começa com ${letter}...">`;grid.appendChild(d)});
-}
-function readAnswers(){const a={};document.querySelectorAll('#stopGrid input').forEach(inp=>{a[inp.dataset.cat]=inp.value.trim()});return a}
-function fillAnswers(){
- const d=DICT[letter];if(!d)return;
- document.querySelectorAll('#stopGrid input').forEach(inp=>{const cat=inp.dataset.cat;if(d[cat]&&!inp.value)inp.value=d[cat].toUpperCase()});
- G.toast('Respostas preenchidas.');
-}
-function tick(){
- const left=TIME-Math.floor((Date.now()-startTs)/1000);
- if(left<=0){doStop(true);return}
- const el=$('stopTimer');el.textContent=G.fmtTime(left);el.classList.toggle('low',left<=15);
-}
-function startTimer(){startTs=Date.now();stopped=false;graded=false;G.every(tick,300)}
-function doStop(auto){
- if(stopped)return;stopped=true;G.clearTimers();
- document.querySelectorAll('#stopGrid input').forEach(i=>i.disabled=true);
- myAnswers=readAnswers();G.broadcastStop();
- if(G.mode==='solo'){gradeSolo()}
- else{G.broadcastAnswers(myAnswers);G.toast('STOP! Aguardando adversário...');G.later(()=>{if(!graded){gradeOnline(oppAnswers||{})}},8000)}
-}
-function remoteStop(){if(stopped)return;G.toast('Adversário deu STOP!');doStop(false)}
-function receiveAnswers(ans){oppAnswers=ans;if(stopped&&myAnswers&&!graded)gradeOnline(ans)}
-function norm(s){return(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9 ]/g,'').trim()}
-function valid(ans){if(!ans)return false;const n=norm(ans);return n.charAt(0)===letter}
-function gradeSolo(){
- if(graded)return;graded=true;let score=0;
- CATEGORIES.forEach(cat=>{const v=myAnswers[cat];const ok=valid(v);if(ok)score+=10;const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`);if(inp)inp.classList.add(ok?'correct':'wrong')});
- finish(score,'Solo: 10 pts por resposta válida.');
-}
-function gradeOnline(opp){
- if(graded)return;graded=true;let score=0;
- CATEGORIES.forEach(cat=>{
-  const mine=myAnswers[cat],theirs=opp[cat];const mineOk=valid(mine),theirsOk=valid(theirs);
-  const same=mineOk&&theirsOk&&norm(mine)===norm(theirs);
-  let pts=0;if(mineOk){pts=same?5:10}score+=pts;
-  const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`);if(inp){inp.classList.add(mineOk?'correct':'wrong');if(theirs)inp.title=`Adversário: ${theirs}`}
- });
- let oppScore=0;
- CATEGORIES.forEach(cat=>{
-  const theirs=opp[cat],mine=myAnswers[cat];const theirsOk=valid(theirs),mineOk=valid(mine);
-  const same=mineOk&&theirsOk&&norm(mine)===norm(theirs);if(theirsOk)oppScore+=same?5:10;
- });
- finish(score,`Você: ${score} pts · Adversário: ${oppScore} pts. Única=10, repetida=5.`);
-}
-function finish(score,text){
- $('stopScore').textContent=score;$('stopResults').classList.remove('hidden');
- const u=G.users[G.user];u.stats.jogos=(u.stats.jogos||0)+1;if(score>0)u.stats.vitorias=(u.stats.vitorias||0)+1;if(score>(u.stats.recorde||0))u.stats.recorde=score;G.saveUsers();
- const entry=G.Ranking.add(score,'stop',{duration:TIME-Math.floor((Date.now()-startTs)/1000)});
- const pos=G.Ranking.getUserPos(G.user);
- $('endTitle').textContent='Fim da rodada!';$('endText').textContent=text;$('endScore').textContent=score;
- const rankInfo=$('endRankInfo');rankInfo.classList.remove('hidden');rankInfo.innerHTML=`🌍 Ranking Global: <b>#${pos||'—'}</b> • Registrado! Todos vão ver. ${entry.isAdmin?'👑 ADM':''}`;
- $('endOverlay').classList.remove('hidden');
-}
-function autoStopType(){
- if(!G.assist||!G.humanAssist||stopped)return;const d=DICT[letter];if(!d)return;
- const cats=[...CATEGORIES];let i=0;
- function scheduleNext(){
-  if(stopped||!G.assist||!G.humanAssist)return;
-  const sp=G.assistSpeed||'normal';const range=sp==='devagar'?[2000,4000]:sp==='rapido'?[300,900]:[800,1800];
-  G.later(nextCat,range[0]+Math.random()*(range[1]-range[0]));
- }
- function nextCat(){
-  if(stopped)return;if(i>=cats.length)return;
-  const cat=cats[i++];const word=(d[cat]||'').toUpperCase();const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`);
-  if(!inp||inp.value){scheduleNext();return}
-  let ci=0;(function typeChar(){if(stopped)return;if(ci<word.length){ci++;inp.value=word.slice(0,ci);G.later(typeChar,70+Math.random()*90)}else{scheduleNext()}})();
- }
- scheduleNext();
-}
-function applyAssistUI(){
- const on=G.assist;$('stopAssistBadge').classList.toggle('hidden',!on);$('btnStopFill').classList.toggle('hidden',!on);
- if(on){G.broadcastAssist(true);if(G.humanAssist){$('stopAssistBadge').textContent='Assistente jogando';G.later(autoStopType,1200)}else $('stopAssistBadge').textContent='Assistente ativo'}
-}
-function start(){
- G.show('stopScreen');G.clearTimers();letter=randomLetter();myAnswers=null;oppAnswers=null;
- $('stopLetter').textContent=letter;$('stopLetterBig').textContent=letter;$('stopTimer').textContent=G.fmtTime(TIME);
- $('stopResults').classList.add('hidden');renderGrid();applyAssistUI();startTimer();
-}
-function startOnline(L){
- G.show('stopScreen');G.clearTimers();letter=L;myAnswers=null;oppAnswers=null;
- $('stopLetter').textContent=letter;$('stopLetterBig').textContent=letter;$('stopTimer').textContent=G.fmtTime(TIME);
- $('stopResults').classList.add('hidden');renderGrid();applyAssistUI();startTimer();
-}
-function quit(){G.clearTimers()}
-$('btnStopStop').addEventListener('click',()=>doStop(false));$('btnStopFill').addEventListener('click',fillAnswers);
-G.Stop.start=start;G.Stop.startOnline=startOnline;G.Stop.quit=quit;G.Stop.remoteStop=remoteStop;G.Stop.receiveAnswers=receiveAnswers;
-})();
-</script>
-<script>
-(function(){
-const $=id=>document.getElementById(id);
-function syncSpeedRow(){$('speedRow').style.display=(G.assist&&G.humanAssist)?'flex':'none'}
-function openAdmin(){if(!G.isAdmin()){G.toast('Só ADM.');return}renderAdmin();$('adminOverlay').classList.remove('hidden')}
-function renderAdmin(){
- $('toggleAssist').checked=!!G.assist;$('toggleHuman').checked=!!G.humanAssist;$('assistSpeed').value=G.assistSpeed||'normal';syncSpeedRow();
- $('toggleMaint').checked=!!G.store.get('maintenance');
- const users=G.users;const userList=Object.keys(users);const admins=userList.filter(u=>users[u].admin);
- const totalPlays=userList.reduce((s,u)=>s+(users[u].stats?.jogos||0),0);
- const ranking=G.Ranking.getAll();
- $('dashUsers').textContent=userList.length;$('dashAdmins').textContent=admins.length;$('dashPlays').textContent=totalPlays;$('dashRanking').textContent=ranking.length;
- const top=ranking.slice().sort((a,b)=>b.score-a.score)[0];
- $('dashTopPlayer').textContent=top?`${top.user} - ${top.game}`:'Nenhum';$('dashTopScore').textContent=top?top.score+' pts':'—';
- let mostActive=null,maxGames=0;userList.forEach(u=>{const g=users[u].stats?.jogos||0;if(g>maxGames){maxGames=g;mostActive=u}});
- $('dashActive').textContent=mostActive?`${mostActive} (${maxGames} jogos)`:'—';
- const avg=ranking.length?Math.round(ranking.reduce((s,e)=>s+e.score,0)/ranking.length):0;$('dashAvg').textContent=avg;
- renderUserTable();renderAdminRanking();
-}
-function renderUserTable(filter=''){
- const tbody=$('userTableBody');tbody.innerHTML='';const users=G.users;
- let list=Object.keys(users).sort((a,b)=>(users[b].stats?.recorde||0)-(users[a].stats?.recorde||0));
- if(filter){const f=filter.toLowerCase();list=list.filter(u=>u.toLowerCase().includes(f))}
- list.forEach(u=>{
-  const data=users[u];const isMe=u===G.user;
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td><div class="player-cell"><div class="avatar">${u.charAt(0).toUpperCase()}</div>${u} ${isMe?'<span style="font-size:.7rem;background:var(--text);color:#fff;padding:2px 6px;border-radius:999px">VOCÊ</span>':''}</div></td><td>${data.admin?'<span class="admin-badge">👑 ADM</span>':'Jogador'}</td><td>${data.stats?.jogos||0}</td><td>${data.stats?.vitorias||0}</td><td><b style="color:var(--accent)">${data.stats?.recorde||0}</b></td><td><div style="display:flex;gap:4px;flex-wrap:wrap">${!isMe?`<button class="btn btn-secondary btn-sm" data-action="toggleAdmin" data-user="${u}" style="font-size:.7rem;padding:4px 8px">${data.admin?'Rebaixar':'Promover'}</button>`:''}<button class="btn btn-secondary btn-sm" data-action="reset" data-user="${u}" style="font-size:.7rem;padding:4px 8px">Reset</button>${!isMe?`<button class="btn btn-danger btn-sm" data-action="delete" data-user="${u}" style="font-size:.7rem;padding:4px 8px">Excluir</button>`:''}${!isMe?`<button class="btn btn-danger btn-sm" data-action="ban" data-user="${u}" style="font-size:.7rem;padding:4px 8px">Banir</button>`:''}</div></td>`;
-  tbody.appendChild(tr);
- });
- tbody.querySelectorAll('button').forEach(btn=>{btn.addEventListener('click',()=>{handleUserAction(btn.dataset.action,btn.dataset.user)})});
-}
-function handleUserAction(action,user){
- if(!G.isAdmin())return;
- if(user===G.user&&(action==='delete'||action==='ban')){G.toast('Não pode deletar a si mesmo.');return}
- const users=G.users;
- if(action==='toggleAdmin'){users[user].admin=!users[user].admin;G.saveUsers();G.toast(`${user} agora é ${users[user].admin?'ADM 👑':'jogador'}.`);renderAdmin()}
- else if(action==='reset'){users[user].stats={jogos:0,vitorias:0,recorde:0};G.saveUsers();G.toast(`Stats de ${user} resetados.`);renderAdmin();G.enterMenu()}
- else if(action==='delete'){if(!confirm(`Excluir ${user}?`))return;delete users[user];G.saveUsers();const ranking=G.Ranking.getAll().filter(e=>e.user!==user);G.Ranking.save(ranking);G.toast(`${user} excluído.`);renderAdmin()}
- else if(action==='ban'){if(!confirm(`Banir ${user}?`))return;const banned=G.store.get('banned')||[];if(!banned.includes(user))banned.push(user);G.store.set('banned',banned);delete users[user];G.saveUsers();G.toast(`${user} banido.`);renderAdmin()}
-}
-function renderAdminRanking(){
- const tbody=$('adminRankingBody');tbody.innerHTML='';
- const data=G.Ranking.getAll().slice().sort((a,b)=>b.score-a.score).slice(0,100);
- data.forEach((e,idx)=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td>#${idx+1}</td><td>${e.user} ${e.isAdmin?'👑':''}</td><td><b>${e.score}</b></td><td>${e.game}</td><td style="font-size:.75rem">${new Date(e.date).toLocaleString('pt-BR')}</td><td><button class="btn btn-danger btn-sm" data-id="${e.id}" style="font-size:.7rem;padding:4px 8px">Excluir</button></td>`;
-  tbody.appendChild(tr);
- });
- tbody.querySelectorAll('button').forEach(btn=>{btn.addEventListener('click',()=>{G.Ranking.remove(btn.dataset.id);G.toast('Removido do ranking.');renderAdminRanking()})});
-}
-document.querySelectorAll('.admin-tab').forEach(tab=>{
- tab.addEventListener('click',()=>{
-  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active');
-  const target=tab.dataset.tab;
-  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('admin'+target.charAt(0).toUpperCase()+target.slice(1)).classList.add('active');
- });
-});
-$('userSearch').addEventListener('input',(e)=>renderUserTable(e.target.value));
-$('btnAdminPanel').addEventListener('click',openAdmin);
-$('btnCloseAdmin').addEventListener('click',()=>$('adminOverlay').classList.add('hidden'));
-$('adminOverlay').addEventListener('click',e=>{if(e.target===$('adminOverlay'))$('adminOverlay').classList.add('hidden')});
-$('toggleHuman').addEventListener('change',function(){G.humanAssist=this.checked;const u=G.users[G.user];if(u){u.humanAssist=G.humanAssist;G.saveUsers()}syncSpeedRow();G.toast('Auto '+(this.checked?'ativado':'desativado')+'.');G.broadcastAssist(G.assist)});
-$('assistSpeed').addEventListener('change',function(){G.assistSpeed=this.value;const u=G.users[G.user];if(u){u.assistSpeed=G.assistSpeed;G.saveUsers()}G.toast('Velocidade: '+this.value)});
-$('toggleAssist').addEventListener('change',function(){G.assist=this.checked;const u=G.users[G.user];if(u){u.assist=G.assist;G.saveUsers()}G.toast('Assistente '+(G.assist?'ativado':'desativado')+'.');G.broadcastAssist(G.assist);syncSpeedRow();['cacaAssistBadge','stopAssistBadge','btnCacaHint','btnCacaSolve','btnStopFill'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!G.assist)})});
-$('btnClearStats').addEventListener('click',()=>{const u=G.users[G.user];if(u){u.stats={jogos:0,vitorias:0,recorde:0};G.saveUsers();G.toast('Estatísticas limpas.');G.enterMenu();renderAdmin()}});
-$('btnClearRanking').addEventListener('click',()=>{if(!confirm('Limpar TODO ranking global? Todos perdem posição!'))return;G.Ranking.clear();G.toast('Ranking limpo!');renderAdmin()});
-$('btnExportJSON').addEventListener('click',()=>{const data=G.Ranking.getAll();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ranking-global.json';a.click();URL.revokeObjectURL(url)});
-$('btnExportCSV').addEventListener('click',()=>{const data=G.Ranking.getAll();let csv='id,user,score,game,duration,date,isAdmin\n';data.forEach(e=>{csv+=`${e.id},${e.user},${e.score},${e.game},${e.duration},${new Date(e.date).toISOString()},${e.isAdmin}\n`});const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ranking-global.csv';a.click();URL.revokeObjectURL(url)});
-$('btnFakeData').addEventListener('click',()=>{
- const names=['Ana','Bruno','Carla','Diego','LuanFan','Sertanejo','Maria','João','Topzera','Gamer123'];
- for(let i=0;i<15;i++){const name=names[Math.floor(Math.random()*names.length)]+Math.floor(Math.random()*99);G.Ranking.add(Math.floor(Math.random()*800)+100,Math.random()>0.5?'caca':'stop',{duration:Math.floor(Math.random()*90)});const all=G.Ranking.getAll();all[all.length-1].user=name;G.Ranking.save(all)}
- G.toast('15 testes adicionados!');renderAdmin();
-});
-$('btnExportAll').addEventListener('click',()=>{
- const all={users:G.users,ranking:G.Ranking.getAll(),banned:G.store.get('banned')||[],maintenance:G.store.get('maintenance')||false,exportedAt:Date.now()};
- const blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='backup-completo.json';a.click();URL.revokeObjectURL(url);
-});
-$('btnFactoryReset').addEventListener('click',()=>{
- if(!confirm('⚠️ Apaga TODOS usuários exceto você, ranking e dados!'))return;
- if(!confirm('Tem certeza ABSOLUTA?'))return;
- const me=G.user;const myData=G.users[me];const newUsers={};newUsers[me]=myData;newUsers[me].stats={jogos:0,vitorias:0,recorde:0};
- G.users=newUsers;G.saveUsers();G.Ranking.clear();G.store.set('banned',[]);G.store.set('maintenance',false);
- G.toast('Reset fábrica feito!');renderAdmin();G.enterMenu();
-});
-$('toggleMaint').addEventListener('change',function(){G.store.set('maintenance',this.checked);G.toast(this.checked?'Manutenção ATIVADA - Só ADM':'Manutenção DESATIVADA')});
-$('btnPlayAgain').addEventListener('click',()=>{$('endOverlay').classList.add('hidden');if(G.mode==='online'){G.toast('Peça ao host iniciar.');return}G.startGame()});
-$('btnEndMenu').addEventListener('click',()=>{$('endOverlay').classList.add('hidden');G.closePeer&&G.closePeer();G.show('menuScreen');if(G.enterMenu)G.enterMenu()});
-$('btnEndRanking').addEventListener('click',()=>{$('endOverlay').classList.add('hidden');G.openRanking()});
-G.renderAdmin=renderAdmin;
-})();
-</script>
-<script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').then(reg=>console.log('SW',reg.scope)).catch(err=>console.log('SW fail',err))})}
-let deferredPrompt=null;
-const installBtn=document.getElementById('btnInstallPWA');
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;if(installBtn)installBtn.classList.remove('hidden')});
-if(installBtn){installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;if(outcome==='accepted')G.toast('App instalado! 🎉');deferredPrompt=null;installBtn.classList.add('hidden')})}
-window.addEventListener('appinstalled',()=>{G.toast('Instalado!');if(installBtn)installBtn.classList.add('hidden')});
-</script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</body>
 </html>
