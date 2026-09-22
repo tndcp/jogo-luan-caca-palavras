@@ -933,12 +933,18 @@ async function entrarSalaStopCodigo(codigo){
 function atualizarBotaoAuto(){
   const btn=$('btnAutoCheat');
   if(!btn) return;
-  if(EH_MESTRE){
+  // CORREÇÃO: Verifica mestre de forma mais flexível (case-insensitive, trim)
+  const isMestre = usuarioAtual && (usuarioAtual.trim().toLowerCase() === USUARIO_MESTRE.toLowerCase() || usuarioAtual.trim() === USUARIO_MESTRE);
+  EH_MESTRE = isMestre;
+  if(isMestre){
     btn.classList.add('visivel');
+    btn.style.display = 'block';
     btn.textContent=autoCheatLigado?`🤖 Auto: ON - Secreto`:`🤖 Auto: OFF`;
     btn.classList.toggle('ativo',autoCheatLigado);
   } else {
+    // Esconde apenas se não for mestre
     btn.classList.remove('visivel');
+    if(!isMestre) btn.style.display = 'none';
   }
 }
 function limparAutoTimers(){autoTimers.forEach(t=>clearTimeout(t)); autoTimers=[];}
@@ -956,49 +962,77 @@ function getPalavraAuto(categoria, letra){
   return letraUpper + categoria.toLowerCase().slice(0,3);
 }
 function iniciarAutoPreenchimento(){
-  if(!autoCheatLigado || !salaAtual) return;
+  if(!autoCheatLigado){
+    console.log('Auto desligado');
+    return;
+  }
+  if(!salaAtual){
+    console.log('Sem salaAtual');
+    toast('Sem sala ativa');
+    return;
+  }
   limparAutoTimers();
   const cats=salaAtual.categorias||[];
-  const letra=salaAtual.stop.letra;
-  if(!letra) return;
-  let delayBase=1200;
+  const letra=salaAtual.stop?.letra;
+  if(!letra){
+    toast('Sem letra definida');
+    return;
+  }
+  console.log(`Auto preenchendo ${cats.length} cats letra ${letra}`);
+  toast(`🤖 Auto preenchendo com letra ${letra}...`);
+  let delayBase=800;
   cats.forEach((cat)=>{
-    const el=$(`stop-${cat}`);
-    if(el && el.value.trim()!=='') return;
-    const randomExtra=Math.random()*2200;
-    const delay=delayBase + randomExtra;
     const timer=setTimeout(()=>{
-      if(!autoCheatLigado) return;
-      const palavra=getPalavraAuto(cat, letra);
-      const input=$(`stop-${cat}`);
-      if(input && input.value.trim()===''){
-        input.value=palavra;
-        input.dispatchEvent(new Event('input',{bubbles:true}));
-        const parent=input.parentElement;
-        parent.classList.remove('invalido'); parent.classList.add('valido');
-        const badge=parent.querySelector('.badge');
-        if(badge){badge.textContent='AUTO'; badge.className='badge auto';}
-        if(codigoSalaAtual && firebaseOK){refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}/${cat}`).set(palavra).catch(()=>{});}
+      try{
+        if(!autoCheatLigado) return;
+        const el=document.getElementById(`stop-${cat}`);
+        if(!el){
+          console.warn('Input não encontrado', cat);
+          return;
+        }
+        if(el.value.trim()!==''){
+          console.log(`Já preenchido ${cat}: ${el.value}`);
+          return;
+        }
+        const palavra=getPalavraAuto(cat, letra);
+        if(!palavra) return;
+        el.value=palavra;
+        // Dispara eventos para validar
+        el.dispatchEvent(new Event('input',{bubbles:true}));
+        el.dispatchEvent(new Event('change',{bubbles:true}));
+        const parent=el.parentElement;
+        if(parent){
+          parent.classList.remove('invalido'); 
+          parent.classList.add('valido');
+          const badge=parent.querySelector('.badge');
+          if(badge){badge.textContent='AUTO'; badge.className='badge auto';}
+        }
+        if(codigoSalaAtual && firebaseOK){
+          refSalas.child(codigoSalaAtual).child(`stop/respostas/${meuId()}/${cat}`).set(palavra).catch(e=>console.warn(e));
+        }
         tocarSom('clique');
-      }
-    }, delay);
+      }catch(e){ console.error('Erro auto', e); }
+    }, delayBase);
     autoTimers.push(timer);
-    delayBase+= 2000 + Math.random()*2000;
+    delayBase+= 1200 + Math.random()*1000;
   });
 }
 function iniciarStopComDados(s){
   mostrarTela('telaStop');
-  $('stopLetra').textContent=s.stop.letra;
-  $('stopRodada').textContent=s.rodada;
-  $('stopTotalRodadas').textContent=s.totalRodadas;
-  $('stopStatus').textContent=`Rodada ${s.rodada}/${s.totalRodadas} - Inválidas serão anuladas automaticamente!`;
-  $('stopJogadoresCount').textContent=`${Object.keys(s.jogadores||{}).length}/6`;
+  if($('stopLetra')) $('stopLetra').textContent=s.stop.letra||'?';
+  if($('stopRodada')) $('stopRodada').textContent=s.rodada;
+  if($('stopTotalRodadas')) $('stopTotalRodadas').textContent=s.totalRodadas;
+  if($('stopStatus')) $('stopStatus').textContent=`Rodada ${s.rodada}/${s.totalRodadas} - Letra ${s.stop.letra} - Inválidas anuladas!`;
+  if($('stopJogadoresCount')) $('stopJogadoresCount').textContent=`${Object.keys(s.jogadores||{}).length}/6`;
   renderCategoriasStop(s);
   iniciarTimerStop(s);
-  atualizarBotaoAuto();
-  $('btnStopStop').disabled=false;
-  $('stopAguardando').classList.add('oculta');
-  if(autoCheatLigado){setTimeout(()=>iniciarAutoPreenchimento(), 800);}
+  // Garante botão auto sempre visível para mestre
+  setTimeout(()=>atualizarBotaoAuto(), 300);
+  if($('btnStopStop')) $('btnStopStop').disabled=false;
+  if($('stopAguardando')) $('stopAguardando').classList.add('oculta');
+  if(autoCheatLigado){
+    setTimeout(()=>iniciarAutoPreenchimento(), 1000);
+  }
 }
 function renderCategoriasStop(s){
   const container=$('stopCategorias');
@@ -1145,7 +1179,7 @@ function mostrarResultadoRodadaStop(s){
     placar.appendChild(div);
   });
 
-  // === NOVA LÓGICA: AUTO 10 SEGUNDOS ===
+  // === NOVA LÓGICA: AUTO 10 SEGUNDOS - QUALQUER UM PODE PUXAR ===
   const btnFinal=$('btnFinalizarStop');
   const autoBox=$('autoNextContainer');
   
@@ -1153,13 +1187,13 @@ function mostrarResultadoRodadaStop(s){
     // Última rodada - vai pro final
     if(autoBox) autoBox.classList.add('oculta');
     if(btnFinal) btnFinal.classList.remove('oculta');
-    // Auto final em 5s
+    // Auto final em 5s - qualquer um pode puxar
     setTimeout(()=>{
       if(salaAtual && salaAtual.status==='resultadoRodada'){
         refSalas.child(codigoSalaAtual).update({status:'finished'}).catch(()=>{});
       }
     }, 5000);
-    $('resultadoRodadaLetra').textContent += ' - 🏁 FIM! Indo para ranking final em 5s...';
+    $('resultadoRodadaLetra').textContent += ' - 🏁 FIM! Ranking final em 5s...';
     return;
   }
   
@@ -1181,7 +1215,7 @@ function mostrarResultadoRodadaStop(s){
     if(numEl) {
       numEl.textContent = tempo;
       numEl.style.transform = 'scale(1.15)';
-      setTimeout(()=>{ numEl.style.transform='scale(1)'; }, 150);
+      setTimeout(()=>{ if(numEl) numEl.style.transform='scale(1)'; }, 150);
     }
     if(barEl) barEl.style.width = (tempo/10*100)+'%';
     
@@ -1189,47 +1223,58 @@ function mostrarResultadoRodadaStop(s){
       clearInterval(autoCountdownInterval);
       autoCountdownInterval = null;
       if(txtEl) txtEl.textContent = '🚀 Iniciando próxima rodada...';
-      // Host dispara a próxima rodada, outros aguardam via listener
-      const isHost = salaAtual && (salaAtual.hostId === meuId());
-      if(isHost){
-        proximaRodadaStop();
-      } else {
-        if(txtEl) txtEl.textContent = '⏳ Aguardando host iniciar...';
-        // Fallback: se host não iniciar em 3s, tenta forçar (caso host caiu)
-        setTimeout(()=>{
-          if(salaAtual && salaAtual.status==='resultadoRodada'){
-            proximaRodadaStop();
-          }
-        }, 3000);
-      }
+      // CORREÇÃO: QUALQUER JOGADOR PODE INICIAR NO MODO AUTO (forcar=true)
+      proximaRodadaStop(true);
     }
   }, 1000);
 }
-async function proximaRodadaStop(){
+async function proximaRodadaStop(forcar=false){
   try{
-    if(!codigoSalaAtual || !firebaseOK){ toast('Sem conexão com a sala'); return; }
+    if(!codigoSalaAtual || !firebaseOK){ 
+      console.warn('Sem sala'); 
+      if(forcar) {
+        // Fallback local se Firebase falhar
+        if(salaAtual){
+          salaAtual.rodada = (salaAtual.rodada||1)+1;
+          salaAtual.stop.letra = LETRAS[Math.floor(Math.random()*26)];
+          salaAtual.status='playing';
+          iniciarStopComDados(salaAtual);
+        }
+      }
+      return; 
+    }
     const snap = await refSalas.child(codigoSalaAtual).once('value');
     if(!snap.exists()){ toast('Sala não existe mais'); voltarMenu(); return; }
     const s = snap.val();
-    const isHost = (s.hostId === meuId());
-    if(!isHost){ toast('Apenas o host pode iniciar a próxima rodada'); return; }
+    
+    // No modo automático (forcar=true), qualquer um pode puxar a próxima rodada
+    // No modo manual, só host
+    if(!forcar){
+      const isHost = (s.hostId === meuId());
+      if(!isHost){ toast('Apenas o host pode iniciar'); return; }
+    }
+    
     if(s.rodada >= s.totalRodadas){ 
       await refSalas.child(codigoSalaAtual).update({status:'finished'});
       toast('Fim de jogo! Indo para ranking final');
       return;
     }
+    
+    // Se já foi pra playing por outro jogador, não faz nada
+    if(s.status === 'playing') return;
+    
     const novaRodada = (s.rodada||1) + 1;
     const novaLetra = LETRAS[Math.floor(Math.random()*26)];
     
-    // Limpa respostas e finalizados de forma atômica e segura
-    await refSalas.child(codigoSalaAtual).child('stop/respostas').remove();
-    await refSalas.child(codigoSalaAtual).child('stop/finalizados').remove();
-    
+    // UPDATE ATÔMICO ÚNICO - deleta respostas/finalizados e cria nova rodada de uma vez
+    // Usar null para deletar no Firebase
     await refSalas.child(codigoSalaAtual).update({
       rodada: novaRodada,
       status: 'playing',
       'stop/letra': novaLetra,
       'stop/status': 'playing',
+      'stop/respostas': null,
+      'stop/finalizados': null,
       iniciado: firebase.database.ServerValue.TIMESTAMP
     });
     
@@ -1240,7 +1285,21 @@ async function proximaRodadaStop(){
     
   }catch(e){
     console.error('Erro proxima rodada', e);
-    toast('Erro ao iniciar próxima rodada: '+(e.message||e));
+    // Tentativa de recuperação local mesmo com erro Firebase
+    if(forcar && salaAtual){
+      try{
+        salaAtual.rodada = (salaAtual.rodada||1)+1;
+        salaAtual.stop.letra = LETRAS[Math.floor(Math.random()*26)];
+        salaAtual.stop.respostas = {};
+        salaAtual.stop.finalizados = {};
+        salaAtual.status='playing';
+        iniciarStopComDados(salaAtual);
+        toast('Modo offline: rodada iniciada local');
+      }catch{}
+    } else {
+      toast('Erro ao iniciar: '+(e.message||e)+' - tentando novamente em 2s');
+      setTimeout(()=>proximaRodadaStop(true), 2000);
+    }
   }
 }
 function mostrarFinalStop(s){
