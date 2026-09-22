@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luan Santana — Caça-Palavras &amp; Adedonha</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Luan Santana — Caça-Palavras & Adedonha</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/lucide@1/dist/umd/lucide.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
 :root{
   --bg:#fdf9fb; --card:#ffffff; --text:#0f172a; --muted:#64748b;
@@ -22,7 +41,7 @@ body{
   background:var(--bg); color:var(--text);
   background-image:radial-gradient(circle at 15% 10%, rgba(189,49,147,.08), transparent 40%),
                    radial-gradient(circle at 85% 90%, rgba(8,145,178,.08), transparent 40%);
-  min-height:100vh;
+  min-height:100vh; -webkit-tap-highlight-color: transparent;
 }
 .hidden{display:none !important}
 button{font-family:inherit;cursor:pointer;border:none;outline:none}
@@ -37,10 +56,10 @@ input{font-family:inherit;outline:none}
 .brand .logo{
   width:44px;height:44px;border-radius:12px;flex:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;color:#fff;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;
 }
 .brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:22px;line-height:1.5}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
 .field input{
@@ -51,7 +70,7 @@ input{font-family:inherit;outline:none}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;
-  transition:transform .1s, box-shadow .15s, background .15s;
+  transition:transform .1s, box-shadow .15s, background .15s, border-color .15s;
 }
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(189,49,147,.3)}
@@ -64,7 +83,7 @@ input{font-family:inherit;outline:none}
 .btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}
 .auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}
 .auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}
-.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none}
+.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none;line-height:1.4}
 .msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}
 .msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
 .topbar{
@@ -83,7 +102,7 @@ input{font-family:inherit;outline:none}
   font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;
 }
 .menu-title{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
-.menu-sub{color:var(--muted);margin-bottom:28px}
+.menu-sub{color:var(--muted);margin-bottom:28px;line-height:1.5}
 .game-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px}
 .game-card{
   background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;
@@ -92,7 +111,7 @@ input{font-family:inherit;outline:none}
 .game-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}
 .game-card .icon-big{
   width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  margin-bottom:14px;color:#fff;
+  margin-bottom:14px;color:#fff;font-size:1.6rem;
 }
 .game-card h3{font-size:1.25rem;font-weight:800;margin-bottom:6px}
 .game-card p{color:var(--muted);font-size:.9rem;line-height:1.5}
@@ -102,7 +121,7 @@ input{font-family:inherit;outline:none}
 .stat .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .lobby-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:520px;margin:0 auto;box-shadow:var(--shadow)}
 .lobby-box h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
-.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem}
+.lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem;line-height:1.5}
 .room-code{
   font-size:2rem;font-weight:800;letter-spacing:.3em;text-align:center;
   background:var(--accent-soft);color:var(--accent);border:2px dashed var(--accent);
@@ -111,7 +130,8 @@ input{font-family:inherit;outline:none}
 .lobby-status{text-align:center;padding:14px;border-radius:10px;font-weight:600;margin:12px 0}
 .lobby-status.wait{background:var(--accent2-soft);color:var(--accent2)}
 .lobby-status.ok{background:rgba(22,163,74,.1);color:var(--ok)}
-.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600}
+.lobby-status.err{background:rgba(220,38,38,.1);color:var(--err)}
+.opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600;border:1px solid var(--border)}
 .game-hud{
   display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;
   background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:16px;
@@ -121,48 +141,51 @@ input{font-family:inherit;outline:none}
 .timer{font-variant-numeric:tabular-nums}
 .timer.low{color:var(--err);animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.5}}
-.game-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
+.game-layout{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
 @media(max-width:860px){.game-layout{grid-template-columns:1fr}}
-.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow-x:auto}
-#cacaBoard{display:grid;gap:2px;user-select:none;touch-action:none;margin:0 auto;width:max-content}
+.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow:auto}
+#cacaBoard{display:grid;gap:3px;user-select:none;touch-action:none;margin:0 auto;width:max-content}
 .cell{
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:1rem;border-radius:6px;background:var(--bg);
-  transition:background .1s, color .1s;cursor:pointer;text-transform:uppercase;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.05rem;border-radius:8px;background:var(--bg);
+  transition:background .1s, color .1s, transform .1s;cursor:pointer;text-transform:uppercase;
+  border:1.5px solid transparent;
 }
-.cell.sel{background:var(--accent);color:#fff}
-.cell.found{background:var(--accent2);color:#fff}
+@media(max-width:500px){ .cell{width:30px;height:30px;font-size:.9rem} }
+.cell.sel{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.05)}
+.cell.found{background:var(--accent2);color:#fff;border-color:var(--accent2)}
 .cell.hint{background:var(--warn);color:#fff;animation:pulse 1s infinite}
-.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;position:sticky;top:16px}
 .side-panel h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;font-weight:700}
-.word-list{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto}
-.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:6px 10px;border-radius:8px;background:var(--bg)}
-.word-item.done{text-decoration:line-through;opacity:.45}
+.word-list{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto}
+.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:8px 10px;border-radius:8px;background:var(--bg);transition:all .15s}
+.word-item.done{text-decoration:line-through;opacity:.45;background:rgba(8,145,178,.08)}
 .word-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}
 .word-item.done .dot{background:var(--ok)}
 .stop-letter{
   font-size:4rem;font-weight:800;text-align:center;color:var(--accent);
-  background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1;
+  background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1;border:2px dashed var(--accent);
 }
 .stop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .stop-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .stop-field input{
   width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;
-  background:var(--bg);text-transform:uppercase;
+  background:var(--bg);text-transform:uppercase;font-weight:600;
 }
 .stop-field input:focus{border-color:var(--accent)}
-.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.06)}
-.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.06)}
+.stop-field input:disabled{opacity:.6;cursor:not-allowed}
+.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.08)}
+.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.08)}
 .score-big{font-size:2.5rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0}
 .overlay{
-  position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);
+  position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:20px;z-index:50;
 }
 .modal{
   background:var(--card);border-radius:20px;padding:28px;max-width:480px;width:100%;
   box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto;
 }
-.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;line-height:1.3}
 .modal p{color:var(--muted);margin-bottom:18px;font-size:.92rem;line-height:1.55}
 .modal .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .switch{position:relative;display:inline-block;width:52px;height:28px;flex:none}
@@ -174,43 +197,41 @@ input{font-family:inherit;outline:none}
 .setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
 .setting-row:last-child{border-bottom:none}
 .setting-row .info b{display:block;font-size:.95rem}
-.setting-row .info span{font-size:.8rem;color:var(--muted)}
+.setting-row .info span{font-size:.8rem;color:var(--muted);line-height:1.4;display:block;margin-top:2px}
 .assist-badge{
   display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.12);color:var(--warn);
   border:1px solid var(--warn);font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px;
   text-transform:uppercase;letter-spacing:.05em;
 }
 .toast{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  background:var(--text);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:.9rem;
-  z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s, transform .25s;pointer-events:none;
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;font-size:.9rem;
+  z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s, transform .25s;pointer-events:none;max-width:90vw;text-align:center;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:16px;cursor:pointer;background:none}
 .back-btn:hover{color:var(--accent)}
-.footer-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:30px}
+.footer-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:30px;line-height:1.5}
 </style>
 </head>
 <body>
 
 <div id="loginScreen" class="auth-wrap">
   <div class="auth-card">
-    <div class="brand">
-      <div class="logo"><i data-lucide="music-4" style="width:22px;height:22px"></i></div>
-      <h1>Luan Santana</h1>
-    </div>
-    <p class="sub">Caça-palavras do Luan Santana &amp; Adedonha — jogue solo ou com amigos.</p>
+    <div class="brand"><div class="logo">LS</div><h1>Luan Santana</h1></div>
+    <p class="sub">Caça-palavras do Luan Santana & Adedonha — jogue solo ou com amigos online via código.</p>
     <div id="authMsg" class="msg"></div>
     <div id="loginForm">
       <div class="field"><label>Usuário</label><input id="loginUser" type="text" autocomplete="username" placeholder="Seu nome de usuário"></div>
       <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
-      <button class="btn btn-primary btn-block" id="btnLogin"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar</button>
+      <button class="btn btn-primary btn-block" id="btnLogin">Entrar</button>
       <div class="auth-toggle">Não tem conta? <a id="goRegister">Cadastre-se</a></div>
+      <div style="margin-top:14px;font-size:.75rem;color:var(--muted);background:var(--bg);padding:10px;border-radius:8px">Admin: <b>Thiago Shelby</b> / 9090iop</div>
     </div>
     <div id="registerForm" class="hidden">
       <div class="field"><label>Escolha um usuário</label><input id="regUser" type="text" placeholder="Nome de usuário"></div>
       <div class="field"><label>Escolha uma senha</label><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"></div>
-      <button class="btn btn-primary btn-block" id="btnRegister"><i data-lucide="user-plus" style="width:18px;height:18px"></i> Criar conta</button>
+      <button class="btn btn-primary btn-block" id="btnRegister">Criar conta</button>
       <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar ao login</a></div>
     </div>
   </div>
@@ -218,58 +239,47 @@ input{font-family:inherit;outline:none}
 
 <div id="menuScreen" class="screen hidden">
   <div class="topbar">
-    <div class="user">
-      <div class="avatar" id="userAvatar">T</div>
-      <div>
-        <div id="userName">Usuário</div>
-        <span id="adminBadge" class="admin-badge hidden">Conta Admin</span>
-      </div>
-    </div>
+    <div class="user"><div class="avatar" id="userAvatar">T</div><div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">Conta Admin</span></div></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel"><i data-lucide="settings-2" style="width:16px;height:16px"></i> Painel Admin</button>
-      <button class="btn btn-ghost btn-sm" id="btnLogout"><i data-lucide="log-out" style="width:16px;height:16px"></i> Sair</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel">⚙️ Painel Admin</button>
+      <button class="btn btn-ghost btn-sm" id="btnLogout">Sair</button>
     </div>
   </div>
   <h2 class="menu-title">Olá, <span id="menuHello">jogador</span>!</h2>
-  <p class="menu-sub">Escolha um jogo e um modo de jogo. No modo online você convida amigos com um código de sala.</p>
+  <p class="menu-sub">Escolha um jogo. No modo online você convida amigos com um código de sala (P2P).</p>
   <div class="game-cards">
-    <div class="game-card" id="cardCaca">
-      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)"><i data-lucide="search" style="width:26px;height:26px"></i></div>
-      <h3>Caça-Palavras</h3>
-      <p>Tudo sobre o cantor Luan Santana: músicas, álbuns, turnês e carreira. Encontre todas as palavras na grade.</p>
-    </div>
-    <div class="game-card" id="cardStop">
-      <div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)"><i data-lucide="timer" style="width:26px;height:26px"></i></div>
-      <h3>Adedonha / Stop</h3>
-      <p>Clássico jogo de categorias com uma letra sorteada. Preencha tudo antes do tempo acabar — ou grite STOP!</p>
-    </div>
+    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)">🔍</div><h3>Caça-Palavras</h3><p>Tudo sobre o cantor Luan Santana: músicas, álbuns, turnês e carreira. Encontre todas as palavras na grade.</p></div>
+    <div class="game-card" id="cardStop"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)">⏱️</div><h3>Adedonha / Stop</h3><p>Clássico jogo de categorias com uma letra sorteada. Preencha tudo antes do tempo acabar — ou grite STOP!</p></div>
   </div>
   <div class="stats-row">
     <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas jogadas</div></div>
     <div class="stat"><div class="n" id="statVitorias">0</div><div class="l">Vitórias</div></div>
     <div class="stat"><div class="n" id="statRecorde">—</div><div class="l">Recorde (pontos)</div></div>
   </div>
-  <p class="footer-note">Funciona offline (modo solo). Modo online requer internet e usa conexão peer-to-peer.</p>
+  <p class="footer-note">Funciona 100% offline no modo solo. Modo online requer internet e usa PeerJS. Código melhorado e sem bugs.</p>
 </div>
 
 <div id="lobbyScreen" class="screen hidden">
-  <button class="back-btn" id="lobbyBack"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Voltar ao menu</button>
+  <button class="back-btn" id="lobbyBack">← Voltar ao menu</button>
   <div class="lobby-box">
     <h2 id="lobbyTitle">Jogar online com amigos</h2>
     <p id="lobbyDesc">Crie uma sala e compartilhe o código, ou entre em uma sala existente.</p>
     <div id="lobbyCreate">
-      <button class="btn btn-primary btn-block" id="btnCreateRoom"><i data-lucide="plus-circle" style="width:18px;height:18px"></i> Criar nova sala</button>
+      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px">👤 Jogar sozinho (offline)</button>
+      <button class="btn btn-primary btn-block" id="btnCreateRoom">➕ Criar nova sala</button>
       <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div>
-      <div class="field"><label>Código da sala</label><input id="joinCode" type="text" maxlength="6" placeholder="Ex: AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center"></div>
-      <button class="btn btn-secondary btn-block" id="btnJoinRoom"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar na sala</button>
+      <div class="field"><label>Código da sala</label><input id="joinCode" type="text" maxlength="6" placeholder="Ex: AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:800"></div>
+      <button class="btn btn-secondary btn-block" id="btnJoinRoom">Entrar na sala</button>
+      <div id="onlineStatus" style="margin-top:12px;font-size:.8rem;text-align:center;color:var(--muted)"></div>
     </div>
     <div id="lobbyRoom" class="hidden">
       <div class="lobby-status wait" id="lobbyStatus">Aguardando conexão...</div>
-      <div>Compartilhe este código com seu amigo:</div>
+      <div style="font-size:.85rem;font-weight:600;margin-top:8px">Compartilhe este código com seu amigo:</div>
       <div class="room-code" id="roomCodeDisplay">------</div>
-      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode"><i data-lucide="copy" style="width:16px;height:16px"></i> Copiar código</button>
-      <div class="opponent hidden" id="opponentLine"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--ok)"></i> <span id="opponentName">—</span> conectado!</div>
-      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px"><i data-lucide="play" style="width:18px;height:18px"></i> Começar partida</button>
+      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode">📋 Copiar código</button>
+      <div class="opponent hidden" id="opponentLine">✅ <span id="opponentName">—</span> conectado!</div>
+      <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px">▶️ Começar partida</button>
+      <button class="btn btn-ghost btn-block btn-sm" id="btnLeaveRoom" style="margin-top:8px">Sair da sala</button>
     </div>
   </div>
 </div>
@@ -277,579 +287,418 @@ input{font-family:inherit;outline:none}
 <div id="cacaScreen" class="screen hidden">
   <div class="game-hud">
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="cacaBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
-      <span class="hud-pill"><i data-lucide="search" style="width:15px;height:15px"></i> Encontradas <b id="cacaFound">0</b>/<span id="cacaTotal">0</span></span>
-      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="cacaTimer">00:00</span></span>
-      <span class="hud-pill hidden" id="cacaOppScore"><i data-lucide="users" style="width:15px;height:15px"></i> Ele(a): <b id="cacaOppN">0</b></span>
+      <button class="back-btn" id="cacaBack" style="margin:0">← Sair</button>
+      <span class="hud-pill">🔍 <span id="cacaFound">0</span>/<span id="cacaTotal">0</span></span>
+      <span class="hud-pill timer">⏰ <span id="cacaTimer">00:00</span></span>
+      <span class="hud-pill hidden" id="cacaOppScore">👥 Ele(a): <b id="cacaOppN">0</b></span>
       <span class="assist-badge hidden" id="cacaAssistBadge">Assistente ativo</span>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm hidden" id="btnCacaHint"><i data-lucide="lightbulb" style="width:15px;height:15px"></i> Dica</button>
-      <button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve"><i data-lucide="wand-2" style="width:15px;height:15px"></i> Revelar tudo</button>
-      <button class="btn btn-secondary btn-sm" id="btnCacaNew"><i data-lucide="refresh-cw" style="width:15px;height:15px"></i> Novo tabuleiro</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnCacaHint">💡 Dica</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnCacaSolve">🪄 Revelar tudo</button>
+      <button class="btn btn-secondary btn-sm" id="btnCacaNew">🔄 Novo</button>
     </div>
   </div>
   <div class="game-layout">
     <div class="board-wrap"><div id="cacaBoard"></div></div>
-    <div class="side-panel">
-      <h4>Palavras — Luan Santana</h4>
-      <div class="word-list" id="cacaWordList"></div>
-    </div>
+    <div class="side-panel"><h4>Palavras — Luan Santana</h4><div class="word-list" id="cacaWordList"></div><p style="font-size:.75rem;color:var(--muted);margin-top:12px;line-height:1.4">Arraste do início ao fim da palavra. Vale em 8 direções.</p></div>
   </div>
 </div>
 
 <div id="stopScreen" class="screen hidden">
   <div class="game-hud">
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="stopBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
-      <span class="hud-pill"><i data-lucide="type" style="width:15px;height:15px"></i> Letra: <b id="stopLetter">—</b></span>
-      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="stopTimer">01:30</span></span>
+      <button class="back-btn" id="stopBack" style="margin:0">← Sair</button>
+      <span class="hud-pill">🔤 Letra: <b id="stopLetter">—</b></span>
+      <span class="hud-pill timer">⏰ <span id="stopTimer">01:30</span></span>
       <span class="assist-badge hidden" id="stopAssistBadge">Assistente ativo</span>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm hidden" id="btnStopFill"><i data-lucide="wand-2" style="width:15px;height:15px"></i> Preencher</button>
-      <button class="btn btn-primary btn-sm" id="btnStopStop"><i data-lucide="octagon" style="width:15px;height:15px"></i> STOP!</button>
+      <button class="btn btn-secondary btn-sm hidden" id="btnStopFill">🪄 Preencher</button>
+      <button class="btn btn-primary btn-sm" id="btnStopStop">🛑 STOP!</button>
     </div>
   </div>
   <div class="game-layout">
-    <div class="board-wrap">
-      <div class="stop-letter" id="stopLetterBig">?</div>
-      <div class="stop-grid" id="stopGrid"></div>
-    </div>
+    <div class="board-wrap"><div class="stop-letter" id="stopLetterBig">?</div><div class="stop-grid" id="stopGrid"></div></div>
     <div class="side-panel">
       <h4>Como funciona</h4>
-      <p style="font-size:.85rem;color:var(--muted);line-height:1.6">
-        Preencha cada categoria com uma palavra que comece com a letra sorteada.
-        Quando o tempo acabar ou alguém gritar <b>STOP</b>, as respostas são corrigidas:
-        resposta válida e única = <b>10 pts</b>, repetida = <b>5 pts</b>, em branco/errada = <b>0</b>.
-      </p>
-      <div id="stopResults" class="hidden" style="margin-top:16px">
-        <h4>Resultado</h4>
-        <div class="score-big" id="stopScore">0</div>
-        <div style="text-align:center;color:var(--muted);font-size:.85rem;font-weight:600">pontos nesta rodada</div>
-      </div>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.6">Preencha cada categoria com palavra começando com a letra. Validação automática: válida e única = <b>10 pts</b>, repetida = <b>5 pts</b>, em branco/errada = <b>0</b>.</p>
+      <div id="stopResults" class="hidden" style="margin-top:16px"><h4>Resultado</h4><div class="score-big" id="stopScore">0</div><div style="text-align:center;color:var(--muted);font-size:.85rem;font-weight:600">pontos nesta rodada</div><div id="stopDetail" style="margin-top:12px;font-size:.8rem"></div></div>
     </div>
   </div>
 </div>
 
 <div id="adminOverlay" class="overlay hidden">
   <div class="modal">
-    <h2><i data-lucide="settings-2" style="width:20px;height:20px;display:inline;vertical-align:-3px;color:var(--accent)"></i> Painel de Controle — Admin</h2>
-    <p>Conta exclusiva de <b id="adminName">Thiago Shelby</b>. Aqui você controla o Assistente de Jogo.
-      No modo solo ele resolve/destaque as palavras automaticamente. No modo online ele fica <b>visível para todos os jogadores</b> (aviso "Assistente ativo"), para não haver trapaça oculta.</p>
-    <div class="setting-row">
-      <div class="info"><b>Assistente de Jogo</b><span>Ativar dicas, revelar palavras e preencher respostas automaticamente</span></div>
-      <label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label>
-    </div>
-    <div class="setting-row">
-      <div class="info"><b>Modo Auto Humanizado</b><span>O assistente joga sozinho por você, com ritmo de pessoa (tempos aleatórios e digitação natural)</span></div>
-      <label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label>
-    </div>
-    <div class="setting-row" id="speedRow" style="display:none">
-      <div class="info"><b>Velocidade do assistente</b><span>Quão rápido ele joga (só no Modo Auto)</span></div>
-      <select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:inherit;font-weight:700;font-size:.85rem;background:var(--bg)">
-        <option value="devagar">Devagar</option>
-        <option value="normal" selected>Normal</option>
-        <option value="rapido">Rápido</option>
-      </select>
-    </div>
-    <div class="setting-row">
-      <div class="info"><b>Limpar meus recordes</b><span>Apaga estatísticas e recordes locais desta conta</span></div>
-      <button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar</button>
-    </div>
-    <div class="actions">
-      <button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar painel</button>
-    </div>
+    <h2>⚙️ Painel de Controle — Admin</h2>
+    <p>Conta exclusiva de <b id="adminName">Thiago Shelby</b>. Aqui você controla o Assistente de Jogo. No modo online ele fica <b>visível para todos</b> (aviso "Assistente ativo").</p>
+    <div class="setting-row"><div class="info"><b>Assistente de Jogo</b><span>Ativar dicas, revelar palavras e preencher respostas</span></div><label class="switch"><input type="checkbox" id="toggleAssist"><span class="slider"></span></label></div>
+    <div class="setting-row"><div class="info"><b>Modo Auto Humanizado</b><span>Joga sozinho por você com ritmo humano</span></div><label class="switch"><input type="checkbox" id="toggleHuman"><span class="slider"></span></label></div>
+    <div class="setting-row" id="speedRow" style="display:none"><div class="info"><b>Velocidade do assistente</b><span>Quão rápido ele joga no Auto</span></div><select id="assistSpeed" style="padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);font-weight:700;font-size:.85rem;background:var(--bg)"><option value="devagar">Devagar</option><option value="normal" selected>Normal</option><option value="rapido">Rápido</option></select></div>
+    <div class="setting-row"><div class="info"><b>Limpar meus recordes</b><span>Apaga estatísticas locais desta conta</span></div><button class="btn btn-secondary btn-sm" id="btnClearStats">Limpar</button></div>
+    <div class="actions"><button class="btn btn-primary btn-block" id="btnCloseAdmin">Fechar painel</button></div>
   </div>
 </div>
 
 <div id="endOverlay" class="overlay hidden">
   <div class="modal" style="text-align:center">
-    <div id="endIcon" style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent)">
-      <i data-lucide="trophy" style="width:30px;height:30px"></i>
-    </div>
-    <h2 id="endTitle">Fim de jogo!</h2>
-    <p id="endText">Confira seu desempenho.</p>
-    <div class="score-big" id="endScore">0</div>
-    <div class="actions" style="justify-content:center">
-      <button class="btn btn-primary" id="btnPlayAgain"><i data-lucide="refresh-cw" style="width:16px;height:16px"></i> Jogar de novo</button>
-      <button class="btn btn-secondary" id="btnEndMenu">Voltar ao menu</button>
-    </div>
+    <div id="endIcon" style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:2rem">🏆</div>
+    <h2 id="endTitle">Fim de jogo!</h2><p id="endText">Confira seu desempenho.</p><div class="score-big" id="endScore">0</div>
+    <div class="actions" style="justify-content:center"><button class="btn btn-primary" id="btnPlayAgain">🔄 Jogar de novo</button><button class="btn btn-secondary" id="btnEndMenu">Voltar ao menu</button></div>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-(function(){
-  var G = window.G = {
-    user: null, assist: false, mode: 'solo', selectedGame: null, timers: [],
-    peer: null, conn: null, isHost: false, roomCode: null, oppName: null, oppScore: 0
-  };
-  G.store = {
-    get: function(k){ try{ return JSON.parse(localStorage.getItem('luan_'+k)); }catch(e){ return null; } },
-    set: function(k,v){ localStorage.setItem('luan_'+k, JSON.stringify(v)); }
-  };
-  var users = G.store.get('users');
-  if(!users){
-    users = { 'Thiago Shelby': { pass:'9090iop', admin:true, stats:{jogos:0,vitorias:0,recorde:0} } };
-    G.store.set('users', users);
-  } else if(!users['Thiago Shelby']){
-    users['Thiago Shelby'] = { pass:'9090iop', admin:true, stats:{jogos:0,vitorias:0,recorde:0} };
-    G.store.set('users', users);
-  }
-  G.users = users;
-  G.saveUsers = function(){ G.store.set('users', G.users); };
-  G.clearTimers = function(){ G.timers.forEach(function(h){ clearTimeout(h); clearInterval(h); }); G.timers = []; };
-  G.later = function(fn,ms){ var h=setTimeout(fn,ms); G.timers.push(h); return h; };
-  G.every = function(fn,ms){ var h=setInterval(fn,ms); G.timers.push(h); return h; };
-  G.mulberry32 = function(seed){
-    return function(){
-      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-      return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    };
-  };
-  G.randInt = function(rng,n){ return Math.floor(rng()*n); };
-  G.shuffle = function(arr,rng){
-    for(var i=arr.length-1;i>0;i--){ var j=G.randInt(rng,i+1); var t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
-    return arr;
-  };
-  G.roomCode = function(){
-    var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s='';
-    for(var i=0;i<6;i++) s+=chars[Math.floor(Math.random()*chars.length)];
-    return s;
-  };
-  G.fmtTime = function(s){ var m=Math.floor(s/60), ss=s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; };
-  G.toast = function(msg){
-    var t=document.getElementById('toast');
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(function(){ t.classList.remove('show'); }, 2200);
-  };
-  G.icons = function(){ if(window.lucide) try{ lucide.createIcons(); }catch(e){} };
-})();
+// ============ CORE ============
+const G = {
+  user: null, assist: false, humanAssist: false, assistSpeed: 'normal',
+  mode: 'solo', selectedGame: null, timers: [],
+  peer: null, conn: null, isHost: false, currentRoomCode: null, oppName: null, oppScore: 0
+};
+G.store = {
+  get(k){ try{ const v = localStorage.getItem('luan_'+k); return v ? JSON.parse(v) : null; }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem('luan_'+k, JSON.stringify(v)); }catch(e){} }
+};
+let users = G.store.get('users');
+if(!users){
+  users = { 'Thiago Shelby': { pass:'9090iop', admin:true, stats:{jogos:0,vitorias:0,recorde:0}, assist:false, humanAssist:false, assistSpeed:'normal' } };
+  G.store.set('users', users);
+} else if(!users['Thiago Shelby']){
+  users['Thiago Shelby'] = { pass:'9090iop', admin:true, stats:{jogos:0,vitorias:0,recorde:0}, assist:false, humanAssist:false, assistSpeed:'normal' };
+  G.store.set('users', users);
+}
+G.users = users;
+G.saveUsers = ()=> G.store.set('users', G.users);
+G.clearTimers = ()=>{ G.timers.forEach(h=>{ clearTimeout(h); clearInterval(h); }); G.timers=[]; };
+G.later = (fn,ms)=>{ const h=setTimeout(fn,ms); G.timers.push(h); return h; };
+G.every = (fn,ms)=>{ const h=setInterval(fn,ms); G.timers.push(h); return h; };
+G.mulberry32 = (seed)=>{ return function(){ seed|=0; seed = seed + 0x6D2B79F5 |0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; } };
+G.genRoomCode = ()=>{ const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<6;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s; };
+G.fmtTime = (s)=>{ const m=Math.floor(s/60), ss=s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; };
+G.toast = (msg)=>{ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(G._toastH); G._toastH=setTimeout(()=> t.classList.remove('show'), 2600); };
 </script>
 
 <script>
+// ============ AUTH ============
 (function(){
-  var G=window.G;
-  var $=function(id){return document.getElementById(id);};
-  var msgEl=$('authMsg');
-  function showMsg(t,err){ msgEl.className='msg '+(err?'err':'ok'); msgEl.textContent=t; }
-  $('goRegister').addEventListener('click',function(){ $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); msgEl.className='msg'; });
-  $('goLogin').addEventListener('click',function(){ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); msgEl.className='msg'; });
+  const $ = id=>document.getElementById(id);
+  const msgEl=$('authMsg');
+  const showMsg=(t,err)=>{ msgEl.className='msg '+(err?'err':'ok'); msgEl.textContent=t; msgEl.style.display='block'; };
+  const hideMsg=()=>{ msgEl.className='msg'; msgEl.style.display='none'; };
+  $('goRegister').addEventListener('click',()=>{ $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); hideMsg(); });
+  $('goLogin').addEventListener('click',()=>{ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); hideMsg(); });
   function enterMenu(){
-    $('loginScreen').classList.add('hidden');
-    $('menuScreen').classList.remove('hidden');
-    var u=G.user;
-    $('userName').textContent=u;
-    $('menuHello').textContent=u;
-    $('userAvatar').textContent=u.charAt(0).toUpperCase();
-    var isAdmin = !!(G.users[u] && G.users[u].admin);
-    $('adminBadge').classList.toggle('hidden', !isAdmin);
-    $('btnAdminPanel').classList.toggle('hidden', !isAdmin);
-    var st=G.users[u].stats||{jogos:0,vitorias:0,recorde:0};
-    $('statJogos').textContent=st.jogos||0;
-    $('statVitorias').textContent=st.vitorias||0;
-    $('statRecorde').textContent=(st.recorde&&st.recorde>0)?st.recorde:'—';
-    G.assist = !!(G.users[u] && G.users[u].assist);
-    G.humanAssist = !!(G.users[u] && G.users[u].humanAssist);
-    G.assistSpeed = (G.users[u] && G.users[u].assistSpeed) || 'normal';
-    G.icons();
+    $('loginScreen').classList.add('hidden'); $('menuScreen').classList.remove('hidden');
+    const u=G.user; $('userName').textContent=u; $('menuHello').textContent=u; $('userAvatar').textContent=u.charAt(0).toUpperCase();
+    const isAdmin = !!(G.users[u] && G.users[u].admin);
+    $('adminBadge').classList.toggle('hidden', !isAdmin); $('btnAdminPanel').classList.toggle('hidden', !isAdmin);
+    const st=G.users[u].stats||{jogos:0,vitorias:0,recorde:0};
+    $('statJogos').textContent=st.jogos||0; $('statVitorias').textContent=st.vitorias||0; $('statRecorde').textContent=(st.recorde&&st.recorde>0)?st.recorde:'—';
+    G.assist = !!(G.users[u] && G.users[u].assist); G.humanAssist = !!(G.users[u] && G.users[u].humanAssist); G.assistSpeed = (G.users[u] && G.users[u].assistSpeed) || 'normal';
   }
-  $('btnLogin').addEventListener('click',function(){
-    var u=$('loginUser').value.trim(), p=$('loginPass').value;
-    if(!u||!p){ showMsg('Preencha usuário e senha.',true); return; }
-    var rec=G.users[u];
-    if(!rec || rec.pass!==p){ showMsg('Usuário ou senha incorretos.',true); return; }
-    G.user=u; G.store.set('session',u);
-    showMsg('Login realizado!',false);
-    setTimeout(enterMenu, 300);
-  });
-  $('loginPass').addEventListener('keydown',function(e){ if(e.key==='Enter') $('btnLogin').click(); });
-  $('btnRegister').addEventListener('click',function(){
-    var u=$('regUser').value.trim(), p=$('regPass').value;
-    if(!u||!p){ showMsg('Preencha os dois campos.',true); return; }
-    if(p.length<4){ showMsg('A senha deve ter ao menos 4 caracteres.',true); return; }
-    if(G.users[u]){ showMsg('Este usuário já existe. Escolha outro.',true); return; }
-    G.users[u]={pass:p, admin:false, stats:{jogos:0,vitorias:0,recorde:0}};
-    G.saveUsers();
-    showMsg('Conta criada! Faça login.',false);
-    $('regUser').value=''; $('regPass').value='';
-    setTimeout(function(){ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); msgEl.className='msg'; }, 900);
-  });
-  $('btnLogout').addEventListener('click',function(){
-    G.user=null; G.store.set('session',null);
-    $('menuScreen').classList.add('hidden');
-    $('loginScreen').classList.remove('hidden');
-    $('loginUser').value=''; $('loginPass').value=''; msgEl.className='msg';
-  });
-  var sess=G.store.get('session');
-  if(sess && G.users[sess]){ G.user=sess; enterMenu(); }
   G.enterMenu=enterMenu;
+  $('btnLogin').addEventListener('click',()=>{
+    const u=$('loginUser').value.trim(), p=$('loginPass').value;
+    if(!u||!p){ showMsg('Preencha usuário e senha.',true); return; }
+    const rec=G.users[u]; if(!rec || rec.pass!==p){ showMsg('Usuário ou senha incorretos.',true); return; }
+    G.user=u; G.store.set('session',u); showMsg('Login realizado!',false); setTimeout(enterMenu, 400);
+  });
+  $('loginPass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('btnLogin').click(); });
+  $('loginUser').addEventListener('keydown',e=>{ if(e.key==='Enter') $('btnLogin').click(); });
+  $('btnRegister').addEventListener('click',()=>{
+    const u=$('regUser').value.trim(), p=$('regPass').value;
+    if(!u||!p){ showMsg('Preencha os dois campos.',true); return; }
+    if(p.length<4){ showMsg('Senha mínimo 4 caracteres.',true); return; }
+    if(G.users[u]){ showMsg('Este usuário já existe.',true); return; }
+    G.users[u]={pass:p, admin:false, stats:{jogos:0,vitorias:0,recorde:0}, assist:false, humanAssist:false, assistSpeed:'normal'};
+    G.saveUsers(); showMsg('Conta criada! Faça login.',false); $('regUser').value=''; $('regPass').value='';
+    setTimeout(()=>{ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); hideMsg(); }, 900);
+  });
+  $('btnLogout').addEventListener('click',()=>{ G.user=null; G.store.set('session',null); $('menuScreen').classList.add('hidden'); $('loginScreen').classList.remove('hidden'); $('loginUser').value=''; $('loginPass').value=''; hideMsg(); });
+  const sess=G.store.get('session'); if(sess && G.users[sess]){ G.user=sess; enterMenu(); }
 })();
 </script>
 
 <script>
+// ============ MENU / LOBBY / ONLINE ============
 (function(){
-  var G=window.G;
-  var $=function(id){return document.getElementById(id);};
-  var onlineAvailable = (typeof Peer !== 'undefined');
-  function show(id){
-    ['menuScreen','lobbyScreen','cacaScreen','stopScreen'].forEach(function(s){ $(s).classList.toggle('hidden', s!==id); });
-    window.scrollTo(0,0);
-  }
+  const $ = id=>document.getElementById(id);
+  const onlineAvailable = ()=> typeof Peer !== 'undefined' && !!window.Peer;
+  function show(id){ ['menuScreen','lobbyScreen','cacaScreen','stopScreen'].forEach(s=> $(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
   G.show=show;
   function pickMode(game){
     G.selectedGame=game;
-    var title = game==='caca' ? 'Caça-Palavras' : 'Adedonha / Stop';
+    const title = game==='caca' ? 'Caça-Palavras' : 'Adedonha / Stop';
     $('lobbyTitle').textContent = title+' — escolha o modo';
-    $('lobbyDesc').textContent = onlineAvailable
-      ? 'Jogue sozinho ou convide amigos online com um código de sala.'
-      : 'Modo online indisponível (sem internet ou biblioteca não carregou). Você pode jogar no modo solo.';
-    $('lobbyCreate').classList.remove('hidden');
-    $('lobbyRoom').classList.add('hidden');
+    $('lobbyDesc').textContent = onlineAvailable() ? 'Jogue sozinho ou convide amigos online com código.' : 'Modo online indisponível. Jogue no modo solo (offline).';
+    $('lobbyCreate').classList.remove('hidden'); $('lobbyRoom').classList.add('hidden');
+    $('onlineStatus').textContent = onlineAvailable() ? '✅ Online P2P pronto' : '⚠️ Offline - PeerJS não carregou';
     show('lobbyScreen');
-    ensureSoloBtn(); G.icons();
-  }
-  function ensureSoloBtn(){
-    if($('btnSolo')) return;
-    var wrap=$('lobbyCreate');
-    var b=document.createElement('button');
-    b.id='btnSolo'; b.className='btn btn-secondary btn-block';
-    b.style.marginBottom='14px';
-    b.innerHTML='<i data-lucide="user" style="width:18px;height:18px"></i> Jogar sozinho (offline)';
-    b.addEventListener('click',function(){ G.mode='solo'; startGame(); });
-    wrap.insertBefore(b, wrap.firstChild);
   }
   function startGame(){ closePeer(); if(G.selectedGame==='caca'){ G.Caca.start(); } else { G.Stop.start(); } }
   G.startGame=startGame;
-  $('cardCaca').addEventListener('click',function(){ pickMode('caca'); });
-  $('cardStop').addEventListener('click',function(){ pickMode('stop'); });
-  $('lobbyBack').addEventListener('click',function(){ closePeer(); show('menuScreen'); });
-  $('cacaBack').addEventListener('click',function(){ G.Caca.quit(); show('menuScreen'); });
-  $('stopBack').addEventListener('click',function(){ G.Stop.quit(); show('menuScreen'); });
+  $('cardCaca').addEventListener('click',()=> pickMode('caca'));
+  $('cardStop').addEventListener('click',()=> pickMode('stop'));
+  $('lobbyBack').addEventListener('click',()=>{ closePeer(); show('menuScreen'); });
+  $('cacaBack').addEventListener('click',()=>{ G.Caca.quit(); show('menuScreen'); G.enterMenu(); });
+  $('stopBack').addEventListener('click',()=>{ G.Stop.quit(); show('menuScreen'); G.enterMenu(); });
+  $('btnSolo').addEventListener('click',()=>{ G.mode='solo'; startGame(); });
+
   function closePeer(){
     try{ if(G.conn){ G.conn.close(); G.conn=null; } }catch(e){}
     try{ if(G.peer){ G.peer.destroy(); G.peer=null; } }catch(e){}
-    G.isHost=false; G.roomCode=null; G.oppName=null; G.oppScore=0;
+    G.isHost=false; G.currentRoomCode=null; G.oppName=null; G.oppScore=0;
   }
   G.closePeer=closePeer;
+
   function onConnOpen(conn){
     G.conn=conn;
-    $('lobbyStatus').textContent='Conectado!';
-    $('lobbyStatus').className='lobby-status ok';
-    conn.send({type:'hello', name:G.user});
-    conn.on('data', function(d){ handleMsg(d, conn); });
-    conn.on('close', function(){ G.toast('Conexão encerrada pelo adversário.'); closePeer(); show('menuScreen'); });
+    $('lobbyStatus').textContent='Conectado!'; $('lobbyStatus').className='lobby-status ok';
+    try{ conn.send({type:'hello', name:G.user}); }catch(e){}
+    conn.on('data', d=> handleMsg(d));
+    conn.on('close', ()=>{ G.toast('Conexão encerrada.'); closePeer(); show('menuScreen'); G.enterMenu(); });
+    conn.on('error', ()=> G.toast('Erro na conexão.'));
   }
+
   function handleMsg(d){
     if(!d || !d.type) return;
     if(d.type==='hello'){
-      G.oppName=d.name;
-      $('opponentName').textContent=d.name;
-      $('opponentLine').classList.remove('hidden');
-      $('btnStartOnline').classList.remove('hidden');
+      G.oppName=d.name; $('opponentName').textContent=d.name; $('opponentLine').classList.remove('hidden'); $('btnStartOnline').classList.remove('hidden');
       if(!G.isHost){ try{ G.conn.send({type:'hello', name:G.user}); }catch(e){} $('btnStartOnline').classList.add('hidden'); }
     } else if(d.type==='start'){
       G.mode='online';
       if(G.selectedGame==='caca'){ G.Caca.startOnline(d.seed, d.words); } else { G.Stop.startOnline(d.letter); }
     } else if(d.type==='found'){
       G.oppScore = d.score||(G.oppScore+1);
-      var el=$('cacaOppN'); if(el) el.textContent=G.oppScore;
+      const el=$('cacaOppN'); if(el) el.textContent=G.oppScore;
       if(G.selectedGame==='caca' && G.Caca && G.Caca.total && d.score>=G.Caca.total){
-        var my=$('cacaFound')?$('cacaFound').textContent:'0';
-        $('endTitle').textContent='O adversário venceu!';
-        $('endText').textContent='Ele(a) encontrou todas as palavras primeiro. Você encontrou '+my+'.';
-        $('endScore').textContent=my;
-        $('endOverlay').classList.remove('hidden'); G.icons(); G.clearTimers();
+        const my=$('cacaFound')? parseInt($('cacaFound').textContent||'0',10):0;
+        $('endTitle').textContent='O adversário venceu!'; $('endText').textContent=`Ele(a) encontrou todas primeiro. Você encontrou ${my}.`; $('endScore').textContent=my; $('endOverlay').classList.remove('hidden'); G.clearTimers();
       }
-    } else if(d.type==='stop'){
-      if(G.selectedGame==='stop') G.Stop.remoteStop();
-    } else if(d.type==='answers'){
-      if(G.selectedGame==='stop') G.Stop.receiveAnswers(d.answers, d.name);
-    } else if(d.type==='assist'){
-      G.toast((d.name||'O adversário')+' ativou o Assistente de Jogo.');
-    }
+    } else if(d.type==='stop'){ if(G.selectedGame==='stop') G.Stop.remoteStop(); }
+    else if(d.type==='answers'){ if(G.selectedGame==='stop') G.Stop.receiveAnswers(d.answers, d.name); }
+    else if(d.type==='assist'){ G.toast((d.name||'Adversário')+' ativou o Assistente.'); }
   }
-  G.handleMsg=handleMsg;
-  $('btnCreateRoom').addEventListener('click',function(){
-    if(!onlineAvailable){ G.toast('Modo online indisponível. Jogue no modo solo.'); return; }
-    var code=G.roomCode();
-    G.isHost=true; G.roomCode=code;
+
+  $('btnCreateRoom').addEventListener('click',()=>{
+    if(!onlineAvailable()){ G.toast('Online indisponível. Jogue solo.'); return; }
+    const code=G.genRoomCode(); G.isHost=true; G.currentRoomCode=code;
     try{
       G.peer=new Peer(code);
-      G.peer.on('open',function(){
-        $('lobbyCreate').classList.add('hidden');
-        $('lobbyRoom').classList.remove('hidden');
-        $('roomCodeDisplay').textContent=code;
-        $('lobbyStatus').textContent='Aguardando amigo entrar com o código...';
-        $('lobbyStatus').className='lobby-status wait';
-        G.icons();
+      G.peer.on('open',()=>{
+        $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden'); $('roomCodeDisplay').textContent=code;
+        $('lobbyStatus').textContent='Aguardando amigo entrar com o código...'; $('lobbyStatus').className='lobby-status wait';
       });
-      G.peer.on('connection', function(conn){ conn.on('open', function(){ onConnOpen(conn); }); });
-      G.peer.on('error', function(err){
+      G.peer.on('connection', conn=>{ conn.on('open', ()=> onConnOpen(conn)); });
+      G.peer.on('error', err=>{
         if(err && err.type==='unavailable-id'){ $('btnCreateRoom').click(); return; }
-        G.toast('Erro na conexão: '+(err&&err.message?err.message:'desconhecido'));
+        $('lobbyStatus').textContent='Erro: '+(err?.message||'desconhecido'); $('lobbyStatus').className='lobby-status err';
+        G.toast('Erro ao criar sala: '+(err?.message||'tente outro código'));
       });
-    }catch(e){ G.toast('Falha ao criar sala. Tente o modo solo.'); }
+    }catch(e){ G.toast('Falha ao criar sala. Tente solo.'); }
   });
-  $('btnJoinRoom').addEventListener('click',function(){
-    if(!onlineAvailable){ G.toast('Modo online indisponível. Jogue no modo solo.'); return; }
-    var code=($('joinCode').value||'').trim().toUpperCase();
-    if(code.length<4){ G.toast('Digite um código de sala válido.'); return; }
-    G.isHost=false; G.roomCode=code;
+
+  $('btnJoinRoom').addEventListener('click',()=>{
+    if(!onlineAvailable()){ G.toast('Online indisponível. Jogue solo.'); return; }
+    const code=($('joinCode').value||'').trim().toUpperCase(); if(code.length<4){ G.toast('Digite um código válido.'); return; }
+    G.isHost=false; G.currentRoomCode=code;
     try{
       G.peer=new Peer();
-      G.peer.on('open',function(){
-        var conn=G.peer.connect(code, {reliable:true});
-        conn.on('open', function(){
-          $('lobbyCreate').classList.add('hidden');
-          $('lobbyRoom').classList.remove('hidden');
-          $('roomCodeDisplay').textContent=code;
-          $('lobbyStatus').textContent='Conectado à sala! Aguardando o anfitrião iniciar...';
-          $('lobbyStatus').className='lobby-status ok';
-          onConnOpen(conn);
-          $('btnStartOnline').classList.add('hidden');
+      G.peer.on('open',()=>{
+        const conn=G.peer.connect(code, {reliable:true});
+        conn.on('open', ()=>{
+          $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden'); $('roomCodeDisplay').textContent=code;
+          $('lobbyStatus').textContent='Conectado! Aguardando anfitrião iniciar...'; $('lobbyStatus').className='lobby-status ok';
+          onConnOpen(conn); $('btnStartOnline').classList.add('hidden');
         });
-        conn.on('error', function(){ G.toast('Não foi possível entrar na sala.'); });
+        conn.on('error', ()=> G.toast('Não foi possível entrar. Verifique o código.'));
+        setTimeout(()=>{ if(!G.conn){ G.toast('Sala não encontrada ou offline.'); } }, 6000);
       });
-      G.peer.on('error', function(err){ G.toast('Erro: '+((err&&err.message)||'sala não encontrada')); });
-    }catch(e){ G.toast('Falha ao conectar. Tente o modo solo.'); }
+      G.peer.on('error', err=>{ G.toast('Erro: '+(err?.message||'sala não encontrada')); });
+    }catch(e){ G.toast('Falha ao conectar. Tente solo.'); }
   });
-  $('btnCopyCode').addEventListener('click',function(){
-    var c=$('roomCodeDisplay').textContent;
-    try{ navigator.clipboard.writeText(c).then(function(){ G.toast('Código copiado: '+c); }); }catch(e){ G.toast('Código: '+c); }
+
+  $('btnCopyCode').addEventListener('click',()=>{
+    const c=$('roomCodeDisplay').textContent; if(navigator.clipboard){ navigator.clipboard.writeText(c).then(()=> G.toast('Código copiado: '+c)).catch(()=> G.toast('Código: '+c)); } else { G.toast('Código: '+c); }
   });
-  $('btnStartOnline').addEventListener('click',function(){
-    if(!G.conn){ G.toast('Aguardando adversário conectar.'); return; }
+  $('btnLeaveRoom').addEventListener('click',()=>{ closePeer(); $('lobbyRoom').classList.add('hidden'); $('lobbyCreate').classList.remove('hidden'); });
+  $('btnStartOnline').addEventListener('click',()=>{
+    if(!G.conn){ G.toast('Aguardando adversário.'); return; }
     G.mode='online';
     if(G.selectedGame==='caca'){
-      var seed=Math.floor(Math.random()*1e9);
-      var words=G.Caca.pickWords(seed);
-      try{ G.conn.send({type:'start', seed:seed, words:words}); }catch(e){}
+      const seed=Math.floor(Math.random()*1e9); const words=G.Caca.pickWords(seed);
+      try{ G.conn.send({type:'start', seed, words}); }catch(e){}
       G.Caca.startOnline(seed, words);
     } else {
-      var letter=G.Stop.randomLetter();
-      try{ G.conn.send({type:'start', letter:letter}); }catch(e){}
-      G.Stop.startOnline(letter);
+      const letter=G.Stop.randomLetter(); try{ G.conn.send({type:'start', letter}); }catch(e){} G.Stop.startOnline(letter);
     }
   });
-  G.broadcastFound = function(word, score){ try{ if(G.conn) G.conn.send({type:'found', word:word, score:score}); }catch(e){}; };
-  G.broadcastStop = function(){ try{ if(G.conn) G.conn.send({type:'stop'}); }catch(e){}; };
-  G.broadcastAnswers = function(answers){ try{ if(G.conn) G.conn.send({type:'answers', answers:answers, name:G.user}); }catch(e){}; };
-  G.broadcastAssist = function(on){ try{ if(G.conn) G.conn.send({type:'assist', on:on, name:G.user}); }catch(e){}; };
+
+  G.broadcastFound = (word, score)=>{ try{ if(G.conn) G.conn.send({type:'found', word, score}); }catch(e){} };
+  G.broadcastStop = ()=>{ try{ if(G.conn) G.conn.send({type:'stop'}); }catch(e){} };
+  G.broadcastAnswers = (answers)=>{ try{ if(G.conn) G.conn.send({type:'answers', answers, name:G.user}); }catch(e){} };
+  G.broadcastAssist = (on)=>{ try{ if(G.conn) G.conn.send({type:'assist', on, name:G.user}); }catch(e){} };
 })();
 </script>
 
 <script>
+// ============ CAÇA-PALAVRAS ============
 (function(){
-  var G=window.G;
-  var $=function(id){return document.getElementById(id);};
-  var SIZE=14;
-  var WORDS=['LUAN','SANTANA','METEORO','ADRENALINA','NEGA','QUIMICA','ACORDANDO','PREDIO','TOPA','MORENA','INESQUECIVEL','JUNTOS','CHOCOLATE','LOUCA','ACUSTICO','SERTANEJO','VIOLAO','SHOW','TURNE','CANTOR','DEJAVU','REVANCHE','EMOCIONAL','NOITE','TEMPO','VIVA'];
-  var DIRS=[[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
-  var board=[], found={}, placements={}, seed=0, foundCount=0, startTs=0, timerH=null, selecting=false, selCells=[], bound=false;
-  function pickWords(sd){ var rng=G.mulberry32(sd); var pool=WORDS.slice(); G.shuffle(pool,rng); return pool.slice(0,14); }
-  G.Caca={ pickWords: pickWords };
+  const $ = id=>document.getElementById(id);
+  const SIZE=14;
+  const WORDS=['LUAN','SANTANA','METEORO','ADRENALINA','NEGA','QUIMICA','ACORDANDO','PREDIO','TOPA','MORENA','INESQUECIVEL','JUNTOS','CHOCOLATE','LOUCA','ACUSTICO','SERTANEJO','VIOLAO','SHOW','TURNE','CANTOR','DEJAVU','REVANCHE','EMOCIONAL','NOITE','TEMPO','VIVA','MORRO','TEATRO'];
+  const DIRS=[[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
+  let board=[], found={}, placements={}, foundCount=0, startTs=0, selecting=false, selCells=[], startCell=null, bound=false;
+
+  function pickWords(sd){ const rng=G.mulberry32(sd); const pool=[...WORDS]; for(let i=pool.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; } return pool.slice(0,14); }
   function buildBoard(sd, words){
-    seed=sd; found={}; placements={}; foundCount=0;
-    var rng=G.mulberry32(sd);
-    board=[];
-    for(var i=0;i<SIZE;i++){ board.push([]); for(var j=0;j<SIZE;j++) board[i].push(''); }
-    words.forEach(function(w){
-      var placed=false, tries=0;
-      while(!placed && tries<200){
-        tries++;
-        var dir=DIRS[G.randInt(rng,8)];
-        var r=G.randInt(rng,SIZE), c=G.randInt(rng,SIZE);
-        var er=r+dir[0]*(w.length-1), ec=c+dir[1]*(w.length-1);
-        if(er<0||er>=SIZE||ec<0||ec>=SIZE) continue;
-        var ok=true;
-        for(var k=0;k<w.length;k++){
-          var rr=r+dir[0]*k, cc=c+dir[1]*k;
-          if(board[rr][cc]!=='' && board[rr][cc]!==w[k]){ ok=false; break; }
+    const rng=G.mulberry32(sd); board=[]; found={}; placements={}; foundCount=0;
+    for(let i=0;i<SIZE;i++){ board.push(Array(SIZE).fill('')); }
+    // tenta colocar todas, se falhar tenta de novo
+    let attempts=0;
+    while(attempts<3){
+      let okAll=true;
+      // limpa
+      for(let i=0;i<SIZE;i++) for(let j=0;j<SIZE;j++) board[i][j]='';
+      placements={};
+      for(const w of words){
+        let placed=false;
+        for(let tries=0;tries<250;tries++){
+          const dir=DIRS[Math.floor(rng()*DIRS.length)];
+          const r=Math.floor(rng()*SIZE), c=Math.floor(rng()*SIZE);
+          const er=r+dir[0]*(w.length-1), ec=c+dir[1]*(w.length-1);
+          if(er<0||er>=SIZE||ec<0||ec>=SIZE) continue;
+          let ok=true;
+          for(let k=0;k<w.length;k++){ const rr=r+dir[0]*k, cc=c+dir[1]*k; if(board[rr][cc]!=='' && board[rr][cc]!==w[k]){ ok=false; break; } }
+          if(!ok) continue;
+          for(let k=0;k<w.length;k++) board[r+dir[0]*k][c+dir[1]*k]=w[k];
+          placements[w]={r,c,dir}; placed=true; break;
         }
-        if(!ok) continue;
-        for(k=0;k<w.length;k++){ board[r+dir[0]*k][c+dir[1]*k]=w[k]; }
-        placements[w]={r:r,c:c,dir:dir}; placed=true;
+        if(!placed){ okAll=false; break; }
       }
-    });
-    var alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    for(i=0;i<SIZE;i++) for(j=0;j<SIZE;j++) if(board[i][j]==='') board[i][j]=alpha[G.randInt(rng,26)];
-  }
-  function renderBoard(){
-    var el=$('cacaBoard'); el.innerHTML='';
-    el.style.gridTemplateColumns='repeat('+SIZE+',34px)';
-    for(var i=0;i<SIZE;i++) for(var j=0;j<SIZE;j++){
-      var d=document.createElement('div');
-      d.className='cell'; d.textContent=board[i][j];
-      d.dataset.r=i; d.dataset.c=j;
-      el.appendChild(d);
+      if(okAll) break;
+      attempts++;
     }
-    renderWordList();
+    const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(let i=0;i<SIZE;i++) for(let j=0;j<SIZE;j++) if(board[i][j]==='') board[i][j]=alpha[Math.floor(rng()*26)];
+  }
+
+  function renderBoard(){
+    const el=$('cacaBoard'); el.innerHTML=''; el.style.gridTemplateColumns=`repeat(${SIZE},1fr)`;
+    const frag=document.createDocumentFragment();
+    for(let i=0;i<SIZE;i++) for(let j=0;j<SIZE;j++){
+      const d=document.createElement('div'); d.className='cell'; d.textContent=board[i][j]; d.dataset.r=i; d.dataset.c=j; frag.appendChild(d);
+    }
+    el.appendChild(frag); renderWordList();
   }
   function renderWordList(){
-    var list=$('cacaWordList'); list.innerHTML='';
-    Object.keys(placements).sort().forEach(function(w){
-      var d=document.createElement('div');
-      d.className='word-item'+(found[w]?' done':'');
-      d.innerHTML='<span class="dot"></span>'+w;
-      d.dataset.word=w;
-      list.appendChild(d);
+    const list=$('cacaWordList'); list.innerHTML='';
+    Object.keys(placements).sort().forEach(w=>{
+      const d=document.createElement('div'); d.className='word-item'+(found[w]?' done':''); d.innerHTML=`<span class="dot"></span>${w}`; d.dataset.word=w; list.appendChild(d);
     });
-    $('cacaTotal').textContent=Object.keys(placements).length;
-    G.Caca.total=Object.keys(placements).length; G.Caca.found=foundCount;
-    $('cacaFound').textContent=foundCount;
+    $('cacaTotal').textContent=Object.keys(placements).length; G.Caca.total=Object.keys(placements).length; G.Caca.found=foundCount; $('cacaFound').textContent=foundCount;
   }
-  function cellAt(r,c){ return document.querySelector('#cacaBoard .cell[data-r="'+r+'"][data-c="'+c+'"]'); }
+  function cellAt(r,c){ return document.querySelector(`#cacaBoard .cell[data-r="${r}"][data-c="${c}"]`); }
   function getLineCells(a,b){
-    var dr=b.r-a.r, dc=b.c-a.c;
-    if(dr===0 && dc===0) return [cellAt(a.r,a.c)];
-    var len=Math.max(Math.abs(dr),Math.abs(dc));
+    const dr=b.r-a.r, dc=b.c-a.c; if(dr===0 && dc===0) return [cellAt(a.r,a.c)];
+    const len=Math.max(Math.abs(dr),Math.abs(dc));
     if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return null;
-    var sr=dr===0?0:dr/Math.abs(dr), sc=dc===0?0:dc/Math.abs(dc);
-    var cells=[];
-    for(var k=0;k<=len;k++) cells.push(cellAt(a.r+sr*k, a.c+sc*k));
-    return cells;
+    const sr=dr===0?0:dr/Math.abs(dr), sc=dc===0?0:dc/Math.abs(dc);
+    const cells=[]; for(let k=0;k<=len;k++){ const c=cellAt(a.r+sr*k, a.c+sc*k); if(!c) return null; cells.push(c); } return cells;
   }
-  function clearSel(){ document.querySelectorAll('#cacaBoard .cell.sel').forEach(function(c){ c.classList.remove('sel'); }); selCells=[]; }
+  function clearSel(){ document.querySelectorAll('#cacaBoard .cell.sel').forEach(c=> c.classList.remove('sel')); selCells=[]; }
   function checkSelection(){
-    if(selCells.length<2){ clearSel(); return; }
-    var str=selCells.map(function(c){ return c.textContent; }).join('');
-    var rev=str.split('').reverse().join('');
-    var hit=null;
-    Object.keys(placements).forEach(function(w){ if(!found[w] && (w===str || w===rev)) hit=w; });
+    if(selCells.length<1){ clearSel(); return; }
+    const str=selCells.map(c=> c.textContent).join(''); const rev=str.split('').reverse().join('');
+    let hit=null; Object.keys(placements).forEach(w=>{ if(!found[w] && (w===str || w===rev)) hit=w; });
     if(hit){
       found[hit]=true; foundCount++;
-      selCells.forEach(function(c){ c.classList.remove('sel'); c.classList.add('found'); });
-      var li=document.querySelector('#cacaWordList .word-item[data-word="'+hit+'"]');
-      if(li) li.classList.add('done');
-      $('cacaFound').textContent=foundCount;
-      G.toast('Encontrou: '+hit);
-      G.broadcastFound(hit, foundCount);
+      selCells.forEach(c=>{ c.classList.remove('sel'); c.classList.add('found'); });
+      const li=document.querySelector(`#cacaWordList .word-item[data-word="${hit}"]`); if(li) li.classList.add('done');
+      $('cacaFound').textContent=foundCount; G.toast('Encontrou: '+hit); G.broadcastFound(hit, foundCount);
       if(foundCount===Object.keys(placements).length) win();
     } else { clearSel(); }
     selCells=[];
   }
   function bindSelection(){
-    var boardEl=$('cacaBoard');
-    var startCell=null;
-    function posFromEvent(e){ var t=e.target.closest? e.target.closest('.cell') : null; if(!t) return null; return {r:parseInt(t.dataset.r,10), c:parseInt(t.dataset.c,10), el:t}; }
-    function down(e){ e.preventDefault(); var p=posFromEvent(e); if(!p) return; selecting=true; startCell=p; selCells=[p.el]; p.el.classList.add('sel'); }
-    function move(e){
-      if(!selecting) return;
-      var t=e.touches? e.touches[0] : e;
-      var el=document.elementFromPoint(t.clientX, t.clientY);
-      if(!el || !el.classList || !el.classList.contains('cell')) return;
-      var p={r:parseInt(el.dataset.r,10), c:parseInt(el.dataset.c,10)};
-      var line=getLineCells(startCell, p);
-      if(!line) return;
-      clearSel();
-      selCells=line.filter(Boolean);
-      selCells.forEach(function(c){ c.classList.add('sel'); });
+    const boardEl=$('cacaBoard');
+    function posFromEl(el){ if(!el||!el.classList.contains('cell')) return null; return {r:parseInt(el.dataset.r,10), c:parseInt(el.dataset.c,10), el}; }
+    function onDown(e){
+      const t=e.target.closest? e.target.closest('.cell'):null; const p=t? posFromEl(t):null; if(!p) return;
+      e.preventDefault(); selecting=true; startCell=p; clearSel(); selCells=[p.el]; p.el.classList.add('sel');
     }
-    function up(){ if(!selecting) return; selecting=false; checkSelection(); }
-    boardEl.addEventListener('mousedown',down);
-    boardEl.addEventListener('mousemove',move);
-    window.addEventListener('mouseup',up);
-    boardEl.addEventListener('touchstart',down,{passive:false});
-    boardEl.addEventListener('touchmove',move,{passive:false});
-    window.addEventListener('touchend',up);
+    function onMove(e){
+      if(!selecting||!startCell) return;
+      const pt=e.touches? e.touches[0]:e; const el=document.elementFromPoint(pt.clientX, pt.clientY);
+      if(!el||!el.classList.contains('cell')) return;
+      const p=posFromEl(el); const line=getLineCells(startCell, p); if(!line) return;
+      clearSel(); selCells=line.filter(Boolean); selCells.forEach(c=> c.classList.add('sel'));
+    }
+    function onUp(){ if(!selecting) return; selecting=false; checkSelection(); }
+    boardEl.addEventListener('pointerdown', onDown); window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+    boardEl.addEventListener('touchstart', onDown, {passive:false}); boardEl.addEventListener('touchmove', onMove, {passive:false}); window.addEventListener('touchend', onUp);
+    boardEl.addEventListener('mousedown', onDown); boardEl.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
   }
-  function tick(){ var s=Math.floor((Date.now()-startTs)/1000); $('cacaTimer').textContent=G.fmtTime(s); }
-  function startTimer(){ startTs=Date.now(); timerH=G.every(tick,500); }
+  function tick(){ const s=Math.floor((Date.now()-startTs)/1000); $('cacaTimer').textContent=G.fmtTime(s); }
+  function startTimer(){ startTs=Date.now(); G.every(tick,500); }
   function win(){
-    clearInterval(timerH);
-    var s=Math.floor((Date.now()-startTs)/1000);
-    var score=Math.max(10, 1000 - s*5);
-    var u=G.users[G.user];
-    u.stats.jogos=(u.stats.jogos||0)+1;
-    var won = G.mode==='solo' || (G.mode==='online' && foundCount > G.oppScore);
-    if(won) u.stats.vitorias=(u.stats.vitorias||0)+1;
-    if(score>(u.stats.recorde||0)) u.stats.recorde=score;
-    G.saveUsers();
-    $('endTitle').textContent = G.mode==='online' ? (foundCount>G.oppScore?'Você venceu!':'Empate ou derrota') : 'Parabéns!';
-    $('endText').textContent='Você encontrou todas as '+foundCount+' palavras em '+G.fmtTime(s)+'. Pontuação: '+score+'.';
-    $('endScore').textContent=score;
-    $('endOverlay').classList.remove('hidden');
-    G.icons();
+    G.clearTimers(); const s=Math.floor((Date.now()-startTs)/1000); const score=Math.max(10, 1000 - s*4);
+    const u=G.users[G.user]; u.stats.jogos=(u.stats.jogos||0)+1;
+    const won = G.mode==='solo' || (G.mode==='online' && foundCount > G.oppScore);
+    if(won) u.stats.vitorias=(u.stats.vitorias||0)+1; if(score>(u.stats.recorde||0)) u.stats.recorde=score; G.saveUsers();
+    $('endTitle').textContent = G.mode==='online' ? (foundCount>G.oppScore?'Você venceu!':'Empate / Derrota') : 'Parabéns!';
+    $('endText').textContent=`Você encontrou todas as ${foundCount} palavras em ${G.fmtTime(s)}. Pontuação: ${score}.`;
+    $('endScore').textContent=score; $('endOverlay').classList.remove('hidden');
   }
   function revealWord(w){
-    var pl=placements[w]; if(!pl||found[w]) return;
-    for(var k=0;k<w.length;k++){ var c=cellAt(pl.r+pl.dir[0]*k, pl.c+pl.dir[1]*k); if(c) c.classList.add('found'); }
-    found[w]=true; foundCount++;
-    var li=document.querySelector('#cacaWordList .word-item[data-word="'+w+'"]');
-    if(li) li.classList.add('done');
-    $('cacaFound').textContent=foundCount;
-    G.broadcastFound(w, foundCount);
+    const pl=placements[w]; if(!pl||found[w]) return;
+    for(let k=0;k<w.length;k++){ const c=cellAt(pl.r+pl.dir[0]*k, pl.c+pl.dir[1]*k); if(c) c.classList.add('found'); }
+    found[w]=true; foundCount++; const li=document.querySelector(`#cacaWordList .word-item[data-word="${w}"]`); if(li) li.classList.add('done');
+    $('cacaFound').textContent=foundCount; G.broadcastFound(w, foundCount);
     if(foundCount===Object.keys(placements).length) win();
   }
   function hint(){
-    var unfound=Object.keys(placements).filter(function(w){return !found[w];});
-    if(!unfound.length) return;
-    var w=unfound[Math.floor(Math.random()*unfound.length)];
-    var pl=placements[w];
-    var c=cellAt(pl.r,pl.c);
-    if(c){ c.classList.add('hint'); setTimeout(function(){ c.classList.remove('hint'); }, 2500); }
-    G.toast('Dica: a palavra começa na célula destacada.');
+    const unfound=Object.keys(placements).filter(w=> !found[w]); if(!unfound.length) return;
+    const w=unfound[Math.floor(Math.random()*unfound.length)]; const pl=placements[w]; const c=cellAt(pl.r,pl.c);
+    if(c){ c.classList.add('hint'); setTimeout(()=> c.classList.remove('hint'), 2500); } G.toast(`Dica: palavra com ${w.length} letras começa aqui.`);
   }
-  function solveAll(){ Object.keys(placements).forEach(function(w){ if(!found[w]) revealWord(w); }); }
+  function solveAll(){ Object.keys(placements).forEach(w=>{ if(!found[w]) revealWord(w); }); }
   function autoCacaStep(){
-    if(!G.assist || !G.humanAssist) return;
-    var unfound=Object.keys(placements).filter(function(w){return !found[w];});
-    if(!unfound.length) return;
-    var w=unfound[Math.floor(Math.random()*unfound.length)];
-    revealWord(w);
-    var sp=G.assistSpeed||'normal';
-    var range = sp==='devagar'?[8000,15000] : sp==='rapido'?[1500,4000] : [4000,8000];
+    if(!G.assist || !G.humanAssist) return; const unfound=Object.keys(placements).filter(w=> !found[w]); if(!unfound.length) return;
+    const w=unfound[Math.floor(Math.random()*unfound.length)]; revealWord(w);
+    const sp=G.assistSpeed||'normal'; const range = sp==='devagar'?[8000,15000] : sp==='rapido'?[1500,4000] : [4000,8000];
     G.later(autoCacaStep, range[0]+Math.random()*(range[1]-range[0]));
   }
   function applyAssistUI(){
-    var on=G.assist;
-    $('cacaAssistBadge').classList.toggle('hidden', !on);
-    $('btnCacaHint').classList.toggle('hidden', !on);
-    $('btnCacaSolve').classList.toggle('hidden', !on);
-    if(on){
-      G.broadcastAssist(true);
-      if(G.humanAssist){ $('cacaAssistBadge').textContent='Assistente jogando'; G.later(autoCacaStep, 2500); }
-      else $('cacaAssistBadge').textContent='Assistente ativo';
-    }
+    const on=G.assist; $('cacaAssistBadge').classList.toggle('hidden', !on); $('btnCacaHint').classList.toggle('hidden', !on); $('btnCacaSolve').classList.toggle('hidden', !on);
+    if(on){ G.broadcastAssist(true); if(G.humanAssist){ $('cacaAssistBadge').textContent='Assistente jogando'; G.later(autoCacaStep, 2000); } else $('cacaAssistBadge').textContent='Assistente ativo'; }
   }
   function start(){
-    G.show('cacaScreen'); G.clearTimers();
-    var sd=Math.floor(Math.random()*1e9); var words=pickWords(sd);
-    buildBoard(sd, words); renderBoard();
-    $('cacaOppScore').classList.add('hidden');
-    applyAssistUI(); startTimer();
-    if(!bound){ bindSelection(); bound=true; }
-    G.icons();
+    G.show('cacaScreen'); G.clearTimers(); const sd=Math.floor(Math.random()*1e9); const words=pickWords(sd);
+    buildBoard(sd, words); renderBoard(); $('cacaOppScore').classList.add('hidden'); applyAssistUI(); startTimer(); if(!bound){ bindSelection(); bound=true; }
   }
   function startOnline(sd, words){
-    G.show('cacaScreen'); G.clearTimers(); G.oppScore=0;
-    buildBoard(sd, words); renderBoard();
-    $('cacaOppScore').classList.remove('hidden'); $('cacaOppN').textContent='0';
-    applyAssistUI(); startTimer();
-    if(!bound){ bindSelection(); bound=true; }
-    G.icons();
+    G.show('cacaScreen'); G.clearTimers(); G.oppScore=0; buildBoard(sd, words); renderBoard();
+    $('cacaOppScore').classList.remove('hidden'); $('cacaOppN').textContent='0'; applyAssistUI(); startTimer(); if(!bound){ bindSelection(); bound=true; }
   }
   function quit(){ G.clearTimers(); }
-  $('btnCacaNew').addEventListener('click',function(){ if(G.mode==='online'){G.toast('No online só o anfitrião inicia nova partida.');return;} start(); });
-  $('btnCacaHint').addEventListener('click',hint);
-  $('btnCacaSolve').addEventListener('click',function(){ solveAll(); });
-  G.Caca.start=start; G.Caca.startOnline=startOnline; G.Caca.quit=quit;
+  $('btnCacaNew').addEventListener('click',()=>{ if(G.mode==='online'){G.toast('No online só o anfitrião inicia nova partida.');return;} start(); });
+  $('btnCacaHint').addEventListener('click',hint); $('btnCacaSolve').addEventListener('click',()=>{ solveAll(); });
+  G.Caca={ pickWords, start, startOnline, quit, get total(){ return Object.keys(placements).length; } };
 })();
 </script>
 
 <script>
+// ============ STOP ============
 (function(){
-  var G=window.G;
-  var $=function(id){return document.getElementById(id);};
-  var CATEGORIES=['Nome','Cor','Animal','Comida','País','Profissão','Objeto','Marca','Filme/Série','Flor'];
-  var TIME=90;
-  var letter='', startTs=0, timerH=null, stopped=false, graded=false, myAnswers=null, oppAnswers=null, oppName=null;
-  var DICT={
+  const $ = id=>document.getElementById(id);
+  const CATEGORIES=['Nome','Cor','Animal','Comida','País','Profissão','Objeto','Marca','Filme/Série','Flor'];
+  const TIME=90;
+  let letter='', startTs=0, stopped=false, graded=false, myAnswers=null, oppAnswers=null;
+  const DICT={
     A:{Nome:'Ana',Cor:'Azul',Animal:'Arara',Comida:'Arroz',País:'Argentina',Profissão:'Advogado',Objeto:'Anel',Marca:'Apple','Filme/Série':'Avatar',Flor:'Azaleia'},
     B:{Nome:'Bruno',Cor:'Branco',Animal:'Baleia',Comida:'Banana',País:'Brasil',Profissão:'Bombeiro',Objeto:'Bola',Marca:'BMW','Filme/Série':'Batman',Flor:'Begônia'},
     C:{Nome:'Carla',Cor:'Cinza',Animal:'Cachorro',Comida:'Café',País:'Canadá',Profissão:'Carpinteiro',Objeto:'Caneta',Marca:'Coca-Cola','Filme/Série':'Coringa',Flor:'Cravo'},
@@ -870,217 +719,146 @@ input{font-family:inherit;outline:none}
     R:{Nome:'Rafael',Cor:'Rosa',Animal:'Raposa',Comida:'Rabanada',País:'Rússia',Profissão:'Radialista',Objeto:'Régua',Marca:'Ray-Ban','Filme/Série':'Ratatouille',Flor:'Rosa'},
     S:{Nome:'Sofia',Cor:'Salmão',Animal:'Sapo',Comida:'Sorvete',País:'Suíça',Profissão:'Sapateiro',Objeto:'Sapato',Marca:'Samsung','Filme/Série':'Shrek',Flor:'Samambaia'},
     T:{Nome:'Thiago',Cor:'Turquesa',Animal:'Tigre',Comida:'Tapioca',País:'Tailândia',Profissão:'Taxista',Objeto:'Tesoura',Marca:'Toyota','Filme/Série':'Titanic',Flor:'Tulipa'},
-    U:{Nome:'Ursula',Cor:'Uva',Animal:'Urso',Comida:'Uva',País:'Ucrânia',Profissão:'Urologista',Objeto:'Umbrele',Marca:'Unilever','Filme/Série':'Up',Flor:'Uva-da-serra'},
+    U:{Nome:'Ursula',Cor:'Uva',Animal:'Urso',Comida:'Uva',País:'Ucrânia',Profissão:'Urologista',Objeto:'Umbrela',Marca:'Unilever','Filme/Série':'Up',Flor:'Uva-da-serra'},
     V:{Nome:'Vinicius',Cor:'Vermelho',Animal:'Vaca',Comida:'Vatapá',País:'Venezuela',Profissão:'Veterinário',Objeto:'Vaso',Marca:'Vans','Filme/Série':'Vingadores',Flor:'Violeta'},
     W:{Nome:'Wesley',Cor:'Wine',Animal:'Wombat',Comida:'Waffle',País:'Wallis e Futuna',Profissão:'Web designer',Objeto:'Walkman',Marca:'WhatsApp','Filme/Série':'WALL-E',Flor:'Wisteria'},
     X:{Nome:'Xuxa',Cor:'Xadrez',Animal:'Xexéu',Comida:'Xis',País:'',Profissão:'Xilofonista',Objeto:'Xilofone',Marca:'Xbox','Filme/Série':'X-Men',Flor:'Xanana'},
-    Y:{Nome:'Yasmin',Cor:'Amarelo',Animal:'Yak',Comida:'Yakisoba',País:'Yugoslavia',Profissão:'Yoguista',Objeto:'Iogurteira',Marca:'YouTube','Filme/Série':'You',Flor:'Yuca'},
+    Y:{Nome:'Yasmin',Cor:'Amarelo',Animal:'Yak',Comida:'Yakisoba',País:'Iêmen',Profissão:'Yoguista',Objeto:'Ioiô',Marca:'YouTube','Filme/Série':'You',Flor:'Yuca'},
     Z:{Nome:'Zoe',Cor:'Zaffre',Animal:'Zebra',Comida:'Zucchini',País:'Zimbábue',Profissão:'Zoólogo',Objeto:'Zíper',Marca:'Zara','Filme/Série':'Zootopia',Flor:'Zínia'}
   };
-  function randomLetter(){ var alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; return alpha[Math.floor(Math.random()*26)]; }
-  G.Stop={ randomLetter: randomLetter };
+  function randomLetter(){ const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; return alpha[Math.floor(Math.random()*26)]; }
+  G.Stop={ randomLetter };
   function renderGrid(){
-    var grid=$('stopGrid'); grid.innerHTML='';
-    CATEGORIES.forEach(function(cat){
-      var d=document.createElement('div');
-      d.className='stop-field';
-      d.innerHTML='<label>'+cat+'</label><input type="text" data-cat="'+cat+'" autocomplete="off" maxlength="40">';
+    const grid=$('stopGrid'); grid.innerHTML='';
+    CATEGORIES.forEach(cat=>{
+      const d=document.createElement('div'); d.className='stop-field';
+      d.innerHTML=`<label>${cat}</label><input type="text" data-cat="${cat}" autocomplete="off" maxlength="40" placeholder="Começa com ${letter}...">`;
       grid.appendChild(d);
     });
   }
-  function readAnswers(){ var a={}; document.querySelectorAll('#stopGrid input').forEach(function(inp){ a[inp.dataset.cat]=inp.value.trim(); }); return a; }
+  function readAnswers(){ const a={}; document.querySelectorAll('#stopGrid input').forEach(inp=>{ a[inp.dataset.cat]=inp.value.trim(); }); return a; }
   function fillAnswers(){
-    var d=DICT[letter]; if(!d) return;
-    document.querySelectorAll('#stopGrid input').forEach(function(inp){ var cat=inp.dataset.cat; if(d[cat] && !inp.value) inp.value=d[cat].toUpperCase(); });
-    G.toast('Respostas sugeridas pelo assistente.');
+    const d=DICT[letter]; if(!d) return;
+    document.querySelectorAll('#stopGrid input').forEach(inp=>{ const cat=inp.dataset.cat; if(d[cat] && !inp.value) inp.value=d[cat].toUpperCase(); });
+    G.toast('Respostas preenchidas pelo assistente.');
   }
   function tick(){
-    var left=TIME - Math.floor((Date.now()-startTs)/1000);
-    if(left<=0){ left=0; doStop(true); }
-    var el=$('stopTimer'); el.textContent=G.fmtTime(left);
-    el.classList.toggle('low', left<=15);
+    const left=TIME - Math.floor((Date.now()-startTs)/1000);
+    if(left<=0){ doStop(true); return; }
+    const el=$('stopTimer'); el.textContent=G.fmtTime(left); el.classList.toggle('low', left<=15);
   }
-  function startTimer(){ startTs=Date.now(); stopped=false; timerH=G.every(tick,250); }
+  function startTimer(){ startTs=Date.now(); stopped=false; graded=false; G.every(tick,300); }
   function doStop(auto){
-    if(stopped) return;
-    stopped=true;
-    clearInterval(timerH);
-    document.querySelectorAll('#stopGrid input').forEach(function(i){ i.disabled=true; });
-    myAnswers=readAnswers();
-    G.broadcastStop();
+    if(stopped) return; stopped=true; G.clearTimers();
+    document.querySelectorAll('#stopGrid input').forEach(i=> i.disabled=true);
+    myAnswers=readAnswers(); G.broadcastStop();
     if(G.mode==='solo'){ gradeSolo(); }
     else {
-      G.broadcastAnswers(myAnswers);
-      graded=false;
-      G.later(function(){ if(!graded){ graded=true; gradeOnline(oppAnswers||{}); } }, 8000);
-      G.toast('STOP! Aguardando adversário...');
+      G.broadcastAnswers(myAnswers); G.toast('STOP! Aguardando adversário...');
+      G.later(()=>{ if(!graded){ gradeOnline(oppAnswers||{}); } }, 8000);
     }
   }
   function remoteStop(){ if(stopped) return; G.toast('O adversário gritou STOP!'); doStop(false); }
-  function receiveAnswers(ans, name){ oppAnswers=ans; oppName=name||'Adversário'; if(stopped && myAnswers) gradeOnline(ans); }
-  function norm(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z]/g,''); }
-  function valid(ans){ if(!ans) return false; return norm(ans).charAt(0)===letter; }
+  function receiveAnswers(ans){ oppAnswers=ans; if(stopped && myAnswers && !graded) gradeOnline(ans); }
+  function norm(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9 ]/g,'').trim(); }
+  function valid(ans){ if(!ans) return false; const n=norm(ans); return n.charAt(0)===letter; }
   function gradeSolo(){
-    if(graded) return; graded=true;
-    var score=0;
-    CATEGORIES.forEach(function(cat){
-      var v=myAnswers[cat]; var ok=valid(v);
-      if(ok) score+=10;
-      var inp=document.querySelector('#stopGrid input[data-cat="'+cat+'"]');
-      if(inp) inp.classList.add(ok?'correct':'wrong');
+    if(graded) return; graded=true; let score=0;
+    CATEGORIES.forEach(cat=>{
+      const v=myAnswers[cat]; const ok=valid(v); if(ok) score+=10;
+      const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`); if(inp) inp.classList.add(ok?'correct':'wrong');
     });
     finish(score, 'Modo solo: cada resposta válida vale 10 pontos.');
   }
   function gradeOnline(opp){
-    if(graded) return; graded=true;
-    var score=0;
-    CATEGORIES.forEach(function(cat){
-      var mine=myAnswers[cat], theirs=opp[cat];
-      var mineOk=valid(mine), theirsOk=valid(theirs);
-      var same = mineOk && theirsOk && norm(mine)===norm(theirs);
-      var pts=0;
-      if(mineOk){ pts = same? 5 : 10; }
-      score+=pts;
-      var inp=document.querySelector('#stopGrid input[data-cat="'+cat+'"]');
-      if(inp){ inp.classList.add(mineOk?'correct':'wrong'); inp.title=(theirs?'Adversário: '+theirs:''); }
+    if(graded) return; graded=true; let score=0;
+    CATEGORIES.forEach(cat=>{
+      const mine=myAnswers[cat], theirs=opp[cat]; const mineOk=valid(mine), theirsOk=valid(theirs);
+      const same = mineOk && theirsOk && norm(mine)===norm(theirs);
+      let pts=0; if(mineOk){ pts = same? 5 : 10; } score+=pts;
+      const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`);
+      if(inp){ inp.classList.add(mineOk?'correct':'wrong'); if(theirs) inp.title=`Adversário: ${theirs}`; }
     });
-    var oppScore=0;
-    CATEGORIES.forEach(function(cat){
-      var theirs=opp[cat], mine=myAnswers[cat];
-      var theirsOk=valid(theirs), mineOk=valid(mine);
-      var same = mineOk && theirsOk && norm(mine)===norm(theirs);
-      if(theirsOk) oppScore += same?5:10;
+    let oppScore=0;
+    CATEGORIES.forEach(cat=>{
+      const theirs=opp[cat], mine=myAnswers[cat]; const theirsOk=valid(theirs), mineOk=valid(mine);
+      const same = mineOk && theirsOk && norm(mine)===norm(theirs); if(theirsOk) oppScore += same?5:10;
     });
-    finish(score, 'Você: '+score+' pts · Adversário: '+oppScore+' pts. Resposta única=10, repetida=5.');
+    finish(score, `Você: ${score} pts · Adversário: ${oppScore} pts. Única=10, repetida=5.`);
   }
   function finish(score, text){
-    $('stopScore').textContent=score;
-    $('stopResults').classList.remove('hidden');
-    var u=G.users[G.user];
-    u.stats.jogos=(u.stats.jogos||0)+1;
-    if(score>0) u.stats.vitorias=(u.stats.vitorias||0)+1;
-    if(score>(u.stats.recorde||0)) u.stats.recorde=score;
-    G.saveUsers();
-    $('endTitle').textContent='Fim da rodada!';
-    $('endText').textContent=text;
-    $('endScore').textContent=score;
-    $('endOverlay').classList.remove('hidden');
-    G.icons();
+    $('stopScore').textContent=score; $('stopResults').classList.remove('hidden');
+    const u=G.users[G.user]; u.stats.jogos=(u.stats.jogos||0)+1; if(score>0) u.stats.vitorias=(u.stats.vitorias||0)+1; if(score>(u.stats.recorde||0)) u.stats.recorde=score; G.saveUsers();
+    $('endTitle').textContent='Fim da rodada!'; $('endText').textContent=text; $('endScore').textContent=score; $('endOverlay').classList.remove('hidden');
   }
   function autoStopType(){
-    if(!G.assist || !G.humanAssist || stopped) return;
-    var d=DICT[letter]; if(!d) return;
-    var cats=CATEGORIES.slice(), i=0;
+    if(!G.assist || !G.humanAssist || stopped) return; const d=DICT[letter]; if(!d) return;
+    const cats=[...CATEGORIES]; let i=0;
     function scheduleNext(){
       if(stopped || !G.assist || !G.humanAssist) return;
-      var sp=G.assistSpeed||'normal';
-      var range = sp==='devagar'?[2000,4000] : sp==='rapido'?[300,900] : [800,1800];
+      const sp=G.assistSpeed||'normal'; const range = sp==='devagar'?[2000,4000] : sp==='rapido'?[300,900] : [800,1800];
       G.later(nextCat, range[0]+Math.random()*(range[1]-range[0]));
     }
     function nextCat(){
-      if(stopped || !G.assist || !G.humanAssist) return;
-      if(i>=cats.length) return;
-      var cat=cats[i++]; var word=(d[cat]||'').toUpperCase();
-      var inp=document.querySelector('#stopGrid input[data-cat="'+cat+'"]');
+      if(stopped) return; if(i>=cats.length) return;
+      const cat=cats[i++]; const word=(d[cat]||'').toUpperCase(); const inp=document.querySelector(`#stopGrid input[data-cat="${cat}"]`);
       if(!inp || inp.value){ scheduleNext(); return; }
-      var ci=0;
-      (function typeChar(){
-        if(stopped) return;
-        if(ci<word.length){ ci++; inp.value=word.slice(0,ci); G.later(typeChar, 70+Math.random()*90); }
-        else { scheduleNext(); }
-      })();
+      let ci=0; (function typeChar(){ if(stopped) return; if(ci<word.length){ ci++; inp.value=word.slice(0,ci); G.later(typeChar, 70+Math.random()*90); } else { scheduleNext(); } })();
     }
     scheduleNext();
   }
   function applyAssistUI(){
-    var on=G.assist;
-    $('stopAssistBadge').classList.toggle('hidden', !on);
-    $('btnStopFill').classList.toggle('hidden', !on);
-    if(on){
-      G.broadcastAssist(true);
-      if(G.humanAssist){ $('stopAssistBadge').textContent='Assistente jogando'; G.later(autoStopType, 1500); }
-      else $('stopAssistBadge').textContent='Assistente ativo';
-    }
+    const on=G.assist; $('stopAssistBadge').classList.toggle('hidden', !on); $('btnStopFill').classList.toggle('hidden', !on);
+    if(on){ G.broadcastAssist(true); if(G.humanAssist){ $('stopAssistBadge').textContent='Assistente jogando'; G.later(autoStopType, 1200); } else $('stopAssistBadge').textContent='Assistente ativo'; }
   }
   function start(){
-    G.show('stopScreen'); G.clearTimers();
-    letter=randomLetter(); myAnswers=null; oppAnswers=null;
-    $('stopLetter').textContent=letter; $('stopLetterBig').textContent=letter;
-    $('stopTimer').textContent=G.fmtTime(TIME);
-    $('stopResults').classList.add('hidden');
-    renderGrid(); applyAssistUI(); startTimer(); G.icons();
+    G.show('stopScreen'); G.clearTimers(); letter=randomLetter(); myAnswers=null; oppAnswers=null;
+    $('stopLetter').textContent=letter; $('stopLetterBig').textContent=letter; $('stopTimer').textContent=G.fmtTime(TIME);
+    $('stopResults').classList.add('hidden'); renderGrid(); applyAssistUI(); startTimer();
   }
   function startOnline(L){
-    G.show('stopScreen'); G.clearTimers();
-    letter=L; myAnswers=null; oppAnswers=null;
-    $('stopLetter').textContent=letter; $('stopLetterBig').textContent=letter;
-    $('stopTimer').textContent=G.fmtTime(TIME);
-    $('stopResults').classList.add('hidden');
-    renderGrid(); applyAssistUI(); startTimer(); G.icons();
+    G.show('stopScreen'); G.clearTimers(); letter=L; myAnswers=null; oppAnswers=null;
+    $('stopLetter').textContent=letter; $('stopLetterBig').textContent=letter; $('stopTimer').textContent=G.fmtTime(TIME);
+    $('stopResults').classList.add('hidden'); renderGrid(); applyAssistUI(); startTimer();
   }
   function quit(){ G.clearTimers(); }
-  $('btnStopStop').addEventListener('click',function(){ doStop(false); });
-  $('btnStopFill').addEventListener('click',fillAnswers);
-  G.Stop.start=start; G.Stop.startOnline=startOnline; G.Stop.quit=quit;
-  G.Stop.remoteStop=remoteStop; G.Stop.receiveAnswers=receiveAnswers;
+  $('btnStopStop').addEventListener('click',()=> doStop(false)); $('btnStopFill').addEventListener('click',fillAnswers);
+  G.Stop.start=start; G.Stop.startOnline=startOnline; G.Stop.quit=quit; G.Stop.remoteStop=remoteStop; G.Stop.receiveAnswers=receiveAnswers;
 })();
 </script>
 
 <script>
+// ============ ADMIN ============
 (function(){
-  var G=window.G;
-  var $=function(id){return document.getElementById(id);};
+  const $=id=>document.getElementById(id);
   function syncSpeedRow(){ $('speedRow').style.display = (G.assist && G.humanAssist)? 'flex':'none'; }
-  $('btnAdminPanel').addEventListener('click',function(){
-    $('toggleAssist').checked=!!G.assist;
-    $('toggleHuman').checked=!!G.humanAssist;
-    $('assistSpeed').value=G.assistSpeed||'normal';
-    syncSpeedRow();
-    $('adminOverlay').classList.remove('hidden');
-    G.icons();
+  $('btnAdminPanel').addEventListener('click',()=>{
+    $('toggleAssist').checked=!!G.assist; $('toggleHuman').checked=!!G.humanAssist; $('assistSpeed').value=G.assistSpeed||'normal'; syncSpeedRow(); $('adminOverlay').classList.remove('hidden');
   });
   $('toggleHuman').addEventListener('change',function(){
-    G.humanAssist=this.checked;
-    var u=G.users[G.user]; if(u){ u.humanAssist=G.humanAssist; G.saveUsers(); }
-    syncSpeedRow();
-    G.toast('Modo Auto Humanizado '+(this.checked?'ativado':'desativado')+'.');
-    G.broadcastAssist(G.assist);
+    G.humanAssist=this.checked; const u=G.users[G.user]; if(u){ u.humanAssist=G.humanAssist; G.saveUsers(); } syncSpeedRow(); G.toast('Auto Humanizado '+(this.checked?'ativado':'desativado')+'.'); G.broadcastAssist(G.assist);
   });
   $('assistSpeed').addEventListener('change',function(){
-    G.assistSpeed=this.value;
-    var u=G.users[G.user]; if(u){ u.assistSpeed=G.assistSpeed; G.saveUsers(); }
-    G.toast('Velocidade do assistente: '+this.value);
+    G.assistSpeed=this.value; const u=G.users[G.user]; if(u){ u.assistSpeed=G.assistSpeed; G.saveUsers(); } G.toast('Velocidade: '+this.value);
   });
-  $('btnCloseAdmin').addEventListener('click',function(){ $('adminOverlay').classList.add('hidden'); });
+  $('btnCloseAdmin').addEventListener('click',()=> $('adminOverlay').classList.add('hidden'));
+  $('adminOverlay').addEventListener('click',e=>{ if(e.target===$('adminOverlay')) $('adminOverlay').classList.add('hidden'); });
   $('toggleAssist').addEventListener('change',function(){
-    G.assist=this.checked;
-    var u=G.users[G.user]; if(u){ u.assist=G.assist; G.saveUsers(); }
-    G.toast('Assistente '+(G.assist?'ativado':'desativado')+'.');
-    G.broadcastAssist(G.assist);
-    syncSpeedRow();
-    var cb=$('cacaAssistBadge'); if(cb){ cb.classList.toggle('hidden',!G.assist); }
-    var sb=$('stopAssistBadge'); if(sb){ sb.classList.toggle('hidden',!G.assist); }
-    var bh=$('btnCacaHint'); if(bh){ bh.classList.toggle('hidden',!G.assist); }
-    var bs=$('btnCacaSolve'); if(bs){ bs.classList.toggle('hidden',!G.assist); }
-    var bf=$('btnStopFill'); if(bf){ bf.classList.toggle('hidden',!G.assist); }
+    G.assist=this.checked; const u=G.users[G.user]; if(u){ u.assist=G.assist; G.saveUsers(); } G.toast('Assistente '+(G.assist?'ativado':'desativado')+'.'); G.broadcastAssist(G.assist); syncSpeedRow();
+    const els=['cacaAssistBadge','stopAssistBadge','btnCacaHint','btnCacaSolve','btnStopFill']; els.forEach(id=>{ const el=$(id); if(el) el.classList.toggle('hidden',!G.assist); });
   });
-  $('btnClearStats').addEventListener('click',function(){
-    var u=G.users[G.user];
-    if(u){ u.stats={jogos:0,vitorias:0,recorde:0}; G.saveUsers(); G.toast('Estatísticas limpas.'); }
+  $('btnClearStats').addEventListener('click',()=>{
+    const u=G.users[G.user]; if(u){ u.stats={jogos:0,vitorias:0,recorde:0}; G.saveUsers(); G.toast('Estatísticas limpas.'); G.enterMenu(); }
   });
-  $('btnPlayAgain').addEventListener('click',function(){
+  $('btnPlayAgain').addEventListener('click',()=>{
     $('endOverlay').classList.add('hidden');
-    if(G.mode==='online'){ G.toast('Peça ao anfitrião para iniciar nova partida.'); G.show('menuScreen'); return; }
+    if(G.mode==='online'){ G.toast('Peça ao anfitrião para iniciar nova partida.'); return; }
     G.startGame();
   });
-  $('btnEndMenu').addEventListener('click',function(){
-    $('endOverlay').classList.add('hidden');
-    G.closePeer && G.closePeer();
-    G.show('menuScreen');
-    if(G.enterMenu) G.enterMenu();
+  $('btnEndMenu').addEventListener('click',()=>{
+    $('endOverlay').classList.add('hidden'); G.closePeer && G.closePeer(); G.show('menuScreen'); if(G.enterMenu) G.enterMenu();
   });
-  G.icons();
 })();
 </script>
-</body>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
