@@ -6,7 +6,7 @@
 <title>Luan Santana — Caça-Palavras & Adedonha</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/lucide@1/dist/umd/lucide.min.js"></script>
-<!-- Adicionado PeerJS para conexão multiplayer online P2P -->
+<!-- PeerJS para Conexão P2P Multi-servidor -->
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
 :root{--bg:#fdf9fb;--card:#fff;--text:#0f172a;--muted:#64748b;--accent:#bd3193;--accent-soft:rgba(189,49,147,.14);--accent2:#0891b2;--accent2-soft:rgba(8,145,178,.14);--border:rgba(15,23,42,.08);--ok:#16a34a;--warn:#d97706;--err:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}
@@ -35,33 +35,19 @@ input,select,textarea{font-family:inherit;outline:none}
 .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
 .btn-ghost{background:transparent;color:var(--muted)}
 .btn-ghost:hover{color:var(--accent)}
-.btn-danger{background:var(--err);color:#fff}
-.btn-danger:hover{background:#b91c1c}
 .btn-block{width:100%}
 .btn-sm{padding:8px 14px;font-size:.85rem;border-radius:8px}
-.btn-xs{padding:4px 8px;font-size:.75rem;border-radius:6px}
-.auth-toggle{text-align:center;margin-top:16px;font-size:.88rem;color:var(--muted)}
-.auth-toggle a{color:var(--accent);font-weight:700;text-decoration:none;cursor:pointer}
-.msg{padding:10px 12px;border-radius:8px;font-size:.85rem;margin-bottom:14px;display:none}
-.msg.err{display:block;background:rgba(220,38,38,.08);color:var(--err);border:1px solid rgba(220,38,38,.2)}
-.msg.ok{display:block;background:rgba(22,163,74,.08);color:var(--ok);border:1px solid rgba(22,163,74,.2)}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:24px;box-shadow:0 2px 8px rgba(15,23,42,.04)}
 .topbar .user{display:flex;align-items:center;gap:10px;font-weight:700}
 .avatar{width:36px;height:36px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
-.admin-badge{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
-.banned-badge{background:rgba(220,38,38,.08);color:var(--err);border:1px solid var(--err);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
 .menu-title{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
 .menu-sub{color:var(--muted);margin-bottom:28px}
 .game-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px}
-.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;position:relative;overflow:hidden}
+.game-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .game-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--accent)}
 .game-card .icon-big{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff}
 .game-card h3{font-size:1.25rem;font-weight:800;margin-bottom:6px}
 .game-card p{color:var(--muted);font-size:.9rem;line-height:1.5}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.stat .n{font-size:1.5rem;font-weight:800;color:var(--accent)}
-.stat .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .lobby-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;max-width:520px;margin:0 auto;box-shadow:var(--shadow)}
 .lobby-box h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
 .lobby-box p{color:var(--muted);margin-bottom:20px;font-size:.92rem}
@@ -70,692 +56,202 @@ input,select,textarea{font-family:inherit;outline:none}
 .lobby-status.wait{background:var(--accent2-soft);color:var(--accent2)}
 .lobby-status.ok{background:rgba(22,163,74,.1);color:var(--ok)}
 .opponent{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;margin:10px 0;font-weight:600}
-.game-hud{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:16px}
-.hud-pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9rem;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--border)}
-.hud-pill b{color:var(--accent);font-variant-numeric:tabular-nums}
-.timer{font-variant-numeric:tabular-nums}
-.timer.low{color:var(--err);animation:pulse 1s infinite}
-@keyframes pulse{50%{opacity:.5}}
-.game-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
-@media(max-width:860px){.game-layout{grid-template-columns:1fr}}
-.board-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,.04);overflow-x:auto}
-#cacaBoard{display:grid;gap:2px;user-select:none;touch-action:none;margin:0 auto;width:max-content}
-.cell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;border-radius:6px;background:var(--bg);transition:background .1s,color .1s;cursor:pointer;text-transform:uppercase}
-.cell.sel{background:var(--accent);color:#fff}
-.cell.found{background:var(--accent2);color:#fff}
-.cell.hint{background:var(--warn);color:#fff;animation:pulse 1s infinite}
-.side-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
-.side-panel h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;font-weight:700}
-.word-list{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto}
-.word-item{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;padding:6px 10px;border-radius:8px;background:var(--bg);justify-content:space-between}
-.word-item.done{text-decoration:line-through;opacity:.45}
-.word-item .dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex:none}
-.word-item.done .dot{background:var(--ok)}
-.stop-letter{font-size:4rem;font-weight:800;text-align:center;color:var(--accent);background:var(--accent-soft);border-radius:16px;padding:10px;margin-bottom:16px;line-height:1}
-.progress{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin:-6px 0 16px}
-.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:100%;transition:width .25s linear}
-.stop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.stop-field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.stop-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;background:var(--bg);text-transform:uppercase}
-.stop-field input:focus{border-color:var(--accent)}
-.stop-field input.correct{border-color:var(--ok);background:rgba(22,163,74,.06)}
-.stop-field input.wrong{border-color:var(--err);background:rgba(220,38,38,.06)}
-.results-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:8px 0}
-.results-table th,.results-table td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:left}
-.results-table th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-.score-big{font-size:2.5rem;font-weight:800;color:var(--accent);text-align:center;margin:10px 0}
-.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-.modal{background:var(--card);border-radius:20px;padding:28px;max-width:600px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
-.modal h2{font-size:1.4rem;font-weight:800;margin-bottom:8px}
-.modal p{color:var(--muted);margin-bottom:18px;font-size:.92rem;line-height:1.55}
-.modal .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
-.tab{padding:10px 14px;font-weight:700;font-size:.85rem;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;transition:all .15s}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.switch{position:relative;display:inline-block;width:52px;height:28px;flex:none}
-.switch input{opacity:0;width:0;height:0}
-.slider{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:.2s;cursor:pointer}
-.slider:before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.switch input:checked+.slider{background:var(--accent)}
-.switch input:checked+.slider:before{transform:translateX(24px)}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
-.setting-row:last-child{border-bottom:none}
-.setting-row .info b{display:block;font-size:.95rem}
-.setting-row .info span{font-size:.8rem;color:var(--muted)}
-.user-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.user-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;background:var(--bg);border-radius:10px;flex-wrap:wrap}
-.user-info{display:flex;align-items:center;gap:10px}
-.user-actions{display:flex;gap:6px;flex-wrap:wrap}
-.word-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.word-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg);border-radius:8px;font-weight:600;font-size:.9rem}
-.word-badge .del{color:var(--err);cursor:pointer;margin-left:4px;font-weight:800}
-.assist-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.12);color:var(--warn);border:1px solid var(--warn);font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:.9rem;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
 .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:16px;cursor:pointer;background:none}
 .back-btn:hover{color:var(--accent)}
-.footer-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:30px}
-pre{background:var(--bg);padding:12px;border-radius:8px;overflow-x:auto;font-size:.75rem;max-height:150px;margin:8px 0}
 </style>
 </head>
 <body>
+
 <div id="loginScreen" class="auth-wrap">
   <div class="auth-card">
     <div class="brand"><div class="logo"><i data-lucide="music-4" style="width:22px;height:22px"></i></div><h1>Luan Santana</h1></div>
-    <p class="sub">Caça-palavras do Luan Santana & Adedonha — jogue solo ou com amigos.</p>
-    <div id="authMsg" class="msg"></div>
-    <div id="loginForm">
-      <div class="field"><label>Usuário</label><input id="loginUser" type="text" autocomplete="username" placeholder="Seu nome de usuário"></div>
-      <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
-      <button class="btn btn-primary btn-block" id="btnLogin"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar</button>
-      <div class="auth-toggle">Não tem conta? <a id="goRegister">Cadastre-se</a></div>
-    </div>
-    <div id="registerForm" class="hidden">
-      <div class="field"><label>Escolha um usuário</label><input id="regUser" type="text" placeholder="Nome de usuário"></div>
-      <div class="field"><label>Escolha uma senha</label><input id="regPass" type="password" placeholder="Mínimo 4 caracteres"></div>
-      <button class="btn btn-primary btn-block" id="btnRegister"><i data-lucide="user-plus" style="width:18px;height:18px"></i> Criar conta</button>
-      <div class="auth-toggle">Já tem conta? <a id="goLogin">Voltar ao login</a></div>
-    </div>
+    <p class="sub">Caça-palavras & Adedonha multiplayer.</p>
+    <div class="field"><label>Seu Nome</label><input id="loginUser" type="text" placeholder="Digite seu nome"></div>
+    <button class="btn btn-primary btn-block" id="btnLogin"><i data-lucide="play" style="width:18px;height:18px"></i> Entrar no Jogo</button>
   </div>
 </div>
+
 <div id="menuScreen" class="screen hidden">
   <div class="topbar">
-    <div class="user"><div class="avatar" id="userAvatar">T</div><div><div id="userName">Usuário</div><span id="adminBadge" class="admin-badge hidden">Conta Admin</span></div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm hidden" id="btnAdminPanel"><i data-lucide="settings-2" style="width:16px;height:16px"></i> Painel Admin</button>
-      <button class="btn btn-ghost btn-sm" id="btnLogout"><i data-lucide="log-out" style="width:16px;height:16px"></i> Sair</button>
-    </div>
+    <div class="user"><div class="avatar" id="userAvatar">U</div><span id="userName">Usuário</span></div>
+    <button class="btn btn-ghost btn-sm" id="btnLogout"><i data-lucide="log-out" style="width:16px;height:16px"></i> Sair</button>
   </div>
-  <h2 class="menu-title">Olá, <span id="menuHello">jogador</span>!</h2>
-  <p class="menu-sub">Escolha um jogo e um modo de jogo. No modo online você convida amigos com um código de sala.</p>
+  <h2 class="menu-title">Escolha o jogo:</h2>
   <div class="game-cards">
-    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)"><i data-lucide="search" style="width:26px;height:26px"></i></div><h3>Caça-Palavras</h3><p>Tudo sobre o cantor Luan Santana: músicas, álbuns, turnês e carreira.</p></div>
-    <div class="game-card" id="cardStop"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent2),#0ea5c9)"><i data-lucide="timer" style="width:26px;height:26px"></i></div><h3>Adedonha / Stop</h3><p>Clássico jogo de categorias com uma letra sorteada. Pontuação acumulada.</p></div>
+    <div class="game-card" id="cardCaca"><div class="icon-big" style="background:linear-gradient(135deg,var(--accent),#e0457f)"><i data-lucide="search" style="width:26px;height:26px"></i></div><h3>Caça-Palavras</h3><p>Jogue solo ou multiplayer com amigo.</p></div>
   </div>
-  <div class="stats-row">
-    <div class="stat"><div class="n" id="statJogos">0</div><div class="l">Partidas jogadas</div></div>
-    <div class="stat"><div class="n" id="statVitorias">0</div><div class="l">Vitórias</div></div>
-    <div class="stat"><div class="n" id="statRecorde">—</div><div class="l">Recorde (pontos)</div></div>
-  </div>
-  <p class="footer-note">Funciona offline (modo solo). Modo online requer internet e usa conexão peer-to-peer.</p>
 </div>
+
 <div id="lobbyScreen" class="screen hidden">
-  <button class="back-btn" id="lobbyBack"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Voltar ao menu</button>
+  <button class="back-btn" id="lobbyBack"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Voltar</button>
   <div class="lobby-box">
-    <h2 id="lobbyTitle">Jogar online com amigos</h2>
-    <p id="lobbyDesc">Crie uma sala e compartilhe o código, ou entre em uma sala existente.</p>
+    <h2>Sala Multiplayer</h2>
+    <p>Crie uma sala ou digite o código do seu amigo abaixo:</p>
     <div id="lobbyCreate">
-      <button class="btn btn-secondary btn-block" id="btnSolo" style="margin-bottom:14px"><i data-lucide="user" style="width:18px;height:18px"></i> Jogar sozinho (offline)</button>
-      <button class="btn btn-primary btn-block" id="btnCreateRoom"><i data-lucide="plus-circle" style="width:18px;height:18px"></i> Criar nova sala</button>
-      <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou —</div>
+      <button class="btn btn-primary btn-block" id="btnCreateRoom"><i data-lucide="plus-circle" style="width:18px;height:18px"></i> Criar Sala</button>
+      <div style="text-align:center;margin:14px 0;color:var(--muted);font-weight:700">— ou entrar em uma —</div>
       <div class="field"><label>Código da sala</label><input id="joinCode" type="text" maxlength="6" placeholder="Ex: AB3X9K" style="text-transform:uppercase;letter-spacing:.2em;text-align:center"></div>
-      <button class="btn btn-secondary btn-block" id="btnJoinRoom"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar na sala</button>
+      <button class="btn btn-secondary btn-block" id="btnJoinRoom"><i data-lucide="log-in" style="width:18px;height:18px"></i> Entrar na Sala</button>
     </div>
     <div id="lobbyRoom" class="hidden">
-      <div class="lobby-status wait" id="lobbyStatus">Aguardando conexão...</div>
-      <div>Compartilhe este código com seu amigo:</div>
+      <div class="lobby-status wait" id="lobbyStatus">Conectando ao servidor...</div>
+      <div>Código da sua sala:</div>
       <div class="room-code" id="roomCodeDisplay">------</div>
-      <button class="btn btn-secondary btn-block btn-sm" id="btnCopyCode"><i data-lucide="copy" style="width:16px;height:16px"></i> Copiar código</button>
-      <div class="opponent hidden" id="opponentLine"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--ok)"></i> <span id="opponentName">—</span> conectado!</div>
+      <div class="opponent hidden" id="opponentLine"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--ok)"></i> <span id="opponentName">Amigo</span> conectado!</div>
       <button class="btn btn-primary btn-block hidden" id="btnStartOnline" style="margin-top:14px"><i data-lucide="play" style="width:18px;height:18px"></i> Começar partida</button>
     </div>
   </div>
 </div>
 
-<!-- Telas de Jogo (Caça Palavras e Adedonha) e Overlays mantidas iguais à sua estrutura -->
-<div id="cacaScreen" class="screen hidden">
-  <div class="game-hud">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="cacaBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
-      <span class="hud-pill"><i data-lucide="search" style="width:15px;height:15px"></i> Encontradas <b id="cacaFound">0</b>/<span id="cacaTotal">0</span></span>
-      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="cacaTimer">00:00</span></span>
-      <span class="hud-pill hidden" id="cacaOppScore"><i data-lucide="users" style="width:15px;height:15px"></i> Ele(a): <b id="cacaOppN">0</b></span>
-    </div>
-  </div>
-  <div class="game-layout">
-    <div class="board-wrap"><div id="cacaBoard"></div></div>
-    <div class="side-panel"><h4>Palavras — Luan Santana</h4><div class="word-list" id="cacaWordList"></div></div>
-  </div>
-</div>
-
-<div id="stopScreen" class="screen hidden">
-  <div class="game-hud">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="back-btn" id="stopBack" style="margin:0"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> Sair</button>
-      <span class="hud-pill"><i data-lucide="type" style="width:15px;height:15px"></i> Letra: <b id="stopLetter">—</b></span>
-      <span class="hud-pill" id="stopRound">Rodada 1/3</span>
-      <span class="hud-pill timer"><i data-lucide="clock" style="width:15px;height:15px"></i> <span id="stopTimer">01:30</span></span>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm" id="btnStopStop"><i data-lucide="octagon" style="width:15px;height:15px"></i> STOP!</button>
-    </div>
-  </div>
-  <div class="game-layout">
-    <div class="board-wrap">
-      <div class="stop-letter" id="stopLetterBig">?</div>
-      <div class="progress"><div class="progress-bar" id="stopProgress"></div></div>
-      <div class="stop-grid" id="stopGrid"></div>
-    </div>
-    <div class="side-panel">
-      <h4>Como funciona</h4>
-      <p style="font-size:.85rem;color:var(--muted);line-height:1.6">Preencha cada categoria com a letra sorteada. Quando o tempo acabar ou alguém gritar <b>STOP</b>, as respostas são corrigidas.</p>
-      <div id="stopResults" class="hidden" style="margin-top:16px">
-        <h4>Resultado da rodada <span id="stopRoundRes">1</span></h4>
-        <table class="results-table">
-          <thead><tr><th>Categoria</th><th>Sua resposta</th><th id="oppTh" class="hidden">Adversário</th><th>Pts</th></tr></thead>
-          <tbody id="stopResultsBody"></tbody>
-        </table>
-        <div class="score-big" id="stopScore">0</div>
-        <button class="btn btn-primary btn-block" id="btnNextRound" style="margin-top:14px">Próxima rodada</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="adminOverlay" class="overlay hidden">
-  <div class="modal">
-    <h2><i data-lucide="settings-2" style="width:20px;height:20px;display:inline;vertical-align:-3px;color:var(--accent)"></i> Painel de Administração</h2>
-    <div class="tabs">
-      <div class="tab active" data-tab="game">Jogo</div>
-      <div class="tab" data-tab="words">Palavras</div>
-    </div>
-    <div class="tab-content active" id="tab-game">
-      <div class="setting-row">
-        <div class="info"><b>Rodadas do Adedonha</b></div>
-        <select id="cfgRounds"><option value="1">1 rodada</option><option value="3" selected>3 rodadas</option><option value="5">5 rodadas</option></select>
-      </div>
-      <div class="setting-row">
-        <div class="info"><b>Tempo por rodada (seg)</b></div>
-        <select id="cfgTime"><option value="60">60</option><option value="90" selected>90</option><option value="120">120</option></select>
-      </div>
-      <div class="setting-row">
-        <div class="info"><b>Tamanho da Grade (Caça)</b></div>
-        <select id="cfgBoardSize"><option value="10">10x10</option><option value="14" selected>14x14</option><option value="16">16x16</option></select>
-      </div>
-      <button class="btn btn-primary btn-block" id="btnSaveGameCfg" style="margin-top:14px"><i data-lucide="save"></i> Salvar</button>
-    </div>
-    <div class="tab-content" id="tab-words">
-      <div class="field"><label>Adicionar palavra</label><input type="text" id="newWordInput"></div>
-      <button class="btn btn-primary btn-sm" id="btnAddWord">Adicionar</button>
-      <div class="word-badges" id="wordBadgesContainer"></div>
-    </div>
-    <div class="actions" style="margin-top:20px"><button class="btn btn-secondary btn-block" id="btnCloseAdmin">Fechar</button></div>
-  </div>
-</div>
-
-<div id="endOverlay" class="overlay hidden">
-  <div class="modal" style="text-align:center">
-    <div id="endIcon" style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i data-lucide="trophy" style="width:30px;height:30px"></i></div>
-    <h2 id="endTitle">Fim de jogo!</h2>
-    <p id="endText">Confira seu desempenho.</p>
-    <div class="score-big" id="endScore">0</div>
-    <div class="actions" style="justify-content:center">
-      <button class="btn btn-secondary" id="btnEndMenu"><i data-lucide="home" style="width:16px;height:16px"></i> Voltar ao menu</button>
-    </div>
-  </div>
-</div>
-<div id="toast" class="toast"></div>
-
 <script>
-// ================= CORE & UTILS =================
-(function(){
-  var G = window.G = {
-    user: null, mode: 'solo', selectedGame: null, timers: [], peer: null, conn: null,
-    isHost: false, roomCode: null, oppName: null, oppScore: 0,
-    cfg: { stopRounds: 3, stopTime: 90, cacaWordCount: 10, cacaBoardSize: 14 },
-    defaultWords: ["METEORO", "SINAIS", "TEESPERANDO", "ESCREVIAI", "CANTOR", "SERTANEJO", "VIOLAO", "AMOR", "SHOW", "ACORDANDOPREDIO", "CHUVA"],
-    customWords: [],
-    gameState: {}
-  };
-  G.store = {
-    get: function(k){try{return JSON.parse(localStorage.getItem('luan_'+k));}catch(e){return null;}},
-    set: function(k,v){localStorage.setItem('luan_'+k,JSON.stringify(v));}
-  };
-  
-  var users = G.store.get('users');
-  if(!users) users = {'Thiago Shelby':{pass:'admin123',admin:true,stats:{jogos:0,vitorias:0,recorde:0}}};
-  G.users = users;
-  G.saveUsers = function(){ G.store.set('users',G.users); };
-  
-  var savedCfg = G.store.get('config'); if(savedCfg) G.cfg = Object.assign(G.cfg, savedCfg);
-  var savedWords = G.store.get('customWords'); if(savedWords) G.customWords = savedWords;
-  G.saveCfg = function(){ G.store.set('config',G.cfg); };
-  G.saveWords = function(){ G.store.set('customWords',G.customWords); };
+lucide.createIcons();
 
-  G.clearTimers = function(){ G.timers.forEach(function(h){clearTimeout(h);clearInterval(h);}); G.timers=[]; };
-  G.later = function(fn,ms){ var h=setTimeout(fn,ms); G.timers.push(h); return h; };
-  G.every = function(fn,ms){ var h=setInterval(fn,ms); G.timers.push(h); return h; };
-  G.roomCode = function(){ var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s; };
-  G.fmtTime = function(s){ var m=Math.floor(s/60),ss=s%60; return(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; };
-  G.toast = function(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2500); };
-  G.icons = function(){ if(window.lucide) try{lucide.createIcons();}catch(e){} };
-})();
+let currentUser = "";
+let peer = null;
+let conn = null;
 
-// ================= UI & AUTH =================
-(function(){
-  var G=window.G, $ = function(id){return document.getElementById(id);};
-  var msgEl = $('authMsg');
-  function showMsg(t,err){ msgEl.className='msg '+(err?'err':'ok'); msgEl.style.display='block'; msgEl.textContent=t; }
-  
-  $('goRegister').onclick = function(){ $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); msgEl.style.display='none'; };
-  $('goLogin').onclick = function(){ $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); msgEl.style.display='none'; };
-  
-  function enterMenu(){
-    $('loginScreen').classList.add('hidden'); $('menuScreen').classList.remove('hidden');
-    var u = G.user, st = G.users[u].stats || {jogos:0,vitorias:0,recorde:0};
-    $('userName').textContent = u; $('menuHello').textContent = u;
-    $('userAvatar').textContent = u.charAt(0).toUpperCase();
-    var isAdmin = !!(G.users[u] && G.users[u].admin);
-    $('adminBadge').classList.toggle('hidden', !isAdmin);
-    $('btnAdminPanel').classList.toggle('hidden', !isAdmin);
-    $('statJogos').textContent = st.jogos; $('statVitorias').textContent = st.vitorias;
-    $('statRecorde').textContent = st.recorde > 0 ? st.recorde : '—';
-    G.icons();
+// Configuração ICE STUN para conexão 100% direta (passa por firewalls e roteadores)
+const peerConfig = {
+  config: {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun2.l.google.com:19302' },
+      { urls: 'stun:stun.cloudflare.com:3478' }
+    ]
   }
-  
-  $('btnLogin').onclick = function(){
-    var u=$('loginUser').value.trim(), p=$('loginPass').value;
-    if(!u||!p){ showMsg('Preencha todos os campos.',true); return; }
-    if(G.users[u] && G.users[u].pass === p){ G.user=u; enterMenu(); }
-    else showMsg('Usuário ou senha incorretos.',true);
-  };
-  $('btnRegister').onclick = function(){
-    var u=$('regUser').value.trim(), p=$('regPass').value;
-    if(!u||p.length<4){ showMsg('Usuário e senha (min 4 chars) requeridos.',true); return; }
-    if(G.users[u]){ showMsg('Usuário já existe.',true); return; }
-    G.users[u] = {pass:p, admin:false, stats:{jogos:0,vitorias:0,recorde:0}};
-    G.saveUsers(); G.user=u; enterMenu();
-  };
-  $('btnLogout').onclick = function(){ G.user=null; $('menuScreen').classList.add('hidden'); $('loginScreen').classList.remove('hidden'); $('loginUser').value=''; $('loginPass').value=''; msgEl.style.display='none';};
+};
 
-  // ADMIN PANEL
-  $('btnAdminPanel').onclick = function(){ 
-    $('adminOverlay').classList.remove('hidden');
-    $('cfgRounds').value = G.cfg.stopRounds;
-    $('cfgTime').value = G.cfg.stopTime;
-    $('cfgBoardSize').value = G.cfg.cacaBoardSize;
-    renderAdminWords();
-  };
-  $('btnCloseAdmin').onclick = function(){ $('adminOverlay').classList.add('hidden'); };
+// Telas
+const loginScreen = document.getElementById('loginScreen');
+const menuScreen = document.getElementById('menuScreen');
+const lobbyScreen = document.getElementById('lobbyScreen');
+
+// Login
+document.getElementById('btnLogin').addEventListener('click', () => {
+  const name = document.getElementById('loginUser').value.trim();
+  if(!name) return alert('Digite seu nome!');
+  currentUser = name;
+  document.getElementById('userName').innerText = currentUser;
+  document.getElementById('userAvatar').innerText = currentUser.charAt(0).toUpperCase();
+  loginScreen.classList.add('hidden');
+  menuScreen.classList.remove('hidden');
+});
+
+document.getElementById('btnLogout').addEventListener('click', () => {
+  if(peer) peer.destroy();
+  location.reload();
+});
+
+document.getElementById('cardCaca').addEventListener('click', () => {
+  menuScreen.classList.add('hidden');
+  lobbyScreen.classList.remove('hidden');
+});
+
+document.getElementById('lobbyBack').addEventListener('click', () => {
+  if(peer) peer.destroy();
+  lobbyScreen.classList.add('hidden');
+  menuScreen.classList.remove('hidden');
+  resetLobbyUI();
+});
+
+// Gerar Código de Sala Limpo
+function generateCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+// CRIAR SALA (Host)
+document.getElementById('btnCreateRoom').addEventListener('click', () => {
+  const roomCode = generateCode();
+  const fullPeerId = "LS-GAME-" + roomCode;
   
-  document.querySelectorAll('.tab').forEach(function(tab){
-    tab.onclick = function(){
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-      tab.classList.add('active');
-      $('tab-'+tab.dataset.tab).classList.add('active');
-    };
+  document.getElementById('lobbyCreate').classList.add('hidden');
+  document.getElementById('lobbyRoom').classList.remove('hidden');
+  document.getElementById('roomCodeDisplay').innerText = roomCode;
+  document.getElementById('lobbyStatus').innerText = "Aguardando seu amigo colocar o código...";
+
+  peer = new Peer(fullPeerId, peerConfig);
+
+  peer.on('open', (id) => {
+    console.log('Sala criada com ID:', id);
   });
 
-  $('btnSaveGameCfg').onclick = function(){
-    G.cfg.stopRounds = parseInt($('cfgRounds').value);
-    G.cfg.stopTime = parseInt($('cfgTime').value);
-    G.cfg.cacaBoardSize = parseInt($('cfgBoardSize').value);
-    G.saveCfg(); G.toast("Configurações salvas!");
-  };
+  peer.on('connection', (connection) => {
+    conn = connection;
+    setupConnectionEvents();
+  });
 
-  function renderAdminWords(){
-    var c = $('wordBadgesContainer'); c.innerHTML='';
-    var all = G.defaultWords.concat(G.customWords);
-    all.forEach(function(w){
-      var b = document.createElement('div'); b.className = 'word-badge';
-      b.innerHTML = w + (G.customWords.includes(w) ? ' <span class="del" data-w="'+w+'">&times;</span>' : '');
-      c.appendChild(b);
-    });
-    c.querySelectorAll('.del').forEach(function(btn){
-      btn.onclick = function(){
-        G.customWords = G.customWords.filter(x => x !== btn.dataset.w);
-        G.saveWords(); renderAdminWords();
-      }
-    });
-  }
-  $('btnAddWord').onclick = function(){
-    var w = $('newWordInput').value.trim().toUpperCase().replace(/[^A-Z]/g, '');
-    if(w && !G.defaultWords.includes(w) && !G.customWords.includes(w)){
-      G.customWords.push(w); G.saveWords(); $('newWordInput').value=''; renderAdminWords();
-    }
-  };
+  peer.on('error', (err) => {
+    console.error('Erro na sala:', err);
+    alert('Erro ao gerar código da sala. Tentando novamente...');
+    resetLobbyUI();
+  });
+});
+
+// ENTRAR NA SALA (Guest)
+document.getElementById('btnJoinRoom').addEventListener('click', () => {
+  const inputCode = document.getElementById('joinCode').value.trim().toUpperCase();
+  if(inputCode.length !== 6) return alert('Digite o código de 6 dígitos corretamente!');
+
+  const targetPeerId = "LS-GAME-" + inputCode;
   
-  // MENU & LOBBY
-  function setupLobby(game){
-    G.selectedGame = game;
-    $('menuScreen').classList.add('hidden'); $('lobbyScreen').classList.remove('hidden');
-    $('lobbyRoom').classList.add('hidden'); $('lobbyCreate').classList.remove('hidden');
-  }
-  $('cardCaca').onclick = function(){ setupLobby('caca'); };
-  $('cardStop').onclick = function(){ setupLobby('stop'); };
-  $('lobbyBack').onclick = function(){ 
-    if(G.conn) G.conn.close(); if(G.peer) G.peer.destroy();
-    $('lobbyScreen').classList.add('hidden'); $('menuScreen').classList.remove('hidden'); 
-  };
-  
-  function endGame(score){
-    $('cacaScreen').classList.add('hidden'); $('stopScreen').classList.add('hidden');
-    $('endOverlay').classList.remove('hidden');
-    $('endScore').textContent = score + " pts";
-    G.users[G.user].stats.jogos++;
-    if(score > G.users[G.user].stats.recorde) G.users[G.user].stats.recorde = score;
-    G.saveUsers();
-  }
-  $('btnEndMenu').onclick = function(){ $('endOverlay').classList.add('hidden'); enterMenu(); };
+  document.getElementById('lobbyCreate').classList.add('hidden');
+  document.getElementById('lobbyRoom').classList.remove('hidden');
+  document.getElementById('roomCodeDisplay').innerText = inputCode;
+  document.getElementById('lobbyStatus').innerText = "Conectando imediatamente...";
 
-  // ================= MULTIPLAYER (PeerJS) =================
-  $('btnSolo').onclick = function(){ 
-    G.mode = 'solo'; $('lobbyScreen').classList.add('hidden'); 
-    if(G.selectedGame === 'caca') initCaca(); else initStop(); 
-  };
+  // Peer do Convidado
+  peer = new Peer(peerConfig);
 
-  function setupPeer(id, isHost){
-    G.peer = new Peer('luan-game-' + id);
-    G.peer.on('open', function(pid){
-      $('roomCodeDisplay').textContent = id;
-      $('lobbyCreate').classList.add('hidden'); $('lobbyRoom').classList.remove('hidden');
-      $('lobbyStatus').textContent = isHost ? "Aguardando amigo..." : "Conectando...";
-      
-      if(!isHost){
-        G.conn = G.peer.connect('luan-game-' + id);
-        setupConn(G.conn);
-      }
-    });
-    if(isHost){
-      G.peer.on('connection', function(conn){
-        G.conn = conn; setupConn(conn);
-      });
+  peer.on('open', () => {
+    conn = peer.connect(targetPeerId, { reliable: true });
+    setupConnectionEvents();
+  });
+
+  peer.on('error', (err) => {
+    console.error('Erro ao conectar:', err);
+    alert('Não foi possível encontrar a sala. Verifique se o código está correto ou se a sala já foi criada.');
+    resetLobbyUI();
+  });
+});
+
+// Trata os eventos de conexão sem falhas
+function setupConnectionEvents() {
+  conn.on('open', () => {
+    document.getElementById('lobbyStatus').className = "lobby-status ok";
+    document.getElementById('lobbyStatus').innerText = "Conectado com sucesso!";
+    document.getElementById('opponentLine').classList.remove('hidden');
+    document.getElementById('btnStartOnline').classList.remove('hidden');
+    
+    // Envia nome para o outro jogador
+    conn.send({ type: 'JOIN_INFO', name: currentUser });
+  });
+
+  conn.on('data', (data) => {
+    if(data.type === 'JOIN_INFO') {
+      document.getElementById('opponentName').innerText = data.name;
     }
-  }
+  });
 
-  function setupConn(conn){
-    conn.on('open', function(){
-      $('lobbyStatus').className = 'lobby-status ok'; $('lobbyStatus').textContent = "Conectado!";
-      $('opponentLine').classList.remove('hidden');
-      $('opponentName').textContent = "Amigo";
-      if(G.isHost) $('btnStartOnline').classList.remove('hidden');
-      
-      conn.send({type: 'hello', name: G.user, game: G.selectedGame, cfg: G.cfg});
-    });
-    
-    conn.on('data', function(data){
-      if(data.type === 'hello'){
-        $('opponentName').textContent = data.name; G.oppName = data.name;
-        if(!G.isHost) { G.selectedGame = data.game; G.cfg = data.cfg; }
-      }
-      if(data.type === 'start'){
-        $('lobbyScreen').classList.add('hidden');
-        if(G.selectedGame === 'caca') { G.gameState = data.state; initCaca(true); }
-        else initStop();
-      }
-      if(data.type === 'caca_score'){
-        $('cacaOppN').textContent = data.score;
-        if(data.score >= G.gameState.words.length) { G.toast("Seu oponente terminou!"); G.later(()=>endGame(G.gameState.myScore), 3000); }
-      }
-      if(data.type === 'stop_stop'){
-        G.toast("Oponente gritou STOP!");
-        endStopRound(data.answers);
-      }
-    });
-  }
+  conn.on('close', () => {
+    alert('Seu amigo desconectou.');
+    resetLobbyUI();
+  });
+}
 
-  $('btnCreateRoom').onclick = function(){ G.isHost = true; G.mode = 'online'; setupPeer(G.roomCode(), true); };
-  $('btnJoinRoom').onclick = function(){ 
-    var c = $('joinCode').value.trim().toUpperCase();
-    if(c.length === 6) { G.isHost = false; G.mode = 'online'; setupPeer(c, false); }
-  };
-  $('btnStartOnline').onclick = function(){
-    if(G.selectedGame === 'caca'){
-      var allW = G.defaultWords.concat(G.customWords);
-      var w = allW.sort(()=>Math.random()-0.5).slice(0, G.cfg.cacaWordCount);
-      var gridData = buildCacaGrid(w, G.cfg.cacaBoardSize);
-      G.gameState = {words: w, grid: gridData.grid};
-      G.conn.send({type: 'start', state: G.gameState});
-      $('lobbyScreen').classList.add('hidden'); initCaca(true);
-    } else {
-      G.conn.send({type: 'start'});
-      $('lobbyScreen').classList.add('hidden'); initStop();
-    }
-  };
-
-  // ================= CAÇA PALAVRAS =================
-  var cacaEls = { board: $('cacaBoard'), list: $('cacaWordList'), found: $('cacaFound'), total: $('cacaTotal'), timer: $('cacaTimer') };
-  var cacaState = { grid:[], words:[], found:[], isDrag:false, startCell:null, time:0 };
-  
-  function buildCacaGrid(wordList, size){
-    var grid = Array(size).fill(0).map(()=>Array(size).fill(''));
-    var placed = [];
-    var dirs = [[0,1], [1,0], [1,1], [1,-1]];
-    
-    wordList.forEach(w => {
-      var p = false;
-      for(var i=0; i<100 && !p; i++){
-        var d = dirs[Math.floor(Math.random()*dirs.length)];
-        var r = Math.floor(Math.random()*size), c = Math.floor(Math.random()*size);
-        var can = true;
-        for(var j=0; j<w.length; j++){
-          var nr = r + d[0]*j, nc = c + d[1]*j;
-          if(nr<0 || nr>=size || nc<0 || nc>=size || (grid[nr][nc] !== '' && grid[nr][nc] !== w[j])) { can = false; break; }
-        }
-        if(can){
-          for(var j=0; j<w.length; j++){ grid[r + d[0]*j][c + d[1]*j] = w[j]; }
-          p = true;
-        }
-      }
-    });
-    for(var i=0; i<size; i++) for(var j=0; j<size; j++) if(grid[i][j]==='') grid[i][j] = String.fromCharCode(65+Math.floor(Math.random()*26));
-    return {grid: grid};
-  }
-
-  function initCaca(fromOnline){
-    $('cacaScreen').classList.remove('hidden');
-    G.clearTimers(); cacaState.time = 0; cacaState.found = []; G.gameState.myScore = 0;
-    
-    if(G.mode === 'online') {
-      $('cacaOppScore').classList.remove('hidden'); $('cacaOppN').textContent = '0';
-    } else {
-      $('cacaOppScore').classList.add('hidden');
-      var allW = G.defaultWords.concat(G.customWords);
-      G.gameState.words = allW.sort(()=>Math.random()-0.5).slice(0, G.cfg.cacaWordCount);
-      var gd = buildCacaGrid(G.gameState.words, G.cfg.cacaBoardSize);
-      G.gameState.grid = gd.grid;
-    }
-    
-    var size = G.cfg.cacaBoardSize;
-    cacaEls.board.style.gridTemplateColumns = `repeat(${size}, 34px)`;
-    cacaEls.board.innerHTML = '';
-    
-    for(var r=0; r<size; r++){
-      for(var c=0; c<size; c++){
-        var div = document.createElement('div');
-        div.className = 'cell'; div.textContent = G.gameState.grid[r][c];
-        div.dataset.r = r; div.dataset.c = c;
-        cacaEls.board.appendChild(div);
-      }
-    }
-    
-    cacaEls.list.innerHTML = '';
-    G.gameState.words.forEach(w => {
-      var item = document.createElement('div'); item.className='word-item'; item.id='word-'+w;
-      item.innerHTML = '<span>'+w+'</span><div class="dot"></div>';
-      cacaEls.list.appendChild(item);
-    });
-    
-    cacaEls.total.textContent = G.gameState.words.length;
-    cacaEls.found.textContent = 0;
-    
-    setupCacaInput();
-    G.every(function(){ cacaState.time++; cacaEls.timer.textContent = G.fmtTime(cacaState.time); }, 1000);
-  }
-
-  function setupCacaInput(){
-    var cells = document.querySelectorAll('.cell');
-    var isDown = false, startR, startC, currentCells = [];
-    
-    function clearSel(){ cells.forEach(c=>c.classList.remove('sel')); currentCells=[]; }
-    
-    cells.forEach(cell => {
-      cell.onmousedown = function(){ isDown = true; startR=parseInt(this.dataset.r); startC=parseInt(this.dataset.c); clearSel(); };
-      cell.onmouseenter = function(){
-        if(!isDown) return;
-        clearSel();
-        var er=parseInt(this.dataset.r), ec=parseInt(this.dataset.c);
-        var dr = Math.sign(er - startR), dc = Math.sign(ec - startC);
-        var len = Math.max(Math.abs(er - startR), Math.abs(ec - startC));
-        for(var i=0; i<=len; i++){
-          var nr = startR + dr*i, nc = startC + dc*i;
-          var cDiv = document.querySelector(`.cell[data-r="${nr}"][data-c="${nc}"]`);
-          if(cDiv) { cDiv.classList.add('sel'); currentCells.push(cDiv); }
-        }
-      };
-      cell.onmouseup = function(){
-        if(!isDown) return;
-        isDown = false;
-        var word = currentCells.map(c=>c.textContent).join('');
-        var wordRev = word.split('').reverse().join('');
-        
-        var foundW = G.gameState.words.find(w => !cacaState.found.includes(w) && (w === word || w === wordRev));
-        if(foundW){
-          cacaState.found.push(foundW);
-          currentCells.forEach(c=>{ c.classList.remove('sel'); c.classList.add('found'); });
-          $('word-'+foundW).classList.add('done');
-          G.gameState.myScore++;
-          cacaEls.found.textContent = G.gameState.myScore;
-          
-          if(G.mode === 'online' && G.conn) G.conn.send({type: 'caca_score', score: G.gameState.myScore});
-          
-          if(cacaState.found.length === G.gameState.words.length){
-            G.toast("Você encontrou todas!");
-            G.later(()=>endGame(G.gameState.myScore * 10 - Math.floor(cacaState.time/10)), 1500);
-          }
-        } else {
-          clearSel();
-        }
-      };
-    });
-    cacaEls.board.onmouseleave = function(){ if(isDown){ isDown=false; clearSel(); } };
-  }
-
-  $('cacaBack').onclick = function(){ G.clearTimers(); enterMenu(); };
-
-  // ================= ADEDONHA =================
-  var stopState = { round:1, letter:'', cats:['Música', 'Álbum ou DVD', 'Nome Comum', 'Lugar', 'Objeto'], time:0, scores:[] };
-  
-  function initStop(){
-    $('stopScreen').classList.remove('hidden');
-    stopState.round = 1; stopState.scores = [];
-    $('stopGrid').innerHTML = '';
-    stopState.cats.forEach((c,i) => {
-      var d = document.createElement('div'); d.className = 'stop-field';
-      d.innerHTML = `<label>${c}</label><input type="text" id="stopInp_${i}" autocomplete="off">`;
-      $('stopGrid').appendChild(d);
-    });
-    startStopRound();
-  }
-
-  function startStopRound(){
-    var chars = "ABCDEFGHIJKLMNOPRSTUVZ";
-    stopState.letter = chars[Math.floor(Math.random()*chars.length)];
-    $('stopLetterBig').textContent = stopState.letter;
-    $('stopLetter').textContent = stopState.letter;
-    $('stopRound').textContent = `Rodada ${stopState.round}/${G.cfg.stopRounds}`;
-    $('stopResults').classList.add('hidden');
-    
-    for(var i=0; i<stopState.cats.length; i++){
-      var inp = $('stopInp_'+i); inp.value=''; inp.disabled=false;
-      inp.className = '';
-    }
-    
-    stopState.time = G.cfg.stopTime;
-    G.clearTimers();
-    updateStopTimer();
-    G.every(function(){
-      stopState.time--; updateStopTimer();
-      if(stopState.time <= 0) handleStopBtn();
-    }, 1000);
-  }
-  
-  function updateStopTimer(){
-    $('stopTimer').textContent = G.fmtTime(stopState.time);
-    var pct = (stopState.time / G.cfg.stopTime)*100;
-    $('stopProgress').style.width = pct + '%';
-  }
-
-  function getStopAnswers(){
-    var a = [];
-    for(var i=0; i<stopState.cats.length; i++) a.push($('stopInp_'+i).value.trim().toUpperCase());
-    return a;
-  }
-
-  function handleStopBtn(){
-    G.clearTimers();
-    for(var i=0; i<stopState.cats.length; i++) $('stopInp_'+i).disabled = true;
-    
-    if(G.mode === 'online' && G.conn){
-      G.conn.send({type: 'stop_stop', answers: getStopAnswers()});
-      G.toast("Aguardando respostas do oponente...");
-    } else {
-      endStopRound(null); // Solo
-    }
-  }
-  $('btnStopStop').onclick = handleStopBtn;
-
-  function endStopRound(oppAnswers){
-    $('stopResults').classList.remove('hidden');$('stopRoundRes').textContent = stopState.round;
-    var myAns = getStopAnswers(), tbody = $('stopResultsBody');
-    tbody.innerHTML = '';
-    
-    var roundScore = 0;
-    for(var i=0; i<stopState.cats.length; i++){
-      var ans = myAns[i];
-      var valid = ans.length > 1 && ans.startsWith(stopState.letter);
-      var pts = 0;
-      
-      var tr = document.createElement('tr');
-      var tdCat = document.createElement('td'); tdCat.textContent = stopState.cats[i];
-      var tdMy = document.createElement('td'); tdMy.textContent = ans || '—';
-      var tdPts = document.createElement('td');
-      
-      if(valid){
-        if(oppAnswers){
-          var oAns = oppAnswers[i];
-          if(oAns && oAns.length>1 && oAns.startsWith(stopState.letter)){
-            if(ans === oAns) { pts = 5; } else { pts = 10; }
-          } else { pts = 10; }
-        } else {
-          pts = 10; // Solo
-        }
-      }
-      
-      $('stopInp_'+i).className = pts > 0 ? 'correct' : (ans ? 'wrong' : '');
-      tdPts.innerHTML = `<b>${pts}</b>`;
-      tr.appendChild(tdCat); tr.appendChild(tdMy); 
-      
-      if(G.mode === 'online') {
-        var tdOpp = document.createElement('td'); tdOpp.textContent = oppAnswers[i] || '—';
-        tr.appendChild(tdOpp); $('oppTh').classList.remove('hidden');
-      } else $('oppTh').classList.add('hidden');
-      
-      tr.appendChild(tdPts); tbody.appendChild(tr);
-      roundScore += pts;
-    }
-    
-    $('stopScore').textContent = roundScore;
-    stopState.scores.push(roundScore);
-  }
-
-  $('btnNextRound').onclick = function(){
-    if(stopState.round >= G.cfg.stopRounds){
-      var total = stopState.scores.reduce((a,b)=>a+b, 0);
-      endGame(total);
-    } else {
-      stopState.round++;
-      startStopRound();
-    }
-  };
-
-  $('stopBack').onclick = function(){ G.clearTimers(); enterMenu(); };
-
-  G.icons();
-})();
+function resetLobbyUI() {
+  document.getElementById('lobbyCreate').classList.remove('hidden');
+  document.getElementById('lobbyRoom').classList.add('hidden');
+  document.getElementById('opponentLine').classList.add('hidden');
+  document.getElementById('btnStartOnline').classList.add('hidden');
+  document.getElementById('lobbyStatus').className = "lobby-status wait";
+  document.getElementById('joinCode').value = "";
+}
 </script>
 </body>
 </html>
