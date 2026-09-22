@@ -119,6 +119,21 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
 .alternativa.correta{background:#00e67622;border-color:var(--green);color:var(--green)}
 .alternativa.errada{background:#ff174422;border-color:var(--red);color:#ff8a80}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1b1b32;border:1px solid var(--border);color:#fff;padding:10px 16px;border-radius:20px;font-size:12px;font-weight:700;z-index:9999;box-shadow:0 8px 25px #000a;animation:fadeIn .3s}
+
+.modal-overlay{position:fixed;inset:0;background:#000a;backdrop-filter:blur(6px);z-index:5000;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.ativa{display:flex;animation:fadeIn .2s}
+.modal-box{background:linear-gradient(180deg,#1b1b32,#12122a);border:1px solid #2f2f52;border-radius:18px;padding:18px;max-width:420px;width:100%;box-shadow:0 20px 60px #000c;animation:fadeIn .3s}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.modal-header h3{color:var(--gold);font-size:15px;font-weight:900}
+.modal-close{background:var(--card2);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900}
+.invite-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0;display:flex;gap:10px;align-items:center;cursor:pointer;transition:.15s}
+.invite-card:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:0 4px 12px #0006}
+.invite-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.invite-info{flex:1}
+.invite-title{font-weight:800;font-size:13px}
+.invite-sub{font-size:10px;opacity:.6;margin-top:2px;line-height:1.3}
+.invite-link-box{background:var(--bg);border:1px dashed var(--gold);border-radius:10px;padding:10px;margin:10px 0;word-break:break-all;font-size:12px;text-align:center}
+
 </style>
 </head>
 <body>
@@ -156,6 +171,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
     <div class="progress-text"><span id="progressAtual">0 pts</span><span id="progressProx">500 pts</span></div>
     <div style="font-size:10px;opacity:.5;text-align:center;margin-top:4px" id="progressFalta"></div>
   </div>
+  <button class="amigo" id="btnConvidar" style="background:linear-gradient(135deg,#00bfa5,#009688);">📨 Convidar Amigos - Qualquer Modo</button>
   <button class="secundario" id="btnSolo">🎮 Solo</button>
   <button class="ranqueada" id="btnRanqueada">🏆 Ranqueada</button>
   <button class="amigo" id="btnAmigo">👥 Caça 1v1 Infinito</button>
@@ -184,6 +200,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
   <div id="chatSalaBox" class="chat-box"></div>
   <div class="chat-input-row"><input type="text" id="chatSalaInput" placeholder="Chat..."><button style="width:auto" id="btnChatSala" class="primario">➤</button></div>
   <button class="primario" id="btnIniciarSala" disabled>⏳ Aguardando oponente...</button>
+  <button class="amigo" id="btnConvidarSala" style="background:linear-gradient(135deg,#00bfa5,#009688);">📨 Convidar Amigos pra Sala</button>
   <button class="secundario" id="btnCopiarCodigo">📋 Copiar Código</button>
   <button class="secundario" id="btnVoltarSala">← Sair da Sala</button>
 </div>
@@ -206,6 +223,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
   <div id="chatStopLobbyBox" class="chat-box"></div>
   <div class="chat-input-row"><input type="text" id="chatStopLobbyInput" placeholder="Chat da sala..."><button style="width:auto" id="btnChatStopLobby" class="primario">➤</button></div>
   <button class="primario" id="btnIniciarStop" disabled>⏳ Mín 2 jogadores</button>
+  <button class="amigo" id="btnConvidarSalaStop" style="background:linear-gradient(135deg,#00bfa5,#009688);">📨 Convidar Amigos pra Sala</button>
   <button class="secundario" id="btnCopiarCodigoStop">📋 Copiar Código</button>
   <button class="secundario" id="btnVoltarSalaStop">← Sair</button>
 </div>
@@ -236,6 +254,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
   <div class="palavras" id="listaPalavras"></div>
   <br>
   <button id="btnProximo" class="primario">Próxima Rodada ➡️</button>
+  <button class="amigo" id="btnConvidarJogo" style="background:linear-gradient(135deg,#00bfa5,#009688);">📨 Convidar Amigo pra Jogar</button>
   <button class="secundario" id="btnVoltarInicioJogo">← Menu</button>
 </div>
 
@@ -256,6 +275,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
   <div id="chatStopBox" class="chat-box"></div>
   <div class="chat-input-row"><input type="text" id="chatStopInput" placeholder="Digite..."><button style="width:auto" id="btnChatStop" class="primario">➤</button></div>
   <div class="emoji-bar"><button class="emoji-btn" data-emoji-stop="😂">😂</button><button class="emoji-btn" data-emoji-stop="🔥">🔥</button><button class="emoji-btn" data-emoji-stop="❤️">❤️</button><button class="emoji-btn" data-emoji-stop="😎">😎</button><button class="emoji-btn" data-emoji-stop="🤣">🤣</button><button class="emoji-btn" data-emoji-stop="😡">😡</button><button class="emoji-btn" data-emoji-stop="👏">👏</button><button class="emoji-btn" data-emoji-stop="💀">💀</button><button class="emoji-btn" data-emoji-stop="🛑">🛑</button></div>
+  <button class="amigo" id="btnConvidarStopGame" style="background:linear-gradient(135deg,#00bfa5,#009688);">📨 Convidar Amigos</button>
   <button class="secundario" id="btnVoltarStop">← Sair</button>
 </div>
 
@@ -264,7 +284,16 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
   <div id="resultadoRodadaLetra" style="text-align:center;font-size:13px;margin:8px 0;font-weight:700"></div>
   <div id="resultadoRodadaLista"></div>
   <div class="vs-placar" id="placarGeralStop"></div>
-  <button class="primario" id="btnProximaRodadaStop">➡️ Próxima Rodada</button>
+  
+  <!-- NOVO: CONTAGEM AUTOMÁTICA 10s -->
+  <div id="autoNextContainer" style="background:linear-gradient(135deg,#1a1a2e,#252545);border:2px solid var(--gold);border-radius:16px;padding:16px;margin:14px 0;text-align:center;position:relative;overflow:hidden">
+    <div style="font-size:11px;opacity:.7;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⏳ Próxima rodada automaticamente em</div>
+    <div id="autoCountdownNumero" style="font-size:48px;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 20px #ffd70088">10</div>
+    <div style="font-size:11px;opacity:.6;margin-top:4px">segundos</div>
+    <div class="timer-bar" style="margin-top:10px"><div class="timer-fill" id="autoCountdownBar" style="width:100%"></div></div>
+    <div id="autoCountdownTexto" style="font-size:11px;margin-top:8px;opacity:.8">Preparando próxima letra...</div>
+  </div>
+
   <button class="secundario oculta" id="btnFinalizarStop">🏁 Ver Ranking Final</button>
 </div>
 
@@ -306,7 +335,93 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
 
 </div>
 
+
+<!-- MODAL CONVIDAR AMIGOS - UNIVERSAL -->
+<div id="modalConvite" class="modal-overlay" onclick="if(event.target===this) fecharConvite()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📨 Convidar Amigos</h3>
+      <button class="modal-close" onclick="fecharConvite()">✕</button>
+    </div>
+    <p style="font-size:11px;opacity:.7;margin-bottom:10px;text-align:center" id="inviteDescricao">Chame seus amigos pra jogar!</p>
+    
+    <div id="inviteCodigoArea" class="oculta">
+      <div style="font-size:10px;opacity:.6;text-align:center;margin-bottom:4px;font-weight:700">CÓDIGO DA SALA</div>
+      <div class="invite-link-box" id="inviteCodigoTexto" style="font-size:22px;letter-spacing:5px;font-weight:900;color:var(--gold)">----</div>
+      <button class="primario" onclick="copiarCodigoConvite()" style="margin-bottom:8px">📋 Copiar Código</button>
+    </div>
+
+    <div class="invite-link-box" id="inviteLinkTexto">https://tndcp.github.io/jogo/</div>
+    
+    <div class="invite-card" onclick="convidarWhatsApp()">
+      <div class="invite-icon" style="background:#25D36622;border:1px solid #25D36644">💬</div>
+      <div class="invite-info"><div class="invite-title">WhatsApp</div><div class="invite-sub">Enviar convite no Zap</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" onclick="convidarCopiarLink()">
+      <div class="invite-icon" style="background:#ffd70022;border:1px solid #ffd70044">🔗</div>
+      <div class="invite-info"><div class="invite-title">Copiar Link</div><div class="invite-sub">Link do jogo com código</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" onclick="convidarNativo()">
+      <div class="invite-icon" style="background:#2196f322;border:1px solid #2196f344">📤</div>
+      <div class="invite-info"><div class="invite-title">Compartilhar</div><div class="invite-sub">Outros apps instalados</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" id="cardInviteSala" onclick="convidarCodigoSala()">
+      <div class="invite-icon" style="background:#9c27b022;border:1px solid #9c27b044">🎮</div>
+      <div class="invite-info"><div class="invite-title">Convidar pra Sala Atual</div><div class="invite-sub">Só pra quem já está em sala</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    
+    <button class="secundario" onclick="fecharConvite()" style="margin-top:8px">Fechar</button>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<!-- MODAL CONVIDAR AMIGOS - UNIVERSAL -->
+<div id="modalConvite" class="modal-overlay" onclick="if(event.target===this) fecharConvite()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📨 Convidar Amigos</h3>
+      <button class="modal-close" onclick="fecharConvite()">✕</button>
+    </div>
+    <p style="font-size:11px;opacity:.7;margin-bottom:10px;text-align:center" id="inviteDescricao">Chame seus amigos pra jogar!</p>
+    
+    <div id="inviteCodigoArea" class="oculta">
+      <div style="font-size:10px;opacity:.6;text-align:center;margin-bottom:4px;font-weight:700">CÓDIGO DA SALA</div>
+      <div class="invite-link-box" id="inviteCodigoTexto" style="font-size:22px;letter-spacing:5px;font-weight:900;color:var(--gold)">----</div>
+      <button class="primario" onclick="copiarCodigoConvite()" style="margin-bottom:8px">📋 Copiar Código</button>
+    </div>
+
+    <div class="invite-link-box" id="inviteLinkTexto">https://tndcp.github.io/jogo/</div>
+    
+    <div class="invite-card" onclick="convidarWhatsApp()">
+      <div class="invite-icon" style="background:#25D36622;border:1px solid #25D36644">💬</div>
+      <div class="invite-info"><div class="invite-title">WhatsApp</div><div class="invite-sub">Enviar convite no Zap</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" onclick="convidarCopiarLink()">
+      <div class="invite-icon" style="background:#ffd70022;border:1px solid #ffd70044">🔗</div>
+      <div class="invite-info"><div class="invite-title">Copiar Link</div><div class="invite-sub">Link do jogo com código</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" onclick="convidarNativo()">
+      <div class="invite-icon" style="background:#2196f322;border:1px solid #2196f344">📤</div>
+      <div class="invite-info"><div class="invite-title">Compartilhar</div><div class="invite-sub">Outros apps instalados</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    <div class="invite-card" id="cardInviteSala" onclick="convidarCodigoSala()">
+      <div class="invite-icon" style="background:#9c27b022;border:1px solid #9c27b044">🎮</div>
+      <div class="invite-info"><div class="invite-title">Convidar pra Sala Atual</div><div class="invite-sub">Só pra quem já está em sala</div></div>
+      <div style="font-size:18px">➤</div>
+    </div>
+    
+    <button class="secundario" onclick="fecharConvite()" style="margin-top:8px">Fechar</button>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
 /* ===== CONFIG SEGURA ===== */
@@ -383,6 +498,7 @@ function voltarMenu(){
   if(listenerSala){try{listenerSala.off();}catch{} listenerSala=null;}
   if(listenerChat){try{listenerChat.off();}catch{} listenerChat=null;}
   if(timerStop){clearInterval(timerStop); timerStop=null;}
+  if(typeof autoCountdownInterval!=='undefined' && autoCountdownInterval){clearInterval(autoCountdownInterval); autoCountdownInterval=null;}
   limparAutoTimers();
   if(salaAtual && souHost && codigoSalaAtual && firebaseOK){
     try{refSalas.child(codigoSalaAtual).remove(); refChats.child(codigoSalaAtual).remove();}catch{}
@@ -585,7 +701,10 @@ function escutarSala(codigo){
   listenerSala=refSalas.child(codigo);
   listenerSala.on('value', snap=>{
     if(!snap.exists()){toast('Sala encerrada pelo host'); voltarMenu(); return;}
-    const s=snap.val(); salaAtual=s; renderListaJogadoresSala(s);
+    const s=snap.val(); salaAtual=s; 
+    // FIX CRÍTICO: sempre recalcula quem é host, mesmo após F5
+    souHost = (s.hostId === meuId());
+    renderListaJogadoresSala(s);
     if(s.status==='waiting'){
       const guestNome=s.guest?(s.jogadores[s.guestId]||s.guest):null;
       $('statusSala').textContent=guestNome?`🎉 ${guestNome} entrou! Pode iniciar!`:'Aguardando oponente... Compartilhe o código!';
@@ -596,7 +715,18 @@ function escutarSala(codigo){
     }
   });
 }
-async function iniciarSalaHost(){if(!salaAtual||!salaAtual.guest){toast('Aguardando oponente!');return;} await refSalas.child(codigoSalaAtual).update({status:'playing'});}
+async function iniciarSalaHost(){
+  try{
+    if(!codigoSalaAtual){return;}
+    const snap = await refSalas.child(codigoSalaAtual).once('value');
+    if(!snap.exists()) return;
+    const s = snap.val();
+    const isHost = (s.hostId === meuId());
+    if(!isHost){ toast('Só o host pode iniciar'); return; }
+    if(!s.guest){toast('Aguardando oponente!');return;}
+    await refSalas.child(codigoSalaAtual).update({status:'playing'});
+  }catch(e){ toast('Erro: '+e.message); }
+}
 async function entrarSalaCodigo(){
   const codigo=$('campoCodigoSala').value.trim().toUpperCase();
   const erro=$('msgErroSala');
@@ -745,6 +875,8 @@ function escutarSalaStop(codigo){
   listenerSala.on('value', snap=>{
     if(!snap.exists()){toast('Sala encerrada'); voltarMenu(); return;}
     const s=snap.val(); salaAtual=s;
+    // FIX CRÍTICO: sempre recalcula host, corrige bug da próxima rodada
+    souHost = (s.hostId === meuId());
     const lista=$('listaJogadoresStop');
     if(lista){
       lista.innerHTML='';
@@ -982,6 +1114,8 @@ async function calcularPontosStopAuto(s){
   await refSalas.child(codigoSalaAtual).child(`stop/pontosRodada/${s.rodada}`).set(pontosRodada);
   await refSalas.child(codigoSalaAtual).update({status:'resultadoRodada'});
 }
+let autoCountdownInterval = null;
+
 function mostrarResultadoRodadaStop(s){
   mostrarTela('telaStopResultado');
   const rodada=s.rodada; const total=s.totalRodadas;
@@ -1010,15 +1144,104 @@ function mostrarResultadoRodadaStop(s){
     div.innerHTML=`<span>${idx+1}º ${escapeHtml(nome)}</span><strong style="color:var(--gold)">${pts} pts</strong>`;
     placar.appendChild(div);
   });
-  const btnProx=$('btnProximaRodadaStop'); const btnFinal=$('btnFinalizarStop');
-  if(rodada>=total){btnProx.classList.add('oculta'); btnFinal.classList.remove('oculta');}
-  else{btnProx.classList.remove('oculta'); btnFinal.classList.add('oculta'); btnProx.textContent=`➡️ Próxima Rodada (${rodada+1}/${total})`;}
+
+  // === NOVA LÓGICA: AUTO 10 SEGUNDOS ===
+  const btnFinal=$('btnFinalizarStop');
+  const autoBox=$('autoNextContainer');
+  
+  if(rodada>=total){
+    // Última rodada - vai pro final
+    if(autoBox) autoBox.classList.add('oculta');
+    if(btnFinal) btnFinal.classList.remove('oculta');
+    // Auto final em 5s
+    setTimeout(()=>{
+      if(salaAtual && salaAtual.status==='resultadoRodada'){
+        refSalas.child(codigoSalaAtual).update({status:'finished'}).catch(()=>{});
+      }
+    }, 5000);
+    $('resultadoRodadaLetra').textContent += ' - 🏁 FIM! Indo para ranking final em 5s...';
+    return;
+  }
+  
+  // Não é última: contagem 10s
+  if(btnFinal) btnFinal.classList.add('oculta');
+  if(autoBox) autoBox.classList.remove('oculta');
+  
+  if(autoCountdownInterval) clearInterval(autoCountdownInterval);
+  let tempo = 10;
+  const numEl = $('autoCountdownNumero');
+  const barEl = $('autoCountdownBar');
+  const txtEl = $('autoCountdownTexto');
+  if(numEl) numEl.textContent = tempo;
+  if(barEl) barEl.style.width = '100%';
+  if(txtEl) txtEl.textContent = `Próxima: Rodada ${rodada+1}/${total}`;
+  
+  autoCountdownInterval = setInterval(()=>{
+    tempo--;
+    if(numEl) {
+      numEl.textContent = tempo;
+      numEl.style.transform = 'scale(1.15)';
+      setTimeout(()=>{ numEl.style.transform='scale(1)'; }, 150);
+    }
+    if(barEl) barEl.style.width = (tempo/10*100)+'%';
+    
+    if(tempo<=0){
+      clearInterval(autoCountdownInterval);
+      autoCountdownInterval = null;
+      if(txtEl) txtEl.textContent = '🚀 Iniciando próxima rodada...';
+      // Host dispara a próxima rodada, outros aguardam via listener
+      const isHost = salaAtual && (salaAtual.hostId === meuId());
+      if(isHost){
+        proximaRodadaStop();
+      } else {
+        if(txtEl) txtEl.textContent = '⏳ Aguardando host iniciar...';
+        // Fallback: se host não iniciar em 3s, tenta forçar (caso host caiu)
+        setTimeout(()=>{
+          if(salaAtual && salaAtual.status==='resultadoRodada'){
+            proximaRodadaStop();
+          }
+        }, 3000);
+      }
+    }
+  }, 1000);
 }
 async function proximaRodadaStop(){
-  if(!souHost){toast('Só o host inicia próxima rodada');return;}
-  const s=salaAtual; const novaRodada=s.rodada+1; const novaLetra=LETRAS[Math.floor(Math.random()*26)];
-  await refSalas.child(codigoSalaAtual).update({rodada:novaRodada, status:'playing', 'stop/letra':novaLetra, 'stop/respostas':{}, 'stop/finalizados':{}, 'stop/status':'playing'});
-  limparAutoTimers(); autoCheatLigado=false; atualizarBotaoAuto();
+  try{
+    if(!codigoSalaAtual || !firebaseOK){ toast('Sem conexão com a sala'); return; }
+    const snap = await refSalas.child(codigoSalaAtual).once('value');
+    if(!snap.exists()){ toast('Sala não existe mais'); voltarMenu(); return; }
+    const s = snap.val();
+    const isHost = (s.hostId === meuId());
+    if(!isHost){ toast('Apenas o host pode iniciar a próxima rodada'); return; }
+    if(s.rodada >= s.totalRodadas){ 
+      await refSalas.child(codigoSalaAtual).update({status:'finished'});
+      toast('Fim de jogo! Indo para ranking final');
+      return;
+    }
+    const novaRodada = (s.rodada||1) + 1;
+    const novaLetra = LETRAS[Math.floor(Math.random()*26)];
+    
+    // Limpa respostas e finalizados de forma atômica e segura
+    await refSalas.child(codigoSalaAtual).child('stop/respostas').remove();
+    await refSalas.child(codigoSalaAtual).child('stop/finalizados').remove();
+    
+    await refSalas.child(codigoSalaAtual).update({
+      rodada: novaRodada,
+      status: 'playing',
+      'stop/letra': novaLetra,
+      'stop/status': 'playing',
+      iniciado: firebase.database.ServerValue.TIMESTAMP
+    });
+    
+    toast(`🚀 Rodada ${novaRodada}/${s.totalRodadas} - Letra ${novaLetra}!`);
+    limparAutoTimers(); 
+    autoCheatLigado=false; 
+    atualizarBotaoAuto();
+    
+  }catch(e){
+    console.error('Erro proxima rodada', e);
+    toast('Erro ao iniciar próxima rodada: '+(e.message||e));
+  }
 }
 function mostrarFinalStop(s){
   mostrarTela('telaStopFinal');
@@ -1166,6 +1389,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
       b.onclick=()=>{const e=b.dataset.emojiStop; const input=$('chatStopInput'); if(input){input.value+=e; input.focus();}};
     });
     $('btnComprarMenu').onclick=async()=>{dadosUsuario.moedas=(dadosUsuario.moedas||0)+50; await salvarDados(); atualizarTelaInicio(); $('saldoLojaPrincipal').textContent=`💰 ${dadosUsuario.moedas} moedas`; toast('💰 +50 moedas adicionadas! (Demo)');};
+    // === BOTÕES DE CONVITE UNIVERSAL ===
+    $('btnConvidar') && ($('btnConvidar').onclick=()=>abrirConvite('geral'));
+    $('btnConvidarSala') && ($('btnConvidarSala').onclick=()=>abrirConvite('sala'));
+    $('btnConvidarSalaStop') && ($('btnConvidarSalaStop').onclick=()=>abrirConvite('stop'));
+    $('btnConvidarJogo') && ($('btnConvidarJogo').onclick=()=>abrirConvite(modoJogo||'solo'));
+    $('btnConvidarStopGame') && ($('btnConvidarStopGame').onclick=()=>abrirConvite('stop'));
+    // Verificar se veio por link de convite
+    verificarCodigoNaURL();
+    
     $('selectRodadas')?.addEventListener('change',atualizarCatsStop);
     $('selectTempo')?.addEventListener('change',atualizarCatsStop);
     try{const ultimo=localStorage.getItem('luan_ultimo'); if(ultimo && $('campoUsuario')) $('campoUsuario').value=ultimo;}catch{}
@@ -1192,6 +1424,134 @@ function carregarPergunta(){
     lista.appendChild(d);
   });
 }
+
+/* ===== SISTEMA DE CONVITE UNIVERSAL - QUALQUER MODO ===== */
+let inviteModoAtual = 'geral';
+
+function getLinkBase(){
+  // tenta pegar url atual, senão usa github.io do print
+  try{
+    const base = location.origin + location.pathname;
+    if(base.includes('github.io')) return base;
+  }catch{}
+  return 'https://tndcp.github.io/jogo/';
+}
+
+function abrirConvite(modo='geral'){
+  inviteModoAtual = modo;
+  const modal = $('modalConvite');
+  const linkBox = $('inviteLinkTexto');
+  const codigoArea = $('inviteCodigoArea');
+  const codigoTexto = $('inviteCodigoTexto');
+  const desc = $('inviteDescricao');
+  const base = getLinkBase();
+  
+  let link = base;
+  let textoDesc = 'Chame seus amigos pra jogar Luan Coins V7!';
+  let codigo = codigoSalaAtual || '';
+  
+  if(codigo && (modo==='sala' || modo==='stop' || salaAtual)){
+    link = base + '?codigo=' + codigo;
+    if(modo==='stop' || (salaAtual && salaAtual.tipo==='stop')){
+      textoDesc = `🛑 Entre na minha sala STOP! Código: ${codigo} - ${salaAtual?.categorias?.length||8} categorias!`;
+    } else {
+      textoDesc = `🎮 Entre na minha sala Caça-Palavras! Código: ${codigo} - Dificuldade ${salaAtual?.dificuldade||'médio'}!`;
+    }
+    codigoArea.classList.remove('oculta');
+    codigoTexto.textContent = codigo;
+    $('cardInviteSala').classList.remove('oculta');
+  } else {
+    // convite geral
+    if(modo==='solo') textoDesc = '🎮 Vem jogar Solo no Luan Coins! Bora ver quem faz mais pontos?';
+    else if(modo==='ranqueada') textoDesc = '🏆 Desafio você na Ranqueada do Luan Coins! Entra e me supera no ranking!';
+    else if(modo==='quiz') textoDesc = '🎤 Quiz do Luan Santana! Será que você sabe tudo? Te desafio!';
+    else if(modo==='stop') textoDesc = '🛑 STOP Adedonha PRO - 2 a 6 jogadores! Criei uma sala, entra!';
+    else textoDesc = '🎸 Luan Coins V7 PRO - Caça-palavras + STOP + Quiz! Jogue comigo!';
+    
+    codigoArea.classList.add('oculta');
+    if(!codigo) $('cardInviteSala').classList.add('oculta');
+  }
+  
+  linkBox.textContent = link;
+  desc.textContent = textoDesc;
+  modal.classList.add('ativa');
+  
+  // vibra se tiver suporte
+  try{ navigator.vibrate && navigator.vibrate(30); }catch{}
+}
+
+function fecharConvite(){
+  $('modalConvite').classList.remove('ativa');
+}
+
+function copiarCodigoConvite(){
+  const codigo = $('inviteCodigoTexto').textContent;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(codigo).then(()=>toast('📋 Código '+codigo+' copiado!')).catch(()=>{
+      prompt('Copie o código:', codigo);
+    });
+  } else {
+    prompt('Copie o código:', codigo);
+  }
+}
+
+function getTextoConviteCompleto(){
+  const base = $('inviteLinkTexto').textContent;
+  const desc = $('inviteDescricao').textContent;
+  const codigo = codigoSalaAtual ? `\n\n🎮 CÓDIGO: ${codigoSalaAtual}\nÉ só colar em "Entrar com Código"` : '';
+  return `${desc}\n\n${base}${codigo}\n\n🎸 Luan Coins V7 PRO`;
+}
+
+function convidarWhatsApp(){
+  const texto = encodeURIComponent(getTextoConviteCompleto());
+  const url = `https://wa.me/?text=${texto}`;
+  window.open(url, '_blank');
+  toast('Abrindo WhatsApp...');
+}
+
+function convidarCopiarLink(){
+  const texto = getTextoConviteCompleto();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(texto).then(()=>toast('✅ Convite copiado! Cole no WhatsApp, Instagram...')).catch(()=>{
+      prompt('Copie o convite:', texto);
+    });
+  } else {
+    prompt('Copie o convite:', texto);
+  }
+}
+
+function convidarNativo(){
+  const texto = getTextoConviteCompleto();
+  if(navigator.share){
+    navigator.share({title:'Luan Coins V7 - Vem jogar!', text:texto, url:getLinkBase()}).then(()=>toast('Convite compartilhado!')).catch(()=>convidarCopiarLink());
+  } else {
+    convidarCopiarLink();
+  }
+}
+
+function convidarCodigoSala(){
+  if(!codigoSalaAtual){ toast('Crie uma sala primeiro!'); return; }
+  convidarWhatsApp();
+}
+
+// Auto-preencher código da URL se veio por convite ?codigo=XXXX
+function verificarCodigoNaURL(){
+  try{
+    const params = new URLSearchParams(location.search);
+    const codigo = params.get('codigo');
+    if(codigo && codigo.length>=4){
+      setTimeout(()=>{
+        const input = $('campoCodigoSala');
+        if(input){
+          mostrarTela('telaEntrarSala');
+          input.value = codigo.toUpperCase();
+          toast(`🎮 Código ${codigo.toUpperCase()} da sala de amigo! Clique em Entrar`);
+        }
+      }, 1200);
+    }
+  }catch{}
+}
+
 window.addEventListener('error',e=>{console.error(e); toast('⚠️ Erro: '+e.message);});
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
