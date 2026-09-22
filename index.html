@@ -183,10 +183,52 @@ function clientCPData(d){
 function finishGame(d){if(!S.cp)return;const tempo=Math.floor((Date.now()-S.cp.started)/1000),eu=d.eu??S.cp.eu,op=d.op??S.cp.op;S.res={titulo:eu>op?'🏆 Vitória!':eu===op?'🤝 Empate!':'😔 Derrota',sub:`${eu} x ${op} • ${tempo}s`,linhas:[['Você',eu],['Outros',op],['Tempo',tempo+'s']],replay:()=>S.cp.network?createCPRoom():startSolo()};if(eu>op&&!S.cp.network){S.user.pontos=(S.user.pontos||0)+10;saveCurrent();updateHome()}showResult()}
 
 function stopGod(){if(S.god.interval){clearInterval(S.god.interval);timers.delete(S.god.interval);S.god.interval=null}S.god.auto=false;$('godDot')?.classList.remove('ativo')}
-function godOne(){if(!S.cp||S.cp.end){stopGod();return}const p=rand(S.cp.jogo.palavras.filter(x=>!x.found));if(!p){stopGod();return}p.found=true;p.by='eu';S.cp.eu++;mark(p,'encontrada');$('cntEncontradas').textContent=(S.cp.eu+S.cp.op)+'/'+S.cp.jogo.palavras.length;updateVS();if(S.cp.network){const m={type:'word',palavra:p.palavra,cells:p.cells,by:S.user.nome,id:myPeerId};isHost?broadcast(m):sendHost(m)}checkEnd()}
+function godOne(){
+ if(!S.cp||S.cp.end){stopGod();return}
+ const p=rand(S.cp.jogo.palavras.filter(x=>!x.found));
+ if(!p){stopGod();return}
+ p.found=true;
+ p.by='eu';
+ S.cp.eu++;
+ mark(p,'encontrada');
+ $('cntEncontradas').textContent=(S.cp.eu+S.cp.op)+'/'+S.cp.jogo.palavras.length;
+ updateVS();
+ if(S.cp.network){
+   const m={type:'word',palavra:p.palavra,cells:p.cells,by:S.user.nome,id:myPeerId};
+   if(isHost) broadcast(m); else sendHost(m);
+ }
+ checkEnd();
+}
 function startGod(){if(!isThiago()||!S.cp)return;stopGod();S.god.auto=true;$('godDot').classList.add('ativo');S.god.interval=repeat(1800,()=>godOne());toast('🥷 Fantasma ativado')}
-function instantGod(){if(!isThiago()||!S.cp)return;S.cp.jogo.palavras.filter(p=>!p.found).forEach(p=>{p.found=true;p.by='eu';S.cp.eu++;mark(p,'encontrada');if(S.cp.network){const m={type:'word',palavra:p.palavra,cells:p.cells,by:S.user.nome,id:myPeerId};isHost?broadcast(m):sendHost(m)}});$('cntEncontradas').textContent=S.cp.jogo.palavras.length+'/'+S.cp.jogo.palavras.length;updateVS();checkEnd()}
-on('godDot','click',()=>$('godPanel').classList.toggle('visivel'));on('godBtnStealth','click',()=>{S.god.auto?stopGod():startGod();$('godPanel').classList.remove('visivel')});on('godBtnInstant','click',()=>{instantGod();$('godPanel').classList.remove('visivel')});
+function instantGod(){
+ if(!isThiago()||!S.cp||S.cp.end)return;
+ stopGod();
+ const restantes=S.cp.jogo.palavras.filter(p=>!p.found);
+ restantes.forEach(p=>{
+   p.found=true;
+   p.by='eu';
+   S.cp.eu++;
+   mark(p,'encontrada');
+   if(S.cp.network){
+     const m={type:'word',palavra:p.palavra,cells:p.cells,by:S.user.nome,id:myPeerId};
+     if(isHost) broadcast(m); else sendHost(m);
+   }
+ });
+ $('cntEncontradas').textContent=(S.cp.eu+S.cp.op)+'/'+S.cp.jogo.palavras.length;
+ updateVS();
+ toast('⚡ GOD: todas as palavras resolvidas!');
+ checkEnd();
+}
+on('godDot','click',()=>$('godPanel').classList.toggle('visivel'));on('godBtnStealth','click',()=>{
+ if(!isThiago()||!S.cp)return toast('GOD disponível durante uma partida.');
+ S.god.auto ? stopGod() : startGod();
+ $('godPanel').classList.remove('visivel');
+});
+on('godBtnInstant','click',()=>{
+ if(!isThiago()||!S.cp)return toast('GOD disponível durante uma partida.');
+ instantGod();
+ $('godPanel').classList.remove('visivel');
+});
 
 on('btnDica','click',()=>{if(!S.cp||S.cp.end)return;if((S.user.items.dica||0)<=0)return toast('Sem dicas!');const p=rand(S.cp.jogo.palavras.filter(x=>!x.found));if(!p)return;S.user.items.dica--;saveCurrent();$('cntDicas').textContent=S.user.items.dica;p.cells.forEach(q=>document.querySelector(`#gradeJogo .casa[data-r="${q.r}"][data-c="${q.c}"]`)?.classList.add('selecionada'));later(1000,()=>highlight([]));toast('Dica: '+p.palavra.length+' letras')});
 on('btnSairJogo','click',()=>{stopGod();clearAllTimers();S.cp=null;destroyPeer();showTela('telaInicio');updateHome()});
