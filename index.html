@@ -2,168 +2,141 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jogos com Sala Firebase</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Jogos - Sala com Amigos</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif}
-  body{background:#0f0f13;color:#fff}
-  .container{width:100%;max-width:500px;margin:0 auto;padding:16px}
-  .card{background:#1c1c22;border-radius:16px;padding:16px;margin-top:16px;border:1px solid #2a2a32}
-  button{width:100%;padding:14px;border-radius:12px;border:0;background:#7c5cff;color:#fff;font-weight:bold;cursor:pointer;margin-top:8px}
-  button.sec{background:#2a2a32}
-  input{width:100%;padding:14px;border-radius:12px;border:1px solid #333;background:#121214;color:#fff;margin-top:8px;text-transform:uppercase}
-  .codigo-grande{font-size:32px;font-weight:bold;letter-spacing:4px;text-align:center;color:#7c5cff}
-  .grid-caca{display:grid;grid-template-columns:repeat(var(--col),1fr);width:100%;max-width:95vw;margin:10px auto;aspect-ratio:1/1;gap:2px}
-  .celula{background:#2a2a32;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(14px,4vw,18px);aspect-ratio:1/1}
-  .celula.sel{background:#7c5cff}
-  .hidden{display:none}
-  .admin{border:1px solid #ffcc00;background:#1a1a0f}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:#0f0f13;color:#fff}
+.container{width:100%;max-width:480px;margin:0 auto;padding:16px}
+.card{background:#1c1c22;border-radius:20px;padding:16px;margin-top:14px;border:1px solid #2a2a32}
+button{width:100%;padding:15px;border-radius:14px;border:0;background:#7c5cff;color:#fff;font-weight:800;font-size:16px;margin-top:10px}
+button.sec{background:#2a2a32}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #333;background:#111;color:#fff;margin-top:8px;text-transform:uppercase;font-size:16px}
+.codigo{font-size:36px;font-weight:900;letter-spacing:5px;text-align:center;color:#7c5cff;padding:10px 0}
+.grid{display:grid;grid-template-columns:repeat(var(--c),1fr);width:100%;max-width:95vw;margin:0 auto;aspect-ratio:1/1;gap:3px}
+.cel{background:#2a2a32;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(14px,4.5vw,20px);aspect-ratio:1/1}
+.cel.sel{background:#7c5cff}
+.hidden{display:none}
+.flex{display:flex;gap:8px}
+.badge{background:#121214;border:1px dashed #7c5cff;border-radius:12px;padding:12px;text-align:center}
+.admin{border:1px solid #ffcc00;background:#1c1c0f}
 </style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// === 1. TROQUE AQUI PELO SEU CONFIG DO FIREBASE ===
+// COLE SEU FIREBASE AQUI
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
+  apiKey: "COLOQUE_SUA_APIKEY",
   authDomain: "SEU_PROJETO.firebaseapp.com",
   projectId: "SEU_PROJETO",
   storageBucket: "SEU_PROJETO.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123:web:abc"
+  messagingSenderId: "SEU_ID",
+  appId: "SEU_APPID"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-window.db = db; window.docF = doc; window.setDocF = setDoc; window.getDocF = getDoc; window.updateDocF = updateDoc; window.arrayUnionF = arrayUnion; window.onSnapshotF = onSnapshot;
+window.DB = db; window.DOC=doc; window.SET=setDoc; window.GET=getDoc; window.UPD=updateDoc; window.ARR=arrayUnion; window.SNAP=onSnapshot;
 </script>
 </head>
 <body>
 <div class="container">
-  <h1>🎮 Jogos Multiplayer</h1>
+<h2>🎮 Escolha o jogo</h2>
 
-  <div id="menu" class="card">
-    <button onclick="criarSala('adedonha')">Jogar Adedonha</button>
-    <button onclick="criarSala('caca')">Jogar Caça-Palavras</button>
-    <button class="sec" onclick="painelAdmin.classList.toggle('hidden')">⚙️ Minha Conta - Robozinho</button>
-  </div>
-
-  <div id="painelAdmin" class="card admin hidden">
-    <h3>🤖 Controle Robozinho</h3>
-    <label>Adedonha: <input type="checkbox" id="botAdedonha" checked onchange="salvarBot()"></label><br><br>
-    <label>Caça-Palavras: <input type="checkbox" id="botCaca" checked onchange="salvarBot()"></label>
-  </div>
-
-  <div id="areaJogo" class="card hidden">
-    <small>MODO: <b id="modoTxt"></b></small>
-    <div class="codigo-grande" id="codigoTxt">------</div>
-    <button onclick="copiar()">📋 Convidar - Copiar Link</button>
-    <div style="display:flex;gap:8px">
-      <input id="inputCodigo" placeholder="COLAR CÓDIGO">
-      <button style="width:100px" onclick="entrarComCodigo()">ENTRAR</button>
-    </div>
-    <p id="status"></p>
-    
-    <div id="jogoAdedonha" class="hidden"><h3>Adedonha</h3><p id="botInfoA"></p><input id="inpAded" placeholder="Sua palavra"><button onclick="alert('Enviado!')">Enviar</button></div>
-    
-    <div id="jogoCaca" class="hidden">
-      <h3>Caça-Palavras - 100% Tela Celular</h3><p id="botInfoC"></p>
-      <div id="grid" class="grid-caca"></div>
-    </div>
-
-    <button class="sec" onclick="location.href=location.pathname">Sair</button>
-    <div id="listaJogadores"></div>
-  </div>
+<div id="menu" class="card">
+<button onclick="criar('adedonha')">🔤 ADEDONHA</button>
+<button onclick="criar('caca')">🔍 CAÇA-PALAVRAS</button>
+<button class="sec" onclick="document.getElementById('admin').classList.toggle('hidden')">⚙️ Minha conta - Robozinho</button>
 </div>
 
-<script type="module">
-function gerarCodigo(){ return Math.random().toString(36).substring(2,8).toUpperCase(); }
+<div id="admin" class="card admin hidden">
+<h3>🤖 Seu Robozinho</h3>
+<p style="opacity:.7;font-size:13px">Ative ou desative por modo. Só você controla.</p>
+<div style="display:flex;justify-content:space-between;margin-top:12px">Robô Adedonha <input type="checkbox" id="bA" checked onchange="saveBot()"></div>
+<div style="display:flex;justify-content:space-between;margin-top:12px">Robô Caça-Palavras <input type="checkbox" id="bC" checked onchange="saveBot()"></div>
+</div>
 
-window.criarSala = async function(modo){
-  const codigo = gerarCodigo();
-  const codigoLimpo = codigo.trim().toUpperCase();
+<div id="game" class="hidden">
+<div class="card badge">
+<small>MODO: <b id="modoT"></b></small>
+<div class="codigo" id="codT">------</div>
+<small id="stat">Sala ativa</small>
+<button onclick="copiar()">📋 COPIAR CÓDIGO / LINK PARA AMIGO</button>
+<div class="flex"><input id="inCod" placeholder="TEM CÓDIGO? COLE AQUI"><button style="width:110px" onclick="entrarCod()">ENTRAR</button></div>
+<div id="players" style="margin-top:10px;font-size:13px;opacity:.8"></div>
+</div>
 
-  await setDocF(docF(db, "salas", codigoLimpo), {
-    codigo: codigoLimpo,
-    modo: modo,
-    jogadores: [localStorage.getItem('meuId') || 'player1'],
-    criadoEm: new Date()
-  });
+<div id="adedonhaBox" class="card hidden">
+<h3>Adedonha</h3>
+<p id="infoA"></p>
+<input id="inpA" placeholder="Ex: Abacaxi">
+<button onclick="alert('Resposta enviada!')">Enviar palavra</button>
+</div>
 
-  entrarNaTela(modo, codigoLimpo, true);
+<div id="cacaBox" class="card hidden">
+<h3>Caça-Palavras</h3>
+<p id="infoC"></p>
+<div id="grid" class="grid"></div>
+<p style="margin-top:8px;font-size:12px">Palavras: BOLA, JOGO, AMIGO</p>
+</div>
+
+<button class="sec" onclick="location.href=location.pathname">← Sair da sala</button>
+</div>
+</div>
+
+<script>
+function gen(){return Math.random().toString(36).substring(2,8).toUpperCase()}
+window.criar = async function(modo){
+const codigo = gen().trim().toUpperCase();
+await SET(DOC(DB,"salas",codigo),{codigo,modo,jogadores:["Você"],criado:new Date()});
+abrir(modo,codigo);
 }
-
-window.entrarComCodigo = async function(){
-  const digitado = document.getElementById('inputCodigo').value.trim().toUpperCase();
-  const ref = docF(db, "salas", digitado);
-  const snap = await getDocF(ref);
-
-  if(!snap.exists()){
-    alert('CODIGO INVALIDO OU NAO ENCONTRADO');
-    return;
-  }
-  const dados = snap.data();
-  await updateDocF(ref, { jogadores: arrayUnionF('amigo_'+Date.now()) });
-  entrarNaTela(dados.modo, digitado, false);
+window.entrarCod = async function(){
+const c = document.getElementById('inCod').value.trim().toUpperCase();
+if(!c) return;
+const r = DOC(DB,"salas",c);
+const s = await GET(r);
+if(!s.exists()){alert('CODIGO INVALIDO OU NAO ENCONTRADO');return}
+await UPD(r,{jogadores:ARR('Amigo')});
+abrir(s.data().modo,c);
 }
-
-function entrarNaTela(modo, codigo, dono){
-  document.getElementById('menu').classList.add('hidden');
-  document.getElementById('areaJogo').classList.remove('hidden');
-  document.getElementById('modoTxt').innerText = modo;
-  document.getElementById('codigoTxt').innerText = codigo;
-  document.getElementById('status').innerText = dono ? `Sala ${codigo} criada!` : `Entrou na sala ${codigo}`;
-  document.getElementById('jogoAdedonha').classList.toggle('hidden', modo !== 'adedonha');
-  document.getElementById('jogoCaca').classList.toggle('hidden', modo !== 'caca');
-  if(modo === 'caca') criarCaca();
-
-  const url = new URL(window.location); url.searchParams.set('codigo', codigo); url.searchParams.set('modo', modo);
-  window.history.replaceState({},'',url);
-
-  // Ouve jogadores entrando em tempo real
-  onSnapshotF(docF(db, "salas", codigo), (doc) => {
-    if(doc.exists()){
-      const j = doc.data().jogadores || [];
-      document.getElementById('listaJogadores').innerHTML = 'Jogadores na sala: ' + j.join(', ');
-    }
-  });
-  atualizarBot();
+function abrir(modo,codigo){
+document.getElementById('menu').classList.add('hidden');
+document.getElementById('game').classList.remove('hidden');
+document.getElementById('modoT').innerText=modo.toUpperCase();
+document.getElementById('codT').innerText=codigo;
+document.getElementById('adedonhaBox').classList.toggle('hidden',modo!=='adedonha');
+document.getElementById('cacaBox').classList.toggle('hidden',modo!=='caca');
+if(modo==='caca') montaCaca();
+saveBot();
+const u = new URL(location.href);u.searchParams.set('codigo',codigo);u.searchParams.set('modo',modo);history.replaceState({},'',u);
+SNAP(DOC(DB,"salas",codigo),(d)=>{if(d.exists()){document.getElementById('players').innerText='Na sala: '+(d.data().jogadores||[]).join(', ')}});
 }
-
-function criarCaca(){
-  const grid = document.getElementById('grid'); grid.style.setProperty('--col', 10); grid.innerHTML='';
-  for(let i=0;i<100;i++){ const d=document.createElement('div'); d.className='celula'; d.innerText=String.fromCharCode(65+Math.random()*26); d.onclick=()=>d.classList.toggle('sel'); grid.appendChild(d); }
+function montaCaca(){
+const g=document.getElementById('grid');g.style.setProperty('--c',10);g.innerHTML='';
+for(let i=0;i<100;i++){let d=document.createElement('div');d.className='cel';d.innerText=String.fromCharCode(65+Math.floor(Math.random()*26));d.onclick=()=>d.classList.toggle('sel');g.appendChild(d)}
 }
-
-window.copiar = function(){
-  const codigo = document.getElementById('codigoTxt').innerText;
-  const modo = document.getElementById('modoTxt').innerText;
-  const link = `${location.origin}${location.pathname}?codigo=${codigo}&modo=${modo}`;
-  navigator.clipboard.writeText(link); alert('Link copiado: '+link);
+window.copiar=function(){
+const cod=document.getElementById('codT').innerText;
+const modo=document.getElementById('modoT').innerText.toLowerCase();
+const link=`${location.origin}${location.pathname}?codigo=${cod}&modo=${modo}`;
+navigator.clipboard.writeText(link);alert('Copiado! Mande para o amigo:\n'+link);
 }
-
-window.salvarBot = function(){
-  localStorage.setItem('botAdedonha', document.getElementById('botAdedonha').checked);
-  localStorage.setItem('botCaca', document.getElementById('botCaca').checked);
-  atualizarBot();
+window.saveBot=function(){
+localStorage.setItem('botA',document.getElementById('bA').checked);
+localStorage.setItem('botC',document.getElementById('bC').checked);
+const a=localStorage.getItem('botA')!=='false';
+const c=localStorage.getItem('botC')!=='false';
+document.getElementById('infoA').innerText=a?'🤖 Robozinho ATIVADO':'🤖 Robozinho DESATIVADO';
+document.getElementById('infoC').innerText=c?'🤖 Robozinho ATIVADO':'🤖 Robozinho DESATIVADO';
 }
-window.atualizarBot = function(){
-  const a = localStorage.getItem('botAdedonha') !== 'false';
-  const c = localStorage.getItem('botCaca') !== 'false';
-  document.getElementById('botAdedonha').checked = a; document.getElementById('botCaca').checked = c;
-  if(document.getElementById('botInfoA')) document.getElementById('botInfoA').innerText = a ? '🤖 Robozinho ON' : '🤖 OFF';
-  if(document.getElementById('botInfoC')) document.getElementById('botInfoC').innerText = c ? '🤖 Robozinho ON' : '🤖 OFF';
-}
-
-// Auto-entrar por link
-window.addEventListener('load', async () => {
-  atualizarBot();
-  const p = new URLSearchParams(location.search); const cod = p.get('codigo'); const modo = p.get('modo');
-  if(cod && modo){
-    document.getElementById('inputCodigo').value = cod;
-    const ref = docF(db, "salas", cod.toUpperCase()); const snap = await getDocF(ref);
-    if(snap.exists()) entrarNaTela(snap.data().modo, cod.toUpperCase(), false);
-  }
+window.addEventListener('load',async()=>{
+document.getElementById('bA').checked=localStorage.getItem('botA')!=='false';
+document.getElementById('bC').checked=localStorage.getItem('botC')!=='false';
+saveBot();
+const p=new URLSearchParams(location.search);const cod=p.get('codigo');const modo=p.get('modo');
+if(cod){document.getElementById('inCod').value=cod;const s=await GET(DOC(DB,"salas",cod.toUpperCase()));if(s.exists())abrir(s.data().modo,cod.toUpperCase());}
 });
 </script>
 </body>
