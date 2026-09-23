@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Luan Games</title>
+<title>Luan Games - Free Fire V10.6</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;touch-action:none;user-select:none}
@@ -32,18 +32,15 @@ canvas{display:block}
 <div id="inv"><div id="slot0" class="slot active"><div id="s0g">Pistola</div><div id="s0a">12</div></div><div id="slot1" class="slot"><div id="s1g">-</div><div id="s1a">0</div></div></div>
 <div id="scope"><div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:180px;height:180px;border:2px solid #00ff88;border-radius:50%"></div></div>
 <div id="admPanel"><b>ADM Thiago Shelby</b><br>Vida <div class="switch" onclick="adm.life=!adm.life;this.classList.toggle('on',adm.life)"></div> Muni <div class="switch" onclick="adm.ammo=!adm.ammo;this.classList.toggle('on',adm.ammo)"></div> Dano <div class="switch" onclick="adm.dmg=!adm.dmg;this.classList.toggle('on',adm.dmg)"></div><br><button style="margin-top:5px;background:#00ff88;border:0;padding:3px 6px;border-radius:6px;font-size:9px" onclick="spawnLoot()">LOOT</button><button style="background:#ffcc00;border:0;padding:3px 6px;border-radius:6px;font-size:9px" onclick="addCoins(5000)">+5k</button></div>
-
 <div id="joy"><div id="stick"></div></div>
 <div class="btns">
 <div style="display:flex;gap:8px"><div id="zoomBtn" class="circle" style="background:#00e5ff;color:#000;display:none">ZOOM</div><div id="grenade" class="circle" style="background:#9c27b0;color:#fff">💣</div><div id="action" class="circle" style="background:#00ff88;color:#000">MOTO</div></div>
 <div style="display:flex;gap:8px"><div id="swap" class="circle" style="background:#ffffff22;color:#fff;border:1px solid #fff4">TROCA</div><div id="shoot" class="circle" style="background:linear-gradient(180deg,#ffcc00,#ff8800);color:#000;width:72px;height:72px;font-size:12px">TIRO</div></div>
 </div>
-
 <canvas id="game"></canvas>
-
 <div id="menu">
 <h1 style="font-family:Bebas Neue;font-size:52px;background:linear-gradient(90deg,#ff2e7a,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">LUAN GAMES</h1>
-<h2 style="font-family:Bebas Neue;font-size:28px">FREE FIRE V10.5 RANKED</h2>
+<h2 style="font-family:Bebas Neue;font-size:28px">FREE FIRE V10.6 RANKED</h2>
 <div class="card">
 <div style="display:flex;justify-content:space-between;font-size:11px"><span>💰 Moedas: <b id="mCoins">0</b></span><span>🏆 Rank: <b id="mRank">BRONZE</b></span></div>
 <div style="display:flex;justify-content:space-between;font-size:10px;margin-top:4px;opacity:.7"><span>Booyah: <b id="mWins">0</b></span><span>Kills: <b id="mKills">0</b></span></div>
@@ -53,7 +50,6 @@ canvas{display:block}
 <div class="card" style="font-size:10px">💰 +100 por kill | +1000 por Booyah<br>🏆 Bronze 0 | Prata 1000 | Ouro 3000 | Mestre 7000 | Desafiante 12000</div>
 <p id="final" style="margin-top:8px;color:#ffcc00;font-weight:800"></p>
 </div>
-
 <script>
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 let W,H; function resize(){W=innerWidth;H=innerHeight;canvas.width=W;canvas.height=H} resize(); onresize=resize;
@@ -65,7 +61,6 @@ let save=JSON.parse(localStorage.getItem('luan_v105')||'{"coins":0,"kills":0,"wi
 function saveGame(){ localStorage.setItem('luan_v105',JSON.stringify(save)); updateMenu(); }
 function updateMenu(){ document.getElementById('mCoins').textContent=save.coins; document.getElementById('mRank').textContent=save.rank; document.getElementById('mWins').textContent=save.wins; document.getElementById('mKills').textContent=save.kills; document.getElementById('coins').textContent=save.coins; document.getElementById('rank').textContent=save.rank; let pts=save.coins; if(pts>=12000) save.rank='DESAFIANTE'; else if(pts>=7000) save.rank='MESTRE'; else if(pts>=3000) save.rank='OURO'; else if(pts>=1000) save.rank='PRATA'; else save.rank='BRONZE'; } updateMenu();
 function addCoins(v){ save.coins+=v; saveGame(); }
-
 function newGame(){
   player={x:MAP/2,y:MAP/2,r:15,life:100,vest:0,inv:[{gun:'Pistola',ammo:12},{gun:null,ammo:0}],activeSlot:0,angle:0,speed:4.8,grenades:2};
   bullets=[]; enemies=[]; squad=[]; loots=[]; houses=[]; trees=[]; motos=[]; grenades=[]; safeZone={x:MAP/2,y:MAP/2,r:1100,targetR:1100}; onMoto=null;
@@ -77,12 +72,11 @@ function newGame(){
   for(let i=0;i<3;i++) squad.push({x:player.x+Math.random()*60-30,y:player.y+Math.random()*60-30,r:12,life:100,gun:'AK',lastShot:0,offset:Math.random()*6});
   updateInv();
 }
-function updateInv(){ for(let i=0;i<2;i++){ let s=player.inv[i]; document.getElementById(`s${i}g`).textContent=s.gun||'-'; document.getElementById(`s${i}a`).textContent=s.gun?s.ammo:'0'; document.getElementById(`slot${i}`).classList.toggle('active',i==player.activeSlot); } document.getElementById('gnade')?.remove(); document.getElementById('squad'); let cur=player.inv[player.activeSlot]; document.getElementById('zoomBtn').style.display=cur.gun=='Sniper'?'flex':'none'; document.getElementById('coins').textContent=save.coins; }
+function updateInv(){ for(let i=0;i<2;i++){ let s=player.inv[i]; document.getElementById(`s${i}g`).textContent=s.gun||'-'; document.getElementById(`s${i}a`).textContent=s.gun?s.ammo:'0'; document.getElementById(`slot${i}`).classList.toggle('active',i==player.activeSlot); } let cur=player.inv[player.activeSlot]; document.getElementById('zoomBtn').style.display=cur.gun=='Sniper'?'flex':'none'; document.getElementById('coins').textContent=save.coins; }
 function getCurGun(){ return player.inv[player.activeSlot]; }
 function startGame(){ let nick=document.getElementById('nick').value.trim().toLowerCase(); isMaster=nick=='thiago shelby'; document.getElementById('admPanel').style.display=isMaster?'block':'none'; document.getElementById('menu').style.display='none'; newGame(); playing=true; loop(); setInterval(()=>{if(!playing)return; safeZone.targetR=Math.max(150,safeZone.r-200);},10000); }
 function spawnLoot(){ loots.push({x:player.x+(Math.random()-0.5)*200,y:player.y+(Math.random()-0.5)*200,type:['AK','Sniper','vest','kit','grenade'][Math.floor(Math.random()*5)],taken:false}); }
 function isColliding(x,y,r){ for(let h of houses){ if(x+r>h.x && x-r<h.x+h.w && y+r>h.y && y-r<h.y+h.h) return true; } for(let t of trees){ if(Math.hypot(x-t.x,y-t.y)<r+t.r) return true; } return false; }
-
 function loop(){
   if(!playing) return; requestAnimationFrame(loop);
   safeZone.r+=(safeZone.targetR-safeZone.r)*0.02;
