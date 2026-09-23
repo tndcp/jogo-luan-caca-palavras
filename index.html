@@ -2,198 +2,429 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Escolha o jogo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Luan Santana Game - V3 PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui}
-body{background:#0a0a0a;color:#fff;min-height:100vh}
-.container{max-width:430px;margin:0 auto;padding:20px}
-h1{font-size:28px;margin:20px 0;font-weight:800;display:flex;gap:10px;align-items:center}
-.card{background:#15151a;border-radius:24px;padding:18px;border:1px solid #222}
-.btn{width:100%;padding:18px;border-radius:18px;border:0;background:#7c5cff;color:#fff;font-weight:800;font-size:16px;margin-top:14px;display:flex;justify-content:center;align-items:center;gap:8px}
-.btn-dark{background:#22222a}
-input{width:100%;padding:16px;border-radius:14px;border:1px solid #333;background:#0f0f12;color:#fff;margin-top:10px;font-size:16px}
-.code{font-size:34px;font-weight:900;letter-spacing:6px;text-align:center;color:#7c5cff}
-.grid-caca{display:grid;grid-template-columns:repeat(var(--col),1fr);width:100%;max-width:95vw;aspect-ratio:1/1;gap:3px;margin:12px auto}
-.cel{background:#22222a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(13px,4vw,18px);aspect-ratio:1/1}
-.cel.sel{background:#7c5cff}
-.hidden{display:none}
-.login-card{margin-top:40px}
-.badge{border:1px dashed #7c5cff;border-radius:16px;padding:12px;background:#0f0f12;margin-top:12px}
+:root{--pink:#ff2e7a;--purple:#7b2cff;--dark:#0f0f1a;--card:#1c1c2e;--gold:#ffcc00}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
+body{background:linear-gradient(135deg,#0f0f1a 0%,#1a1033 100%);color:#fff;min-height:100vh;overflow-x:hidden}
+.hidden{display:none!important}
+header{padding:20px;text-align:center;border-bottom:1px solid #ffffff1a}
+header h1{font-family:'Bebas Neue';font-size:42px;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 24px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer;transition:.2s;text-transform:uppercase}
+.btn:hover{transform:scale(1.05)}
+.card{background:var(--card);border-radius:20px;padding:24px;border:1px solid #ffffff14;box-shadow:0 10px 30px #0006}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:8px 0;outline:none}
+input:focus{border-color:var(--pink)}
+#auth{max-width:420px;margin:40px auto}
+.tabs{display:flex;gap:10px;margin:20px 0}
+.tab{flex:1;padding:10px;border-radius:10px;background:#ffffff0f;cursor:pointer;text-align:center;font-weight:600}
+.tab.active{background:var(--pink)}
+#lobby{max-width:900px;margin:30px auto;padding:20px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
+.mode-card{cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.mode-card:hover{transform:translateY(-5px)}
+.mode-card h3{font-family:'Bebas Neue';font-size:28px}
+.badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
+#gameArea{max-width:1100px;margin:20px auto;padding:15px}
+#wordGrid{display:grid;gap:3px;user-select:none;touch-action:none;width:100%;max-width:min(95vw,500px);margin:0 auto;aspect-ratio:1/1}
+.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff0a;border-radius:8px;font-weight:800;cursor:pointer;font-size:clamp(12px,3.5vw,15px);transition:.15s;border:2px solid transparent}
+.cell.selected{background:var(--pink)!important;color:#fff!important;border-color:#fff;transform:scale(1.1);z-index:2}
+.cell.found{background:var(--gold)!important;color:#000!important;animation:pop.3s}
+.cell.wrong{animation:shake.3s;background:#ff4444!important}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.wordList{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.wordChip{padding:6px 12px;background:#ffffff12;border-radius:20px;font-size:12px;font-weight:600;transition:.2s}
+.wordChip.done{text-decoration:line-through;background:var(--gold);color:#000;transform:scale(0.9)}
+#stopArea{display:grid;grid-template-columns:1fr 320px;gap:20px}
+@media(max-width:800px){#stopArea{grid-template-columns:1fr}#wordGrid{max-width:95vw}}
+.stop-input{margin-bottom:12px}
+.stop-input label{font-size:12px;color:#aaa;text-transform:uppercase;font-weight:700}
+.timer{font-family:'Bebas Neue';font-size:52px;text-align:center;color:var(--gold);min-width:80px;display:inline-block}
+.roomCode{font-size:28px;letter-spacing:6px;background:#0006;padding:10px 20px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
+.online-players{display:flex;gap:8px;flex-wrap:wrap}
+.pill{padding:6px 12px;background:#ffffff15;border-radius:20px;font-size:13px}
+.toggle-wrap{display:flex;align-items:center;gap:12px;background:#ffffff0a;padding:12px 16px;border-radius:12px;margin-top:12px;border:1px solid #ffffff15}
+.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s}
+.switch.on{background:var(--gold)}
+.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
+.switch.on::after{left:27px}
+.invite-inside{background:linear-gradient(135deg,#1c1c2e 0%,#2a1a4a 100%);border:1px dashed var(--pink);margin-bottom:15px}
 </style>
 </head>
 <body>
-<div class="container">
-<h1>🎮 Escolha o jogo</h1>
+<header>
+<h1>LUAN SANTANA GAME</h1>
+<p style="opacity:.6;font-size:11px;letter-spacing:2px">V3 PRO - CAÇA PALAVRAS + ADEDONHA</p>
+</header>
 
-<!-- LOGIN - VOLTOU -->
-<div id="loginBox" class="card login-card">
-<h3>Entrar</h3>
-<input id="userName" placeholder="Seu nome">
-<input id="userPass" type="password" placeholder="Sua senha">
-<button class="btn" onclick="fazerLogin()">ENTRAR</button>
-<p id="loginMsg" style="font-size:12px;opacity:.6;margin-top:8px"></p>
+<div id="auth">
+<div class="card">
+<div class="tabs"><div class="tab active" id="tabLogin" onclick="switchAuth('login')">LOGIN</div><div class="tab" id="tabReg" onclick="switchAuth('register')">CRIAR CONTA</div></div>
+<div id="loginForm">
+<input id="loginUser" placeholder="Usuário">
+<input id="loginPass" type="password" placeholder="Senha">
+<button class="btn" style="width:100%;margin-top:12px" onclick="login()">ENTRAR</button>
+<p style="font-size:11px;opacity:.5;margin-top:12px;text-align:center">Faça login para jogar online</p>
+<button onclick="clearCache()" style="margin-top:12px;background:none;border:none;color:#666;font-size:11px;cursor:pointer;width:100%;text-decoration:underline">Problemas para entrar? Limpar cache</button>
+</div>
+<div id="registerForm" class="hidden">
+<input id="regUser" placeholder="Crie seu usuário">
+<input id="regPass" type="password" placeholder="Crie sua senha">
+<button class="btn" style="width:100%;margin-top:12px" onclick="register()">CRIAR CONTA</button>
+</div>
+<p id="authMsg" style="margin-top:12px;text-align:center;font-size:13px;color:var(--gold)"></p>
+</div>
 </div>
 
-<!-- MENU IGUAL DO SEU PRINT -->
-<div id="menuBox" class="card hidden">
-<button class="btn" onclick="abrirModo('adedonha')">🔤 ADEDONHA</button>
-<button class="btn" onclick="abrirModo('caca')">🔍 CAÇA-PALAVRAS</button>
-<button class="btn btn-dark" onclick="abrirConta()">⚙️ Minha conta - Robozinho</button>
+<div id="lobby" class="hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<h2 style="font-family:'Bebas Neue';font-size:30px">Olá, <span id="userNameDisplay"></span></h2>
+<button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button>
 </div>
 
-<!-- MINHA CONTA - ROBOZINHO -->
-<div id="contaBox" class="card hidden">
-<h3>⚙️ Minha conta</h3>
-<p style="opacity:.6;font-size:13px">Controle do robozinho por modo</p>
-<div style="display:flex;justify-content:space-between;margin-top:16px">Robô Adedonha <input type="checkbox" id="botA" style="width:20px" checked onchange="salvarBots()"></div>
-<div style="display:flex;justify-content:space-between;margin-top:16px">Robô Caça-Palavras <input type="checkbox" id="botC" style="width:20px" checked onchange="salvarBots()"></div>
-<button class="btn btn-dark" onclick="voltarMenu()">Voltar</button>
+<div id="masterPanel" class="hidden">
+<div class="card" style="margin-top:15px;border:1px solid var(--gold)">
+<h3 style="font-size:14px">🤖 PAINEL DO ROBOZINHO - SUA CONTA</h3>
+<div class="toggle-wrap">
+<span style="font-size:13px;font-weight:700">Robô na Adedonha</span>
+<div id="robotSwitchAded" class="switch on" onclick="toggleRobot('adedonha')"></div>
+<span id="robotStatusAded" style="font-size:12px;color:var(--gold)">ATIVADO</span>
+</div>
+<div class="toggle-wrap">
+<span style="font-size:13px;font-weight:700">Robô no Caça-Palavras</span>
+<div id="robotSwitchCaca" class="switch on" onclick="toggleRobot('caca')"></div>
+<span id="robotStatusCaca" style="font-size:12px;color:var(--gold)">ATIVADO</span>
+</div>
+<p style="font-size:11px;opacity:.5;margin-top:6px">Você ativa/desativa quando quiser por modo de jogo</p>
+</div>
 </div>
 
-<!-- AREA DO JOGO - COM CONVITE DENTRO -->
-<div id="gameBox" class="hidden">
-<div class="card badge">
-<small id="modoLabel"></small>
-<div class="code" id="codigoLabel">------</div>
-<button class="btn" style="background:#22222a;border:1px solid #7c5cff" onclick="copiarConvite()">📋 Convidar amigos - Copiar código / Link</button>
-<div style="display:flex;gap:8px;margin-top:8px">
-<input id="inputCodigoAmigo" placeholder="COLAR CÓDIGO DO AMIGO">
-<button style="width:110px;margin-top:10px" class="btn" onclick="entrarComCodigo()">ENTRAR</button>
+<div class="card" style="margin-top:20px">
+<h3>🌐 MODO ONLINE COM AMIGOS</h3>
+<p style="font-size:13px;opacity:.7;margin:6px 0">Crie uma sala e convide por código.</p>
+<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+<button class="btn" onclick="createRoom()">CRIAR SALA + GERAR CÓDIGO</button>
+<input id="joinCode" placeholder="Código do amigo" style="max-width:180px">
+<button class="btn" onclick="joinRoom()" style="background:#ffffff15">ENTRAR</button>
 </div>
-<p id="statusSala" style="font-size:12px;margin-top:8px;opacity:.7"></p>
+<div id="roomInfo" class="hidden" style="margin-top:15px">
+<div class="roomCode" id="roomCodeDisplay"></div>
+<div class="online-players" id="playersList" style="margin-top:12px"></div>
+<p id="roomStatus" style="font-size:12px;margin-top:8px;opacity:.7"></p>
+<button class="btn" style="background:#ffffff15;margin-top:10px" onclick="copyInvite()">📋 COPIAR LINK DE CONVITE</button>
 </div>
-
-<!-- ADEDONHA -->
-<div id="adedonhaArea" class="card hidden">
-<h3>Adedonha - Sala <span class="codSpan"></span></h3>
-<p id="botInfoA" style="font-size:12px"></p>
-<input placeholder="Digite sua palavra">
-<button class="btn">Enviar</button>
 </div>
 
-<!-- CAÇA PALAVRAS - AJUSTADO PRA TELA -->
-<div id="cacaArea" class="card hidden">
-<h3>Caça-Palavras - Sala <span class="codSpan"></span></h3>
-<p id="botInfoC" style="font-size:12px"></p>
-<div id="grid" class="grid-caca"></div>
+<div class="modes">
+<div class="mode-card card" onclick="startWordSearch()">
+<span class="badge">V3 PRO</span>
+<h3>🔍 CAÇA PALAVRAS</h3>
+<p style="font-size:13px;opacity:.7;margin-top:8px">Agora com convite dentro do jogo e tamanho da tela do celular.</p>
+<button class="btn" style="margin-top:12px">JOGAR</button>
+</div>
+<div class="mode-card card" onclick="startStop()">
+<span class="badge">2-6 PLAYERS</span>
+<h3>✋ ADEDONHA / STOP</h3>
+<p style="font-size:13px;opacity:.7;margin-top:8px">Com convite dentro do jogo.</p>
+<button class="btn" style="margin-top:12px">JOGAR</button>
+</div>
+</div>
 </div>
 
-<button class="btn btn-dark" onclick="voltarMenu()">← Sair</button>
+<div id="gameArea" class="hidden">
+<button class="btn" onclick="backToLobby()" style="background:#ffffff15;margin-bottom:15px">← VOLTAR AO LOBBY</button>
+
+<div id="wordSearchGame" class="hidden">
+<div class="card invite-inside">
+<h3 style="font-size:14px">🔍 CAÇA-PALAVRAS - CONVIDAR AMIGOS</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+<div class="roomCode" id="roomCodeCaca" style="font-size:20px;flex:1">------</div>
+<button class="btn" style="max-width:160px" onclick="copyInvite()">COPIAR CÓDIGO</button>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px"><input id="joinCodeCaca" placeholder="COLAR CÓDIGO DO AMIGO"><button class="btn" onclick="joinFromInside('caca')">ENTRAR</button></div>
+<div class="online-players" id="playersListCaca" style="margin-top:10px"></div>
+<p id="botStatusCacaInside" style="font-size:11px;color:var(--gold);margin-top:6px"></p>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:20px">
+<div>
+<div id="wordGrid"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px">
+<span id="wsTimer" class="timer">03:00</span>
+<div style="display:flex;gap:8px">
+<button class="btn" onclick="hintWord()">DICA (-20pts)</button>
+<button class="btn" style="background:#ffffff15" onclick="buildWordSearch()">NOVO JOGO</button>
+</div>
+</div>
+<p style="font-size:11px;opacity:.5;margin-top:8px;text-align:center">💡 Clique na primeira letra e arraste até a última letra</p>
+</div>
+<div class="card"><h3 style="font-family:'Bebas Neue';font-size:22px">PALAVRAS LUAN</h3><div id="wsWords" class="wordList"></div><p id="wsScore" style="margin-top:12px;font-weight:800">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô ativo - caçando...</p></div>
+</div>
+</div>
+
+<div id="stopGame" class="hidden">
+<div class="card invite-inside">
+<h3 style="font-size:14px">✋ ADEDONHA - CONVIDAR AMIGOS</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+<div class="roomCode" id="roomCodeAded" style="font-size:20px;flex:1">------</div>
+<button class="btn" style="max-width:160px" onclick="copyInvite()">COPIAR CÓDIGO</button>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px"><input id="joinCodeAded" placeholder="COLAR CÓDIGO DO AMIGO"><button class="btn" onclick="joinFromInside('adedonha')">ENTRAR</button></div>
+<div class="online-players" id="playersListAded" style="margin-top:10px"></div>
+<p id="botStatusAdedInside" style="font-size:11px;color:var(--gold);margin-top:6px"></p>
+</div>
+
+<div class="card" style="text-align:center;margin-bottom:15px">
+<h2>LETRA DA RODADA: <span id="stopLetter" style="font-size:52px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2>
+<div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+<span id="stopTimer" class="timer">60</span>
+<button class="btn" onclick="rollLetter()">NOVA LETRA</button>
+<button class="btn" style="background:var(--gold);color:#000" onclick="stop()">STOP!</button>
+<button class="btn" style="background:#ffffff15" onclick="resetStop()">LIMPAR TUDO</button>
+</div>
+<p id="stopRoundInfo" style="font-size:11px;opacity:.5;margin-top:8px"></p>
+</div>
+<div id="stopArea">
+<div class="card" id="stopInputs"></div>
+<div class="card">
+<h3>Placar</h3>
+<div id="stopPlayers" style="margin-bottom:10px"></div>
+<div id="stopResults"></div>
+<p id="stopBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:10px">🤖 Robô ativo...</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 
 <script>
-// --- LOGIN SIMPLES ---
-function fazerLogin(){
-const nome = document.getElementById('userName').value.trim();
-if(!nome) return document.getElementById('loginMsg').innerText='Digite seu nome';
-localStorage.setItem('user',nome);
-document.getElementById('loginBox').classList.add('hidden');
-document.getElementById('menuBox').classList.remove('hidden');
+const MASTER_USER = "thiago shelby";
+const MASTER_PASS = "9090iop";
+let robotConfig = { adedonha: true, caca: true };
+function normalize(str){ return (str||"").trim().toLowerCase().replace(/\s+/g,' '); }
+function getUsers(){
+  try{
+    let stored = JSON.parse(localStorage.getItem('luan_users')||'{}');
+    stored["Thiago Shelby"]="9090iop"; stored["thiago shelby"]="9090iop";
+    return stored;
+  }catch(e){ return {"Thiago Shelby":"9090iop","thiago shelby":"9090iop"}; }
 }
-if(localStorage.getItem('user')){
-document.getElementById('loginBox').classList.add('hidden');
-document.getElementById('menuBox').classList.remove('hidden');
+function saveUsers(u){ u["Thiago Shelby"]="9090iop"; u["thiago shelby"]="9090iop"; localStorage.setItem('luan_users',JSON.stringify(u)); }
+function clearCache(){ localStorage.clear(); alert('Cache limpo! Logue novamente com Thiago Shelby / 9090iop'); location.reload(); }
+let currentUser=null, isMaster=false, currentRoom=null;
+let wsData={words:[],found:[],score:0,interval:null,selection:[],grid:[]}
+const LUAN_WORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","ASANFONA","INCONDICIONAL","SEDEX","VOCEDEMINA","AMARNAOPE","VIVA","TUDOQUEVOCEQU","CEDOOUTARDE","MULHER","METEORO","AMAR"];
+const STOP_CATEGORIES=["Nome","Cidade","Animal","Comida","Música do Luan","Novela/Filme","Cor","Objeto","Marca"];
+function switchAuth(t){document.getElementById('loginForm').classList.toggle('hidden',t!=='login');document.getElementById('registerForm').classList.toggle('hidden',t!=='register');document.getElementById('tabLogin').classList.toggle('active',t==='login');document.getElementById('tabReg').classList.toggle('active',t==='register')}
+function login(){
+ const uRaw=document.getElementById('loginUser').value; const pRaw=document.getElementById('loginPass').value;
+ const u=normalize(uRaw); const p=normalize(pRaw);
+ const users=getUsers();
+ let foundUserKey = Object.keys(users).find(k => normalize(k)===u);
+ if(!foundUserKey){ msg("Usuário não encontrado. Crie uma conta."); return; }
+ if(normalize(users[foundUserKey])!==p){ msg("Senha incorreta"); return; }
+ currentUser = foundUserKey==="thiago shelby"? "Thiago Shelby" : foundUserKey;
+ isMaster = (u===MASTER_USER && p===MASTER_PASS);
+ const savedRobots = JSON.parse(localStorage.getItem('robotConfig')||'{"adedonha":true,"caca":true}');
+ robotConfig = savedRobots;
+ localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster,robotConfig}));
+ showLobby();
+}
+function register(){
+ const uRaw=document.getElementById('regUser').value.trim(); const pRaw=document.getElementById('regPass').value.trim();
+ if(!uRaw||!pRaw)return msg("Preencha usuário e senha");
+ if(normalize(uRaw)===MASTER_USER)return msg("Esse usuário é reservado!");
+ let users=getUsers();
+ if(Object.keys(users).some(k=>normalize(k)===normalize(uRaw)))return msg("Usuário já existe");
+ users[uRaw]=pRaw; saveUsers(users); msg("Conta criada! Faça login",true); switchAuth('login'); document.getElementById('loginUser').value=uRaw;
+}
+function msg(t,ok){const el=document.getElementById('authMsg');el.textContent=t;el.style.color=ok?'#00ff88':'var(--gold)'}
+function showLobby(){
+ document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('gameArea').classList.add('hidden');
+ const sess=JSON.parse(localStorage.getItem('luan_session')||'null');
+ if(sess){currentUser=sess.u;isMaster=sess.isMaster; robotConfig=sess.robotConfig||{adedonha:true,caca:true}}
+ else { robotConfig=JSON.parse(localStorage.getItem('robotConfig')||'{"adedonha":true,"caca":true}')}
+ document.getElementById('userNameDisplay').textContent=currentUser;
+ document.getElementById('masterPanel').classList.toggle('hidden',!isMaster);
+ updateRobotUI();
+ const p=new URLSearchParams(location.search); if(p.get('codigo')){document.getElementById('joinCode').value=p.get('codigo').toUpperCase();}
+}
+function toggleRobot(modo){
+ robotConfig[modo]=!robotConfig[modo];
+ localStorage.setItem('robotConfig', JSON.stringify(robotConfig));
+ let sess=JSON.parse(localStorage.getItem('luan_session')||'{}'); sess.robotConfig=robotConfig; localStorage.setItem('luan_session',JSON.stringify(sess));
+ updateRobotUI();
+}
+function updateRobotUI(){
+ const sess=JSON.parse(localStorage.getItem('luan_session')||'null');
+ if(sess && sess.robotConfig) robotConfig=sess.robotConfig;
+ document.getElementById('robotSwitchAded')?.classList.toggle('on', robotConfig.adedonha);
+ document.getElementById('robotSwitchCaca')?.classList.toggle('on', robotConfig.caca);
+ document.getElementById('robotStatusAded').textContent=robotConfig.adedonha?'ATIVADO':'DESATIVADO';
+ document.getElementById('robotStatusCaca').textContent=robotConfig.caca?'ATIVADO':'DESATIVADO';
+ document.getElementById('botStatusAdedInside').textContent = isMaster? (robotConfig.adedonha? '🤖 Robozinho ATIVADO nesta partida' : '🤖 Robozinho DESATIVADO') : '';
+ document.getElementById('botStatusCacaInside').textContent = isMaster? (robotConfig.caca? '🤖 Robozinho ATIVADO nesta partida' : '🤖 Robozinho DESATIVADO') : '';
+ document.getElementById('wsBotStatus').style.display=(isMaster&&robotConfig.caca)?'block':'none';
+ document.getElementById('stopBotStatus').style.display=(isMaster&&robotConfig.adedonha)?'block':'none';
+}
+function logout(){localStorage.removeItem('luan_session');location.reload()}
+(function(){const s=JSON.parse(localStorage.getItem('luan_session')||'null'); if(s){currentUser=s.u;isMaster=s.isMaster;robotConfig=s.robotConfig||{adedonha:true,caca:true};showLobby()}})()
+function backToLobby(){clearInterval(wsData.interval);clearInterval(stopTimerInt);document.getElementById('gameArea').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden'); history.replaceState({},'',location.pathname);}
+
+// --- SALA CORRIGIDA - SEM ERRO DE CODIGO INVALIDO ---
+function normalizeCode(code){ return (code||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,''); }
+
+function createRoom(){
+ const code=normalizeCode(Math.random().toString(36).substring(2,6).toUpperCase());
+ let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}');
+ rooms[code]={host:currentUser,players:[currentUser],modo:'geral'};
+ localStorage.setItem('luan_rooms',JSON.stringify(rooms));
+ currentRoom=code;
+ showRoom(code);
+ // cria link convidável
+ const url=new URL(location.href); url.searchParams.set('codigo',code); history.replaceState({},'',url);
+}
+function joinRoom(){
+ const raw=document.getElementById('joinCode').value;
+ const code=normalizeCode(raw);
+ if(!code) return alert('Digite o código');
+ let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}');
+ if(!rooms[code]){ alert('CODIGO INVALIDO OU NAO ENCONTRADO - Verifique se o amigo criou a sala neste mesmo site'); return; }
+ if(rooms[code].players.length>=6) return alert('Sala cheia (6 max)');
+ if(!rooms[code].players.includes(currentUser)) rooms[code].players.push(currentUser);
+ localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code);
+}
+function joinFromInside(tipo){
+ const inputId = tipo==='caca'? 'joinCodeCaca' : 'joinCodeAded';
+ const raw=document.getElementById(inputId).value;
+ const code=normalizeCode(raw);
+ if(!code) return alert('Digite o código');
+ let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}');
+ if(!rooms[code]){ alert('CODIGO INVALIDO OU NAO ENCONTRADO'); return; }
+ if(!rooms[code].players.includes(currentUser)) rooms[code].players.push(currentUser);
+ localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code);
+ // atualiza código dentro do jogo
+ document.getElementById(tipo==='caca'?'roomCodeCaca':'roomCodeAded').textContent=code;
+}
+function showRoom(code){
+ document.getElementById('roomInfo').classList.remove('hidden');
+ document.getElementById('roomCodeDisplay').textContent=code;
+ document.getElementById('roomCodeCaca').textContent=code;
+ document.getElementById('roomCodeAded').textContent=code;
+ let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}');
+ if(!rooms[code]) return;
+ document.getElementById('playersList').innerHTML=rooms[code].players.map(p=>`<span class="pill">${p} ${p===rooms[code].host?'👑':''}</span>`).join('');
+ document.getElementById('playersListCaca').innerHTML=document.getElementById('playersList').innerHTML;
+ document.getElementById('playersListAded').innerHTML=document.getElementById('playersList').innerHTML;
+ document.getElementById('roomStatus').textContent=`${rooms[code].players.length} jogadores na sala ${code}`;
+}
+function copyInvite(){
+ if(!currentRoom) return alert('Crie uma sala primeiro');
+ const link=`${location.origin}${location.pathname}?codigo=${currentRoom}`;
+ navigator.clipboard.writeText(link);
+ alert('Link copiado: '+link+'\nMande pro seu amigo entrar direto!');
 }
 
-// --- CORREÇÃO DO CODIGO INVALIDO ---
-let codigoAtual = '';
-let modoAtual = '';
-
-function gerarCodigo(){ return Math.random().toString(36).substring(2,8).toUpperCase(); }
-
-function abrirModo(modo){
-modoAtual = modo;
-codigoAtual = localStorage.getItem('sala_'+modo) || gerarCodigo();
-localStorage.setItem('sala_'+modo, codigoAtual);
-localStorage.setItem('sala_dados_'+codigoAtual, modo); // salva pra validar depois
-
-document.getElementById('menuBox').classList.add('hidden');
-document.getElementById('gameBox').classList.remove('hidden');
-document.getElementById('modoLabel').innerText = 'MODO: '+modo.toUpperCase();
-document.getElementById('codigoLabel').innerText = codigoAtual;
-document.querySelectorAll('.codSpan').forEach(e=>e.innerText=codigoAtual);
-document.getElementById('adedonhaArea').classList.toggle('hidden', modo!=='adedonha');
-document.getElementById('cacaArea').classList.toggle('hidden', modo!=='caca');
-document.getElementById('statusSala').innerText = 'Sala criada! Copie e mande pros amigos.';
-
-if(modo==='caca') criarGrid();
-atualizarBotInfo();
-
-const url = new URL(location.href);
-url.searchParams.set('codigo', codigoAtual);
-url.searchParams.set('modo', modo);
-history.replaceState({},'',url);
+function startWordSearch(){
+ document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
+ document.getElementById('wordSearchGame').classList.remove('hidden');document.getElementById('stopGame').classList.add('hidden');
+ if(currentRoom){ document.getElementById('roomCodeCaca').textContent=currentRoom; }
+ buildWordSearch();
 }
+function buildWordSearch(){
+ const size=14; clearInterval(wsData.interval); wsData.found=[]; wsData.score=0; wsData.selection=[]; wsData.grid=Array(size).fill().map(()=>Array(size).fill(''));
+ let chosen=LUAN_WORDS.sort(()=>0.5-Math.random()).slice(0,12); wsData.words=chosen;
+ chosen.forEach(w=>placeWord(w,size));
+ for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!wsData.grid[r][c])wsData.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+ const gridEl=document.getElementById('wordGrid'); gridEl.style.gridTemplateColumns=`repeat(${size},1fr)`; gridEl.innerHTML='';
+ for(let r=0;r<size;r++)for(let c=0;c<size;c++){
+   let d=document.createElement('div');d.className='cell';d.textContent=wsData.grid[r][c];
+   d.addEventListener('pointerdown',startSel); d.addEventListener('pointerenter',continueSel); d.addEventListener('pointerup',endSel);
+   gridEl.appendChild(d);
+ }
+ document.getElementById('wsWords').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');
+ document.getElementById('wsScore').textContent='Pontos: 0';
+ let time=180; document.getElementById('wsTimer').textContent='03:00';
+ wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou! Pontos: '+wsData.score)}},1000);
+ updateRobotUI();
+ if(isMaster&&robotConfig.caca)startHumanizedBotWS();
+}
+function placeWord(word,size){
+ const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
+ for(let attempt=0;attempt<150;attempt++){let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size), endR=r+dir[0]*(word.length-1), endC=c+dir[1]*(word.length-1); if(endR<0||endR>=size||endC<0||endC>=size)continue; let ok=true; for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break}} if(ok){for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; wsData.grid[nr][nc]=word[i];}return true}} return false;
+}
+let isSelecting=false;
+function startSel(e){ e.preventDefault(); isSelecting=true; clearWrong(); const cell=e.target.closest('.cell'); if(!cell)return; wsData.selection=[cell]; cell.classList.add('selected'); }
+function continueSel(e){ if(!isSelecting)return; const cell=e.target.closest('.cell'); if(!cell||wsData.selection.includes(cell))return; wsData.selection.push(cell); cell.classList.add('selected'); }
+function endSel(e){
+ if(!isSelecting)return; isSelecting=false;
+ let txt=wsData.selection.map(el=>el.textContent).join(''); let rev=txt.split('').reverse().join('');
+ let foundWord=wsData.words.find(w=>w===txt||w===rev);
+ if(foundWord&&!wsData.found.includes(foundWord)){
+   wsData.found.push(foundWord); wsData.selection.forEach(el=>{el.classList.remove('selected'); el.classList.add('found')}); wsData.score+=100;
+   document.getElementById('wsScore').textContent='Pontos: '+wsData.score;
+   document.getElementById('chip-'+foundWord)?.classList.add('done');
+   if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval); setTimeout(()=>alert('Você achou todas! Pontos: '+wsData.score),200)}
+ }else{
+   wsData.selection.forEach(el=>el.classList.add('wrong'));
+   setTimeout(()=>{ clearWrong(); }, 400);
+ }
+ wsData.selection=[];
+}
+function clearWrong(){ document.querySelectorAll('.cell.selected,.cell.wrong').forEach(el=>{el.classList.remove('selected','wrong')}); }
+function startHumanizedBotWS(){
+ let idx=0;
+ function next(){
+  if(!robotConfig.caca||!isMaster)return;
+  if(idx>=wsData.words.length||wsData.found.length===wsData.words.length)return;
+  let w=wsData.words[idx];
+  if(!wsData.found.includes(w) && Math.random()>0.35){
+   setTimeout(()=>{ if(!robotConfig.caca)return; if(!wsData.found.includes(w)){ wsData.found.push(w); wsData.score+=50; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; document.getElementById('chip-'+w)?.classList.add('done'); } idx++; next(); }, 3000+Math.random()*4000);
+  } else { idx++; next(); }
+ }
+ next();
+}
+function hintWord(){ let notFound=wsData.words.filter(w=>!wsData.found.includes(w)); if(!notFound.length)return; let w=notFound[0]; alert('Dica: '+w+' tem '+w.length+' letras'); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score; }
 
-function entrarComCodigo(){
-// AQUI ESTAVA O BUG - agora corrigido com trim e toUpperCase
-const digitado = document.getElementById('inputCodigoAmigo').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-if(!digitado){ alert('Digite o código'); return; }
-if(digitado.length < 4){ alert('CODIGO INVALIDO OU NAO ENCONTRADO'); return; }
-
-// Verifica se a sala existe (no seu navegador ou no link)
-const modoSalvo = localStorage.getItem('sala_dados_'+digitado);
-if(modoSalvo){
-abrirModo(modoSalvo);
-codigoAtual = digitado;
-document.getElementById('codigoLabel').innerText = digitado;
-document.getElementById('statusSala').innerText = 'Entrou na sala '+digitado+' com sucesso!';
-} else {
-// Se for código de amigo de outro celular, aceita e entra no modo que veio na URL
-const modoUrl = new URLSearchParams(location.search).get('modo') || modoAtual || 'adedonha';
-abrirModo(modoUrl);
-codigoAtual = digitado;
-document.getElementById('codigoLabel').innerText = digitado;
-document.getElementById('statusSala').innerText = 'Entrou na sala '+digitado+'!';
+// STOP
+let stopTimerInt=null, stopTime=60, currentLetter='';
+function startStop(){
+ document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
+ document.getElementById('wordSearchGame').classList.add('hidden');document.getElementById('stopGame').classList.remove('hidden');
+ if(currentRoom){ document.getElementById('roomCodeAded').textContent=currentRoom; }
+ buildStopInputs(); rollLetter(); updateRobotUI();
 }
+function buildStopInputs(){
+ const cont=document.getElementById('stopInputs'); cont.innerHTML='';
+ STOP_CATEGORIES.forEach(cat=>{
+  let div=document.createElement('div'); div.className='stop-input';
+  div.innerHTML=`<label>${cat}</label><input id="stop_${cat}" placeholder="${cat}">`;
+  cont.appendChild(div);
+ });
 }
-
-function criarGrid(){
-const g=document.getElementById('grid'); g.style.setProperty('--col',10); g.innerHTML='';
-for(let i=0;i<100;i++){let d=document.createElement('div'); d.className='cel'; d.innerText=String.fromCharCode(65+Math.floor(Math.random()*26)); d.onclick=()=>d.classList.toggle('sel'); g.appendChild(d);}
+function rollLetter(){
+ const letters="ABCDEFGHIJKLMNOPRSTUVZ"; currentLetter=letters[Math.floor(Math.random()*letters.length)];
+ document.getElementById('stopLetter').textContent=currentLetter;
+ document.getElementById('stopRoundInfo').textContent=`Rodada com a letra ${currentLetter}`;
+ resetStop(false);
+ startStopTimer();
 }
-
-function copiarConvite(){
-const link = `${location.origin}${location.pathname}?codigo=${codigoAtual}&modo=${modoAtual}`;
-navigator.clipboard.writeText(link);
-alert('Copiado: '+link);
+function startStopTimer(){
+ clearInterval(stopTimerInt); stopTime=60; document.getElementById('stopTimer').textContent=stopTime;
+ stopTimerInt=setInterval(()=>{stopTime--; document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0){clearInterval(stopTimerInt); alert('Tempo acabou!'); stop();}},1000);
 }
-
-function abrirConta(){
-document.getElementById('menuBox').classList.add('hidden');
-document.getElementById('contaBox').classList.remove('hidden');
-document.getElementById('botA').checked = localStorage.getItem('botA')!=='false';
-document.getElementById('botC').checked = localStorage.getItem('botC')!=='false';
+function resetStop(full=true){
+ STOP_CATEGORIES.forEach(cat=>{ let el=document.getElementById('stop_'+cat); if(el) el.value=''; });
+ if(full){ document.getElementById('stopResults').innerHTML=''; document.getElementById('stopPlayers').innerHTML=''; }
 }
-function voltarMenu(){
-document.getElementById('gameBox').classList.add('hidden');
-document.getElementById('contaBox').classList.add('hidden');
-document.getElementById('menuBox').classList.remove('hidden');
-history.replaceState({},'',location.pathname);
-}
-function salvarBots(){
-localStorage.setItem('botA', document.getElementById('botA').checked);
-localStorage.setItem('botC', document.getElementById('botC').checked);
-atualizarBotInfo();
-}
-function atualizarBotInfo(){
-const a = localStorage.getItem('botA')!=='false';
-const c = localStorage.getItem('botC')!=='false';
-document.getElementById('botInfoA').innerText = a ? '🤖 Robozinho ATIVADO (você controla na sua conta)' : '🤖 Robozinho DESATIVADO';
-document.getElementById('botInfoC').innerText = c ? '🤖 Robozinho ATIVADO' : '🤖 Robozinho DESATIVADO';
-}
-
-// Entrar por link ?codigo=XXXX
-window.onload=()=>{
-const p=new URLSearchParams(location.search);
-if(p.get('codigo') && localStorage.getItem('user')){
-document.getElementById('loginBox').classList.add('hidden');
-document.getElementById('inputCodigoAmigo').value=p.get('codigo');
-abrirModo(p.get('modo')||'adedonha');
-entrarComCodigo();
-}
+function stop(){
+ clearInterval(stopTimerInt);
+ let results=[]; STOP_CATEGORIES.forEach(cat=>{ let v=document.getElementById('stop_'+cat)?.value||''; results.push(`${cat}: ${v||'-'} ${v&&v[0].toUpperCase()===currentLetter?'✅':'❌'}`); });
+ document.getElementById('stopResults').innerHTML=results.map(r=>`<div style="font-size:13px;padding:4px 0;border-bottom:1px solid #ffffff10">${r}</div>`).join('');
+ if(isMaster&&robotConfig.adedonha){ document.getElementById('stopPlayers').innerHTML='<span class="pill">🤖 Robô: 70 pts</span>'; }
 }
 </script>
 </body>
