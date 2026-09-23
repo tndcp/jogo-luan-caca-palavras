@@ -1,111 +1,137 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>LUAN GAME V3 PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUAN GAME V4 FIX</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-:root{--pink:#ff2e7a;--purple:#7b2cff;--dark:#0f0f1a;--card:#1c1c2e;--gold:#ffcc00}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-body{background:#0f0f1a;color:#fff;min-height:100vh}
-.hidden{display:none!important}
-.card{background:var(--card);border-radius:20px;padding:20px;border:1px solid #ffffff14;margin-top:15px}
-.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 20px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:6px 0}
-.roomCode{font-size:24px;letter-spacing:5px;background:#0006;padding:10px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
-#wordGrid{display:grid;gap:4px;width:100%;max-width:480px;aspect-ratio:1/1;background:#0003;padding:8px;border-radius:16px;margin:0 auto}
-.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff18;border-radius:8px;font-weight:800;font-size:14px;user-select:none}
-.cell.selected{background:var(--pink)!important;border:2px solid #fff;transform:scale(1.1)}
-.cell.found{background:var(--gold)!important;color:#000!important}
-.wordChip{padding:6px 10px;background:#ffffff18;border-radius:20px;font-size:11px;margin:4px;display:inline-block}
-.wordChip.done{text-decoration:line-through;background:var(--gold);color:#000}
-.pill{padding:6px 10px;background:#ffffff15;border-radius:20px;font-size:12px;display:inline-block;margin:3px}
-.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer}
-.switch.on{background:var(--gold)}.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}.switch.on::after{left:27px}
-.timer{font-family:'Bebas Neue';font-size:48px;color:var(--gold)}
+:root{--pink:#ff2e7a;--purple:#7b2cff;--gold:#ffcc00;--bg:#0f0f1a;--card:#1c1c2e}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Montserrat}body{background:var(--bg);color:#fff;padding:12px;max-width:1100px;margin:auto}
+.hidden{display:none!important}.card{background:var(--card);border-radius:18px;padding:14px;border:1px solid #ffffff15;margin-top:12px}
+.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:0;padding:10px 18px;border-radius:25px;color:#fff;font-weight:800;cursor:pointer}
+input{width:100%;padding:11px;border-radius:12px;border:1px solid #ffffff2a;background:#0005;color:#fff;margin:5px 0}
+.roomCode{font-size:22px;letter-spacing:5px;background:#0006;padding:10px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
+#wordGrid{display:grid;gap:4px;width:100%;max-width:500px;aspect-ratio:1;background:#0004;padding:8px;border-radius:16px;margin:0 auto}
+.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff18;border-radius:8px;font-weight:800;font-size:13px}
+.cell.sel{background:var(--pink)!important;transform:scale(1.1);border:2px solid #fff}.cell.found{background:var(--gold)!important;color:#000!important}.cell.other{background:#00e5ff!important;color:#000!important}
+.wordChip{padding:5px 10px;background:#ffffff18;border-radius:20px;font-size:11px;margin:3px;display:inline-block}.wordChip.done{background:var(--gold);color:#000;text-decoration:line-through}.pill{padding:5px 9px;background:#ffffff15;border-radius:20px;font-size:11px;margin:2px;display:inline-block}
+.timer{font-family:Bebas Neue;font-size:44px;color:var(--gold)}.switch{width:46px;height:24px;background:#333;border-radius:20px;position:relative;cursor:pointer}.switch.on{background:var(--gold)}.switch:after{content:'';width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}.switch.on:after{left:25px}
 </style>
 </head>
-<body style="padding:15px;max-width:1100px;margin:0 auto">
-<h1 style="font-family:'Bebas Neue';font-size:40px;text-align:center;background:linear-gradient(90deg,#ff2e7a,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px">LUAN SANTANA GAME V3</h1>
-
-<div id="auth"><div class="card" style="max-width:400px;margin:30px auto"><div style="display:flex;gap:8px"><div id="tL" onclick="tA('l')" style="flex:1;text-align:center;padding:10px;background:var(--pink);border-radius:10px;cursor:pointer">LOGIN</div><div id="tR" onclick="tA('r')" style="flex:1;text-align:center;padding:10px;background:#ffffff15;border-radius:10px;cursor:pointer">CRIAR</div></div>
-<div id="fL"><input id="lu" placeholder="Usuário"><input id="lp" type="password" placeholder="Senha"><button class="btn" style="width:100%;margin-top:10px" onclick="login()">ENTRAR</button></div>
-<div id="fR" class="hidden"><input id="ru" placeholder="Novo usuário"><input id="rp" type="password" placeholder="Nova senha"><button class="btn" style="width:100%;margin-top:10px" onclick="register()">CRIAR CONTA</button></div>
-<p id="am" style="text-align:center;margin-top:10px;color:var(--gold)"></p></div></div>
+<body>
+<h1 style="font-family:Bebas Neue;text-align:center;font-size:38px;background:linear-gradient(90deg,#ff2e7a,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">LUAN V4 - SINCRONIZADO</h1>
+<div id="auth"><div class="card" style="max-width:380px;margin:20px auto"><div style="display:flex;gap:6px"><div onclick="tA('l')" id="tL" style="flex:1;text-align:center;padding:10px;background:var(--pink);border-radius:10px;cursor:pointer">LOGIN</div><div onclick="tA('r')" id="tR" style="flex:1;text-align:center;padding:10px;background:#ffffff15;border-radius:10px;cursor:pointer">CRIAR</div></div>
+<div id="fL"><input id="lu" placeholder="Usuário"><input id="lp" type="password" placeholder="Senha"><button class="btn" style="width:100%;margin-top:8px" onclick="login()">ENTRAR</button></div>
+<div id="fR" class="hidden"><input id="ru" placeholder="Novo usuário"><input id="rp" type="password" placeholder="Nova senha"><button class="btn" style="width:100%;margin-top:8px" onclick="register()">CRIAR</button></div><p id="am" style="text-align:center;margin-top:8px;color:var(--gold)"></p></div></div>
 
 <div id="lobby" class="hidden">
-<div style="display:flex;justify-content:space-between"><h2>Olá, <span id="un"></span></h2><button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button></div>
-<div id="mp" class="hidden" class="card" style="border:1px solid var(--gold)"><div class="card"><h3 style="font-size:12px">🤖 CONTA THIAGO SHELBY - ROBÔ POR MODO</h3>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span>Robô Adedonha</span><div id="sA" class="switch on" onclick="tRbt('adedonha')"></div><span id="stA">ATIVADO</span></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span>Robô Caça-Palavras</span><div id="sC" class="switch on" onclick="tRbt('caca')"></div><span id="stC">ATIVADO</span></div></div></div>
-
-<div class="card"><h3>🌐 ONLINE FIREBASE - NÃO DÁ MAIS INVALIDO</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="createRoom()">CRIAR SALA + CÓDIGO</button><input id="jc" placeholder="Código do amigo" style="max-width:160px;text-transform:uppercase"><button class="btn" style="background:#ffffff15" onclick="joinRoom()">ENTRAR</button></div>
-<div id="ri" class="hidden"><div id="rc" class="roomCode" style="margin-top:12px"></div><div id="pl" style="margin-top:10px"></div><p id="rs" style="font-size:11px;opacity:.6"></p><button class="btn" style="margin-top:8px;background:#ffffff15" onclick="copyInvite()">📋 COPIAR LINK</button></div></div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px"><div class="card" onclick="startWS()" style="cursor:pointer"><h3>🔍 CAÇA PALAVRAS</h3><p style="font-size:12px;opacity:.6">Arrasta pra selecionar, palavras visíveis</p><button class="btn" style="margin-top:8px">JOGAR</button></div>
-<div class="card" onclick="startST()" style="cursor:pointer"><h3>✋ ADEDONHA</h3><p style="font-size:12px;opacity:.6">2-6 jogadores online</p><button class="btn" style="margin-top:8px">JOGAR</button></div></div>
+<div style="display:flex;justify-content:space-between"><h3>Olá <span id="un"></span></h3><button class="btn" style="background:#ffffff15" onclick="logout()">Sair</button></div>
+<div id="mp" class="hidden" class="card" style="border:1px solid var(--gold)"><b>🤖 THIAGO SHELBY - ROBÔ HUMANIZADO</b>
+<div style="display:flex;justify-content:space-between;margin-top:8px">Adedonha <div id="sA" class="switch on" onclick="tR('adedonha')"></div><span id="stA">ATIVADO</span></div>
+<div style="display:flex;justify-content:space-between;margin-top:8px">Caça-palavras <div id="sC" class="switch on" onclick="tR('caca')"></div><span id="stC">ATIVADO</span></div>
+<p style="font-size:10px;opacity:.6">Robô agora entra na sala, demora 3-10s pra responder, erra às vezes e aparece como Luan Bot 🤖</p></div>
+<div class="card"><h3>🌐 SALA ONLINE</h3><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="btn" onclick="createRoom()">CRIAR SALA</button><input id="jc" placeholder="Código" style="max-width:130px;text-transform:uppercase"><button class="btn" style="background:#ffffff15" onclick="joinRoom()">ENTRAR</button></div>
+<div id="ri" class="hidden"><div id="rc" class="roomCode" style="margin-top:10px"></div><div id="pl" style="margin-top:8px"></div><p id="rs" style="font-size:11px;opacity:.6"></p><button class="btn" style="margin-top:6px;background:#ffffff15" onclick="copyI()">📋 COPIAR LINK</button></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="card" onclick="startWS()" style="cursor:pointer"><h3>🔍 CAÇA</h3><p style="font-size:11px">Sincronizado em tempo real</p><button class="btn" style="margin-top:6px">JOGAR</button></div><div class="card" onclick="startST()" style="cursor:pointer"><h3>✋ ADEDONHA</h3><p style="font-size:11px">Vê o que amigo digita ao vivo</p><button class="btn" style="margin-top:6px">JOGAR</button></div></div>
 </div>
 
 <div id="ga" class="hidden"><button class="btn" style="background:#ffffff15" onclick="back()">← LOBBY</button>
-
-<div id="wsGame" class="hidden"><div class="card" style="border:1px dashed var(--pink)"><h3>🔍 CAÇA - CONVIDAR DENTRO DO JOGO</h3><div style="display:flex;gap:8px;margin-top:8px"><div id="rcC" class="roomCode" style="flex:1;font-size:18px">------</div><button class="btn" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:6px;margin-top:8px"><input id="jcC" placeholder="COLAR CÓDIGO" style="text-transform:uppercase"><button class="btn" onclick="joinIn('caca')">ENTRAR</button></div><div id="plC" style="margin-top:8px"></div><p id="biC" style="font-size:11px;color:var(--gold)"></p></div>
-<div id="wordGrid"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span id="wt" class="timer">03:00</span><div><button class="btn" onclick="buildWS()">NOVO</button></div></div><p style="font-size:11px;text-align:center;opacity:.5">Segure e arraste de letra em letra</p><div class="card"><div id="wl"></div><p id="ws" style="font-weight:800;margin-top:8px">Pontos: 0</p></div></div>
-
-<div id="stGame" class="hidden"><div class="card" style="border:1px dashed var(--pink)"><h3>✋ ADEDONHA - CONVIDAR DENTRO DO JOGO</h3><div style="display:flex;gap:8px;margin-top:8px"><div id="rcA" class="roomCode" style="flex:1;font-size:18px">------</div><button class="btn" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:6px;margin-top:8px"><input id="jcA" placeholder="COLAR CÓDIGO" style="text-transform:uppercase"><button class="btn" onclick="joinIn('adedonha')">ENTRAR</button></div><div id="plA" style="margin-top:8px"></div><p id="biA" style="font-size:11px;color:var(--gold)"></p></div>
-<div class="card" style="text-align:center"><h2>LETRA: <span id="sl" style="font-size:50px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2><div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap"><span id="stT" class="timer">60</span><button class="btn" onclick="rollL()">NOVA LETRA</button><button class="btn" style="background:var(--gold);color:#000" onclick="doStop()">STOP!</button></div></div>
-<div id="si" class="card"></div><div id="sr" class="card"></div></div>
-
+<div id="wsGame" class="hidden">
+<div class="card" style="border:1px dashed var(--pink)"><h4>🔍 SALA: <span id="rcC"></span> - <span id="plC"></span></h4><div id="wl" style="margin-top:8px"></div><p style="font-size:11px;margin-top:6px">🟡 Você | 🔵 Outro jogador | <span id="botInfo"></span></p></div>
+<div id="wordGrid"></div>
+<div style="display:flex;justify-content:space-between;margin-top:8px"><span id="wt" class="timer">03:00</span><div><span id="wsP" style="font-weight:800">0 pts</span> <button class="btn" onclick="resetGame()">NOVO GRID (HOST)</button></div></div>
+<p id="live" style="font-size:11px;color:var(--gold);text-align:center;margin-top:4px"></p>
 </div>
+<div id="stGame" class="hidden">
+<div class="card" style="border:1px dashed var(--pink)"><h4>✋ SALA: <span id="rcA"></span> - <span id="plA"></span></h4><p style="font-size:11px">Letra: <span id="sl" style="font-size:36px;color:var(--pink);font-family:Bebas Neue">?</span> | <span id="stT" class="timer">60</span></p><div style="display:flex;gap:6px"><button class="btn" onclick="rollL()">NOVA LETRA</button><button class="btn" style="background:var(--gold);color:#000" onclick="doStop()">STOP!</button></div></div>
+<div id="si" class="card"></div><div id="liveA" style="font-size:11px;color:var(--gold)"></div><div id="sr" class="card"></div>
+</div></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const firebaseConfig={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316",measurementId:"G-KVC10MM12Y"};
-const app=initializeApp(firebaseConfig); const db=getDatabase(app);
-window.db=db; window.dbRef=ref; window.dbSet=set; window.dbGet=get; window.dbOnValue=onValue; window.dbUpdate=update;
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {getDatabase,ref,set,get,onValue,update} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const cfg={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316"};
+const app=initializeApp(cfg);const db=getDatabase(app);window.db=db;window.dbRef=ref;window.dbSet=set;window.dbGet=get;window.dbOn=onValue;window.dbUpd=update;
 </script>
 <script>
-const MASTER="thiago shelby"; let robot={adedonha:true,caca:true}; let curUser=null,isMaster=false,curRoom=null;
-let ws={words:[],found:[],score:0,grid:[],sel:[],timer:null}; const LWORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVA","ACORDO","SANFONA","INCONDICIONAL","VOCE","AMAR","VIVA","METEORO","MULHER"];
-const CATS=["Nome","Cidade","Animal","Comida","Música Luan","Cor","Objeto","Marca"];
-function tA(t){document.getElementById('fL').classList.toggle('hidden',t!='l');document.getElementById('fR').classList.toggle('hidden',t!='r');document.getElementById('tL').style.background=t=='l'?'var(--pink)':'#ffffff15';document.getElementById('tR').style.background=t=='r'?'var(--pink)':'#ffffff15'}
-function norm(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
-function getU(){try{let u=JSON.parse(localStorage.getItem('luan_users')||'{}');u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";return u}catch{return{"Thiago Shelby":"9090iop"}}}
+const MASTER="thiago shelby";let robot={adedonha:true,caca:true};let curUser=null,isMaster=false,curRoom=null;let sTimer=null,ws={sel:[],isSel:false};
+const LWORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVA","ACORDO","SANFONA","INCONDICIONAL","VOCE","AMAR","VIVA","METEORO","MULHER","CANTOR","AMOR"];const CATS=["Nome","Cidade","Animal","Comida","Música Luan","Cor","Objeto","Marca"];
+function tA(t){document.getElementById('fL').classList.toggle('hidden',t!='l');document.getElementById('fR').classList.toggle('hidden',t!='r')}
+function norm(s){return s.trim().toLowerCase()}function getU(){try{let u=JSON.parse(localStorage.getItem('luan_users')||'{}');u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";return u}catch{return{"Thiago Shelby":"9090iop"}}}
 function saveU(u){u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";localStorage.setItem('luan_users',JSON.stringify(u))}
-function login(){let u=norm(document.getElementById('lu').value),p=norm(document.getElementById('lp').value),users=getU(),f=Object.keys(users).find(k=>norm(k)==u);if(!f)return amsg("Não encontrado");if(norm(users[f])!=p)return amsg("Senha errada");curUser=f=="thiago shelby"?"Thiago Shelby":f;isMaster=(u==MASTER&&p=="9090iop");let rc=JSON.parse(localStorage.getItem('robotConfig')||'null');if(rc)robot=rc;localStorage.setItem('luan_session',JSON.stringify({u:curUser,isMaster,robot}));showLobby()}
-function register(){let u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value.trim();if(!u||!p)return amsg("Preencha");if(norm(u)==MASTER)return amsg("Reservado");let users=getU();if(Object.keys(users).some(k=>norm(k)==norm(u)))return amsg("Já existe");users[u]=p;saveU(users);amsg("Criado! Faça login",1);tA('l');document.getElementById('lu').value=u}
-function amsg(t,ok){let e=document.getElementById('am');e.textContent=t;e.style.color=ok?'#0f0':'var(--gold)'}
-function showLobby(){let s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s){curUser=s.u;isMaster=s.isMaster;robot=s.robot||robot}document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('ga').classList.add('hidden');document.getElementById('un').textContent=curUser;document.getElementById('mp').classList.toggle('hidden',!isMaster);updR();let cod=new URLSearchParams(location.search).get('codigo');if(cod)document.getElementById('jc').value=cod.toUpperCase()}
-function tRbt(m){robot[m]=!robot[m];localStorage.setItem('robotConfig',JSON.stringify(robot));let s=JSON.parse(localStorage.getItem('luan_session')||'{}');s.robot=robot;localStorage.setItem('luan_session',JSON.stringify(s));updR()}
-function updR(){document.getElementById('sA')?.classList.toggle('on',robot.adedonha);document.getElementById('sC')?.classList.toggle('on',robot.caca);document.getElementById('stA').textContent=robot.adedonha?'ATIVADO':'DESATIVADO';document.getElementById('stC').textContent=robot.caca?'ATIVADO':'DESATIVADO';document.getElementById('biA').textContent=isMaster?(robot.adedonha?'🤖 ATIVADO':'🤖 DESATIVADO'):'';document.getElementById('biC').textContent=isMaster?(robot.caca?'🤖 ATIVADO':'🤖 DESATIVADO'):''}
-function logout(){localStorage.removeItem('luan_session');location.reload()}function back(){clearInterval(ws.timer);clearInterval(sTimer);document.getElementById('ga').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
+function login(){let u=norm(document.getElementById('lu').value),p=norm(document.getElementById('lp').value),users=getU(),f=Object.keys(users).find(k=>norm(k)==u);if(!f)return am("Não encontrado");if(norm(users[f])!=p)return am("Senha errada");curUser=f=="thiago shelby"?"Thiago Shelby":f;isMaster=(u==MASTER&&p=="9090iop");let rc=JSON.parse(localStorage.getItem('robotConfig')||'null');if(rc)robot=rc;localStorage.setItem('luan_session',JSON.stringify({u:curUser,isMaster,robot}));showLobby()}
+function register(){let u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value.trim();if(!u||!p)return am("Preencha");if(norm(u)==MASTER)return am("Reservado");let users=getU();if(Object.keys(users).some(k=>norm(k)==norm(u)))return am("Já existe");users[u]=p;saveU(users);am("Criado! Login",1);tA('l')}
+function am(t,ok){let e=document.getElementById('am');e.textContent=t;e.style.color=ok?'#0f0':'var(--gold)'}
+function showLobby(){let s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s){curUser=s.u;isMaster=s.isMaster;robot=s.robot||robot}document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('ga').classList.add('hidden');document.getElementById('un').textContent=curUser;document.getElementById('mp').classList.toggle('hidden',!isMaster);updR();let c=new URLSearchParams(location.search).get('codigo');if(c)document.getElementById('jc').value=c.toUpperCase()}
+function tR(m){robot[m]=!robot[m];localStorage.setItem('robotConfig',JSON.stringify(robot));let s=JSON.parse(localStorage.getItem('luan_session')||'{}');s.robot=robot;localStorage.setItem('luan_session',JSON.stringify(s));updR()}
+function updR(){document.getElementById('sA')?.classList.toggle('on',robot.adedonha);document.getElementById('sC')?.classList.toggle('on',robot.caca);document.getElementById('stA').textContent=robot.adedonha?'ATIVADO':'DESATIVADO';document.getElementById('stC').textContent=robot.caca?'ATIVADO':'DESATIVADO'}
+function logout(){localStorage.removeItem('luan_session');location.reload()}function back(){clearInterval(sTimer);document.getElementById('ga').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
 (function(){let s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s)showLobby()})()
-
 function nC(c){return c.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
-async function createRoom(){let code=nC(Math.random().toString(36).substring(2,6).toUpperCase());try{await dbSet(dbRef(db,'salas/'+code),{codigo:code,host:curUser,players:[curUser],criado:Date.now()});curRoom=code;showR(code);listen(code);let u=new URL(location.href);u.searchParams.set('codigo',code);history.replaceState({},'',u);}catch(e){alert('Erro Firebase: '+e.message)}}
-async function joinRoom(){let code=nC(document.getElementById('jc').value);if(!code)return alert('Digite código');let snap=await dbGet(dbRef(db,'salas/'+code));if(!snap.exists())return alert('CODIGO INVALIDO - Sala '+code+' não existe. Crie uma nova.');let p=snap.val().players||[];if(!p.includes(curUser))p.push(curUser);await dbUpdate(dbRef(db,'salas/'+code),{players:p});curRoom=code;showR(code);listen(code)}
-async function joinIn(t){let id=t=='caca'?'jcC':'jcA';let code=nC(document.getElementById(id).value);if(!code)return alert('Digite código');let snap=await dbGet(dbRef(db,'salas/'+code));if(!snap.exists())return alert('CODIGO INVALIDO');let p=snap.val().players||[];if(!p.includes(curUser))p.push(curUser);await dbUpdate(dbRef(db,'salas/'+code),{players:p});curRoom=code;showR(code);listen(code)}
-function showR(code){document.getElementById('ri').classList.remove('hidden');document.getElementById('rc').textContent=code;document.getElementById('rcC').textContent=code;document.getElementById('rcA').textContent=code;document.getElementById('rs').textContent='Sala '+code+' online'}
-function listen(code){dbOnValue(dbRef(db,'salas/'+code),snap=>{if(snap.exists()){let p=snap.val().players||[];let h=p.map(x=>`<span class="pill">${x} ${x==snap.val().host?'👑':''}</span>`).join('');document.getElementById('pl').innerHTML=h;document.getElementById('plC').innerHTML=h;document.getElementById('plA').innerHTML=h;document.getElementById('rs').textContent=p.length+' jogadores - '+code}})}
+async function createRoom(){let code=nC(Math.random().toString(36).substring(2,6).toUpperCase());try{await dbSet(dbRef(db,'salas/'+code),{codigo:code,host:curUser,players:[curUser],criado:Date.now(),game:{}});curRoom=code;showR(code);listen(code);let u=new URL(location.href);u.searchParams.set('codigo',code);history.replaceState({},'',u)}catch(e){alert('Erro: '+e.message)}}
+async function joinRoom(){let code=nC(document.getElementById('jc').value);if(!code)return alert('Digite código');let snap=await dbGet(dbRef(db,'salas/'+code));if(!snap.exists())return alert('CODIGO INVALIDO');let p=snap.val().players||[];if(!p.includes(curUser))p.push(curUser);await dbUpd(dbRef(db,'salas/'+code),{players:p});curRoom=code;showR(code);listen(code)}
+function showR(c){document.getElementById('ri').classList.remove('hidden');document.getElementById('rc').textContent=c;document.getElementById('rcC').textContent=c;document.getElementById('rcA').textContent=c;document.getElementById('rs').textContent='Online '+c}
+function listen(code){dbOn(dbRef(db,'salas/'+code),(snap)=>{if(!snap.exists())return;let d=snap.val();let p=d.players||[];let h=p.map(x=>`<span class="pill">${x} ${x==d.host?'👑':''}</span>`).join('');document.getElementById('pl').innerHTML=h;document.getElementById('plC').innerHTML=h;document.getElementById('plA').innerHTML=h;if(d.game?.caca){renderGrid(d.game.caca);updateScore(d.game.caca)}if(d.game?.adedonhaLive){document.getElementById('liveA').textContent=d.game.adedonhaLive}if(d.game?.cacaLive){document.getElementById('live').textContent=d.game.cacaLive}})}
+function copyI(){if(!curRoom)return alert('Crie sala');let link=`${location.origin}${location.pathname}?codigo=${curRoom}`;navigator.clipboard.writeText(link);alert('Copiado: '+link)}
 
-function copyInvite(){if(!curRoom)return alert('Crie sala');let link=`${location.origin}${location.pathname}?codigo=${curRoom}`;navigator.clipboard.writeText(link);alert('Copiado: '+link)}
+// CAÇA SINCRONIZADO
+function genGrid(){let size=12;let grid=Array(size).fill().map(()=>Array(size).fill(''));let words=LWORDS.sort(()=>0.5-Math.random()).slice(0,8);let placed=[];
+words.forEach(w=>{for(let a=0;a<200;a++){let dirs=[[0,1],[1,0],[1,1],[0,-1]],d=dirs[Math.floor(Math.random()*dirs.length)],r=Math.floor(Math.random()*size),c=Math.floor(Math.random()*size),er=r+d[0]*(w.length-1),ec=c+d[1]*(w.length-1);if(er<0||er>=size||ec<0||ec>=size)continue;let ok=true;for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;if(grid[nr][nc]&&grid[nr][nc]!=w[i]){ok=false;break}}if(ok){for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;grid[nr][nc]=w[i]}placed.push({word:w,r,c,d});break}}});
+for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!grid[r][c])grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+return {size,grid,words:placed.map(p=>p.word),placed,found:[],scores:{},time:180};
+}
+async function startWS(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.remove('hidden');document.getElementById('stGame').classList.add('hidden');if(!curRoom){alert('Crie ou entre numa sala antes');return}
+let snap=await dbGet(dbRef(db,'salas/'+curRoom+'/game/caca'));if(!snap.exists()){let g=genGrid();await dbSet(dbRef(db,'salas/'+curRoom+'/game/caca'),g);if(isMaster&&robot.caca) startBotCaca(curRoom,g)}
+}
+async function resetGame(){if(!curRoom)return;let g=genGrid();await dbSet(dbRef(db,'salas/'+curRoom+'/game/caca'),g)}
+function renderGrid(data){if(!data)return;let ge=document.getElementById('wordGrid');ge.style.gridTemplateColumns=`repeat(${data.size},1fr)`;ge.innerHTML='';for(let r=0;r<data.size;r++)for(let c=0;c<data.size;c++){let d=document.createElement('div');d.className='cell';d.textContent=data.grid[r][c];d.dataset.r=r;d.dataset.c=c;
+if(data.found?.some(f=>f.word==data.grid[r][c] && false)){} // placeholder
+data.found?.forEach(f=>{if(isInWord(r,c,f)){d.classList.add(f.player==curUser?'found':'other')}});
+d.addEventListener('mousedown',sS);d.addEventListener('mouseenter',e=>{if(ws.isSel)addCell(d)});d.addEventListener('touchstart',e=>{e.preventDefault();ws.isSel=true;addCell(d)},{passive:false});d.addEventListener('touchmove',e=>{let t=e.touches[0];let el=document.elementFromPoint(t.clientX,t.clientY)?.closest('.cell');if(el)addCell(el)},{passive:false});
+ge.appendChild(d)}
+document.addEventListener('mouseup',endSel);document.addEventListener('touchend',endSel);
+document.getElementById('wl').innerHTML=data.words.map(w=>{let f=data.found?.find(x=>x.word==w);return `<span class="wordChip ${f?'done':''}">${w} ${f?'✓ '+f.player:''}</span>`}).join('');
+}
+function isInWord(r,c,f){for(let i=0;i<f.word.length;i++){let nr=f.r+f.d[0]*i,nc=f.c+f.d[1]*i;if(nr==r&&nc==c)return true}return false}
+function addCell(cell){if(!ws.sel.includes(cell)){ws.sel.push(cell);cell.classList.add('sel')}}
+function sS(e){ws.isSel=true;ws.sel=[e.target];e.target.classList.add('sel')}
+async function endSel(){if(!ws.isSel)return;ws.isSel=false;if(ws.sel.length<2){ws.sel.forEach(c=>c.classList.remove('sel'));ws.sel=[];return}
+let txt=ws.sel.map(c=>c.textContent).join('');let rev=txt.split('').reverse().join('');
+let snap=await dbGet(dbRef(db,'salas/'+curRoom+'/game/caca'));let data=snap.val();if(!data)return;
+let match=data.placed.find(p=>p.word==txt||p.word==rev);if(match&&!data.found.some(f=>f.word==match.word)){
+let found={word:match.word,r:match.r,c:match.c,d:match.d,player:curUser};data.found.push(found);data.scores[curUser]=(data.scores[curUser]||0)+100;
+await dbSet(dbRef(db,'salas/'+curRoom+'/game/caca'),data);
+await dbSet(dbRef(db,'salas/'+curRoom+'/game/cacaLive'),`${curUser} achou ${match.word}!`);
+setTimeout(()=>dbSet(dbRef(db,'salas/'+curRoom+'/game/cacaLive'),''),3000);
+}else{ws.sel.forEach(c=>c.classList.remove('sel'))}
+ws.sel=[];
+}
+function updateScore(data){let my=data.scores?.[curUser]||0;document.getElementById('wsP').textContent=my+' pts';let t=data.time||180;document.getElementById('wt').textContent=`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`}
 
-function startWS(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.remove('hidden');document.getElementById('stGame').classList.add('hidden');if(curRoom)document.getElementById('rcC').textContent=curRoom;buildWS()}
-function buildWS(){let size=12;clearInterval(ws.timer);ws.found=[];ws.score=0;ws.sel=[];ws.grid=Array(size).fill().map(()=>Array(size).fill(''));let chosen=LWORDS.sort(()=>0.5-Math.random()).slice(0,8);ws.words=chosen;
-chosen.forEach(w=>{for(let a=0;a<100;a++){let dirs=[[0,1],[1,0],[1,1]],d=dirs[Math.floor(Math.random()*dirs.length)],r=Math.floor(Math.random()*size),c=Math.floor(Math.random()*size),er=r+d[0]*(w.length-1),ec=c+d[1]*(w.length-1);if(er<0||er>=size||ec<0||ec>=size)continue;let ok=true;for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;if(ws.grid[nr][nc]&&ws.grid[nr][nc]!=w[i]){ok=false;break}}if(ok){for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;ws.grid[nr][nc]=w[i]}break}}});
-for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!ws.grid[r][c])ws.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
-let ge=document.getElementById('wordGrid');ge.style.gridTemplateColumns=`repeat(${size},1fr)`;ge.innerHTML='';for(let r=0;r<size;r++)for(let c=0;c<size;c++){let d=document.createElement('div');d.className='cell';d.textContent=ws.grid[r][c];d.dataset.r=r;d.dataset.c=c;d.addEventListener('touchstart',sS,{passive:false});d.addEventListener('mousedown',sS);d.addEventListener('mouseenter',cS);d.addEventListener('touchmove',cT,{passive:false});d.addEventListener('touchend',eS);d.addEventListener('mouseup',eS);ge.appendChild(d)}
-document.getElementById('wl').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');document.getElementById('ws').textContent='Pontos: 0';let time=180;document.getElementById('wt').textContent='03:00';ws.timer=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wt').textContent=`${m}:${s}`;if(time<=0){clearInterval(ws.timer);alert('Acabou! Pontos: '+ws.score)}},1000);updR()}
-let isSel=false;function sS(e){e.preventDefault();isSel=true;let cell=e.target.closest('.cell');if(!cell)return;ws.sel=[cell];cell.classList.add('selected')}
-function cS(e){if(!isSel)return;let cell=e.target.closest('.cell');if(cell&&!ws.sel.includes(cell)){ws.sel.push(cell);cell.classList.add('selected')}}
-function cT(e){if(!isSel)return;let t=e.touches[0];let el=document.elementFromPoint(t.clientX,t.clientY);let cell=el?.closest('.cell');if(cell&&!ws.sel.includes(cell)){ws.sel.push(cell);cell.classList.add('selected')}}
-function eS(){if(!isSel)return;isSel=false;let txt=ws.sel.map(c=>c.textContent).join('');let rev=txt.split('').reverse().join('');let f=ws.words.find(w=>w==txt||w==rev);if(f&&!ws.found.includes(f)){ws.found.push(f);ws.sel.forEach(c=>{c.classList.remove('selected');c.classList.add('found')});ws.score+=100;document.getElementById('ws').textContent='Pontos: '+ws.score;document.getElementById('chip-'+f)?.classList.add('done');if(ws.found.length==ws.words.length){clearInterval(ws.timer);setTimeout(()=>alert('Achou todas! '+ws.score),200)}}else{ws.sel.forEach(c=>c.classList.remove('selected'))}ws.sel=[]}
+// BOT HUMANIZADO CAÇA
+async function startBotCaca(room,game){if(!game.words.length)return;let i=0;
+let loop=async()=>{let snap=await dbGet(dbRef(db,'salas/'+room+'/game/caca'));let g=snap.val();if(!g||g.found.length>=g.words.length)return;
+let remaining=g.placed.filter(p=>!g.found.some(f=>f.word==p.word));if(!remaining.length)return;
+let pick=remaining[Math.floor(Math.random()*remaining.length)];
+let humanDelay=3000+Math.random()*7000; // 3-10s humanizado
+if(Math.random()<0.2){humanDelay=1000;pick=null} // erra 20%
+setTimeout(async()=>{
+let s=await dbGet(dbRef(db,'salas/'+room+'/game/caca'));let cur=s.val();if(!cur)return;
+if(pick&&!cur.found.some(f=>f.word==pick.word)){cur.found.push({word:pick.word,r:pick.r,c:pick.c,d:pick.d,player:'Luan Bot 🤖'});cur.scores['Luan Bot 🤖']=(cur.scores['Luan Bot 🤖']||0)+100;await dbSet(dbRef(db,'salas/'+room+'/game/caca'),cur);await dbSet(dbRef(db,'salas/'+room+'/game/cacaLive'),`Luan Bot 🤖 achou ${pick.word}!`)}
+loop();
+},humanDelay);
+};
+loop();
+document.getElementById('botInfo').textContent='🤖 Luan Bot jogando';
+}
 
-let sTimer=null,curL='';function startST(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.add('hidden');document.getElementById('stGame').classList.remove('hidden');if(curRoom)document.getElementById('rcA').textContent=curRoom;buildSI();rollL();updR()}
-function buildSI(){let cont=document.getElementById('si');cont.innerHTML='';CATS.forEach(c=>{cont.innerHTML+=`<label style="font-size:11px;opacity:.6">${c}</label><input id="stop_${c}" placeholder="${c}">`})}
-function rollL(){let lets="ABCDEFGHIJKLMNOPRSTUVZ";curL=lets[Math.floor(Math.random()*lets.length)];document.getElementById('sl').textContent=curL;clearInterval(sTimer);let t=60;document.getElementById('stT').textContent=t;sTimer=setInterval(()=>{t--;document.getElementById('stT').textContent=t;if(t<=0){clearInterval(sTimer);doStop()}},1000)}
-function doStop(){clearInterval(sTimer);let r=[];CATS.forEach(c=>{let v=document.getElementById('stop_'+c)?.value||'';r.push(`${c}: ${v||'-'} ${v&&v[0].toUpperCase()==curL?'✅':'❌'}`)});document.getElementById('sr').innerHTML=r.map(x=>`<div style="padding:4px 0;border-bottom:1px solid #ffffff10;font-size:13px">${x}</div>`).join('')}
+// ADEDONHA SINCRONIZADO
+let curL='';function startST(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.add('hidden');document.getElementById('stGame').classList.remove('hidden');buildSI();rollL();}
+function buildSI(){let c=document.getElementById('si');c.innerHTML='';CATS.forEach(cat=>{c.innerHTML+=`<label style="font-size:11px;opacity:.6">${cat}</label><input id="stop_${cat}" placeholder="${cat}" oninput="syncA()">`})}
+async function syncA(){if(!curRoom)return;let txt=`${curUser} digitando...`;await dbSet(dbRef(db,'salas/'+curRoom+'/game/adedonhaLive'),txt);setTimeout(()=>dbSet(dbRef(db,'salas/'+curRoom+'/game/adedonhaLive'),''),2000)}
+function rollL(){let lets="ABCDEFGILMOPRST";curL=lets[Math.floor(Math.random()*lets.length)];document.getElementById('sl').textContent=curL;clearInterval(sTimer);let t=60;document.getElementById('stT').textContent=t;sTimer=setInterval(()=>{t--;document.getElementById('stT').textContent=t;if(t<=0){clearInterval(sTimer);doStop()}},1000);if(isMaster&&robot.adedonha) startBotAdedonha()}
+function doStop(){clearInterval(sTimer);let r=[];CATS.forEach(c=>{let v=document.getElementById('stop_'+c)?.value||'';r.push(`${c}: ${v||'-'} ${v&&v[0].toUpperCase()==curL?'✅':'❌'}`)});document.getElementById('sr').innerHTML=r.map(x=>`<div style="padding:4px 0;border-bottom:1px solid #ffffff10">${x}</div>`).join('');if(curRoom) dbSet(dbRef(db,'salas/'+curRoom+'/game/adedonhaLive'),`${curUser} deu STOP! Letra ${curL}`)}
+function startBotAdedonha(){setTimeout(()=>{CATS.forEach(cat=>{let el=document.getElementById('stop_'+cat);if(el&&!el.value&&Math.random()>0.3){let fake={Nome:curL+"uan",Cidade:curL+"ondrina",Animal:curL+"obo",Comida:curL+"asanha", "Música Luan":curL+"ua",Cor:curL+"oxo",Objeto:curL+"ivro",Marca:curL+"ike"};el.value=fake[cat]||curL+"...";}});document.getElementById('liveA').textContent='Luan Bot 🤖 também respondeu!';},4000+Math.random()*5000)}
 </script>
 </body>
 </html>
