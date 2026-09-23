@@ -2,228 +2,110 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Luan Santana Game - V3 PRO ONLINE</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>LUAN GAME V3 PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#ff2e7a;--purple:#7b2cff;--dark:#0f0f1a;--card:#1c1c2e;--gold:#ffcc00}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-body{background:linear-gradient(135deg,#0f0f1a 0%,#1a1033 100%);color:#fff;min-height:100vh;overflow-x:hidden}
+body{background:#0f0f1a;color:#fff;min-height:100vh}
 .hidden{display:none!important}
-header{padding:20px;text-align:center;border-bottom:1px solid #ffffff1a}
-header h1{font-family:'Bebas Neue';font-size:42px;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 24px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer;transition:.2s;text-transform:uppercase}
-.btn:hover{transform:scale(1.05)}
-.card{background:var(--card);border-radius:20px;padding:24px;border:1px solid #ffffff14;box-shadow:0 10px 30px #0006}
-input{width:100%;padding:14px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:8px 0;outline:none}
-input:focus{border-color:var(--pink)}
-#auth{max-width:420px;margin:40px auto}
-.tabs{display:flex;gap:10px;margin:20px 0}
-.tab{flex:1;padding:10px;border-radius:10px;background:#ffffff0f;cursor:pointer;text-align:center;font-weight:600}
-.tab.active{background:var(--pink)}
-#lobby{max-width:900px;margin:30px auto;padding:20px}
-.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
-.mode-card{cursor:pointer;transition:.3s;position:relative;overflow:hidden}
-.mode-card h3{font-family:'Bebas Neue';font-size:28px}
-.badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
-#gameArea{max-width:1100px;margin:20px auto;padding:15px}
-#wordGrid{display:grid;gap:4px;user-select:none;touch-action:none;width:100%;max-width:min(95vw,480px);margin:0 auto;aspect-ratio:1/1;background:#0003;padding:8px;border-radius:16px}
-.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff18;border-radius:8px;font-weight:800;cursor:pointer;font-size:clamp(11px,3.5vw,15px);transition:.1s;border:2px solid transparent;touch-action:none}
-.cell.selected{background:var(--pink)!important;color:#fff!important;border-color:#fff;transform:scale(1.08);z-index:2}
+.card{background:var(--card);border-radius:20px;padding:20px;border:1px solid #ffffff14;margin-top:15px}
+.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 20px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:6px 0}
+.roomCode{font-size:24px;letter-spacing:5px;background:#0006;padding:10px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
+#wordGrid{display:grid;gap:4px;width:100%;max-width:480px;aspect-ratio:1/1;background:#0003;padding:8px;border-radius:16px;margin:0 auto}
+.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff18;border-radius:8px;font-weight:800;font-size:14px;user-select:none}
+.cell.selected{background:var(--pink)!important;border:2px solid #fff;transform:scale(1.1)}
 .cell.found{background:var(--gold)!important;color:#000!important}
-.cell.wrong{background:#ff4444!important}
-.wordList{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0;min-height:40px}
-.wordChip{padding:8px 12px;background:#ffffff18;border-radius:20px;font-size:12px;font-weight:700;transition:.2s}
+.wordChip{padding:6px 10px;background:#ffffff18;border-radius:20px;font-size:11px;margin:4px;display:inline-block}
 .wordChip.done{text-decoration:line-through;background:var(--gold);color:#000}
-.timer{font-family:'Bebas Neue';font-size:52px;text-align:center;color:var(--gold);min-width:80px}
-.roomCode{font-size:28px;letter-spacing:6px;background:#0006;padding:10px 20px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
-.pill{padding:6px 12px;background:#ffffff15;border-radius:20px;font-size:13px}
-.toggle-wrap{display:flex;align-items:center;gap:12px;background:#ffffff0a;padding:12px 16px;border-radius:12px;margin-top:12px;border:1px solid #ffffff15}
-.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s}
-.switch.on{background:var(--gold)}
-.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
-.switch.on::after{left:27px}
-#stopArea{display:grid;grid-template-columns:1fr 320px;gap:20px}
-@media(max-width:800px){#stopArea{grid-template-columns:1fr}#wordGrid{max-width:95vw}}
+.pill{padding:6px 10px;background:#ffffff15;border-radius:20px;font-size:12px;display:inline-block;margin:3px}
+.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer}
+.switch.on{background:var(--gold)}.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}.switch.on::after{left:27px}
+.timer{font-family:'Bebas Neue';font-size:48px;color:var(--gold)}
 </style>
 </head>
-<body>
-<header>
-<h1>LUAN SANTANA GAME</h1>
-<p style="opacity:.6;font-size:11px;letter-spacing:2px">V3 PRO - ONLINE REAL - FIREBASE</p>
-</header>
+<body style="padding:15px;max-width:1100px;margin:0 auto">
+<h1 style="font-family:'Bebas Neue';font-size:40px;text-align:center;background:linear-gradient(90deg,#ff2e7a,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px">LUAN SANTANA GAME V3</h1>
 
-<div id="auth"><div class="card">
-<div class="tabs"><div class="tab active" id="tabLogin" onclick="switchAuth('login')">LOGIN</div><div class="tab" id="tabReg" onclick="switchAuth('register')">CRIAR CONTA</div></div>
-<div id="loginForm"><input id="loginUser" placeholder="Usuário"><input id="loginPass" type="password" placeholder="Senha"><button class="btn" style="width:100%;margin-top:12px" onclick="login()">ENTRAR</button><button onclick="clearCache()" style="margin-top:12px;background:none;border:none;color:#666;font-size:11px;cursor:pointer;width:100%;text-decoration:underline">Limpar cache</button></div>
-<div id="registerForm" class="hidden"><input id="regUser" placeholder="Crie seu usuário"><input id="regPass" type="password" placeholder="Crie sua senha"><button class="btn" style="width:100%;margin-top:12px" onclick="register()">CRIAR CONTA</button></div>
-<p id="authMsg" style="margin-top:12px;text-align:center;font-size:13px;color:var(--gold)"></p>
-</div></div>
+<div id="auth"><div class="card" style="max-width:400px;margin:30px auto"><div style="display:flex;gap:8px"><div id="tL" onclick="tA('l')" style="flex:1;text-align:center;padding:10px;background:var(--pink);border-radius:10px;cursor:pointer">LOGIN</div><div id="tR" onclick="tA('r')" style="flex:1;text-align:center;padding:10px;background:#ffffff15;border-radius:10px;cursor:pointer">CRIAR</div></div>
+<div id="fL"><input id="lu" placeholder="Usuário"><input id="lp" type="password" placeholder="Senha"><button class="btn" style="width:100%;margin-top:10px" onclick="login()">ENTRAR</button></div>
+<div id="fR" class="hidden"><input id="ru" placeholder="Novo usuário"><input id="rp" type="password" placeholder="Nova senha"><button class="btn" style="width:100%;margin-top:10px" onclick="register()">CRIAR CONTA</button></div>
+<p id="am" style="text-align:center;margin-top:10px;color:var(--gold)"></p></div></div>
 
 <div id="lobby" class="hidden">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h2 style="font-family:'Bebas Neue';font-size:30px">Olá, <span id="userNameDisplay"></span></h2><button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button></div>
-<div id="masterPanel" class="hidden"><div class="card" style="margin-top:15px;border:1px solid var(--gold)"><h3 style="font-size:14px">🤖 SUA CONTA THIAGO SHELBY - ROBOZINHO POR MODO</h3><div class="toggle-wrap"><span style="font-size:13px;font-weight:700">Robô na Adedonha</span><div id="robotSwitchAded" class="switch on" onclick="toggleRobot('adedonha')"></div><span id="robotStatusAded" style="font-size:12px;color:var(--gold)">ATIVADO</span></div><div class="toggle-wrap"><span style="font-size:13px;font-weight:700">Robô no Caça-Palavras</span><div id="robotSwitchCaca" class="switch on" onclick="toggleRobot('caca')"></div><span id="robotStatusCaca" style="font-size:12px;color:var(--gold)">ATIVADO</span></div></div></div>
-<div class="card" style="margin-top:20px"><h3>🌐 MODO ONLINE COM AMIGOS - FIREBASE</h3><p style="font-size:13px;opacity:.7;margin:6px 0">Agora funciona entre celulares diferentes.</p><div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="createRoom()">CRIAR SALA + GERAR CÓDIGO</button><input id="joinCode" placeholder="Código do amigo" style="max-width:180px;text-transform:uppercase"><button class="btn" onclick="joinRoom()" style="background:#ffffff15">ENTRAR</button></div><div id="roomInfo" class="hidden" style="margin-top:15px"><div class="roomCode" id="roomCodeDisplay"></div><div class="online-players" id="playersList" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"></div><p id="roomStatus" style="font-size:12px;margin-top:8px;opacity:.7"></p><button class="btn" style="margin-top:10px;background:#ffffff15" onclick="copyInvite()">📋 COPIAR LINK DE CONVITE</button></div></div>
-<div class="modes"><div class="mode-card card" onclick="startWordSearch()"><span class="badge">ONLINE</span><h3>🔍 CAÇA PALAVRAS</h3><p style="font-size:13px;opacity:.7;margin-top:8px">Clique e arraste. Tamanho certo pro celular.</p><button class="btn" style="margin-top:12px">JOGAR</button></div><div class="mode-card card" onclick="startStop()"><span class="badge">2-6 PLAYERS</span><h3>✋ ADEDONHA / STOP</h3><p style="font-size:13px;opacity:.7;margin-top:8px">Com sala online dentro.</p><button class="btn" style="margin-top:12px">JOGAR</button></div></div>
+<div style="display:flex;justify-content:space-between"><h2>Olá, <span id="un"></span></h2><button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button></div>
+<div id="mp" class="hidden" class="card" style="border:1px solid var(--gold)"><div class="card"><h3 style="font-size:12px">🤖 CONTA THIAGO SHELBY - ROBÔ POR MODO</h3>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span>Robô Adedonha</span><div id="sA" class="switch on" onclick="tRbt('adedonha')"></div><span id="stA">ATIVADO</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span>Robô Caça-Palavras</span><div id="sC" class="switch on" onclick="tRbt('caca')"></div><span id="stC">ATIVADO</span></div></div></div>
+
+<div class="card"><h3>🌐 ONLINE FIREBASE - NÃO DÁ MAIS INVALIDO</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="createRoom()">CRIAR SALA + CÓDIGO</button><input id="jc" placeholder="Código do amigo" style="max-width:160px;text-transform:uppercase"><button class="btn" style="background:#ffffff15" onclick="joinRoom()">ENTRAR</button></div>
+<div id="ri" class="hidden"><div id="rc" class="roomCode" style="margin-top:12px"></div><div id="pl" style="margin-top:10px"></div><p id="rs" style="font-size:11px;opacity:.6"></p><button class="btn" style="margin-top:8px;background:#ffffff15" onclick="copyInvite()">📋 COPIAR LINK</button></div></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px"><div class="card" onclick="startWS()" style="cursor:pointer"><h3>🔍 CAÇA PALAVRAS</h3><p style="font-size:12px;opacity:.6">Arrasta pra selecionar, palavras visíveis</p><button class="btn" style="margin-top:8px">JOGAR</button></div>
+<div class="card" onclick="startST()" style="cursor:pointer"><h3>✋ ADEDONHA</h3><p style="font-size:12px;opacity:.6">2-6 jogadores online</p><button class="btn" style="margin-top:8px">JOGAR</button></div></div>
 </div>
 
-<div id="gameArea" class="hidden">
-<button class="btn" onclick="backToLobby()" style="background:#ffffff15;margin-bottom:15px">← VOLTAR AO LOBBY</button>
+<div id="ga" class="hidden"><button class="btn" style="background:#ffffff15" onclick="back()">← LOBBY</button>
 
-<div id="wordSearchGame" class="hidden">
-<div class="card" style="border:1px dashed var(--pink);margin-bottom:15px;background:linear-gradient(135deg,#1c1c2e 0%,#2a1a4a 100%)"><h3 style="font-size:14px">🔍 CAÇA-PALAVRAS - CONVIDAR AMIGOS</h3><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><div class="roomCode" id="roomCodeCaca" style="font-size:20px;flex:1">------</div><button class="btn" style="max-width:150px" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:8px;margin-top:10px"><input id="joinCodeCaca" placeholder="COLAR CÓDIGO DO AMIGO" style="text-transform:uppercase"><button class="btn" onclick="joinFromInside('caca')">ENTRAR</button></div><div id="playersListCaca" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"></div><p id="botInfoCaca" style="font-size:11px;color:var(--gold);margin-top:6px"></p></div>
-<div style="display:grid;grid-template-columns:1fr 300px;gap:20px"><div><div id="wordGrid"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px"><span id="wsTimer" class="timer">03:00</span><div style="display:flex;gap:8px"><button class="btn" onclick="hintWord()">DICA (-20)</button><button class="btn" style="background:#ffffff15" onclick="buildWordSearch()">NOVO JOGO</button></div></div><p style="font-size:11px;opacity:.5;margin-top:8px;text-align:center">💡 Segure na primeira letra e arraste até a última</p></div><div class="card"><h3 style="font-family:'Bebas Neue';font-size:22px">PALAVRAS PARA ACHAR</h3><div id="wsWords" class="wordList"></div><p id="wsScore" style="margin-top:12px;font-weight:800">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô ativo</p></div></div>
-</div>
+<div id="wsGame" class="hidden"><div class="card" style="border:1px dashed var(--pink)"><h3>🔍 CAÇA - CONVIDAR DENTRO DO JOGO</h3><div style="display:flex;gap:8px;margin-top:8px"><div id="rcC" class="roomCode" style="flex:1;font-size:18px">------</div><button class="btn" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:6px;margin-top:8px"><input id="jcC" placeholder="COLAR CÓDIGO" style="text-transform:uppercase"><button class="btn" onclick="joinIn('caca')">ENTRAR</button></div><div id="plC" style="margin-top:8px"></div><p id="biC" style="font-size:11px;color:var(--gold)"></p></div>
+<div id="wordGrid"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span id="wt" class="timer">03:00</span><div><button class="btn" onclick="buildWS()">NOVO</button></div></div><p style="font-size:11px;text-align:center;opacity:.5">Segure e arraste de letra em letra</p><div class="card"><div id="wl"></div><p id="ws" style="font-weight:800;margin-top:8px">Pontos: 0</p></div></div>
 
-<div id="stopGame" class="hidden">
-<div class="card" style="border:1px dashed var(--pink);margin-bottom:15px;background:linear-gradient(135deg,#1c1c2e 0%,#2a1a4a 100%)"><h3 style="font-size:14px">✋ ADEDONHA - CONVIDAR AMIGOS</h3><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><div class="roomCode" id="roomCodeAded" style="font-size:20px;flex:1">------</div><button class="btn" style="max-width:150px" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:8px;margin-top:10px"><input id="joinCodeAded" placeholder="COLAR CÓDIGO DO AMIGO" style="text-transform:uppercase"><button class="btn" onclick="joinFromInside('adedonha')">ENTRAR</button></div><div id="playersListAded" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"></div><p id="botInfoAded" style="font-size:11px;color:var(--gold);margin-top:6px"></p></div>
-<div class="card" style="text-align:center;margin-bottom:15px"><h2>LETRA DA RODADA: <span id="stopLetter" style="font-size:52px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2><div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap"><span id="stopTimer" class="timer">60</span><button class="btn" onclick="rollLetter()">NOVA LETRA</button><button class="btn" style="background:var(--gold);color:#000" onclick="stop()">STOP!</button><button class="btn" style="background:#ffffff15" onclick="resetStop()">LIMPAR</button></div><p id="stopRoundInfo" style="font-size:11px;opacity:.5;margin-top:8px"></p></div>
-<div id="stopArea"><div class="card" id="stopInputs"></div><div class="card"><h3>Placar</h3><div id="stopPlayers" style="margin-bottom:10px"></div><div id="stopResults"></div></div></div>
-</div>
+<div id="stGame" class="hidden"><div class="card" style="border:1px dashed var(--pink)"><h3>✋ ADEDONHA - CONVIDAR DENTRO DO JOGO</h3><div style="display:flex;gap:8px;margin-top:8px"><div id="rcA" class="roomCode" style="flex:1;font-size:18px">------</div><button class="btn" onclick="copyInvite()">COPIAR</button></div><div style="display:flex;gap:6px;margin-top:8px"><input id="jcA" placeholder="COLAR CÓDIGO" style="text-transform:uppercase"><button class="btn" onclick="joinIn('adedonha')">ENTRAR</button></div><div id="plA" style="margin-top:8px"></div><p id="biA" style="font-size:11px;color:var(--gold)"></p></div>
+<div class="card" style="text-align:center"><h2>LETRA: <span id="sl" style="font-size:50px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2><div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap"><span id="stT" class="timer">60</span><button class="btn" onclick="rollL()">NOVA LETRA</button><button class="btn" style="background:var(--gold);color:#000" onclick="doStop()">STOP!</button></div></div>
+<div id="si" class="card"></div><div id="sr" class="card"></div></div>
+
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, child, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",
-  authDomain: "luan-coins.firebaseapp.com",
-  databaseURL: "https://luan-coins-default-rtdb.firebaseio.com",
-  projectId: "luan-coins",
-  storageBucket: "luan-coins.firebasestorage.app",
-  messagingSenderId: "379641584803",
-  appId: "1:379641584803:web:c1bfc0c0715e3347fef316",
-  measurementId: "G-KVC10MM12Y"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-window.db = db; window.dbRef = ref; window.dbSet = set; window.dbGet = get; window.dbChild = child; window.dbOnValue = onValue; window.dbUpdate = update;
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig={apiKey:"AIzaSyAkZYDcCsua7qzmdZDj__KIrYTAWIslvsI",authDomain:"luan-coins.firebaseapp.com",databaseURL:"https://luan-coins-default-rtdb.firebaseio.com",projectId:"luan-coins",storageBucket:"luan-coins.firebasestorage.app",messagingSenderId:"379641584803",appId:"1:379641584803:web:c1bfc0c0715e3347fef316",measurementId:"G-KVC10MM12Y"};
+const app=initializeApp(firebaseConfig); const db=getDatabase(app);
+window.db=db; window.dbRef=ref; window.dbSet=set; window.dbGet=get; window.dbOnValue=onValue; window.dbUpdate=update;
 </script>
-
 <script>
-const MASTER_USER="thiago shelby"; let robotConfig={adedonha:true,caca:true};
-function normalize(s){return (s||"").trim().toLowerCase().replace(/\s+/g,' ')}
-function getUsers(){try{let u=JSON.parse(localStorage.getItem('luan_users')||'{}');u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";return u}catch{return{"Thiago Shelby":"9090iop","thiago shelby":"9090iop"}}}
-function saveUsers(u){u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";localStorage.setItem('luan_users',JSON.stringify(u))}
-function clearCache(){localStorage.clear();alert('Cache limpo!');location.reload()}
-let currentUser=null,isMaster=false,currentRoom=null;
-let wsData={words:[],found:[],score:0,interval:null,selection:[],grid:[]}
-const LUAN_WORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","SANFONA","INCONDICIONAL","SEDEX","VOCEDEMINA","AMARNAOPE","VIVA","TUDOQUEVOCEQU","CEDOOUTARDE","MULHER","METEORO","AMAR"];
-const STOP_CATEGORIES=["Nome","Cidade","Animal","Comida","Música do Luan","Novela/Filme","Cor","Objeto","Marca"];
-function switchAuth(t){document.getElementById('loginForm').classList.toggle('hidden',t!=='login');document.getElementById('registerForm').classList.toggle('hidden',t!=='register');document.getElementById('tabLogin').classList.toggle('active',t==='login');document.getElementById('tabReg').classList.toggle('active',t==='register')}
-function login(){const uRaw=document.getElementById('loginUser').value;const pRaw=document.getElementById('loginPass').value;const u=normalize(uRaw);const p=normalize(pRaw);const users=getUsers();let found=Object.keys(users).find(k=>normalize(k)===u);if(!found)return msg("Usuário não encontrado");if(normalize(users[found])!==p)return msg("Senha incorreta");currentUser=found==="thiago shelby"?"Thiago Shelby":found;isMaster=(u===MASTER_USER&&p==="9090iop");let cfg=JSON.parse(localStorage.getItem('robotConfig')||'null');if(cfg)robotConfig=cfg;localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster,robotConfig}));showLobby()}
-function register(){const uRaw=document.getElementById('regUser').value.trim();const pRaw=document.getElementById('regPass').value.trim();if(!uRaw||!pRaw)return msg("Preencha");if(normalize(uRaw)===MASTER_USER)return msg("Reservado");let users=getUsers();if(Object.keys(users).some(k=>normalize(k)===normalize(uRaw)))return msg("Já existe");users[uRaw]=pRaw;saveUsers(users);msg("Conta criada! Faça login",true);switchAuth('login');document.getElementById('loginUser').value=uRaw}
-function msg(t,ok){const el=document.getElementById('authMsg');el.textContent=t;el.style.color=ok?'#00ff88':'var(--gold)'}
-function showLobby(){document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('gameArea').classList.add('hidden');const sess=JSON.parse(localStorage.getItem('luan_session')||'null');if(sess){currentUser=sess.u;isMaster=sess.isMaster;robotConfig=sess.robotConfig||robotConfig}document.getElementById('userNameDisplay').textContent=currentUser;document.getElementById('masterPanel').classList.toggle('hidden',!isMaster);updateRobotUI();const params=new URLSearchParams(location.search);if(params.get('codigo')){document.getElementById('joinCode').value=params.get('codigo').toUpperCase()}}
-function toggleRobot(modo){robotConfig[modo]=!robotConfig[modo];localStorage.setItem('robotConfig',JSON.stringify(robotConfig));let sess=JSON.parse(localStorage.getItem('luan_session')||'{}');sess.robotConfig=robotConfig;localStorage.setItem('luan_session',JSON.stringify(sess));updateRobotUI()}
-function updateRobotUI(){document.getElementById('robotSwitchAded')?.classList.toggle('on',robotConfig.adedonha);document.getElementById('robotSwitchCaca')?.classList.toggle('on',robotConfig.caca);document.getElementById('robotStatusAded').textContent=robotConfig.adedonha?'ATIVADO':'DESATIVADO';document.getElementById('robotStatusCaca').textContent=robotConfig.caca?'ATIVADO':'DESATIVADO';document.getElementById('botInfoAded').textContent=isMaster?(robotConfig.adedonha?'🤖 Robô ATIVADO neste modo':'🤖 Robô DESATIVADO'):"";document.getElementById('botInfoCaca').textContent=isMaster?(robotConfig.caca?'🤖 Robô ATIVADO neste modo':'🤖 Robô DESATIVADO'):"";document.getElementById('wsBotStatus').style.display=(isMaster&&robotConfig.caca)?'block':'none'}
-function logout(){localStorage.removeItem('luan_session');location.reload()}
-(function(){const s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s){currentUser=s.u;isMaster=s.isMaster;robotConfig=s.robotConfig||robotConfig;showLobby()}})()
-function backToLobby(){clearInterval(wsData.interval);clearInterval(stopTimerInt);document.getElementById('gameArea').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
+const MASTER="thiago shelby"; let robot={adedonha:true,caca:true}; let curUser=null,isMaster=false,curRoom=null;
+let ws={words:[],found:[],score:0,grid:[],sel:[],timer:null}; const LWORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVA","ACORDO","SANFONA","INCONDICIONAL","VOCE","AMAR","VIVA","METEORO","MULHER"];
+const CATS=["Nome","Cidade","Animal","Comida","Música Luan","Cor","Objeto","Marca"];
+function tA(t){document.getElementById('fL').classList.toggle('hidden',t!='l');document.getElementById('fR').classList.toggle('hidden',t!='r');document.getElementById('tL').style.background=t=='l'?'var(--pink)':'#ffffff15';document.getElementById('tR').style.background=t=='r'?'var(--pink)':'#ffffff15'}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
+function getU(){try{let u=JSON.parse(localStorage.getItem('luan_users')||'{}');u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";return u}catch{return{"Thiago Shelby":"9090iop"}}}
+function saveU(u){u["Thiago Shelby"]="9090iop";u["thiago shelby"]="9090iop";localStorage.setItem('luan_users',JSON.stringify(u))}
+function login(){let u=norm(document.getElementById('lu').value),p=norm(document.getElementById('lp').value),users=getU(),f=Object.keys(users).find(k=>norm(k)==u);if(!f)return amsg("Não encontrado");if(norm(users[f])!=p)return amsg("Senha errada");curUser=f=="thiago shelby"?"Thiago Shelby":f;isMaster=(u==MASTER&&p=="9090iop");let rc=JSON.parse(localStorage.getItem('robotConfig')||'null');if(rc)robot=rc;localStorage.setItem('luan_session',JSON.stringify({u:curUser,isMaster,robot}));showLobby()}
+function register(){let u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value.trim();if(!u||!p)return amsg("Preencha");if(norm(u)==MASTER)return amsg("Reservado");let users=getU();if(Object.keys(users).some(k=>norm(k)==norm(u)))return amsg("Já existe");users[u]=p;saveU(users);amsg("Criado! Faça login",1);tA('l');document.getElementById('lu').value=u}
+function amsg(t,ok){let e=document.getElementById('am');e.textContent=t;e.style.color=ok?'#0f0':'var(--gold)'}
+function showLobby(){let s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s){curUser=s.u;isMaster=s.isMaster;robot=s.robot||robot}document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('ga').classList.add('hidden');document.getElementById('un').textContent=curUser;document.getElementById('mp').classList.toggle('hidden',!isMaster);updR();let cod=new URLSearchParams(location.search).get('codigo');if(cod)document.getElementById('jc').value=cod.toUpperCase()}
+function tRbt(m){robot[m]=!robot[m];localStorage.setItem('robotConfig',JSON.stringify(robot));let s=JSON.parse(localStorage.getItem('luan_session')||'{}');s.robot=robot;localStorage.setItem('luan_session',JSON.stringify(s));updR()}
+function updR(){document.getElementById('sA')?.classList.toggle('on',robot.adedonha);document.getElementById('sC')?.classList.toggle('on',robot.caca);document.getElementById('stA').textContent=robot.adedonha?'ATIVADO':'DESATIVADO';document.getElementById('stC').textContent=robot.caca?'ATIVADO':'DESATIVADO';document.getElementById('biA').textContent=isMaster?(robot.adedonha?'🤖 ATIVADO':'🤖 DESATIVADO'):'';document.getElementById('biC').textContent=isMaster?(robot.caca?'🤖 ATIVADO':'🤖 DESATIVADO'):''}
+function logout(){localStorage.removeItem('luan_session');location.reload()}function back(){clearInterval(ws.timer);clearInterval(sTimer);document.getElementById('ga').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
+(function(){let s=JSON.parse(localStorage.getItem('luan_session')||'null');if(s)showLobby()})()
 
-// SALA FIREBASE ONLINE - CORRIGE CODIGO INVALIDO
-function normCode(c){return (c||"").toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
-async function createRoom(){
- const code=normCode(Math.random().toString(36).substring(2,6).toUpperCase());
- try{
-  await window.dbSet(window.dbRef(window.db,'salas/'+code),{codigo:code,host:currentUser,players:[currentUser],criado:Date.now()});
-  currentRoom=code; showRoom(code); listenRoom(code);
-  const url=new URL(location.href); url.searchParams.set('codigo',code); history.replaceState({},'',url);
- }catch(e){alert('Erro Firebase: '+e.message+' - Ative Realtime Database em modo teste');}
-}
-async function joinRoom(){
- const code=normCode(document.getElementById('joinCode').value);
- if(!code) return alert('Digite o código');
- try{
-  const snap=await window.dbGet(window.dbRef(window.db,'salas/'+code));
-  if(!snap.exists()){ alert('CODIGO INVALIDO OU NAO ENCONTRADO - A sala '+code+' não existe no Firebase. Peça pro amigo criar de novo.'); return; }
-  let data=snap.val(); let players=data.players||[]; if(!players.includes(currentUser))players.push(currentUser);
-  await window.dbUpdate(window.dbRef(window.db,'salas/'+code),{players});
-  currentRoom=code; showRoom(code); listenRoom(code);
- }catch(e){alert('Erro: '+e.message)}
-}
-async function joinFromInside(tipo){
- const id=tipo==='caca'?'joinCodeCaca':'joinCodeAded';
- const code=normCode(document.getElementById(id).value);
- if(!code) return alert('Digite o código');
- try{
-  const snap=await window.dbGet(window.dbRef(window.db,'salas/'+code));
-  if(!snap.exists()){alert('CODIGO INVALIDO OU NAO ENCONTRADO');return;}
-  let players=snap.val().players||[]; if(!players.includes(currentUser))players.push(currentUser);
-  await window.dbUpdate(window.dbRef(window.db,'salas/'+code),{players});
-  currentRoom=code; showRoom(code); listenRoom(code);
- }catch(e){alert('Erro: '+e.message)}
-}
-function showRoom(code){document.getElementById('roomInfo').classList.remove('hidden');document.getElementById('roomCodeDisplay').textContent=code;document.getElementById('roomCodeCaca').textContent=code;document.getElementById('roomCodeAded').textContent=code;document.getElementById('roomStatus').textContent=`Sala ${code} - Online Firebase`}
-function listenRoom(code){
- window.dbOnValue(window.dbRef(window.db,'salas/'+code),(snap)=>{
-  if(snap.exists()){
-   let p=snap.val().players||[];
-   const html=p.map(x=>`<span class="pill">${x} ${x===snap.val().host?'👑':''}</span>`).join('');
-   document.getElementById('playersList').innerHTML=html;
-   document.getElementById('playersListCaca').innerHTML=html;
-   document.getElementById('playersListAded').innerHTML=html;
-   document.getElementById('roomStatus').textContent=`${p.length} jogadores na sala ${code}`;
-  }
- });
-}
-function copyInvite(){if(!currentRoom)return alert('Crie sala');const link=`${location.origin}${location.pathname}?codigo=${currentRoom}`;navigator.clipboard.writeText(link);alert('Link copiado: '+link)}
+function nC(c){return c.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
+async function createRoom(){let code=nC(Math.random().toString(36).substring(2,6).toUpperCase());try{await dbSet(dbRef(db,'salas/'+code),{codigo:code,host:curUser,players:[curUser],criado:Date.now()});curRoom=code;showR(code);listen(code);let u=new URL(location.href);u.searchParams.set('codigo',code);history.replaceState({},'',u);}catch(e){alert('Erro Firebase: '+e.message)}}
+async function joinRoom(){let code=nC(document.getElementById('jc').value);if(!code)return alert('Digite código');let snap=await dbGet(dbRef(db,'salas/'+code));if(!snap.exists())return alert('CODIGO INVALIDO - Sala '+code+' não existe. Crie uma nova.');let p=snap.val().players||[];if(!p.includes(curUser))p.push(curUser);await dbUpdate(dbRef(db,'salas/'+code),{players:p});curRoom=code;showR(code);listen(code)}
+async function joinIn(t){let id=t=='caca'?'jcC':'jcA';let code=nC(document.getElementById(id).value);if(!code)return alert('Digite código');let snap=await dbGet(dbRef(db,'salas/'+code));if(!snap.exists())return alert('CODIGO INVALIDO');let p=snap.val().players||[];if(!p.includes(curUser))p.push(curUser);await dbUpdate(dbRef(db,'salas/'+code),{players:p});curRoom=code;showR(code);listen(code)}
+function showR(code){document.getElementById('ri').classList.remove('hidden');document.getElementById('rc').textContent=code;document.getElementById('rcC').textContent=code;document.getElementById('rcA').textContent=code;document.getElementById('rs').textContent='Sala '+code+' online'}
+function listen(code){dbOnValue(dbRef(db,'salas/'+code),snap=>{if(snap.exists()){let p=snap.val().players||[];let h=p.map(x=>`<span class="pill">${x} ${x==snap.val().host?'👑':''}</span>`).join('');document.getElementById('pl').innerHTML=h;document.getElementById('plC').innerHTML=h;document.getElementById('plA').innerHTML=h;document.getElementById('rs').textContent=p.length+' jogadores - '+code}})}
 
-// CAÇA PALAVRAS - CORRIGIDO SELEÇÃO CELULAR
-function startWordSearch(){document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');document.getElementById('wordSearchGame').classList.remove('hidden');document.getElementById('stopGame').classList.add('hidden');if(currentRoom)document.getElementById('roomCodeCaca').textContent=currentRoom;buildWordSearch()}
-function buildWordSearch(){
- const size=13; clearInterval(wsData.interval); wsData.found=[]; wsData.score=0; wsData.selection=[]; wsData.grid=Array(size).fill().map(()=>Array(size).fill(''));
- let chosen=LUAN_WORDS.sort(()=>0.5-Math.random()).slice(0,9); wsData.words=chosen;
- chosen.forEach(w=>placeWord(w,size));
- for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!wsData.grid[r][c])wsData.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
- const gridEl=document.getElementById('wordGrid'); gridEl.style.gridTemplateColumns=`repeat(${size},1fr)`; gridEl.innerHTML='';
- for(let r=0;r<size;r++)for(let c=0;c<size;c++){
-   let d=document.createElement('div');d.className='cell';d.textContent=wsData.grid[r][c];d.dataset.r=r;d.dataset.c=c;
-   d.addEventListener('touchstart',startSel,{passive:false}); d.addEventListener('mousedown',startSel);
-   d.addEventListener('touchmove',continueSelTouch,{passive:false}); d.addEventListener('mouseenter',continueSel);
-   d.addEventListener('touchend',endSel); d.addEventListener('mouseup',endSel);
-   gridEl.appendChild(d);
- }
- document.getElementById('wsWords').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');
- document.getElementById('wsScore').textContent='Pontos: 0';
- let time=180; document.getElementById('wsTimer').textContent='03:00';
- wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou! Pontos: '+wsData.score)}},1000);
- updateRobotUI();
-}
-function placeWord(word,size){
- const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
- for(let attempt=0;attempt<150;attempt++){let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size), endR=r+dir[0]*(word.length-1), endC=c+dir[1]*(word.length-1); if(endR<0||endR>=size||endC<0||endC>=size)continue; let ok=true; for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break}} if(ok){for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; wsData.grid[nr][nc]=word[i];}return true}} return false;
-}
-let isSelecting=false;
-function startSel(e){ e.preventDefault(); isSelecting=true; clearWrong(); const cell=e.target.closest('.cell'); if(!cell)return; wsData.selection=[cell]; cell.classList.add('selected'); }
-function continueSel(e){ if(!isSelecting)return; const cell=e.target.closest('.cell'); if(!cell||wsData.selection.includes(cell))return; wsData.selection.push(cell); cell.classList.add('selected'); }
-function continueSelTouch(e){ if(!isSelecting)return; const t=e.touches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); const cell=el?.closest('.cell'); if(cell&&!wsData.selection.includes(cell)){ wsData.selection.push(cell); cell.classList.add('selected'); } }
-function endSel(e){
- if(!isSelecting)return; isSelecting=false;
- let txt=wsData.selection.map(el=>el.textContent).join(''); let rev=txt.split('').reverse().join('');
- let foundWord=wsData.words.find(w=>w===txt||w===rev);
- if(foundWord&&!wsData.found.includes(foundWord)){
-   wsData.found.push(foundWord); wsData.selection.forEach(el=>{el.classList.remove('selected'); el.classList.add('found')}); wsData.score+=100;
-   document.getElementById('wsScore').textContent='Pontos: '+wsData.score;
-   document.getElementById('chip-'+foundWord)?.classList.add('done');
-   if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval); setTimeout(()=>alert('Você achou todas! Pontos: '+wsData.score),200)}
- }else{
-   wsData.selection.forEach(el=>el.classList.add('wrong'));
-   setTimeout(()=>{ clearWrong(); }, 400);
- }
- wsData.selection=[];
-}
-function clearWrong(){ document.querySelectorAll('.cell.selected,.cell.wrong').forEach(el=>{el.classList.remove('selected','wrong')}); }
-function hintWord(){ let notFound=wsData.words.filter(w=>!wsData.found.includes(w)); if(!notFound.length)return; let w=notFound[0]; alert('Dica: '+w+' tem '+w.length+' letras'); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score; }
+function copyInvite(){if(!curRoom)return alert('Crie sala');let link=`${location.origin}${location.pathname}?codigo=${curRoom}`;navigator.clipboard.writeText(link);alert('Copiado: '+link)}
 
-// STOP
-let stopTimerInt=null, stopTime=60, currentLetter='';
-function startStop(){ document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden'); document.getElementById('wordSearchGame').classList.add('hidden');document.getElementById('stopGame').classList.remove('hidden'); if(currentRoom)document.getElementById('roomCodeAded').textContent=currentRoom; buildStopInputs(); rollLetter(); updateRobotUI(); }
-function buildStopInputs(){ const cont=document.getElementById('stopInputs'); cont.innerHTML=''; STOP_CATEGORIES.forEach(cat=>{ let div=document.createElement('div'); div.style.marginBottom='12px'; div.innerHTML=`<label style="font-size:12px;color:#aaa;text-transform:uppercase;font-weight:700">${cat}</label><input id="stop_${cat}" placeholder="${cat}">`; cont.appendChild(div); }); }
-function rollLetter(){ const letters="ABCDEFGHIJKLMNOPRSTUVZ"; currentLetter=letters[Math.floor(Math.random()*letters.length)]; document.getElementById('stopLetter').textContent=currentLetter; document.getElementById('stopRoundInfo').textContent=`Rodada com a letra ${currentLetter}`; resetStop(false); startStopTimer(); }
-function startStopTimer(){ clearInterval(stopTimerInt); stopTime=60; document.getElementById('stopTimer').textContent=stopTime; stopTimerInt=setInterval(()=>{stopTime--; document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0){clearInterval(stopTimerInt); alert('Tempo acabou!'); stop();}},1000); }
-function resetStop(full=true){ STOP_CATEGORIES.forEach(cat=>{ let el=document.getElementById('stop_'+cat); if(el) el.value=''; }); if(full){ document.getElementById('stopResults').innerHTML=''; } }
-function stop(){ clearInterval(stopTimerInt); let results=[]; STOP_CATEGORIES.forEach(cat=>{ let v=document.getElementById('stop_'+cat)?.value||''; results.push(`${cat}: ${v||'-'} ${v&&v[0].toUpperCase()===currentLetter?'✅':'❌'}`); }); document.getElementById('stopResults').innerHTML=results.map(r=>`<div style="font-size:13px;padding:4px 0;border-bottom:1px solid #ffffff10">${r}</div>`).join(''); }
+function startWS(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.remove('hidden');document.getElementById('stGame').classList.add('hidden');if(curRoom)document.getElementById('rcC').textContent=curRoom;buildWS()}
+function buildWS(){let size=12;clearInterval(ws.timer);ws.found=[];ws.score=0;ws.sel=[];ws.grid=Array(size).fill().map(()=>Array(size).fill(''));let chosen=LWORDS.sort(()=>0.5-Math.random()).slice(0,8);ws.words=chosen;
+chosen.forEach(w=>{for(let a=0;a<100;a++){let dirs=[[0,1],[1,0],[1,1]],d=dirs[Math.floor(Math.random()*dirs.length)],r=Math.floor(Math.random()*size),c=Math.floor(Math.random()*size),er=r+d[0]*(w.length-1),ec=c+d[1]*(w.length-1);if(er<0||er>=size||ec<0||ec>=size)continue;let ok=true;for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;if(ws.grid[nr][nc]&&ws.grid[nr][nc]!=w[i]){ok=false;break}}if(ok){for(let i=0;i<w.length;i++){let nr=r+d[0]*i,nc=c+d[1]*i;ws.grid[nr][nc]=w[i]}break}}});
+for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!ws.grid[r][c])ws.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+let ge=document.getElementById('wordGrid');ge.style.gridTemplateColumns=`repeat(${size},1fr)`;ge.innerHTML='';for(let r=0;r<size;r++)for(let c=0;c<size;c++){let d=document.createElement('div');d.className='cell';d.textContent=ws.grid[r][c];d.dataset.r=r;d.dataset.c=c;d.addEventListener('touchstart',sS,{passive:false});d.addEventListener('mousedown',sS);d.addEventListener('mouseenter',cS);d.addEventListener('touchmove',cT,{passive:false});d.addEventListener('touchend',eS);d.addEventListener('mouseup',eS);ge.appendChild(d)}
+document.getElementById('wl').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');document.getElementById('ws').textContent='Pontos: 0';let time=180;document.getElementById('wt').textContent='03:00';ws.timer=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wt').textContent=`${m}:${s}`;if(time<=0){clearInterval(ws.timer);alert('Acabou! Pontos: '+ws.score)}},1000);updR()}
+let isSel=false;function sS(e){e.preventDefault();isSel=true;let cell=e.target.closest('.cell');if(!cell)return;ws.sel=[cell];cell.classList.add('selected')}
+function cS(e){if(!isSel)return;let cell=e.target.closest('.cell');if(cell&&!ws.sel.includes(cell)){ws.sel.push(cell);cell.classList.add('selected')}}
+function cT(e){if(!isSel)return;let t=e.touches[0];let el=document.elementFromPoint(t.clientX,t.clientY);let cell=el?.closest('.cell');if(cell&&!ws.sel.includes(cell)){ws.sel.push(cell);cell.classList.add('selected')}}
+function eS(){if(!isSel)return;isSel=false;let txt=ws.sel.map(c=>c.textContent).join('');let rev=txt.split('').reverse().join('');let f=ws.words.find(w=>w==txt||w==rev);if(f&&!ws.found.includes(f)){ws.found.push(f);ws.sel.forEach(c=>{c.classList.remove('selected');c.classList.add('found')});ws.score+=100;document.getElementById('ws').textContent='Pontos: '+ws.score;document.getElementById('chip-'+f)?.classList.add('done');if(ws.found.length==ws.words.length){clearInterval(ws.timer);setTimeout(()=>alert('Achou todas! '+ws.score),200)}}else{ws.sel.forEach(c=>c.classList.remove('selected'))}ws.sel=[]}
+
+let sTimer=null,curL='';function startST(){document.getElementById('lobby').classList.add('hidden');document.getElementById('ga').classList.remove('hidden');document.getElementById('wsGame').classList.add('hidden');document.getElementById('stGame').classList.remove('hidden');if(curRoom)document.getElementById('rcA').textContent=curRoom;buildSI();rollL();updR()}
+function buildSI(){let cont=document.getElementById('si');cont.innerHTML='';CATS.forEach(c=>{cont.innerHTML+=`<label style="font-size:11px;opacity:.6">${c}</label><input id="stop_${c}" placeholder="${c}">`})}
+function rollL(){let lets="ABCDEFGHIJKLMNOPRSTUVZ";curL=lets[Math.floor(Math.random()*lets.length)];document.getElementById('sl').textContent=curL;clearInterval(sTimer);let t=60;document.getElementById('stT').textContent=t;sTimer=setInterval(()=>{t--;document.getElementById('stT').textContent=t;if(t<=0){clearInterval(sTimer);doStop()}},1000)}
+function doStop(){clearInterval(sTimer);let r=[];CATS.forEach(c=>{let v=document.getElementById('stop_'+c)?.value||'';r.push(`${c}: ${v||'-'} ${v&&v[0].toUpperCase()==curL?'✅':'❌'}`)});document.getElementById('sr').innerHTML=r.map(x=>`<div style="padding:4px 0;border-bottom:1px solid #ffffff10;font-size:13px">${x}</div>`).join('')}
 </script>
 </body>
 </html>
