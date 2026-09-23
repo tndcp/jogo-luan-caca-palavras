@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luan Santana - Game Oficial | Caça Palavras & Stop</title>
+<title>Luan Santana Game - V3 PRO</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#ff2e7a;--purple:#7b2cff;--dark:#0f0f1a;--card:#1c1c2e;--gold:#ffcc00}
@@ -13,7 +13,7 @@ body{background:linear-gradient(135deg,#0f0f1a 0%,#1a1033 100%);color:#fff;min-h
 header{padding:20px;text-align:center;border-bottom:1px solid #ffffff1a}
 header h1{font-family:'Bebas Neue';font-size:42px;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 24px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer;transition:.2s;text-transform:uppercase}
-.btn:hover{transform:scale(1.05);box-shadow:0 0 20px var(--pink)}
+.btn:hover{transform:scale(1.05)}
 .card{background:var(--card);border-radius:20px;padding:24px;border:1px solid #ffffff14;box-shadow:0 10px 30px #0006}
 input{width:100%;padding:14px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:8px 0;outline:none}
 input:focus{border-color:var(--pink)}
@@ -28,39 +28,46 @@ input:focus{border-color:var(--pink)}
 .mode-card h3{font-family:'Bebas Neue';font-size:28px}
 .badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
 #gameArea{max-width:1100px;margin:20px auto;padding:15px}
-#wordGrid{display:grid;gap:2px;user-select:none;touch-action:none}
-.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff0a;border-radius:6px;font-weight:800;cursor:pointer;font-size:14px}
-.cell.selected{background:var(--pink)!important}
-.cell.found{background:var(--gold)!important;color:#000!important}
+#wordGrid{display:grid;gap:3px;user-select:none;touch-action:none}
+.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff0a;border-radius:8px;font-weight:800;cursor:pointer;font-size:15px;transition:.15s;border:2px solid transparent}
+.cell.selected{background:var(--pink)!important;color:#fff!important;border-color:#fff;transform:scale(1.1);z-index:2}
+.cell.found{background:var(--gold)!important;color:#000!important;animation:pop.3s}
+.cell.wrong{animation:shake.3s;background:#ff4444!important}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
 .wordList{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
-.wordChip{padding:6px 12px;background:#ffffff12;border-radius:20px;font-size:12px;font-weight:600}
-.wordChip.done{text-decoration:line-through;background:var(--gold);color:#000}
-#stopArea{display:grid;grid-template-columns:1fr 300px;gap:20px}
+.wordChip{padding:6px 12px;background:#ffffff12;border-radius:20px;font-size:12px;font-weight:600;transition:.2s}
+.wordChip.done{text-decoration:line-through;background:var(--gold);color:#000;transform:scale(0.9)}
+#stopArea{display:grid;grid-template-columns:1fr 320px;gap:20px}
 @media(max-width:800px){#stopArea{grid-template-columns:1fr}}
 .stop-input{margin-bottom:12px}
 .stop-input label{font-size:12px;color:#aaa;text-transform:uppercase;font-weight:700}
-.timer{font-family:'Bebas Neue';font-size:48px;text-align:center;color:var(--gold)}
+.timer{font-family:'Bebas Neue';font-size:52px;text-align:center;color:var(--gold);min-width:80px;display:inline-block}
 .roomCode{font-size:28px;letter-spacing:6px;background:#0006;padding:10px 20px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
 .online-players{display:flex;gap:8px;flex-wrap:wrap}
 .pill{padding:6px 12px;background:#ffffff15;border-radius:20px;font-size:13px}
-.bot-indicator{font-size:11px;color:var(--gold);display:none}
+.toggle-wrap{display:flex;align-items:center;gap:12px;background:#ffffff0a;padding:12px 16px;border-radius:12px;margin-top:15px;border:1px solid #ffffff15}
+.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s}
+.switch.on{background:var(--gold)}
+.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
+.switch.on::after{left:27px}
 </style>
 </head>
 <body>
 <header>
 <h1>LUAN SANTANA GAME</h1>
-<p style="opacity:.6;font-size:12px;letter-spacing:2px">CAÇA PALAVRAS + ADEDONHA OFICIAL - V2 FIX</p>
+<p style="opacity:.6;font-size:11px;letter-spacing:2px">V3 PRO - CAÇA PALAVRAS + ADEDONHA</p>
 </header>
 
 <div id="auth">
 <div class="card">
 <div class="tabs"><div class="tab active" id="tabLogin" onclick="switchAuth('login')">LOGIN</div><div class="tab" id="tabReg" onclick="switchAuth('register')">CRIAR CONTA</div></div>
 <div id="loginForm">
-<input id="loginUser" placeholder="Usuário - ex: Thiago Shelby">
-<input id="loginPass" type="password" placeholder="Senha - ex: 9090iop">
+<input id="loginUser" placeholder="Usuário">
+<input id="loginPass" type="password" placeholder="Senha">
 <button class="btn" style="width:100%;margin-top:12px" onclick="login()">ENTRAR</button>
-<p style="font-size:11px;opacity:.7;margin-top:12px;text-align:center;line-height:1.4">Sua conta mestre é:<br><b style="color:var(--gold)">Thiago Shelby / 9090iop</b><br>Login sem diferenciar maiúscula/minúscula</p>
-<button onclick="clearCache()" style="margin-top:15px;background:none;border:1px solid #ffffff2a;color:#aaa;padding:8px 12px;border-radius:20px;font-size:11px;cursor:pointer;width:100%">⚠️ Se não entrar, clique aqui para limpar cache e corrigir</button>
+<p style="font-size:11px;opacity:.5;margin-top:12px;text-align:center">Faça login para jogar online</p>
+<button onclick="clearCache()" style="margin-top:12px;background:none;border:none;color:#666;font-size:11px;cursor:pointer;width:100%;text-decoration:underline">Problemas para entrar? Limpar cache</button>
 </div>
 <div id="registerForm" class="hidden">
 <input id="regUser" placeholder="Crie seu usuário">
@@ -73,16 +80,26 @@ input:focus{border-color:var(--pink)}
 
 <div id="lobby" class="hidden">
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-<h2 style="font-family:'Bebas Neue';font-size:32px">Olá, <span id="userNameDisplay"></span> <span id="botTag" class="bot-indicator">🤖 MODO SHELBY ATIVO</span></h2>
+<h2 style="font-family:'Bebas Neue';font-size:30px">Olá, <span id="userNameDisplay"></span></h2>
 <button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button>
 </div>
+
+<div id="masterPanel" class="hidden">
+<div class="toggle-wrap">
+<span style="font-size:13px;font-weight:700">🤖 ROBÔ HUMANIZADO</span>
+<div id="robotSwitch" class="switch on" onclick="toggleRobot()"></div>
+<span id="robotStatus" style="font-size:12px;color:var(--gold)">ATIVADO</span>
+</div>
+<p style="font-size:11px;opacity:.5;margin-top:6px;margin-left:16px">Quando ativado, o robô resolve com tempo humano e erros proposital</p>
+</div>
+
 <div class="card" style="margin-top:20px">
 <h3>🌐 MODO ONLINE COM AMIGOS</h3>
 <p style="font-size:13px;opacity:.7;margin:6px 0">Crie uma sala e convide por código. Adedonha precisa de 2 a 6 jogadores.</p>
 <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
 <button class="btn" onclick="createRoom()">CRIAR SALA + GERAR CÓDIGO</button>
-<input id="joinCode" placeholder="Digite código do amigo" style="max-width:200px">
-<button class="btn" onclick="joinRoom()" style="background:#ffffff15">ENTRAR NA SALA</button>
+<input id="joinCode" placeholder="Código do amigo" style="max-width:180px">
+<button class="btn" onclick="joinRoom()" style="background:#ffffff15">ENTRAR</button>
 </div>
 <div id="roomInfo" class="hidden" style="margin-top:15px">
 <div class="roomCode" id="roomCodeDisplay"></div>
@@ -90,42 +107,62 @@ input:focus{border-color:var(--pink)}
 <p id="roomStatus" style="font-size:12px;margin-top:8px;opacity:.7"></p>
 </div>
 </div>
+
 <div class="modes">
 <div class="mode-card card" onclick="startWordSearch()">
-<span class="badge">PROFISSIONAL</span>
+<span class="badge">V3 PRO</span>
 <h3>🔍 CAÇA PALAVRAS</h3>
-<p style="font-size:13px;opacity:.7;margin-top:8px">12 palavras do Luan Santana escondidas. Modo profissional com diagonais e invertidas.</p>
-<button class="btn" style="margin-top:12px">JOGAR SOZINHO</button>
+<p style="font-size:13px;opacity:.7;margin-top:8px">Profissional: clique e arraste, diagonais, invertidas. Se errar, desmarca sozinho.</p>
+<button class="btn" style="margin-top:12px">JOGAR</button>
 </div>
 <div class="mode-card card" onclick="startStop()">
 <span class="badge">2-6 PLAYERS</span>
 <h3>✋ ADEDONHA / STOP</h3>
-<p style="font-size:13px;opacity:.7;margin-top:8px">Stop clássico igual app profissional: categorias, letra sorteada, timer 60s, validação.</p>
-<button class="btn" style="margin-top:12px">JOGAR STOP</button>
+<p style="font-size:13px;opacity:.7;margin-top:8px">Corrigido: nova rodada limpa tudo, nova letra, timer reseta.</p>
+<button class="btn" style="margin-top:12px">JOGAR</button>
 </div>
 </div>
 </div>
 
 <div id="gameArea" class="hidden">
 <button class="btn" onclick="backToLobby()" style="background:#ffffff15;margin-bottom:15px">← VOLTAR AO LOBBY</button>
+
 <div id="wordSearchGame" class="hidden">
-<div style="display:grid;grid-template-columns:1fr 280px;gap:20px">
-<div><div id="wordGrid"></div><div style="display:flex;justify-content:space-between;margin-top:12px"><span id="wsTimer" class="timer">03:00</span><button class="btn" onclick="hintWord()">DICA (-20pts)</button></div></div>
-<div class="card"><h3>PALAVRAS LUAN</h3><div id="wsWords" class="wordList"></div><p id="wsScore" style="margin-top:12px;font-weight:800">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô caçando discretamente...</p></div>
+<div style="display:grid;grid-template-columns:1fr 300px;gap:20px">
+<div>
+<div id="wordGrid"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px">
+<span id="wsTimer" class="timer">03:00</span>
+<div style="display:flex;gap:8px">
+<button class="btn" onclick="hintWord()">DICA (-20pts)</button>
+<button class="btn" style="background:#ffffff15" onclick="buildWordSearch()">NOVO JOGO</button>
 </div>
 </div>
+<p style="font-size:11px;opacity:.5;margin-top:8px;text-align:center">💡 Clique na primeira letra e arraste até a última letra</p>
+</div>
+<div class="card"><h3 style="font-family:'Bebas Neue';font-size:22px">PALAVRAS LUAN</h3><div id="wsWords" class="wordList"></div><p id="wsScore" style="margin-top:12px;font-weight:800">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô ativo - caçando...</p></div>
+</div>
+</div>
+
 <div id="stopGame" class="hidden">
 <div class="card" style="text-align:center;margin-bottom:15px">
-<h2>LETRA DA RODADA: <span id="stopLetter" style="font-size:48px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2>
-<div style="display:flex;justify-content:center;gap:15px;align-items:center;margin-top:10px"><span id="stopTimer" class="timer">60</span><button class="btn" onclick="rollLetter()">SORTEAR LETRA</button><button class="btn" style="background:var(--gold);color:#000" onclick="stop()">STOP!</button></div>
+<h2>LETRA DA RODADA: <span id="stopLetter" style="font-size:52px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2>
+<div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+<span id="stopTimer" class="timer">60</span>
+<button class="btn" onclick="rollLetter()">NOVA LETRA</button>
+<button class="btn" style="background:var(--gold);color:#000" onclick="stop()">STOP!</button>
+<button class="btn" style="background:#ffffff15" onclick="resetStop()">LIMPAR TUDO</button>
+</div>
+<p id="stopRoundInfo" style="font-size:11px;opacity:.5;margin-top:8px"></p>
 </div>
 <div id="stopArea">
 <div class="card" id="stopInputs"></div>
 <div class="card">
-<h3>Jogadores</h3>
-<div id="stopPlayers"></div>
-<div id="stopResults" style="margin-top:15px"></div>
-<p id="stopBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:10px">🤖 Robô preenchendo como humano...</p>
+<h3>Placar</h3>
+<div id="stopPlayers" style="margin-bottom:10px"></div>
+<div id="stopResults"></div>
+<p id="stopBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:10px">🤖 Robô ativo...</p>
+</div>
 </div>
 </div>
 </div>
@@ -134,148 +171,195 @@ input:focus{border-color:var(--pink)}
 <script>
 const MASTER_USER = "thiago shelby";
 const MASTER_PASS = "9090iop";
+let robotEnabled = true;
 function normalize(str){ return (str||"").trim().toLowerCase().replace(/\s+/g,' '); }
 function getUsers(){
   try{
     let stored = JSON.parse(localStorage.getItem('luan_users')||'{}');
-    stored["Thiago Shelby"] = "9090iop";
-    stored["thiago shelby"] = "9090iop";
+    stored["Thiago Shelby"]="9090iop"; stored["thiago shelby"]="9090iop";
     return stored;
-  }catch(e){
-    return {"Thiago Shelby":"9090iop","thiago shelby":"9090iop"};
-  }
+  }catch(e){ return {"Thiago Shelby":"9090iop","thiago shelby":"9090iop"}; }
 }
-function saveUsers(u){
-  u["Thiago Shelby"]="9090iop";
-  u["thiago shelby"]="9090iop";
-  localStorage.setItem('luan_users',JSON.stringify(u));
-}
-function clearCache(){
-  localStorage.removeItem('luan_users');
-  localStorage.removeItem('luan_session');
-  localStorage.removeItem('luan_rooms');
-  alert('Cache limpo! Agora tente logar com Thiago Shelby / 9090iop');
-  location.reload();
-}
+function saveUsers(u){ u["Thiago Shelby"]="9090iop"; u["thiago shelby"]="9090iop"; localStorage.setItem('luan_users',JSON.stringify(u)); }
+function clearCache(){ localStorage.clear(); alert('Cache limpo! Logue novamente com Thiago Shelby / 9090iop'); location.reload(); }
 let currentUser=null, isMaster=false, currentRoom=null;
 let wsData={words:[],found:[],score:0,interval:null,selection:[],grid:[]}
-const LUAN_WORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","ASANFONA","INCONDICIONAL","SEDEX","VOCEDEMINA","AMARNAOPE","VIVA","TUDOQUEVOCEQU","CEDOOUTARDE","MULHER","METEORO"];
+const LUAN_WORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","ASANFONA","INCONDICIONAL","SEDEX","VOCEDEMINA","AMARNAOPE","VIVA","TUDOQUEVOCEQU","CEDOOUTARDE","MULHER","METEORO","AMAR"];
 const STOP_CATEGORIES=["Nome","Cidade","Animal","Comida","Música do Luan","Novela/Filme","Cor","Objeto","Marca"];
 function switchAuth(t){document.getElementById('loginForm').classList.toggle('hidden',t!=='login');document.getElementById('registerForm').classList.toggle('hidden',t!=='register');document.getElementById('tabLogin').classList.toggle('active',t==='login');document.getElementById('tabReg').classList.toggle('active',t==='register')}
 function login(){
- const uRaw=document.getElementById('loginUser').value;
- const pRaw=document.getElementById('loginPass').value;
- const u = normalize(uRaw);
- const p = normalize(pRaw);
+ const uRaw=document.getElementById('loginUser').value; const pRaw=document.getElementById('loginPass').value;
+ const u=normalize(uRaw); const p=normalize(pRaw);
  const users=getUsers();
  let foundUserKey = Object.keys(users).find(k => normalize(k)===u);
- if(!foundUserKey){ msg("Usuário não encontrado. Clique em CRIAR CONTA ou use Thiago Shelby / 9090iop"); return; }
- if(normalize(users[foundUserKey])!== p){ msg("Senha incorreta para "+foundUserKey); return; }
+ if(!foundUserKey){ msg("Usuário não encontrado. Crie uma conta."); return; }
+ if(normalize(users[foundUserKey])!==p){ msg("Senha incorreta"); return; }
  currentUser = foundUserKey==="thiago shelby"? "Thiago Shelby" : foundUserKey;
  isMaster = (u===MASTER_USER && p===MASTER_PASS);
- localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster}));
+ localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster,robotEnabled}));
  showLobby();
 }
 function register(){
- const uRaw=document.getElementById('regUser').value.trim();
- const pRaw=document.getElementById('regPass').value.trim();
+ const uRaw=document.getElementById('regUser').value.trim(); const pRaw=document.getElementById('regPass').value.trim();
  if(!uRaw||!pRaw)return msg("Preencha usuário e senha");
- if(normalize(uRaw)===MASTER_USER)return msg("Esse usuário é reservado! Escolha outro");
+ if(normalize(uRaw)===MASTER_USER)return msg("Esse usuário é reservado!");
  let users=getUsers();
- let exists = Object.keys(users).some(k=>normalize(k)===normalize(uRaw));
- if(exists)return msg("Usuário já existe, faça login");
- users[uRaw]=pRaw;
- saveUsers(users);
- msg("Conta '"+uRaw+"' criada! Agora vá em LOGIN e entre",true);
- switchAuth('login');
- document.getElementById('loginUser').value=uRaw;
- document.getElementById('loginPass').value="";
+ if(Object.keys(users).some(k=>normalize(k)===normalize(uRaw)))return msg("Usuário já existe");
+ users[uRaw]=pRaw; saveUsers(users); msg("Conta criada! Faça login",true); switchAuth('login'); document.getElementById('loginUser').value=uRaw;
 }
 function msg(t,ok){const el=document.getElementById('authMsg');el.textContent=t;el.style.color=ok?'#00ff88':'var(--gold)'}
 function showLobby(){
  document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('gameArea').classList.add('hidden');
- const sess=JSON.parse(localStorage.getItem('luan_session')||'null'); if(sess){currentUser=sess.u;isMaster=sess.isMaster}
+ const sess=JSON.parse(localStorage.getItem('luan_session')||'null'); if(sess){currentUser=sess.u;isMaster=sess.isMaster; robotEnabled=sess.robotEnabled!==false}
  document.getElementById('userNameDisplay').textContent=currentUser;
- document.getElementById('botTag').style.display=isMaster?'inline':'none';
+ document.getElementById('masterPanel').classList.toggle('hidden',!isMaster);
+ updateRobotUI();
+}
+function toggleRobot(){
+ robotEnabled=!robotEnabled;
+ updateRobotUI();
+ let sess=JSON.parse(localStorage.getItem('luan_session')||'{}'); sess.robotEnabled=robotEnabled; localStorage.setItem('luan_session',JSON.stringify(sess));
+}
+function updateRobotUI(){
+ const sw=document.getElementById('robotSwitch'); const st=document.getElementById('robotStatus');
+ if(!sw)return;
+ sw.classList.toggle('on',robotEnabled);
+ st.textContent=robotEnabled?'ATIVADO - Ninguém percebe':'DESATIVADO';
+ st.style.color=robotEnabled?'var(--gold)':'#666';
+ document.getElementById('wsBotStatus').style.display=(isMaster&&robotEnabled)?'block':'none';
+ document.getElementById('stopBotStatus').style.display=(isMaster&&robotEnabled)?'block':'none';
 }
 function logout(){localStorage.removeItem('luan_session');location.reload()}
-(function(){const s=JSON.parse(localStorage.getItem('luan_session')||'null'); if(s){currentUser=s.u;isMaster=s.isMaster;showLobby()}})()
+(function(){const s=JSON.parse(localStorage.getItem('luan_session')||'null'); if(s){currentUser=s.u;isMaster=s.isMaster;robotEnabled=s.robotEnabled!==false;showLobby()}})()
 function backToLobby(){clearInterval(wsData.interval);clearInterval(stopTimerInt);document.getElementById('gameArea').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
-function createRoom(){const code=Math.random().toString(36).substring(2,6).toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); rooms[code]={host:currentUser,players:[currentUser],created:Date.now()}; localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
-function joinRoom(){const code=document.getElementById('joinCode').value.trim().toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); if(!rooms[code])return alert('Código não encontrado'); if(rooms[code].players.length>=6)return alert('Sala cheia (máx 6)'); if(!rooms[code].players.includes(currentUser))rooms[code].players.push(currentUser); localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
-function showRoom(code){document.getElementById('roomInfo').classList.remove('hidden');document.getElementById('roomCodeDisplay').textContent=code; let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); document.getElementById('playersList').innerHTML=rooms[code].players.map(p=>`<span class="pill">${p} ${p===rooms[code].host?'👑':''}</span>`).join(''); document.getElementById('roomStatus').textContent=`${rooms[code].players.length} jogadores - ${rooms[code].players.length>=2?'Pronto para Stop!':'Precisa de pelo menos 2 para Stop'}`}
+function createRoom(){const code=Math.random().toString(36).substring(2,6).toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); rooms[code]={host:currentUser,players:[currentUser]}; localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
+function joinRoom(){const code=document.getElementById('joinCode').value.trim().toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); if(!rooms[code])return alert('Código não encontrado'); if(rooms[code].players.length>=6)return alert('Sala cheia'); if(!rooms[code].players.includes(currentUser))rooms[code].players.push(currentUser); localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
+function showRoom(code){document.getElementById('roomInfo').classList.remove('hidden');document.getElementById('roomCodeDisplay').textContent=code; let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); document.getElementById('playersList').innerHTML=rooms[code].players.map(p=>`<span class="pill">${p} ${p===rooms[code].host?'👑':''}</span>`).join(''); document.getElementById('roomStatus').textContent=`${rooms[code].players.length} jogadores`}
+
 function startWordSearch(){
  document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
  document.getElementById('wordSearchGame').classList.remove('hidden');document.getElementById('stopGame').classList.add('hidden');
  buildWordSearch();
- if(isMaster){document.getElementById('wsBotStatus').style.display='block'; startHumanizedBotWS();}
 }
 function buildWordSearch(){
- const size=14; wsData.found=[]; wsData.score=0; wsData.grid=Array(size).fill().map(()=>Array(size).fill(''));
+ const size=14; clearInterval(wsData.interval); wsData.found=[]; wsData.score=0; wsData.selection=[]; wsData.grid=Array(size).fill().map(()=>Array(size).fill(''));
  let chosen=LUAN_WORDS.sort(()=>0.5-Math.random()).slice(0,12); wsData.words=chosen;
  chosen.forEach(w=>placeWord(w,size));
  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!wsData.grid[r][c])wsData.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
  const gridEl=document.getElementById('wordGrid'); gridEl.style.gridTemplateColumns=`repeat(${size},1fr)`; gridEl.innerHTML='';
- for(let r=0;r<size;r++)for(let c=0;c<size;c++){let d=document.createElement('div');d.className='cell';d.textContent=wsData.grid[r][c];d.dataset.r=r;d.dataset.c=c; d.addEventListener('mousedown',startSel); d.addEventListener('mouseenter',continueSel); d.addEventListener('mouseup',endSel); d.addEventListener('touchstart',startSel,{passive:false}); gridEl.appendChild(d);}
+ for(let r=0;r<size;r++)for(let c=0;c<size;c++){
+   let d=document.createElement('div');d.className='cell';d.textContent=wsData.grid[r][c];
+   d.addEventListener('pointerdown',startSel); d.addEventListener('pointerenter',continueSel); d.addEventListener('pointerup',endSel);
+   gridEl.appendChild(d);
+ }
  document.getElementById('wsWords').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');
- let time=180; wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou! Pontos: '+wsData.score)}},1000);
+ document.getElementById('wsScore').textContent='Pontos: 0';
+ let time=180; document.getElementById('wsTimer').textContent='03:00';
+ wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou! Pontos: '+wsData.score)}},1000);
+ updateRobotUI();
+ if(isMaster&&robotEnabled)startHumanizedBotWS();
 }
 function placeWord(word,size){
- const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0]]; for(let attempt=0;attempt<100;attempt++){let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size), endR=r+dir[0]*(word.length-1), endC=c+dir[1]*(word.length-1); if(endR<0||endR>=size||endC<0||endC>=size)continue; let ok=true; for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break}} if(ok){for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; wsData.grid[nr][nc]=word[i];}return true}} return false;
+ const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
+ for(let attempt=0;attempt<150;attempt++){let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size), endR=r+dir[0]*(word.length-1), endC=c+dir[1]*(word.length-1); if(endR<0||endR>=size||endC<0||endC>=size)continue; let ok=true; for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break}} if(ok){for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; wsData.grid[nr][nc]=word[i];}return true}} return false;
 }
-let selecting=false;
-function startSel(e){selecting=true; wsData.selection=[e.target]; e.target.classList.add('selected'); e.preventDefault()}
-function continueSel(e){if(!selecting)return; if(!wsData.selection.includes(e.target)){wsData.selection.push(e.target); e.target.classList.add('selected')}}
-function endSel(){if(!selecting)return; selecting=false; let txt=wsData.selection.map(el=>el.textContent).join(''); let rev=txt.split('').reverse().join(''); let foundWord=wsData.words.find(w=>w===txt||w===rev); if(foundWord&&!wsData.found.includes(foundWord)){wsData.found.push(foundWord); wsData.selection.forEach(el=>el.classList.add('found')); wsData.score+=100; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; document.getElementById('chip-'+foundWord).classList.add('done'); if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval);alert('Você achou todas! Luan Santana aprova! Pontos: '+wsData.score)}} wsData.selection.forEach(el=>el.classList.remove('selected')); wsData.selection=[];}
-function startHumanizedBotWS(){ let idx=0; function next(){ if(idx>=wsData.words.length||wsData.found.length===wsData.words.length)return; let w=wsData.words[idx]; if(!wsData.found.includes(w) && Math.random()>0.3){ setTimeout(()=>{ if(!wsData.found.includes(w)){ wsData.found.push(w); wsData.score+=100; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; let chip=document.getElementById('chip-'+w); if(chip)chip.classList.add('done'); }}, 800 + Math.random()*4000); } idx++; setTimeout(next, 2000+Math.random()*3000); } setTimeout(next, 3000); }
-function hintWord(){let remain=wsData.words.filter(w=>!wsData.found.includes(w)); if(!remain.length)return; alert('Dica: procure por '+remain[0].substring(0,2)+'...'); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score}
-let stopLetter='', stopTimerInt=null, stopTime=60;
+let isSelecting=false;
+function startSel(e){ e.preventDefault(); isSelecting=true; clearWrong(); const cell=e.target.closest('.cell'); if(!cell)return; wsData.selection=[cell]; cell.classList.add('selected'); }
+function continueSel(e){ if(!isSelecting)return; const cell=e.target.closest('.cell'); if(!cell||wsData.selection.includes(cell))return; wsData.selection.push(cell); cell.classList.add('selected'); }
+function endSel(e){
+ if(!isSelecting)return; isSelecting=false;
+ let txt=wsData.selection.map(el=>el.textContent).join(''); let rev=txt.split('').reverse().join('');
+ let foundWord=wsData.words.find(w=>w===txt||w===rev);
+ if(foundWord&&!wsData.found.includes(foundWord)){
+   wsData.found.push(foundWord); wsData.selection.forEach(el=>{el.classList.remove('selected'); el.classList.add('found')}); wsData.score+=100;
+   document.getElementById('wsScore').textContent='Pontos: '+wsData.score;
+   document.getElementById('chip-'+foundWord)?.classList.add('done');
+   if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval); setTimeout(()=>alert('Você achou todas! Pontos: '+wsData.score),200)}
+ }else{
+   wsData.selection.forEach(el=>el.classList.add('wrong'));
+   setTimeout(()=>{ clearWrong(); }, 400);
+ }
+ wsData.selection=[];
+}
+function clearWrong(){ document.querySelectorAll('.cell.selected,.cell.wrong').forEach(el=>{el.classList.remove('selected','wrong')}); }
+function startHumanizedBotWS(){
+ let idx=0;
+ function next(){
+  if(!robotEnabled||!isMaster)return;
+  if(idx>=wsData.words.length||wsData.found.length===wsData.words.length)return;
+  let w=wsData.words[idx];
+  if(!wsData.found.includes(w) && Math.random()>0.35){
+   setTimeout(()=>{ if(!robotEnabled)return; if(!wsData.found.includes(w)){ wsData.found.push(w); wsData.score+=100; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; document.getElementById('chip-'+w)?.classList.add('done'); }}, 1200 + Math.random()*4000);
+  }
+  idx++; setTimeout(next, 2500+Math.random()*3500);
+ }
+ setTimeout(next, 4000);
+}
+function hintWord(){let remain=wsData.words.filter(w=>!wsData.found.includes(w)); if(!remain.length)return; alert('Dica: procure por '+remain[0].substring(0,3)+'...'); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score}
+
+let stopLetter='', stopTimerInt=null, stopTime=60, stopRound=0;
 const STOP_DB={
  "A":{Nome:["Ana"],Cidade:["Anápolis"],Animal:["Anta"],Comida:["Arroz"], "Música do Luan":["Amar Não É Pecado"], "Novela/Filme":["Avenida Brasil"],Cor:["Azul"],Objeto:["Abajur"],Marca:["Adidas"]},
  "L":{Nome:["Luan"],Cidade:["Londrina"],Animal:["Leão"],Comida:["Lasanha"],"Música do Luan":["Logo Eu"],"Novela/Filme":["La Casa de Papel"],Cor:["Lilás"],Objeto:["Livro"],Marca:["Lacoste"]},
- "M":{Nome:["Maria"],Cidade:["Manaus"],Animal:["Macaco"],Comida:["Macarrão"],"Música do Luan":["Meteoro","Morada"],"Novela/Filme":["Malhação"],Cor:["Marrom"],Objeto:["Mesa"],Marca:["Mizuno"]}
+ "M":{Nome:["Maria"],Cidade:["Manaus"],Animal:["Macaco"],Comida:["Macarrão"],"Música do Luan":["Meteoro","Morada"],"Novela/Filme":["Malhação"],Cor:["Marrom"],Objeto:["Mesa"],Marca:["Mizuno"]},
+ "S":{Nome:["Sofia"],Cidade:["Salvador"],Animal:["Sapo"],Comida:["Sushi"],"Música do Luan":["SINAIS"],"Novela/Filme":["Senna"],Cor:["Salmon"],Objeto:["Sofá"],Marca:["Samsung"]}
 };
 function startStop(){
  document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
  document.getElementById('stopGame').classList.remove('hidden');document.getElementById('wordSearchGame').classList.add('hidden');
- buildStopInputs(); rollLetter();
- if(isMaster)document.getElementById('stopBotStatus').style.display='block';
+ stopRound=0;
+ rollLetter();
 }
 function buildStopInputs(){
- const cont=document.getElementById('stopInputs'); cont.innerHTML=STOP_CATEGORIES.map(cat=>`<div class="stop-input"><label>${cat}</label><input id="stop-${cat}" placeholder="Digite com a letra..."></div>`).join('');
- document.getElementById('stopPlayers').innerHTML=`<span class="pill">${currentUser} (você) ${isMaster?'🤖':''}</span>` + (currentRoom? JSON.parse(localStorage.getItem('luan_rooms')||'{}')[currentRoom]?.players.filter(p=>p!==currentUser).map(p=>`<span class="pill">${p}</span>`).join('') : '');
+ const cont=document.getElementById('stopInputs'); cont.innerHTML=STOP_CATEGORIES.map(cat=>`<div class="stop-input"><label>${cat}</label><input id="stop-${cat}" placeholder="Com a letra ${stopLetter}..." autocomplete="off"></div>`).join('');
+ document.getElementById('stopPlayers').innerHTML=`<span class="pill">${currentUser} (você) ${isMaster&&robotEnabled?'🤖':''}</span>` + (currentRoom? JSON.parse(localStorage.getItem('luan_rooms')||'{}')[currentRoom]?.players.filter(p=>p!==currentUser).map(p=>`<span class="pill">${p}</span>`).join('') : '');
+ document.getElementById('stopResults').innerHTML='';
+}
+function resetStop(){
+ STOP_CATEGORIES.forEach(cat=>{ let el=document.getElementById('stop-'+cat); if(el)el.value=''; });
+ document.getElementById('stopResults').innerHTML='';
+ stopTime=60; document.getElementById('stopTimer').textContent=stopTime;
 }
 function rollLetter(){
- const letters="ABCDEFGHIJKLMNOPRST"; stopLetter=letters[Math.floor(Math.random()*letters.length)]; document.getElementById('stopLetter').textContent=stopLetter;
- stopTime=60; clearInterval(stopTimerInt); document.getElementById('stopTimer').textContent=stopTime;
- stopTimerInt=setInterval(()=>{stopTime--;document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0)stop()},1000);
- if(isMaster){humanizedBotStop();}
+ clearInterval(stopTimerInt);
+ let letters="ABCDEFGHIJKLMNOPRSTUVWZ"; let newLetter;
+ do{ newLetter=letters[Math.floor(Math.random()*letters.length)]; }while(newLetter===stopLetter);
+ stopLetter=newLetter; stopRound++;
+ document.getElementById('stopLetter').textContent=stopLetter;
+ document.getElementById('stopRoundInfo').textContent=`Rodada ${stopRound} - Letra ${stopLetter}`;
+ buildStopInputs();
+ resetStop();
+ stopTime=60;
+ stopTimerInt=setInterval(()=>{stopTime--;document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0){clearInterval(stopTimerInt); stop();}},1000);
+ updateRobotUI();
+ if(isMaster&&robotEnabled)humanizedBotStop();
 }
 function stop(){
  clearInterval(stopTimerInt);
- let myAnswers={}; STOP_CATEGORIES.forEach(cat=>{myAnswers[cat]=document.getElementById('stop-'+cat).value.trim()});
- let score=0; let html=`<h4>Resultados - Letra ${stopLetter}</h4>`;
+ let myAnswers={}; STOP_CATEGORIES.forEach(cat=>{myAnswers[cat]=document.getElementById('stop-'+cat)?.value.trim()||''});
+ let score=0; let html=`<h4 style="margin-bottom:8px">Resultados - Letra ${stopLetter} - Rodada ${stopRound}</h4>`;
  STOP_CATEGORIES.forEach(cat=>{
-  let val=myAnswers[cat]; let valid=val && val[0].toUpperCase()===stopLetter; if(valid)score+=10; html+=`<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #ffffff0a"><span>${cat}: <b>${val||'-'}</b></span><span style="color:${valid?'var(--gold)':'#ff5555'}">${valid?'10':'0'}</span></div>`;
+  let val=myAnswers[cat]; let valid=val && val[0].toUpperCase()===stopLetter; if(valid)score+=10;
+  html+=`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid #ffffff0a"><span>${cat}: <b>${val||'-'}</b></span><span style="color:${valid?'var(--gold)':'#ff5555'}">${valid?'10':'0'}</span></div>`;
  });
- html+=`<p style="margin-top:10px;font-weight:800">Sua pontuação: ${score}</p>`;
+ html+=`<p style="margin-top:12px;font-weight:800">Sua pontuação: ${score}/90</p><button class="btn" style="margin-top:10px;width:100%" onclick="rollLetter()">PRÓXIMA RODADA</button>`;
  document.getElementById('stopResults').innerHTML=html;
 }
 function humanizedBotStop(){
- const inputs=STOP_CATEGORIES;
- let delay=4000 + Math.random()*6000;
+ let delay=3500 + Math.random()*5000;
  setTimeout(()=>{
-  inputs.forEach((cat,i)=>{
+  if(!robotEnabled)return;
+  STOP_CATEGORIES.forEach((cat,i)=>{
    setTimeout(()=>{
+    if(!robotEnabled)return;
     const el=document.getElementById('stop-'+cat);
-    if(!el.value){
-     let base = STOP_DB[stopLetter] && STOP_DB[stopLetter][cat]? STOP_DB[stopLetter][cat][0] : stopLetter + cat.substring(0,3).toLowerCase();
-     if(Math.random()>0.7) base = base.toLowerCase();
-     if(Math.random()>0.85) base = base.substring(0, base.length-1);
-     let typed=""; let j=0;
-     let typer=setInterval(()=>{ if(j>=base.length){clearInterval(typer); return;} typed+=base[j]; el.value=typed; j++;}, 80+Math.random()*120);
-    }
-   }, i*800 + Math.random()*500);
+    if(!el||el.value)return;
+    let base = STOP_DB[stopLetter] && STOP_DB[stopLetter][cat]? STOP_DB[stopLetter][cat][0] : stopLetter + cat.substring(0,3).toLowerCase();
+    if(Math.random()>0.6) base = base.charAt(0).toUpperCase()+base.slice(1).toLowerCase();
+    if(Math.random()>0.88) base = base.slice(0,-1);
+    let typed=""; let j=0;
+    let typer=setInterval(()=>{ if(!robotEnabled||j>=base.length){clearInterval(typer);return;} typed+=base[j]; el.value=typed; j++;}, 70+Math.random()*130);
+   }, i*700 + Math.random()*600);
   });
  }, delay);
 }
