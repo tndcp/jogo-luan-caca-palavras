@@ -2,72 +2,69 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luan Santana Game - V3 PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Luan Santana Game - V4 ULTRA</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-:root{--pink:#ff2e7a;--purple:#7b2cff;--dark:#0f0f1a;--card:#1c1c2e;--gold:#ffcc00}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-body{background:linear-gradient(135deg,#0f0f1a 0%,#1a1033 100%);color:#fff;min-height:100vh}
+:root{--pink:#ff2e7a;--purple:#7b2cff;--card:#1c1c2e;--gold:#ffcc00;--bg:#0f0f1a}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:#fff;min-height:100vh;overscroll-behavior:none}
 .hidden{display:none!important}
-header{padding:20px;text-align:center;border-bottom:1px solid #ffffff1a}
-header h1{font-family:'Bebas Neue';font-size:42px;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 24px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer;transition:.2s;text-transform:uppercase}
-.btn:hover{transform:scale(1.05)}
-.card{background:var(--card);border-radius:20px;padding:24px;border:1px solid #ffffff14;box-shadow:0 10px 30px #0006}
-input{width:100%;padding:14px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:8px 0;outline:none}
-input:focus{border-color:var(--pink)}
-#auth{max-width:420px;margin:40px auto}
-.tabs{display:flex;gap:10px;margin:20px 0}
-.tab{flex:1;padding:10px;border-radius:10px;background:#ffffff0f;cursor:pointer;text-align:center;font-weight:600}
+header{padding:18px;text-align:center;border-bottom:1px solid #ffffff1a;position:sticky;top:0;background:var(--bg);z-index:10}
+header h1{font-family:'Bebas Neue';font-size:38px;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.btn{background:linear-gradient(90deg,var(--pink),var(--purple));border:none;padding:12px 22px;border-radius:30px;color:#fff;font-weight:800;cursor:pointer;transition:.2s;text-transform:uppercase;font-size:13px}
+.btn:active{transform:scale(.96)}
+.card{background:var(--card);border-radius:18px;padding:20px;border:1px solid #ffffff14}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #ffffff2a;background:#0004;color:#fff;margin:8px 0;outline:none;font-size:15px}
+#auth{max-width:400px;margin:50px auto;padding:15px}
+.tabs{display:flex;gap:10px;margin:18px 0}
+.tab{flex:1;padding:10px;border-radius:10px;background:#ffffff0f;cursor:pointer;text-align:center;font-weight:700;font-size:13px}
 .tab.active{background:var(--pink)}
-#lobby{max-width:900px;margin:30px auto;padding:20px}
-.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:20px}
-.mode-card{cursor:pointer;transition:.3s;position:relative;overflow:hidden}
-.mode-card:hover{transform:translateY(-5px)}
-.mode-card h3{font-family:'Bebas Neue';font-size:28px}
-.badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
-#gameArea{max-width:1100px;margin:20px auto;padding:15px}
-#wordGrid{display:grid;gap:3px;user-select:none;touch-action:none}
-.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#ffffff0a;border-radius:8px;font-weight:800;cursor:pointer;font-size:15px;transition:.15s;border:2px solid transparent}
-.cell.selected{background:var(--pink)!important;color:#fff!important;border-color:#fff;transform:scale(1.1);z-index:2}
-.cell.found{background:var(--gold)!important;color:#000!important;animation:pop.3s}
-.cell.wrong{animation:shake.3s;background:#ff4444!important}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
-.wordList{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
-.wordChip{padding:6px 12px;background:#ffffff12;border-radius:20px;font-size:12px;font-weight:600;transition:.2s}
-.wordChip.done{text-decoration:line-through;background:var(--gold);color:#000;transform:scale(0.9)}
-#stopArea{display:grid;grid-template-columns:1fr 320px;gap:20px}
+#lobby{max-width:900px;margin:20px auto;padding:15px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
+.badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#000;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800}
+.mode-card{position:relative;cursor:pointer}
+#gameArea{max-width:1100px;margin:10px auto;padding:10px}
+#wsWrap{display:flex;flex-direction:column;align-items:center}
+#wordGrid{display:grid;gap:5px;user-select:none;touch-action:none;background:#0003;padding:10px;border-radius:16px;border:1px solid #ffffff10;max-width:100%}
+.cell{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#ffffff0a;border-radius:8px;font-weight:800;font-size:15px;cursor:pointer;position:relative;transition:all.12s;border:2px solid transparent}
+@media(min-width:600px){.cell{width:38px;height:38px;font-size:17px}}
+.cell.start{border-color:var(--pink);background:var(--pink)!important;color:#fff;transform:scale(1.15);z-index:2;box-shadow:0 0 12px var(--pink)}
+.cell.selected{background:var(--pink)!important;color:#fff!important;transform:scale(1.05)}
+.cell.found{background:var(--gold)!important;color:#000!important;border-color:var(--gold);animation:pop.35s}
+.cell.found::after{content:'✓';position:absolute;top:-6px;right:-6px;background:#00ff88;color:#000;font-size:9px;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+#wsRight{width:100%;max-width:400px;margin-top:16px}
+.wordChip{padding:7px 12px;background:#ffffff12;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;margin:4px}
+.wordChip.done{background:var(--gold);color:#000;text-decoration:line-through;opacity:.7}
+.timer{font-family:'Bebas Neue';font-size:48px;color:var(--gold);line-height:1}
+#stopArea{display:grid;grid-template-columns:1fr 330px;gap:16px}
 @media(max-width:800px){#stopArea{grid-template-columns:1fr}}
-.stop-input{margin-bottom:12px}
-.stop-input label{font-size:12px;color:#aaa;text-transform:uppercase;font-weight:700}
-.timer{font-family:'Bebas Neue';font-size:52px;text-align:center;color:var(--gold);min-width:80px;display:inline-block}
-.roomCode{font-size:28px;letter-spacing:6px;background:#0006;padding:10px 20px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
-.online-players{display:flex;gap:8px;flex-wrap:wrap}
-.pill{padding:6px 12px;background:#ffffff15;border-radius:20px;font-size:13px}
-.toggle-wrap{display:flex;align-items:center;gap:12px;background:#ffffff0a;padding:12px 16px;border-radius:12px;margin-top:15px;border:1px solid #ffffff15}
-.switch{width:50px;height:26px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s}
+.stop-input label{font-size:11px;color:#aaa;text-transform:uppercase;font-weight:800;letter-spacing:.5px}
+.pill{padding:6px 12px;background:#ffffff15;border-radius:20px;font-size:13px;display:inline-block;margin:3px}
+.toggle-wrap{display:flex;align-items:center;gap:12px;background:#ffffff0a;padding:12px 16px;border-radius:12px;margin-top:14px;border:1px solid #ffffff15}
+.switch{width:52px;height:28px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s;flex-shrink:0}
 .switch.on{background:var(--gold)}
-.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.3s}
-.switch.on::after{left:27px}
+.switch::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:4px;left:4px;transition:.3s}
+.switch.on::after{left:28px}
+.roomCode{font-size:26px;letter-spacing:5px;background:#0006;padding:10px 18px;border-radius:12px;border:2px dashed var(--pink);text-align:center;font-weight:800}
 </style>
 </head>
 <body>
 <header>
 <h1>LUAN SANTANA GAME</h1>
-<p style="opacity:.6;font-size:11px;letter-spacing:2px">V3 PRO - CAÇA PALAVRAS + ADEDONHA</p>
+<p style="opacity:.5;font-size:10px;letter-spacing:2px">V4 ULTRA - PROFISSIONAL</p>
 </header>
 
 <div id="auth">
 <div class="card">
 <div class="tabs"><div class="tab active" id="tabLogin" onclick="switchAuth('login')">LOGIN</div><div class="tab" id="tabReg" onclick="switchAuth('register')">CRIAR CONTA</div></div>
 <div id="loginForm">
-<input id="loginUser" placeholder="Usuário">
-<input id="loginPass" type="password" placeholder="Senha">
+<input id="loginUser" placeholder="Usuário" autocomplete="username">
+<input id="loginPass" type="password" placeholder="Senha" autocomplete="current-password">
 <button class="btn" style="width:100%;margin-top:12px" onclick="login()">ENTRAR</button>
-<p style="font-size:11px;opacity:.5;margin-top:12px;text-align:center">Faça login para jogar online</p>
-<button onclick="clearCache()" style="margin-top:12px;background:none;border:none;color:#666;font-size:11px;cursor:pointer;width:100%;text-decoration:underline">Problemas para entrar? Limpar cache</button>
+<p style="font-size:10px;opacity:.4;margin-top:10px;text-align:center">Jogo oficial para fãs</p>
+<button onclick="clearCache()" style="margin-top:10px;background:none;border:none;color:#555;font-size:10px;cursor:pointer;width:100%;text-decoration:underline">Limpar cache</button>
 </div>
 <div id="registerForm" class="hidden">
 <input id="regUser" placeholder="Crie seu usuário">
@@ -79,290 +76,258 @@ input:focus{border-color:var(--pink)}
 </div>
 
 <div id="lobby" class="hidden">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-<h2 style="font-family:'Bebas Neue';font-size:30px">Olá, <span id="userNameDisplay"></span></h2>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2 style="font-family:'Bebas Neue';font-size:28px">Olá, <span id="userNameDisplay"></span></h2>
 <button class="btn" onclick="logout()" style="background:#ffffff15">Sair</button>
 </div>
-
 <div id="masterPanel" class="hidden">
 <div class="toggle-wrap">
-<span style="font-size:13px;font-weight:700">🤖 ROBÔ HUMANIZADO</span>
+<span style="font-size:13px;font-weight:800">🤖 ROBÔ HUMANIZADO</span>
 <div id="robotSwitch" class="switch on" onclick="toggleRobot()"></div>
 <span id="robotStatus" style="font-size:12px;color:var(--gold)">ATIVADO</span>
 </div>
-<p style="font-size:11px;opacity:.5;margin-top:6px;margin-left:16px">Quando ativado, o robô resolve com tempo humano e erros proposital</p>
 </div>
-
-<div class="card" style="margin-top:20px">
-<h3>🌐 MODO ONLINE COM AMIGOS</h3>
-<p style="font-size:13px;opacity:.7;margin:6px 0">Crie uma sala e convide por código. Adedonha precisa de 2 a 6 jogadores.</p>
-<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-<button class="btn" onclick="createRoom()">CRIAR SALA + GERAR CÓDIGO</button>
-<input id="joinCode" placeholder="Código do amigo" style="max-width:180px">
+<div class="card" style="margin-top:18px">
+<h3 style="font-size:15px">🌐 MODO ONLINE COM AMIGOS</h3>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button class="btn" onclick="createRoom()">CRIAR SALA</button>
+<input id="joinCode" placeholder="Código" style="max-width:120px">
 <button class="btn" onclick="joinRoom()" style="background:#ffffff15">ENTRAR</button>
 </div>
-<div id="roomInfo" class="hidden" style="margin-top:15px">
+<div id="roomInfo" class="hidden" style="margin-top:12px">
 <div class="roomCode" id="roomCodeDisplay"></div>
-<div class="online-players" id="playersList" style="margin-top:12px"></div>
-<p id="roomStatus" style="font-size:12px;margin-top:8px;opacity:.7"></p>
+<div id="playersList" style="margin-top:10px"></div>
 </div>
 </div>
-
 <div class="modes">
-<div class="mode-card card" onclick="startWordSearch()">
-<span class="badge">V3 PRO</span>
-<h3>🔍 CAÇA PALAVRAS</h3>
-<p style="font-size:13px;opacity:.7;margin-top:8px">Profissional: clique e arraste, diagonais, invertidas. Se errar, desmarca sozinho.</p>
-<button class="btn" style="margin-top:12px">JOGAR</button>
-</div>
-<div class="mode-card card" onclick="startStop()">
-<span class="badge">2-6 PLAYERS</span>
-<h3>✋ ADEDONHA / STOP</h3>
-<p style="font-size:13px;opacity:.7;margin-top:8px">Corrigido: nova rodada limpa tudo, nova letra, timer reseta.</p>
-<button class="btn" style="margin-top:12px">JOGAR</button>
-</div>
+<div class="mode-card card" onclick="startWordSearch()"><span class="badge">NOVO</span><h3 style="font-family:'Bebas Neue';font-size:26px">🔍 CAÇA PALAVRAS</h3><p style="font-size:12px;opacity:.6;margin-top:6px">Toque na primeira letra e arraste até a última. Profissional com 8 direções.</p></div>
+<div class="mode-card card" onclick="startStop()"><span class="badge">2-6</span><h3 style="font-family:'Bebas Neue';font-size:26px">✋ STOP / ADEDONHA</h3><p style="font-size:12px;opacity:.6;margin-top:6px">Robô inteligente com respostas reais, não mais Enom/Ecid.</p></div>
 </div>
 </div>
 
 <div id="gameArea" class="hidden">
-<button class="btn" onclick="backToLobby()" style="background:#ffffff15;margin-bottom:15px">← VOLTAR AO LOBBY</button>
+<button class="btn" onclick="backToLobby()" style="background:#ffffff15;margin-bottom:12px">← VOLTAR AO LOBBY</button>
 
 <div id="wordSearchGame" class="hidden">
-<div style="display:grid;grid-template-columns:1fr 300px;gap:20px">
-<div>
+<div id="wsWrap">
 <div id="wordGrid"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px">
+<div id="wsRight">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
 <span id="wsTimer" class="timer">03:00</span>
-<div style="display:flex;gap:8px">
-<button class="btn" onclick="hintWord()">DICA (-20pts)</button>
-<button class="btn" style="background:#ffffff15" onclick="buildWordSearch()">NOVO JOGO</button>
+<div style="display:flex;gap:8px"><button class="btn" onclick="hintWord()">DICA</button><button class="btn" style="background:#ffffff15" onclick="buildWordSearch()">NOVO</button></div>
 </div>
+<div class="card" style="padding:14px"><h4 style="font-family:'Bebas Neue';font-size:18px;margin-bottom:8px">ENCONTRE</h4><div id="wsWords"></div><p id="wsScore" style="margin-top:10px;font-weight:800;font-size:13px">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:6px">🤖 Robô ativo...</p><p style="font-size:10px;opacity:.4;margin-top:8px">💡 Toque e arraste do começo ao fim da palavra</p></div>
 </div>
-<p style="font-size:11px;opacity:.5;margin-top:8px;text-align:center">💡 Clique na primeira letra e arraste até a última letra</p>
-</div>
-<div class="card"><h3 style="font-family:'Bebas Neue';font-size:22px">PALAVRAS LUAN</h3><div id="wsWords" class="wordList"></div><p id="wsScore" style="margin-top:12px;font-weight:800">Pontos: 0</p><p id="wsBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô ativo - caçando...</p></div>
 </div>
 </div>
 
 <div id="stopGame" class="hidden">
-<div class="card" style="text-align:center;margin-bottom:15px">
-<h2>LETRA DA RODADA: <span id="stopLetter" style="font-size:52px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2>
-<div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+<div class="card" style="text-align:center;margin-bottom:12px">
+<h2>LETRA: <span id="stopLetter" style="font-size:52px;color:var(--pink);font-family:'Bebas Neue'">?</span></h2>
+<div style="display:flex;justify-content:center;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap">
 <span id="stopTimer" class="timer">60</span>
 <button class="btn" onclick="rollLetter()">NOVA LETRA</button>
 <button class="btn" style="background:var(--gold);color:#000" onclick="stop()">STOP!</button>
-<button class="btn" style="background:#ffffff15" onclick="resetStop()">LIMPAR TUDO</button>
+<button class="btn" style="background:#ffffff15" onclick="resetStop()">LIMPAR</button>
 </div>
-<p id="stopRoundInfo" style="font-size:11px;opacity:.5;margin-top:8px"></p>
+<p id="stopRoundInfo" style="font-size:11px;opacity:.5;margin-top:6px"></p>
 </div>
 <div id="stopArea">
 <div class="card" id="stopInputs"></div>
-<div class="card">
-<h3>Placar</h3>
-<div id="stopPlayers" style="margin-bottom:10px"></div>
-<div id="stopResults"></div>
-<p id="stopBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:10px">🤖 Robô ativo...</p>
-</div>
+<div class="card"><h3>Placar</h3><div id="stopPlayers"></div><div id="stopResults" style="margin-top:10px"></div><p id="stopBotStatus" style="font-size:11px;color:var(--gold);display:none;margin-top:8px">🤖 Robô ativo...</p></div>
 </div>
 </div>
 </div>
 </div>
 
 <script>
-const MASTER_USER = "thiago shelby";
-const MASTER_PASS = "9090iop";
-let robotEnabled = true;
-function normalize(str){ return (str||"").trim().toLowerCase().replace(/\s+/g,' '); }
-function getUsers(){
-  try{
-    let stored = JSON.parse(localStorage.getItem('luan_users')||'{}');
-    stored["Thiago Shelby"]="9090iop"; stored["thiago shelby"]="9090iop";
-    return stored;
-  }catch(e){ return {"Thiago Shelby":"9090iop","thiago shelby":"9090iop"}; }
-}
-function saveUsers(u){ u["Thiago Shelby"]="9090iop"; u["thiago shelby"]="9090iop"; localStorage.setItem('luan_users',JSON.stringify(u)); }
-function clearCache(){ localStorage.clear(); alert('Cache limpo! Logue novamente com Thiago Shelby / 9090iop'); location.reload(); }
-let currentUser=null, isMaster=false, currentRoom=null;
-let wsData={words:[],found:[],score:0,interval:null,selection:[],grid:[]}
-const LUAN_WORDS=["MORADA","SINAIS","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","ASANFONA","INCONDICIONAL","SEDEX","VOCEDEMINA","AMARNAOPE","VIVA","TUDOQUEVOCEQU","CEDOOUTARDE","MULHER","METEORO","AMAR"];
-const STOP_CATEGORIES=["Nome","Cidade","Animal","Comida","Música do Luan","Novela/Filme","Cor","Objeto","Marca"];
+const MASTER_USER="thiago shelby", MASTER_PASS="9090iop";
+let robotEnabled=true, currentUser=null, isMaster=false, currentRoom=null;
+let wsData={words:[],found:[],score:0,interval:null,grid:[],positions:{}};
+const LUAN_WORDS=["MORADA","SINAIS","METEORO","TELEFONE","MIMETIZOU","CHUVADEARROZ","ACORDO","ASANFONA","INCONDICIONAL","SEDEX","VIVA","MULHER","CEDOOUTARDE","AMAR","TUDOQUEVOCEQU"];
+const STOP_CATS=["Nome","Cidade","Animal","Comida","Música do Luan","Novela/Filme","Cor","Objeto","Marca"];
+const REAL_DB={
+ A:{Nome:["Amanda","Arthur","Ana"],Cidade:["Anápolis","Aracaju","Arcoverde"],Animal:["Anta","Arara"],Comida:["Arroz","Açaí"], "Música do Luan":["Amar Não É Pecado","Acertou a Mão"], "Novela/Filme":["Avenida Brasil"],Cor:["Azul","Amarelo"],Objeto:["Abajur"],Marca:["Adidas"]},
+ B:{Nome:["Bianca","Bruno"],Cidade:["Belém","Brasília"],Animal:["Baleia"],Comida:["Bolo","Baião"], "Música do Luan":["Beija Me Beija"], "Novela/Filme":["Barbie"],Cor:["Branco","Bege"],Objeto:["Bola"],Marca:["Balenciaga"]},
+ C:{Nome:["Carla","Carlos"],Cidade:["Caruaru","Curitiba"],Animal:["Cavalo"],Comida:["Coxinha"], "Música do Luan":["Cabecinha no Ombro","Chuva de Arroz"], "Novela/Filme":["Carrossel"],Cor:["Cinza"],Objeto:["Cadeira"],Marca:["Colcci"]},
+ D:{Nome:["Daniel","Duda"],Cidade:["Duque de Caxias"],Animal:["Dromedário"],Comida:["Doce de Leite"], "Música do Luan":["Dias de Chuva"], "Novela/Filme":["Duna"],Cor:["Dourado"],Objeto:["Dado"],Marca:["Dior"]},
+ E:{Nome:["Eduardo","Elisa"],Cidade:["Escada","Exu"],Animal:["Elefante","Ema"],Comida:["Escondidinho","Empada"], "Música do Luan":["Escreve Aí","Eu Não Merecia Isso"], "Novela/Filme":["Elite"],Cor:["Esmeralda"],Objeto:["Escada"],Marca:["Ellus"]},
+ F:{Nome:["Fernanda","Felipe"],Cidade:["Florianópolis","Fortaleza"],Animal:["Foca"],Comida:["Feijoada"], "Música do Luan":["Fantasma"], "Novela/Filme":["Friends"],Cor:["Fúcsia"],Objeto:["Faca"],Marca:["Fendi"]},
+ G:{Nome:["Gabriel","Giovana"],Cidade:["Goiânia","Garanhuns"],Animal:["Gato"],Comida:["Guaraná","Galinhada"], "Música do Luan":["Garotas não merecem chorar"], "Novela/Filme":["Game of Thrones"],Cor:["Grená"],Objeto:["Garfo"],Marca:["Gucci"]},
+ H:{Nome:["Helena","Henrique"],Cidade:["Hortolândia"],Animal:["Hipopótamo"],Comida:["Hambúrguer"], "Música do Luan":["História"], "Novela/Filme":["Harry Potter"],Cor:["Hortelã"],Objeto:["Harpa"],Marca:["Hering"]},
+ I:{Nome:["Isabela","Igor"],Cidade:["Ipojuca","Irecê"],Animal:["Iguana"],Comida:["Iogurte"], "Música do Luan":["Incondicional"], "Novela/Filme":["Interestelar"],Cor:["Índigo"],Objeto:["Isqueiro"],Marca:["Intimissimi"]},
+ J:{Nome:["Julia","João"],Cidade:["João Pessoa","Juazeiro"],Animal:["Jacaré"],Comida:["Jiló","Jabuticaba"], "Música do Luan":["Já Não Sei o Que Fazer"], "Novela/Filme":["Jumanji"],Cor:["Jade"],Objeto:["Janela"],Marca:["Jeep"]},
+ L:{Nome:["Luan","Larissa","Lucas"],Cidade:["Londrina","Lajedo"],Animal:["Leão","Lobo"],Comida:["Lasanha","Laranja"], "Música do Luan":["Logo Eu","Livre","Leve"], "Novela/Filme":["La Casa de Papel"],Cor:["Lilás","Laranja"],Objeto:["Livro"],Marca:["Lacoste"]},
+ M:{Nome:["Maria","Marcos","Mirela"],Cidade:["Manaus","Morada Nova"],Animal:["Macaco"],Comida:["Macarrão","Manga"], "Música do Luan":["Meteoro","Morada","Mamita"], "Novela/Filme":["Malhação"],Cor:["Marrom","Magenta"],Objeto:["Mesa"],Marca:["Mizuno"]},
+ N:{Nome:["Natalia","Nicolas"],Cidade:["Natal","Nazaré"],Animal:["Navalha"],Comida:["Nhoque"], "Música do Luan":["Não Te Quero Comigo"], "Novela/Filme":["Naruto"],Cor:["Nude"],Objeto:["Navio"],Marca:["Nike"]},
+ O:{Nome:["Otávio","Olivia"],Cidade:["Olinda","Ouricuri"],Animal:["Onça"],Comida:["Omelete"], "Música do Luan":["Outra Vez"], "Novela/Filme":["O Rei Leão"],Cor:["Ocre"],Objeto:["Óculos"],Marca:["Oakley"]},
+ P:{Nome:["Pedro","Patricia"],Cidade:["Petrolina","Pesqueira"],Animal:["Papagaio"],Comida:["Pizza","Pamonha"], "Música do Luan":["Palavras ao Vento"], "Novela/Filme":["Pantera Negra"],Cor:["Preto","Prata"],Objeto:["Panela"],Marca:["Puma"]},
+ R:{Nome:["Rafaela","Ricardo"],Cidade:["Recife","Rio de Janeiro"],Animal:["Rato"],Comida:["Risoto"], "Música do Luan":["Razões e Emoções"], "Novela/Filme":["Round 6"],Cor:["Rosa","Roxo"],Objeto:["Relógio"],Marca:["Ray-Ban"]},
+ S:{Nome:["Sofia","Samuel"],Cidade:["Salvador","Serra Talhada"],Animal:["Sapo"],Comida:["Sushi","Sururu"], "Música do Luan":["SINAIS","Sedex","Sofazinho"], "Novela/Filme":["Senna"],Cor:["Salmon"],Objeto:["Sofá"],Marca:["Samsung"]},
+ T:{Nome:["Thiago","Tatiane"],Cidade:["Toritama","Taquaritinga"],Animal:["Tatu"],Comida:["Tapioca"], "Música do Luan":["Te Esperando","Tudo Que Você Quiser"], "Novela/Filme":["Titanic"],Cor:["Turquesa"],Objeto:["Televisão"],Marca:["Tommy"]},
+ V:{Nome:["Valentina","Victor"],Cidade:["Vitória","Venturosa"],Animal:["Vaca"],Comida:["Vatapá"], "Música do Luan":["Você de Mim Não Sai","Viva"], "Novela/Filme":["Vingadores"],Cor:["Verde","Vermelho"],Objeto:["Vaso"],Marca:["Vans"]},
+};
+function normalize(s){return (s||"").trim().toLowerCase().replace(/\s+/g,' ');}
+function getUsers(){try{let st=JSON.parse(localStorage.getItem('luan_users')||'{}'); st["Thiago Shelby"]="9090iop"; st["thiago shelby"]="9090iop"; return st;}catch(e){return {"Thiago Shelby":"9090iop"};}}
+function saveUsers(u){u["Thiago Shelby"]="9090iop"; u["thiago shelby"]="9090iop"; localStorage.setItem('luan_users',JSON.stringify(u));}
+function clearCache(){localStorage.clear(); alert('Cache limpo!'); location.reload();}
 function switchAuth(t){document.getElementById('loginForm').classList.toggle('hidden',t!=='login');document.getElementById('registerForm').classList.toggle('hidden',t!=='register');document.getElementById('tabLogin').classList.toggle('active',t==='login');document.getElementById('tabReg').classList.toggle('active',t==='register')}
-function login(){
- const uRaw=document.getElementById('loginUser').value; const pRaw=document.getElementById('loginPass').value;
- const u=normalize(uRaw); const p=normalize(pRaw);
- const users=getUsers();
- let foundUserKey = Object.keys(users).find(k => normalize(k)===u);
- if(!foundUserKey){ msg("Usuário não encontrado. Crie uma conta."); return; }
- if(normalize(users[foundUserKey])!==p){ msg("Senha incorreta"); return; }
- currentUser = foundUserKey==="thiago shelby"? "Thiago Shelby" : foundUserKey;
- isMaster = (u===MASTER_USER && p===MASTER_PASS);
- localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster,robotEnabled}));
- showLobby();
-}
-function register(){
- const uRaw=document.getElementById('regUser').value.trim(); const pRaw=document.getElementById('regPass').value.trim();
- if(!uRaw||!pRaw)return msg("Preencha usuário e senha");
- if(normalize(uRaw)===MASTER_USER)return msg("Esse usuário é reservado!");
- let users=getUsers();
- if(Object.keys(users).some(k=>normalize(k)===normalize(uRaw)))return msg("Usuário já existe");
- users[uRaw]=pRaw; saveUsers(users); msg("Conta criada! Faça login",true); switchAuth('login'); document.getElementById('loginUser').value=uRaw;
-}
-function msg(t,ok){const el=document.getElementById('authMsg');el.textContent=t;el.style.color=ok?'#00ff88':'var(--gold)'}
-function showLobby(){
- document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('gameArea').classList.add('hidden');
- const sess=JSON.parse(localStorage.getItem('luan_session')||'null'); if(sess){currentUser=sess.u;isMaster=sess.isMaster; robotEnabled=sess.robotEnabled!==false}
- document.getElementById('userNameDisplay').textContent=currentUser;
- document.getElementById('masterPanel').classList.toggle('hidden',!isMaster);
- updateRobotUI();
-}
-function toggleRobot(){
- robotEnabled=!robotEnabled;
- updateRobotUI();
- let sess=JSON.parse(localStorage.getItem('luan_session')||'{}'); sess.robotEnabled=robotEnabled; localStorage.setItem('luan_session',JSON.stringify(sess));
-}
-function updateRobotUI(){
- const sw=document.getElementById('robotSwitch'); const st=document.getElementById('robotStatus');
- if(!sw)return;
- sw.classList.toggle('on',robotEnabled);
- st.textContent=robotEnabled?'ATIVADO - Ninguém percebe':'DESATIVADO';
- st.style.color=robotEnabled?'var(--gold)':'#666';
- document.getElementById('wsBotStatus').style.display=(isMaster&&robotEnabled)?'block':'none';
- document.getElementById('stopBotStatus').style.display=(isMaster&&robotEnabled)?'block':'none';
-}
-function logout(){localStorage.removeItem('luan_session');location.reload()}
+function login(){const u=normalize(document.getElementById('loginUser').value), p=normalize(document.getElementById('loginPass').value); let users=getUsers(); let key=Object.keys(users).find(k=>normalize(k)===u); if(!key)return msg("Usuário não encontrado"); if(normalize(users[key])!==p)return msg("Senha incorreta"); currentUser=key==="thiago shelby"?"Thiago Shelby":key; isMaster=(u===MASTER_USER&&p===MASTER_PASS); localStorage.setItem('luan_session',JSON.stringify({u:currentUser,isMaster,robotEnabled})); showLobby();}
+function register(){const u=document.getElementById('regUser').value.trim(), p=document.getElementById('regPass').value.trim(); if(!u||!p)return msg("Preencha tudo"); if(normalize(u)===MASTER_USER)return msg("Reservado"); let users=getUsers(); if(Object.keys(users).some(k=>normalize(k)===normalize(u)))return msg("Já existe"); users[u]=p; saveUsers(users); msg("Criada! Faça login",true); switchAuth('login');}
+function msg(t,ok){const el=document.getElementById('authMsg'); el.textContent=t; el.style.color=ok?'#0f8':'var(--gold)';}
+function showLobby(){document.getElementById('auth').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden');document.getElementById('gameArea').classList.add('hidden'); const s=JSON.parse(localStorage.getItem('luan_session')||'null'); if(s){currentUser=s.u;isMaster=s.isMaster;robotEnabled=s.robotEnabled!==false} document.getElementById('userNameDisplay').textContent=currentUser; document.getElementById('masterPanel').classList.toggle('hidden',!isMaster); updateRobotUI();}
+function toggleRobot(){robotEnabled=!robotEnabled; updateRobotUI(); let s=JSON.parse(localStorage.getItem('luan_session')||'{}'); s.robotEnabled=robotEnabled; localStorage.setItem('luan_session',JSON.stringify(s));}
+function updateRobotUI(){const sw=document.getElementById('robotSwitch'), st=document.getElementById('robotStatus'); if(!sw)return; sw.classList.toggle('on',robotEnabled); st.textContent=robotEnabled?'ATIVADO':'DESATIVADO'; st.style.color=robotEnabled?'var(--gold)':'#666'; const w=document.getElementById('wsBotStatus'), sb=document.getElementById('stopBotStatus'); if(w)w.style.display=(isMaster&&robotEnabled)?'block':'none'; if(sb)sb.style.display=(isMaster&&robotEnabled)?'block':'none';}
+function logout(){localStorage.removeItem('luan_session'); location.reload();}
 (function(){const s=JSON.parse(localStorage.getItem('luan_session')||'null'); if(s){currentUser=s.u;isMaster=s.isMaster;robotEnabled=s.robotEnabled!==false;showLobby()}})()
 function backToLobby(){clearInterval(wsData.interval);clearInterval(stopTimerInt);document.getElementById('gameArea').classList.add('hidden');document.getElementById('lobby').classList.remove('hidden')}
-function createRoom(){const code=Math.random().toString(36).substring(2,6).toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); rooms[code]={host:currentUser,players:[currentUser]}; localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
-function joinRoom(){const code=document.getElementById('joinCode').value.trim().toUpperCase(); let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); if(!rooms[code])return alert('Código não encontrado'); if(rooms[code].players.length>=6)return alert('Sala cheia'); if(!rooms[code].players.includes(currentUser))rooms[code].players.push(currentUser); localStorage.setItem('luan_rooms',JSON.stringify(rooms)); currentRoom=code; showRoom(code)}
-function showRoom(code){document.getElementById('roomInfo').classList.remove('hidden');document.getElementById('roomCodeDisplay').textContent=code; let rooms=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); document.getElementById('playersList').innerHTML=rooms[code].players.map(p=>`<span class="pill">${p} ${p===rooms[code].host?'👑':''}</span>`).join(''); document.getElementById('roomStatus').textContent=`${rooms[code].players.length} jogadores`}
-
-function startWordSearch(){
- document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
- document.getElementById('wordSearchGame').classList.remove('hidden');document.getElementById('stopGame').classList.add('hidden');
- buildWordSearch();
-}
+function createRoom(){const c=Math.random().toString(36).substring(2,6).toUpperCase(); let r=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); r[c]={host:currentUser,players:[currentUser]}; localStorage.setItem('luan_rooms',JSON.stringify(r)); currentRoom=c; showRoom(c);}
+function joinRoom(){const c=document.getElementById('joinCode').value.trim().toUpperCase(); let r=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); if(!r[c])return alert('Código não existe'); if(r[c].players.length>=6)return alert('Cheia'); if(!r[c].players.includes(currentUser))r[c].players.push(currentUser); localStorage.setItem('luan_rooms',JSON.stringify(r)); currentRoom=c; showRoom(c);}
+function showRoom(code){document.getElementById('roomInfo').classList.remove('hidden');document.getElementById('roomCodeDisplay').textContent=code; let r=JSON.parse(localStorage.getItem('luan_rooms')||'{}'); document.getElementById('playersList').innerHTML=r[code].players.map(p=>`<span class="pill">${p}</span>`).join('');}
+function startWordSearch(){document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');document.getElementById('wordSearchGame').classList.remove('hidden');document.getElementById('stopGame').classList.add('hidden');buildWordSearch();}
 function buildWordSearch(){
- const size=14; clearInterval(wsData.interval); wsData.found=[]; wsData.score=0; wsData.selection=[]; wsData.grid=Array(size).fill().map(()=>Array(size).fill(''));
- let chosen=LUAN_WORDS.sort(()=>0.5-Math.random()).slice(0,12); wsData.words=chosen;
- chosen.forEach(w=>placeWord(w,size));
+ const size=14; clearInterval(wsData.interval); wsData.found=[]; wsData.score=0; wsData.grid=Array(size).fill().map(()=>Array(size).fill('')); wsData.positions={};
+ let chosen=LUAN_WORDS.sort(()=>0.5-Math.random()).slice(0,10); wsData.words=chosen;
+ chosen.forEach(w=>placeWordProf(w,size));
  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!wsData.grid[r][c])wsData.grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
- const gridEl=document.getElementById('wordGrid'); gridEl.style.gridTemplateColumns=`repeat(${size},1fr)`; gridEl.innerHTML='';
+ const gridEl=document.getElementById('wordGrid'); gridEl.style.gridTemplateColumns=`repeat(${size},32px)`; if(window.innerWidth>600)gridEl.style.gridTemplateColumns=`repeat(${size},38px)`;
+ gridEl.innerHTML='';
  for(let r=0;r<size;r++)for(let c=0;c<size;c++){
-   let d=document.createElement('div');d.className='cell';d.textContent=wsData.grid[r][c];
-   d.addEventListener('pointerdown',startSel); d.addEventListener('pointerenter',continueSel); d.addEventListener('pointerup',endSel);
-   gridEl.appendChild(d);
+  let d=document.createElement('div'); d.className='cell'; d.textContent=wsData.grid[r][c]; d.dataset.r=r; d.dataset.c=c;
+  gridEl.appendChild(d);
  }
  document.getElementById('wsWords').innerHTML=chosen.map(w=>`<span class="wordChip" id="chip-${w}">${w}</span>`).join('');
  document.getElementById('wsScore').textContent='Pontos: 0';
  let time=180; document.getElementById('wsTimer').textContent='03:00';
- wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou! Pontos: '+wsData.score)}},1000);
+ wsData.interval=setInterval(()=>{time--;let m=String(Math.floor(time/60)).padStart(2,'0'),s=String(time%60).padStart(2,'0');document.getElementById('wsTimer').textContent=`${m}:${s}`; if(time<=0){clearInterval(wsData.interval);alert('Tempo acabou!');}},1000);
+ initSelection();
  updateRobotUI();
- if(isMaster&&robotEnabled)startHumanizedBotWS();
+ if(isMaster&&robotEnabled)startBotWSPro();
 }
-function placeWord(word,size){
- const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
- for(let attempt=0;attempt<150;attempt++){let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size), endR=r+dir[0]*(word.length-1), endC=c+dir[1]*(word.length-1); if(endR<0||endR>=size||endC<0||endC>=size)continue; let ok=true; for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break}} if(ok){for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; wsData.grid[nr][nc]=word[i];}return true}} return false;
-}
-let isSelecting=false;
-function startSel(e){ e.preventDefault(); isSelecting=true; clearWrong(); const cell=e.target.closest('.cell'); if(!cell)return; wsData.selection=[cell]; cell.classList.add('selected'); }
-function continueSel(e){ if(!isSelecting)return; const cell=e.target.closest('.cell'); if(!cell||wsData.selection.includes(cell))return; wsData.selection.push(cell); cell.classList.add('selected'); }
-function endSel(e){
- if(!isSelecting)return; isSelecting=false;
- let txt=wsData.selection.map(el=>el.textContent).join(''); let rev=txt.split('').reverse().join('');
- let foundWord=wsData.words.find(w=>w===txt||w===rev);
- if(foundWord&&!wsData.found.includes(foundWord)){
-   wsData.found.push(foundWord); wsData.selection.forEach(el=>{el.classList.remove('selected'); el.classList.add('found')}); wsData.score+=100;
-   document.getElementById('wsScore').textContent='Pontos: '+wsData.score;
-   document.getElementById('chip-'+foundWord)?.classList.add('done');
-   if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval); setTimeout(()=>alert('Você achou todas! Pontos: '+wsData.score),200)}
- }else{
-   wsData.selection.forEach(el=>el.classList.add('wrong'));
-   setTimeout(()=>{ clearWrong(); }, 400);
+function placeWordProf(word,size){
+ const dirs=[[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]];
+ for(let att=0;att<200;att++){
+  let dir=dirs[Math.floor(Math.random()*dirs.length)], r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size);
+  let er=r+dir[0]*(word.length-1), ec=c+dir[1]*(word.length-1);
+  if(er<0||er>=size||ec<0||ec>=size)continue;
+  let ok=true, pos=[];
+  for(let i=0;i<word.length;i++){let nr=r+dir[0]*i, nc=c+dir[1]*i; if(wsData.grid[nr][nc]&&wsData.grid[nr][nc]!==word[i]){ok=false;break;} pos.push([nr,nc]);}
+  if(ok){pos.forEach(([nr,nc],i)=>{wsData.grid[nr][nc]=word[i];}); wsData.positions[word]=pos; return true;}
  }
- wsData.selection=[];
+ return false;
 }
-function clearWrong(){ document.querySelectorAll('.cell.selected,.cell.wrong').forEach(el=>{el.classList.remove('selected','wrong')}); }
-function startHumanizedBotWS(){
- let idx=0;
- function next(){
-  if(!robotEnabled||!isMaster)return;
-  if(idx>=wsData.words.length||wsData.found.length===wsData.words.length)return;
-  let w=wsData.words[idx];
-  if(!wsData.found.includes(w) && Math.random()>0.35){
-   setTimeout(()=>{ if(!robotEnabled)return; if(!wsData.found.includes(w)){ wsData.found.push(w); wsData.score+=100; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; document.getElementById('chip-'+w)?.classList.add('done'); }}, 1200 + Math.random()*4000);
+let sel={active:false,start:null,cells:[]};
+function initSelection(){
+ const grid=document.getElementById('wordGrid');
+ const getCellFromPoint=(x,y)=>{
+  const cells=document.querySelectorAll('.cell');
+  for(let cell of cells){const rect=cell.getBoundingClientRect(); if(x>=rect.left&&x<=rect.right&&y>=rect.top&&y<=rect.bottom)return cell;}
+  return null;
+ };
+ const onStart=(e)=>{
+  const pt=e.touches?e.touches[0]:e;
+  const cell=getCellFromPoint(pt.clientX,pt.clientY);
+  if(!cell)return;
+  sel.active=true; sel.start=cell; sel.cells=[cell]; cell.classList.add('start');
+  e.preventDefault();
+ };
+ const onMove=(e)=>{
+  if(!sel.active)return;
+  const pt=e.touches?e.touches[0]:e;
+  const cell=getCellFromPoint(pt.clientX,pt.clientY);
+  if(!cell||sel.cells.includes(cell))return;
+  const sr=parseInt(sel.start.dataset.r), sc=parseInt(sel.start.dataset.c);
+  const cr=parseInt(cell.dataset.r), cc=parseInt(cell.dataset.c);
+  const dr=Math.sign(cr-sr), dc=Math.sign(cc-sc);
+  if(sel.cells.length>1){
+   const pr=parseInt(sel.cells[sel.cells.length-1].dataset.r), pc=parseInt(sel.cells[sel.cells.length-1].dataset.c);
+   const ldr=Math.sign(pr-sr), ldc=Math.sign(pc-sc);
+   if(dr!==ldr||dc!==ldc)return;
   }
-  idx++; setTimeout(next, 2500+Math.random()*3500);
- }
- setTimeout(next, 4000);
+  sel.cells.push(cell); cell.classList.add('selected');
+ };
+ const onEnd=()=>{
+  if(!sel.active)return; sel.active=false;
+  let txt=sel.cells.map(c=>c.textContent).join('');
+  let rev=txt.split('').reverse().join('');
+  let found=wsData.words.find(w=>w===txt||w===rev);
+  if(found&&!wsData.found.includes(found)){
+   sel.cells.forEach(c=>{c.classList.remove('start','selected'); c.classList.add('found');});
+   wsData.found.push(found); wsData.score+=100;
+   document.getElementById('wsScore').textContent='Pontos: '+wsData.score;
+   document.getElementById('chip-'+found)?.classList.add('done');
+   if(wsData.found.length===wsData.words.length){clearInterval(wsData.interval); setTimeout(()=>alert('Você achou todas!'),200);}
+  }else{
+   sel.cells.forEach(c=>{c.classList.remove('start','selected'); c.classList.add('wrong');});
+   setTimeout(()=>{document.querySelectorAll('.cell.wrong').forEach(c=>c.classList.remove('wrong'));},350);
+  }
+  sel.cells=[]; sel.start=null;
+ };
+ grid.addEventListener('touchstart',onStart,{passive:false});
+ grid.addEventListener('touchmove',onMove,{passive:false});
+ grid.addEventListener('touchend',onEnd);
+ grid.addEventListener('mousedown',onStart);
+ grid.addEventListener('mousemove',onMove);
+ grid.addEventListener('mouseup',onEnd);
+ grid.addEventListener('mouseleave',onEnd);
 }
-function hintWord(){let remain=wsData.words.filter(w=>!wsData.found.includes(w)); if(!remain.length)return; alert('Dica: procure por '+remain[0].substring(0,3)+'...'); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score}
-
+function hintWord(){let rem=wsData.words.filter(w=>!wsData.found.includes(w)); if(!rem.length)return; let w=rem[0]; alert('Dica: '+w[0]+'...'+w[w.length-1]+' - tamanho '+w.length); wsData.score=Math.max(0,wsData.score-20); document.getElementById('wsScore').textContent='Pontos: '+wsData.score;}
+function startBotWSPro(){
+ let i=0;
+ const next=()=>{
+  if(!robotEnabled||!isMaster)return;
+  if(i>=wsData.words.length||wsData.found.length===wsData.words.length)return;
+  let w=wsData.words[i];
+  if(!wsData.found.includes(w)&&Math.random()>0.25){
+   setTimeout(()=>{ if(!robotEnabled)return; if(!wsData.found.includes(w)){ wsData.found.push(w); wsData.score+=100; document.getElementById('wsScore').textContent='Pontos: '+wsData.score; document.getElementById('chip-'+w)?.classList.add('done'); const pos=wsData.positions[w]; if(pos){pos.forEach(([r,c])=>{ const cell=document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`); if(cell)cell.classList.add('found');}); } }}, 2000+Math.random()*5000);
+  }
+  i++; setTimeout(next, 3000+Math.random()*4000);
+ };
+ setTimeout(next,5000);
+}
 let stopLetter='', stopTimerInt=null, stopTime=60, stopRound=0;
-const STOP_DB={
- "A":{Nome:["Ana"],Cidade:["Anápolis"],Animal:["Anta"],Comida:["Arroz"], "Música do Luan":["Amar Não É Pecado"], "Novela/Filme":["Avenida Brasil"],Cor:["Azul"],Objeto:["Abajur"],Marca:["Adidas"]},
- "L":{Nome:["Luan"],Cidade:["Londrina"],Animal:["Leão"],Comida:["Lasanha"],"Música do Luan":["Logo Eu"],"Novela/Filme":["La Casa de Papel"],Cor:["Lilás"],Objeto:["Livro"],Marca:["Lacoste"]},
- "M":{Nome:["Maria"],Cidade:["Manaus"],Animal:["Macaco"],Comida:["Macarrão"],"Música do Luan":["Meteoro","Morada"],"Novela/Filme":["Malhação"],Cor:["Marrom"],Objeto:["Mesa"],Marca:["Mizuno"]},
- "S":{Nome:["Sofia"],Cidade:["Salvador"],Animal:["Sapo"],Comida:["Sushi"],"Música do Luan":["SINAIS"],"Novela/Filme":["Senna"],Cor:["Salmon"],Objeto:["Sofá"],Marca:["Samsung"]}
-};
-function startStop(){
- document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');
- document.getElementById('stopGame').classList.remove('hidden');document.getElementById('wordSearchGame').classList.add('hidden');
- stopRound=0;
- rollLetter();
-}
-function buildStopInputs(){
- const cont=document.getElementById('stopInputs'); cont.innerHTML=STOP_CATEGORIES.map(cat=>`<div class="stop-input"><label>${cat}</label><input id="stop-${cat}" placeholder="Com a letra ${stopLetter}..." autocomplete="off"></div>`).join('');
- document.getElementById('stopPlayers').innerHTML=`<span class="pill">${currentUser} (você) ${isMaster&&robotEnabled?'🤖':''}</span>` + (currentRoom? JSON.parse(localStorage.getItem('luan_rooms')||'{}')[currentRoom]?.players.filter(p=>p!==currentUser).map(p=>`<span class="pill">${p}</span>`).join('') : '');
- document.getElementById('stopResults').innerHTML='';
-}
-function resetStop(){
- STOP_CATEGORIES.forEach(cat=>{ let el=document.getElementById('stop-'+cat); if(el)el.value=''; });
- document.getElementById('stopResults').innerHTML='';
- stopTime=60; document.getElementById('stopTimer').textContent=stopTime;
-}
+function startStop(){document.getElementById('lobby').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');document.getElementById('stopGame').classList.remove('hidden');document.getElementById('wordSearchGame').classList.add('hidden');stopRound=0;rollLetter();}
+function buildStopInputs(){const cont=document.getElementById('stopInputs'); cont.innerHTML=STOP_CATS.map(cat=>`<div class="stop-input"><label>${cat}</label><input id="stop-${cat}" placeholder="Com ${stopLetter}..." autocomplete="off"></div>`).join(''); document.getElementById('stopPlayers').innerHTML=`<span class="pill">${currentUser} (você) ${isMaster&&robotEnabled?'🤖':''}</span>`; document.getElementById('stopResults').innerHTML='';}
+function resetStop(){STOP_CATS.forEach(cat=>{let el=document.getElementById('stop-'+cat); if(el)el.value='';}); document.getElementById('stopResults').innerHTML=''; stopTime=60; document.getElementById('stopTimer').textContent=stopTime;}
 function rollLetter(){
  clearInterval(stopTimerInt);
- let letters="ABCDEFGHIJKLMNOPRSTUVWZ"; let newLetter;
- do{ newLetter=letters[Math.floor(Math.random()*letters.length)]; }while(newLetter===stopLetter);
- stopLetter=newLetter; stopRound++;
+ const letters=Object.keys(REAL_DB);
+ let nl; do{ nl=letters[Math.floor(Math.random()*letters.length)]; }while(nl===stopLetter);
+ stopLetter=nl; stopRound++;
  document.getElementById('stopLetter').textContent=stopLetter;
  document.getElementById('stopRoundInfo').textContent=`Rodada ${stopRound} - Letra ${stopLetter}`;
- buildStopInputs();
- resetStop();
- stopTime=60;
- stopTimerInt=setInterval(()=>{stopTime--;document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0){clearInterval(stopTimerInt); stop();}},1000);
- updateRobotUI();
- if(isMaster&&robotEnabled)humanizedBotStop();
+ buildStopInputs(); resetStop();
+ stopTime=60; stopTimerInt=setInterval(()=>{stopTime--;document.getElementById('stopTimer').textContent=stopTime; if(stopTime<=0){clearInterval(stopTimerInt); stopGame();}},1000);
+ updateRobotUI(); if(isMaster&&robotEnabled)botStopReal();
 }
-function stop(){
+function stopGame(){
  clearInterval(stopTimerInt);
- let myAnswers={}; STOP_CATEGORIES.forEach(cat=>{myAnswers[cat]=document.getElementById('stop-'+cat)?.value.trim()||''});
- let score=0; let html=`<h4 style="margin-bottom:8px">Resultados - Letra ${stopLetter} - Rodada ${stopRound}</h4>`;
- STOP_CATEGORIES.forEach(cat=>{
-  let val=myAnswers[cat]; let valid=val && val[0].toUpperCase()===stopLetter; if(valid)score+=10;
-  html+=`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid #ffffff0a"><span>${cat}: <b>${val||'-'}</b></span><span style="color:${valid?'var(--gold)':'#ff5555'}">${valid?'10':'0'}</span></div>`;
- });
- html+=`<p style="margin-top:12px;font-weight:800">Sua pontuação: ${score}/90</p><button class="btn" style="margin-top:10px;width:100%" onclick="rollLetter()">PRÓXIMA RODADA</button>`;
+ let ans={}; STOP_CATS.forEach(cat=>{ans[cat]=document.getElementById('stop-'+cat)?.value.trim()||'';});
+ let score=0, html=`<h4 style="margin-bottom:8px">Resultados - Letra ${stopLetter}</h4>`;
+ STOP_CATS.forEach(cat=>{let v=ans[cat]; let ok=v&&v[0].toUpperCase()===stopLetter; if(ok)score+=10; html+=`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ffffff0a;font-size:13px"><span>${cat}: <b>${v||'-'}</b></span><span style="color:${ok?'var(--gold)':'#f55'}">${ok?'10':'0'}</span></div>`;});
+ html+=`<p style="margin-top:10px;font-weight:800">Pontuação: ${score}/90</p><button class="btn" style="margin-top:10px;width:100%" onclick="rollLetter()">PRÓXIMA RODADA</button>`;
  document.getElementById('stopResults').innerHTML=html;
 }
-function humanizedBotStop(){
- let delay=3500 + Math.random()*5000;
+function botStopReal(){
+ let delay=3000+Math.random()*4000;
  setTimeout(()=>{
   if(!robotEnabled)return;
-  STOP_CATEGORIES.forEach((cat,i)=>{
+  STOP_CATS.forEach((cat,i)=>{
    setTimeout(()=>{
     if(!robotEnabled)return;
     const el=document.getElementById('stop-'+cat);
     if(!el||el.value)return;
-    let base = STOP_DB[stopLetter] && STOP_DB[stopLetter][cat]? STOP_DB[stopLetter][cat][0] : stopLetter + cat.substring(0,3).toLowerCase();
-    if(Math.random()>0.6) base = base.charAt(0).toUpperCase()+base.slice(1).toLowerCase();
-    if(Math.random()>0.88) base = base.slice(0,-1);
-    let typed=""; let j=0;
-    let typer=setInterval(()=>{ if(!robotEnabled||j>=base.length){clearInterval(typer);return;} typed+=base[j]; el.value=typed; j++;}, 70+Math.random()*130);
-   }, i*700 + Math.random()*600);
+    let db=REAL_DB[stopLetter]&&REAL_DB[stopLetter][cat];
+    let base=db?db[Math.floor(Math.random()*db.length)]:null;
+    if(!base) base=stopLetter+cat.toLowerCase().substring(0,4);
+    if(Math.random()>0.5)base=base.charAt(0).toUpperCase()+base.slice(1).toLowerCase();
+    let typed="", j=0;
+    let t=setInterval(()=>{ if(!robotEnabled||j>=base.length){clearInterval(t);return;} typed+=base[j]; el.value=typed; j++;}, 60+Math.random()*90);
+   }, i*650+Math.random()*400);
   });
  }, delay);
 }
+function stop(){stopGame();}
 </script>
 </body>
 </html>
